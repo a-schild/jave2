@@ -27,7 +27,7 @@ the license bundled into the downloadable software distribution).
 
 Feedback
 
-You can send comments and requests to Andre Schild
+You can send comments and requests to andre@schild.ws
 
 
 Credits
