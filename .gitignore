@@ -2,3 +2,5 @@
 /dist/
 *.iml
 /.idea
+/build/
+/out/

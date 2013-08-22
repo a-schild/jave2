@@ -11,7 +11,7 @@
     <description>Builds, tests, and runs the project Jave2.</description>
     <import file="nbproject/build-impl.xml"/>
 
-    <property name="Version" value="2.0"/>
+    <property name="Version" value="2.1"/>
 
     <target name="build-all-jars" 
     depends="build-jar,build-jar-win32,build-jar-win64,build-jar-linux32,build-jar-linux64">
