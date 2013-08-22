@@ -3,6 +3,8 @@ package it.sauronsoftware.jave;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.String;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -32,17 +34,39 @@ public class ScreenExtractor {
         this.locator = locator;
     }
 
-    public void render (File inputFile, int width, int height, String compression, File outputDir) throws InputFormatException, EncoderException {
+    /**
+     * Generates screenshots from source video.
+     *
+     * @param inputFile Source file
+     * @param width Output width
+     * @param height Output height
+     * @param seconds Interval in seconds between screens
+     * @param outputDir Destination of output images
+     * @param fileNamePrefix
+     * @param extension Image extension for output (jpg, png, etc)
+     * @param quality The range is between 1-31 with 31 being the worst quality
+     * @throws InputFormatException If the source multimedia file cannot be
+     * decoded.
+     * @throws EncoderException If a problems occurs during the encoding
+     * process.
+     */
+
+    public void render (File inputFile, int width, int height, int seconds, File outputDir,
+                        String fileNamePrefix, String extension, int quality)
+            throws InputFormatException, EncoderException {
         FFMPEGExecutor ffmpeg = this.locator.createExecutor();
         ffmpeg.addArgument("-i");
         ffmpeg.addArgument(inputFile.getAbsolutePath());
         ffmpeg.addArgument("-f");
         ffmpeg.addArgument("image2");
         ffmpeg.addArgument("-vf");
-        ffmpeg.addArgument(String.valueOf("fps=fps=1/5"));
+        ffmpeg.addArgument(String.format("fps=fps=1/%s", String.valueOf(seconds)));
         ffmpeg.addArgument("-s");
         ffmpeg.addArgument(String.format("%sx%s", String.valueOf(width), String.valueOf(height)));
-        ffmpeg.addArgument(outputDir.getAbsolutePath() + "\\test-%04d.png");
+        ffmpeg.addArgument("-qscale");
+        ffmpeg.addArgument(String.valueOf(quality));
+        ffmpeg.addArgument(String.format("%s%s%s-%%04d.%s",
+                outputDir.getAbsolutePath(), File.separator, fileNamePrefix, extension));
 
         try {
             ffmpeg.execute();
