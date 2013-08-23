@@ -1,6 +1,7 @@
 package it.sauronsoftware.jave;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.String;
@@ -15,6 +16,7 @@ public class ScreenExtractor {
      * The locator of the ffmpeg executable used by this extractor.
      */
     private FFMPEGLocator locator;
+    private int numberOfScreens;
 
     /**
      * It builds an extractor using a {@link DefaultFFMPEGLocator} instance to
@@ -22,6 +24,13 @@ public class ScreenExtractor {
      */
     public ScreenExtractor() {
         this.locator = new DefaultFFMPEGLocator();
+    }
+
+    /**
+     *
+     */
+    public  int getNumberOfScreens(){
+        return numberOfScreens;
     }
 
     /**
@@ -42,7 +51,7 @@ public class ScreenExtractor {
      * @param height Output height
      * @param seconds Interval in seconds between screens
      * @param outputDir Destination of output images
-     * @param fileNamePrefix
+     * @param fileNamePrefix Name all thumbnails will start with
      * @param extension Image extension for output (jpg, png, etc)
      * @param quality The range is between 1-31 with 31 being the worst quality
      * @throws InputFormatException If the source multimedia file cannot be
@@ -54,6 +63,25 @@ public class ScreenExtractor {
     public void render (File inputFile, int width, int height, int seconds, File outputDir,
                         String fileNamePrefix, String extension, int quality)
             throws InputFormatException, EncoderException {
+        try{
+            if (!outputDir.exists()) {
+                if (!outputDir.mkdirs()) {
+                    _log.debug("Failed to create destination folder");
+                    throw new SecurityException();
+                }
+            }
+            if(!inputFile.canRead()){
+                _log.debug("Failed to open input file");
+                throw new SecurityException();
+            }
+        }catch (SecurityException e){
+            _log.debug("Access denied checking destination folder" + e);
+        }
+
+        Encoder encoder = new Encoder();
+        MultimediaInfo multimediaInfo = encoder.getInfo(inputFile);
+        numberOfScreens = (int) Math.ceil((multimediaInfo.getDuration() * .001) / seconds + 1);
+
         FFMPEGExecutor ffmpeg = this.locator.createExecutor();
         ffmpeg.addArgument("-i");
         ffmpeg.addArgument(inputFile.getAbsolutePath());
