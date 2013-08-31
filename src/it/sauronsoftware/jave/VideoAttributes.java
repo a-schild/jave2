@@ -19,6 +19,7 @@
 package it.sauronsoftware.jave;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Attributes controlling the video encoding process.
@@ -57,6 +58,8 @@ public class VideoAttributes implements Serializable {
      * source video size will not be modified.
      */
     private VideoSize size = null;
+
+    private ArrayList<VideoFilter> videoFilters = new ArrayList<VideoFilter>();
     /**
      * Encode the video with faststart mode, default OFF
      *
@@ -211,6 +214,14 @@ public class VideoAttributes implements Serializable {
      */
     public boolean isFaststart() {
         return faststart;
+    }
+
+    public void addFilter (VideoFilter videoFilter) {
+        this.videoFilters.add(videoFilter);
+    }
+
+    public ArrayList<VideoFilter> getVideoFilters () {
+        return this.videoFilters;
     }
 
     /**

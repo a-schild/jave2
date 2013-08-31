@@ -37,7 +37,7 @@ public class ScreenExtractor {
     /**
      * Generates screenshots from source video.
      *
-     * @param inputFile Source file
+     * @param multimediaObject Source MultimediaObject @see MultimediaObject
      * @param width Output width
      * @param height Output height
      * @param seconds Interval in seconds between screens
@@ -51,12 +51,12 @@ public class ScreenExtractor {
      * process.
      */
 
-    public void render (File inputFile, int width, int height, int seconds, File outputDir,
+    public void render (MultimediaObject multimediaObject, int width, int height, int seconds, File outputDir,
                         String fileNamePrefix, String extension, int quality)
             throws InputFormatException, EncoderException {
         FFMPEGExecutor ffmpeg = this.locator.createExecutor();
         ffmpeg.addArgument("-i");
-        ffmpeg.addArgument(inputFile.getAbsolutePath());
+        ffmpeg.addArgument(multimediaObject.getFile().getAbsolutePath());
         ffmpeg.addArgument("-f");
         ffmpeg.addArgument("image2");
         ffmpeg.addArgument("-vf");
