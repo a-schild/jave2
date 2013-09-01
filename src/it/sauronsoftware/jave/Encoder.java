@@ -451,217 +451,6 @@ public class Encoder {
     }
 
     /**
-     * Returns a set informations about a multimedia file, if its format is
-     * supported for decoding.
-     *
-     * @param source The source multimedia file.
-     * @return A set of informations about the file and its contents.
-     * @throws InputFormatException If the format of the source file cannot be
-     * recognized and decoded.
-     * @throws EncoderException If a problem occurs calling the underlying
-     * ffmpeg executable.
-     */
-    public MultimediaInfo getInfo(File source) throws InputFormatException,
-            EncoderException {
-        FFMPEGExecutor ffmpeg = locator.createExecutor();
-        ffmpeg.addArgument("-i");
-        ffmpeg.addArgument(source.getAbsolutePath());
-        try {
-            ffmpeg.execute();
-        } catch (IOException e) {
-            throw new EncoderException(e);
-        }
-        try {
-            RBufferedReader reader = null;
-            reader = new RBufferedReader(new InputStreamReader(ffmpeg
-                    .getErrorStream()));
-            return parseMultimediaInfo(source, reader);
-        } finally {
-            ffmpeg.destroy();
-        }
-    }
-
-    /**
-     * Private utility. It parses the ffmpeg output, extracting informations
-     * about a source multimedia file.
-     *
-     * @param source The source multimedia file.
-     * @param reader The ffmpeg output channel.
-     * @return A set of informations about the source multimedia file and its
-     * contents.
-     * @throws InputFormatException If the format of the source file cannot be
-     * recognized and decoded.
-     * @throws EncoderException If a problem occurs calling the underlying
-     * ffmpeg executable.
-     */
-    private MultimediaInfo parseMultimediaInfo(File source,
-            RBufferedReader reader) throws InputFormatException,
-            EncoderException {
-        Pattern p1 = Pattern.compile("^\\s*Input #0, (\\w+).+$\\s*",
-                Pattern.CASE_INSENSITIVE);
-        Pattern p2 = Pattern.compile(
-                "^\\s*Duration: (\\d\\d):(\\d\\d):(\\d\\d)\\.(\\d\\d).*$",
-                Pattern.CASE_INSENSITIVE);
-        Pattern p3 = Pattern.compile(
-                "^\\s*Stream #\\S+: ((?:Audio)|(?:Video)|(?:Data)): (.*)\\s*$",
-                Pattern.CASE_INSENSITIVE);
-        Pattern p4 = Pattern.compile(
-                "^\\s*Metadata:",
-                Pattern.CASE_INSENSITIVE);
-        MultimediaInfo info = null;
-        try {
-            int step = 0;
-            while (true) {
-                String line = reader.readLine();
-                _log.warn("Output line: " + line);
-                if (line == null) {
-                    break;
-                }
-                if (step == 0) {
-                    String token = source.getAbsolutePath() + ": ";
-                    if (line.startsWith(token)) {
-                        String message = line.substring(token.length());
-                        throw new InputFormatException(message);
-                    }
-                    Matcher m = p1.matcher(line);
-                    if (m.matches()) {
-                        String format = m.group(1);
-                        info = new MultimediaInfo();
-                        info.setFormat(format);
-                        step++;
-                    }
-                } else if (step == 1) {
-                    Matcher m = p2.matcher(line);
-                    if (m.matches()) {
-                        long hours = Integer.parseInt(m.group(1));
-                        long minutes = Integer.parseInt(m.group(2));
-                        long seconds = Integer.parseInt(m.group(3));
-                        long dec = Integer.parseInt(m.group(4));
-                        long duration = (dec * 10L) + (seconds * 1000L)
-                                + (minutes * 60L * 1000L)
-                                + (hours * 60L * 60L * 1000L);
-                        info.setDuration(duration);
-                        step++;
-                    } else {
-                        // step = 3;
-                    }
-                } else if (step == 2) {
-                    Matcher m = p3.matcher(line);
-                    Matcher m4 = p4.matcher(line);
-                    if (m.matches()) {
-                        String type = m.group(1);
-                        String specs = m.group(2);
-                        if ("Video".equalsIgnoreCase(type)) {
-                            VideoInfo video = new VideoInfo();
-                            StringTokenizer st = new StringTokenizer(specs, ",");
-                            for (int i = 0; st.hasMoreTokens(); i++) {
-                                String token = st.nextToken().trim();
-                                if (i == 0) {
-                                    video.setDecoder(token);
-                                } else {
-                                    boolean parsed = false;
-                                    // Video size.
-                                    Matcher m2 = SIZE_PATTERN.matcher(token);
-                                    if (!parsed && m2.find()) {
-                                        int width = Integer.parseInt(m2
-                                                .group(1));
-                                        int height = Integer.parseInt(m2
-                                                .group(2));
-                                        video.setSize(new VideoSize(width,
-                                                height));
-                                        parsed = true;
-                                    }
-                                    // Frame rate.
-                                    m2 = FRAME_RATE_PATTERN.matcher(token);
-                                    if (!parsed && m2.find()) {
-                                        try {
-                                            float frameRate = Float
-                                                    .parseFloat(m2.group(1));
-                                            video.setFrameRate(frameRate);
-                                        } catch (NumberFormatException e) {
-                                            _log.info("Invalid frame rate value: " + m2.group(1), e);
-                                        }
-                                        parsed = true;
-                                    }
-                                    // Bit rate.
-                                    m2 = BIT_RATE_PATTERN.matcher(token);
-                                    if (!parsed && m2.find()) {
-                                        int bitRate = Integer.parseInt(m2
-                                                .group(1));
-                                        video.setBitRate(bitRate);
-                                        parsed = true;
-                                    }
-                                }
-                            }
-                            info.setVideo(video);
-                        } else if ("Audio".equalsIgnoreCase(type)) {
-                            AudioInfo audio = new AudioInfo();
-                            StringTokenizer st = new StringTokenizer(specs, ",");
-                            for (int i = 0; st.hasMoreTokens(); i++) {
-                                String token = st.nextToken().trim();
-                                if (i == 0) {
-                                    audio.setDecoder(token);
-                                } else {
-                                    boolean parsed = false;
-                                    // Sampling rate.
-                                    Matcher m2 = SAMPLING_RATE_PATTERN
-                                            .matcher(token);
-                                    if (!parsed && m2.find()) {
-                                        int samplingRate = Integer.parseInt(m2
-                                                .group(1));
-                                        audio.setSamplingRate(samplingRate);
-                                        parsed = true;
-                                    }
-                                    // Channels.
-                                    m2 = CHANNELS_PATTERN.matcher(token);
-                                    if (!parsed && m2.find()) {
-                                        String ms = m2.group(1);
-                                        if ("mono".equalsIgnoreCase(ms)) {
-                                            audio.setChannels(1);
-                                        } else if ("stereo"
-                                                .equalsIgnoreCase(ms)) {
-                                            audio.setChannels(2);
-                                        }
-                                        parsed = true;
-                                    }
-                                    // Bit rate.
-                                    m2 = BIT_RATE_PATTERN.matcher(token);
-                                    if (!parsed && m2.find()) {
-                                        int bitRate = Integer.parseInt(m2
-                                                .group(1));
-                                        audio.setBitRate(bitRate);
-                                        parsed = true;
-                                    }
-                                }
-                            }
-                            info.setAudio(audio);
-                        }
-                    } else // if (m4.matches())
-                    {
-                        // Stay on level 2
-                    }
-                    /*
-                     else 
-                     {
-                     step = 3;
-                     }
-                     */
-                }
-                if (line.startsWith("frame=")) {
-                    reader.reinsertLine(line);
-                    break;
-                }
-            }
-        } catch (IOException e) {
-            throw new EncoderException(e);
-        }
-        if (info == null) {
-            throw new InputFormatException();
-        }
-        return info;
-    }
-
-    /**
      * Private utility. Parse a line and try to match its contents against the
      * {@link Encoder#PROGRESS_INFO_PATTERN} pattern. It the line can be parsed,
      * it returns a hashtable with progress informations, otherwise it returns
@@ -688,7 +477,7 @@ public class Encoder {
     /**
      * Re-encode a multimedia file.
      *
-     * @param source The source multimedia file. It cannot be null. Be sure this
+     * @param multimediaObject The source multimedia file. It cannot be null. Be sure this
      * file can be decoded (see      {@link Encoder#getSupportedDecodingFormats()},
 	 *            {@link Encoder#getAudioDecoders()} and
      * {@link Encoder#getVideoDecoders()}).
@@ -702,16 +491,16 @@ public class Encoder {
      * @throws EncoderException If a problems occurs during the encoding
      * process.
      */
-    public void encode(File source, File target, EncodingAttributes attributes)
+    public void encode(MultimediaObject multimediaObject, File target, EncodingAttributes attributes)
             throws IllegalArgumentException, InputFormatException,
             EncoderException {
-        encode(source, target, attributes, null);
+        encode(multimediaObject, target, attributes, null);
     }
 
     /**
      * Re-encode a multimedia file.
      *
-     * @param source The source multimedia file. It cannot be null. Be sure this
+     * @param multimediaObject The source multimedia file. It cannot be null. Be sure this
      * file can be decoded (see      {@link Encoder#getSupportedDecodingFormats()},
 	 *            {@link Encoder#getAudioDecoders()} and
      * {@link Encoder#getVideoDecoders()}).
@@ -727,7 +516,7 @@ public class Encoder {
      * @throws EncoderException If a problems occurs during the encoding
      * process.
      */
-    public void encode(File source, File target, EncodingAttributes attributes,
+    public void encode(MultimediaObject multimediaObject, File target, EncodingAttributes attributes,
             EncoderProgressListener listener) throws IllegalArgumentException,
             InputFormatException, EncoderException {
         String formatAttribute = attributes.getFormat();
@@ -747,7 +536,7 @@ public class Encoder {
             ffmpeg.addArgument(String.valueOf(offsetAttribute.floatValue()));
         }
         ffmpeg.addArgument("-i");
-        ffmpeg.addArgument(source.getAbsolutePath());
+        ffmpeg.addArgument(multimediaObject.getFile().getAbsolutePath());
         if (durationAttribute != null) {
             ffmpeg.addArgument("-t");
             ffmpeg.addArgument(String.valueOf(durationAttribute.floatValue()));
@@ -792,6 +581,15 @@ public class Encoder {
             {
                 ffmpeg.addArgument("-profile:v");
                 ffmpeg.addArgument(videoAttributes.getX264Profile().getModeName());
+            }
+
+            if (videoAttributes.getVideoFilters().size() > 0)
+            {
+                for (VideoFilter videoFilter : videoAttributes.getVideoFilters())
+                {
+                    ffmpeg.addArgument("-vf");
+                    ffmpeg.addArgument(videoFilter.getExpression());
+                }
             }
         }
         if (audioAttributes == null) {
@@ -841,7 +639,7 @@ public class Encoder {
             long progress = 0;
             RBufferedReader reader = new RBufferedReader(
                     new InputStreamReader(ffmpeg.getErrorStream()));
-            MultimediaInfo info = parseMultimediaInfo(source, reader);
+            MultimediaInfo info = multimediaObject.getInfo();
             if (durationAttribute != null) {
                 duration = (long) Math
                         .round((durationAttribute.floatValue() * 1000L));
