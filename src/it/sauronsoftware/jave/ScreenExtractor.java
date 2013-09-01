@@ -63,6 +63,7 @@ public class ScreenExtractor {
     public void render (MultimediaObject multimediaObject, int width, int height, int seconds, File outputDir,
                         String fileNamePrefix, String extension, int quality)
             throws InputFormatException, EncoderException {
+        File inputFile = multimediaObject.getFile();
         try{
             if (!outputDir.exists()) {
                 if (!outputDir.mkdirs()) {
@@ -78,13 +79,12 @@ public class ScreenExtractor {
             _log.debug("Access denied checking destination folder" + e);
         }
 
-        Encoder encoder = new Encoder();
-        MultimediaInfo multimediaInfo = encoder.getInfo(inputFile);
+        MultimediaInfo multimediaInfo = multimediaObject.getInfo();
         numberOfScreens = (int) Math.ceil((multimediaInfo.getDuration() * .001) / seconds + 1);
 
         FFMPEGExecutor ffmpeg = this.locator.createExecutor();
         ffmpeg.addArgument("-i");
-        ffmpeg.addArgument(multimediaObject.getFile().getAbsolutePath());
+        ffmpeg.addArgument(inputFile.getAbsolutePath());
         ffmpeg.addArgument("-f");
         ffmpeg.addArgument("image2");
         ffmpeg.addArgument("-vf");
