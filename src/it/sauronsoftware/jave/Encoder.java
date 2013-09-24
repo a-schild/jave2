@@ -18,6 +18,9 @@
  */
 package it.sauronsoftware.jave;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,8 +29,6 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Main class of the package. Instances can encode audio and video streams.
@@ -570,13 +571,13 @@ public class Encoder {
                 ffmpeg.addArgument(String.valueOf(size.getWidth()) + "x"
                         + String.valueOf(size.getHeight()));
             }
-            
+
             if (videoAttributes.isFaststart())
             {
                 ffmpeg.addArgument("-movflags");
                 ffmpeg.addArgument("faststart");
             }
-            
+
             if (videoAttributes.getX264Profile() != null)
             {
                 ffmpeg.addArgument("-profile:v");
@@ -698,7 +699,7 @@ public class Encoder {
                         step++;
                     }
                 }
-                if (line.startsWith("frame=")) 
+                if (line.startsWith("frame="))
                 {
                     try
                     {
@@ -715,11 +716,17 @@ public class Encoder {
                                     String time = table.get("time");
                                     if (time != null) {
                                         String dParts[] = time.split(":");
-                                        // HH.MM.SS.xx
+                                        // HH:MM:SS.xx
 
-                                        Double seconds = (Double.parseDouble(dParts[0]) * 60 * 60)
-                                                + (Double.parseDouble(dParts[1]) * 60)
-                                                + (Double.parseDouble(dParts[2]));
+                                        Double seconds = Double.parseDouble(dParts[dParts.length-1]);
+                                        if(dParts.length > 1)
+                                        {
+                                            seconds += Double.parseDouble(dParts[dParts.length-2]) * 60;
+                                            if(dParts.length > 2)
+                                            {
+                                                seconds += Double.parseDouble(dParts[dParts.length-3]) * 60 * 60;
+                                            }
+                                        }
 
                                         int perm = (int) Math.round((seconds * 1000L * 1000L)
                                                 / (double) duration);
