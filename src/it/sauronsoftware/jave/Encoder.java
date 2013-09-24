@@ -625,8 +625,10 @@ public class Encoder {
                 ffmpeg.addArgument(String.valueOf(volume.intValue()));
             }
         }
-        ffmpeg.addArgument("-f");
-        ffmpeg.addArgument(formatAttribute);
+        if(formatAttribute != null) {
+            ffmpeg.addArgument("-f");
+            ffmpeg.addArgument(formatAttribute);
+        }
         ffmpeg.addArgument("-y");
         ffmpeg.addArgument(target.getAbsolutePath());
         try {
