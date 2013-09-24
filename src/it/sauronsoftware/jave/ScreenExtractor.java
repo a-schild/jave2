@@ -1,13 +1,11 @@
 package it.sauronsoftware.jave;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.String;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class ScreenExtractor {
     private final static Log _log = LogFactory.getLog(ScreenExtractor.class);
@@ -95,6 +93,78 @@ public class ScreenExtractor {
         ffmpeg.addArgument(String.valueOf(quality));
         ffmpeg.addArgument(String.format("%s%s%s-%%04d.%s",
                 outputDir.getAbsolutePath(), File.separator, fileNamePrefix, extension));
+
+        try {
+            ffmpeg.execute();
+        } catch (IOException e) {
+            throw new EncoderException(e);
+        }
+        try {
+            RBufferedReader reader = new RBufferedReader(
+                    new InputStreamReader(ffmpeg.getErrorStream()));
+            int step = 0;
+            int lineNR = 0;
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lineNR++;
+                _log.debug("Input Line (" + lineNR + "): " + line);
+                // TODO: Implement additional input stream parsing
+            }
+        } catch (IOException e) {
+            throw new EncoderException(e);
+        } finally {
+            ffmpeg.destroy();
+        }
+
+    }
+
+
+    /**
+     * Generate a single screenshot from source video.
+     *
+     * @param multimediaObject Source MultimediaObject @see MultimediaObject
+     * @param width Output width
+     * @param height Output height
+     * @param seconds Interval in seconds between screens
+     * @param target Destination of output image
+     * @param quality The range is between 1-31 with 31 being the worst quality
+     * @throws InputFormatException If the source multimedia file cannot be
+     * decoded.
+     * @throws EncoderException If a problems occurs during the encoding
+     * process.
+     */
+    public void render (MultimediaObject multimediaObject, int width, int height, int seconds, File target, int quality)
+            throws EncoderException {
+        File inputFile = multimediaObject.getFile();
+        target = target.getAbsoluteFile();
+        target.getParentFile().mkdirs();
+        try{
+            if(!inputFile.canRead()){
+                _log.debug("Failed to open input file");
+                throw new SecurityException();
+            }
+        }catch (SecurityException e){
+            _log.debug("Access denied checking destination folder" + e);
+        }
+
+        MultimediaInfo multimediaInfo = multimediaObject.getInfo();
+        int duration = (int) (multimediaInfo.getDuration() * .001);
+        numberOfScreens = seconds <= duration ? 1 : 0;
+
+        FFMPEGExecutor ffmpeg = this.locator.createExecutor();
+        ffmpeg.addArgument("-i");
+        ffmpeg.addArgument(inputFile.getAbsolutePath());
+        ffmpeg.addArgument("-f");
+        ffmpeg.addArgument("image2");
+        ffmpeg.addArgument("-vframes");
+        ffmpeg.addArgument("1");
+        ffmpeg.addArgument("-ss");
+        ffmpeg.addArgument(String.valueOf(seconds));
+        ffmpeg.addArgument("-s");
+        ffmpeg.addArgument(String.format("%sx%s", String.valueOf(width), String.valueOf(height)));
+        ffmpeg.addArgument("-qscale");
+        ffmpeg.addArgument(String.valueOf(quality));
+        ffmpeg.addArgument(target.getAbsolutePath());
 
         try {
             ffmpeg.execute();
