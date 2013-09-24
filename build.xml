@@ -7,11 +7,11 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="Jave2.1" default="build-all-jars" basedir=".">
-    <description>Builds, tests, and runs the project Jave 2.1.</description>
+<project name="Jave2.2" default="build-all-jars" basedir=".">
+    <description>Builds, tests, and runs the project Jave 2.2.</description>
     <property name="lib.dir" value="libs"/>
 
-    <property name="Version" value="2.1"/>
+    <property name="Version" value="2.2"/>
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
     </path>
