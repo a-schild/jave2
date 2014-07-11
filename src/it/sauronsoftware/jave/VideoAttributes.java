@@ -59,7 +59,7 @@ public class VideoAttributes implements Serializable {
      */
     private VideoSize size = null;
 
-    private ArrayList<VideoFilter> videoFilters = new ArrayList<VideoFilter>();
+    private final ArrayList<VideoFilter> videoFilters = new ArrayList<>();
     /**
      * Encode the video with faststart mode, default OFF
      *
@@ -94,8 +94,9 @@ public class VideoAttributes implements Serializable {
         this.x264Profile = x264Profile;
     }
     
-    public enum X264_PROFILE { BASELINE("baseline"), MAIN("main"), HIGH("high"), HIGH10("high10"), HIGH422("high422"), HIGH444("high444"); 
-        private String modeName;
+    public enum X264_PROFILE { BASELINE("baseline"), MAIN("main"), HIGH("high"), 
+        HIGH10("high10"), HIGH422("high422"), HIGH444("high444"); 
+        private final String modeName;
 
         private X264_PROFILE(String modeName) 
         {

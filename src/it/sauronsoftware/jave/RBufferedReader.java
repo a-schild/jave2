@@ -36,7 +36,7 @@ class RBufferedReader extends BufferedReader {
 	/**
 	 * Re-inserted lines buffer.
 	 */
-	private ArrayList<String> lines = new ArrayList<String>();
+	private final ArrayList<String> lines = new ArrayList<>();
 
 	/**
 	 * It builds the reader.

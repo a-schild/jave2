@@ -96,7 +96,7 @@ public class Encoder {
     /**
      * The locator of the ffmpeg executable used by this encoder.
      */
-    private FFMPEGLocator locator;
+    private final FFMPEGLocator locator;
 
     /**
      * It builds an encoder using a {@link DefaultFFMPEGLocator} instance to
@@ -126,7 +126,7 @@ public class Encoder {
      * ffmpeg executable.
      */
     public String[] getAudioDecoders() throws EncoderException {
-        ArrayList<String> res = new ArrayList<String>();
+        ArrayList<String> res = new ArrayList<>();
         FFMPEGExecutor ffmpeg = locator.createExecutor();
         ffmpeg.addArgument("-formats");
         try {
@@ -180,7 +180,7 @@ public class Encoder {
      * ffmpeg executable.
      */
     public String[] getAudioEncoders() throws EncoderException {
-        ArrayList<String> res = new ArrayList<String>();
+        ArrayList<String> res = new ArrayList<>();
         FFMPEGExecutor ffmpeg = locator.createExecutor();
         ffmpeg.addArgument("-formats");
         try {
@@ -234,7 +234,7 @@ public class Encoder {
      * ffmpeg executable.
      */
     public String[] getVideoDecoders() throws EncoderException {
-        ArrayList<String> res = new ArrayList<String>();
+        ArrayList<String> res = new ArrayList<>();
         FFMPEGExecutor ffmpeg = locator.createExecutor();
         ffmpeg.addArgument("-formats");
         try {
@@ -288,7 +288,7 @@ public class Encoder {
      * ffmpeg executable.
      */
     public String[] getVideoEncoders() throws EncoderException {
-        ArrayList<String> res = new ArrayList<String>();
+        ArrayList<String> res = new ArrayList<>();
         FFMPEGExecutor ffmpeg = locator.createExecutor();
         ffmpeg.addArgument("-formats");
         try {
@@ -344,7 +344,7 @@ public class Encoder {
      * ffmpeg executable.
      */
     public String[] getSupportedEncodingFormats() throws EncoderException {
-        ArrayList<String> res = new ArrayList<String>();
+        ArrayList<String> res = new ArrayList<>();
         FFMPEGExecutor ffmpeg = locator.createExecutor();
         ffmpeg.addArgument("-formats");
         try {
@@ -403,7 +403,7 @@ public class Encoder {
      * ffmpeg executable.
      */
     public String[] getSupportedDecodingFormats() throws EncoderException {
-        ArrayList<String> res = new ArrayList<String>();
+        ArrayList<String> res = new ArrayList<>();
         FFMPEGExecutor ffmpeg = locator.createExecutor();
         ffmpeg.addArgument("-formats");
         try {
@@ -466,7 +466,7 @@ public class Encoder {
         Matcher m = PROGRESS_INFO_PATTERN.matcher(line);
         while (m.find()) {
             if (table == null) {
-                table = new HashMap<String, String>();
+                table = new HashMap<>();
             }
             String key = m.group(1);
             String value = m.group(2);
@@ -645,12 +645,12 @@ public class Encoder {
             MultimediaInfo info = multimediaObject.getInfo();
             if (durationAttribute != null) {
                 duration = (long) Math
-                        .round((durationAttribute.floatValue() * 1000L));
+                        .round((durationAttribute * 1000L));
             } else {
                 duration = info.getDuration();
                 if (offsetAttribute != null) {
                     duration -= (long) Math
-                            .round((offsetAttribute.floatValue() * 1000L));
+                            .round((offsetAttribute * 1000L));
                 }
             }
             if (listener != null) {

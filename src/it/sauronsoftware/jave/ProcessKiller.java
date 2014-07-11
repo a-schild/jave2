@@ -29,7 +29,7 @@ class ProcessKiller extends Thread {
 	/**
 	 * The process to kill.
 	 */
-	private Process process;
+	private final Process process;
 
 	/**
 	 * Builds the killer.

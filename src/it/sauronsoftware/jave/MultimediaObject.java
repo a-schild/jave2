@@ -3,7 +3,6 @@ package it.sauronsoftware.jave;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.String;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,7 +45,7 @@ public class MultimediaObject {
     /**
      * The locator of the ffmpeg executable used by this extractor.
      */
-    private FFMPEGLocator locator;
+    private final FFMPEGLocator locator;
 
     private File inputFile;
 
@@ -54,6 +53,7 @@ public class MultimediaObject {
     /**
      * It builds an extractor using a {@link DefaultFFMPEGLocator} instance to
      * locate the ffmpeg executable to use.
+     * @param input Input file for creating MultimediaObject
      */
     public MultimediaObject(File input) {
         this.locator = new DefaultFFMPEGLocator();
@@ -72,6 +72,7 @@ public class MultimediaObject {
     /**
      * It builds an extractor with a custom {@link FFMPEGLocator}.
      *
+     * @param input Input file for creating MultimediaObject
      * @param locator The locator picking up the ffmpeg executable used by the
      * extractor.
      */
@@ -289,8 +290,4 @@ public class MultimediaObject {
         }
         return info;
     }
-
-    /*public static IMultimediaObject probe (File input) {
-
-    }*/
 }

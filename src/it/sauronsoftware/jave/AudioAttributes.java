@@ -173,6 +173,7 @@ public class AudioAttributes implements Serializable {
 		this.volume = volume;
 	}
 
+        @Override
 	public String toString() {
 		return getClass().getName() + "(codec=" + codec + ", bitRate="
 				+ bitRate + ", samplingRate=" + samplingRate + ", channels="

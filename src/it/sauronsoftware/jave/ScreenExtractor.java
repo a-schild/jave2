@@ -13,7 +13,7 @@ public class ScreenExtractor {
     /**
      * The locator of the ffmpeg executable used by this extractor.
      */
-    private FFMPEGLocator locator;
+    private final FFMPEGLocator locator;
     private int numberOfScreens;
 
     /**
@@ -26,6 +26,7 @@ public class ScreenExtractor {
 
     /**
      *
+     * @return 
      */
     public  int getNumberOfScreens(){
         return numberOfScreens;

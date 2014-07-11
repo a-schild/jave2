@@ -47,7 +47,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator
 	/**
 	 * The ffmpeg executable file path.
 	 */
-	private String path;
+	private final String path;
 
 	/**
 	 * It builds the default FFMPEGLocator, exporting the ffmpeg executable on a
@@ -58,7 +58,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator
 		// Windows?
 		boolean isWindows;
 		String os = System.getProperty("os.name").toLowerCase();
-		if (os.indexOf("windows") != -1) {
+		if (os.contains("windows")) {
 			isWindows = true;
 		} else {
 			isWindows = false;
@@ -79,15 +79,6 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator
 		if (!exe.exists()) {
 			copyFile("ffmpeg-"+arch + suffix, exe);
 		}
-                /*
-		// pthreadGC2.dll
-		if (isWindows) {
-			File dll = new File(temp, "pthreadGC2.dll");
-			if (!dll.exists()) {
-				copyFile("pthreadGC2.dll", dll);
-			}
-		}
-                */
 		// Need a chmod?
 		if (!isWindows) {
 			Runtime runtime = Runtime.getRuntime();
@@ -150,7 +141,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator
 					output.close();
 				} catch (Throwable t) 
                                 {
-					;
+					; // Silent ignore
 				}
 			}
 			if (input != null) {
@@ -158,7 +149,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator
 					input.close();
 				} catch (Throwable t) 
                                 {
-					;
+					; // Silent ignore
 				}
 			}
 		}

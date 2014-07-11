@@ -37,12 +37,12 @@ class FFMPEGExecutor
 	/**
 	 * The path of the ffmpeg executable.
 	 */
-	private String ffmpegExecutablePath;
+	private final String ffmpegExecutablePath;
 
 	/**
 	 * Arguments for the executable.
 	 */
-	private ArrayList<String> args = new ArrayList<String>();
+	private final ArrayList<String> args = new ArrayList<>();
 
 	/**
 	 * The process representing the ffmpeg execution.
