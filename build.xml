@@ -12,6 +12,7 @@
     <property name="lib.dir" value="libs"/>
 
     <property name="Version" value="2.2"/>
+    <property name="JavaVersion" value="1.7"/>
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
     </path>
@@ -22,7 +23,7 @@
 
     <target name="compile" depends="clean">
         <mkdir dir="build/classes" />
-        <javac srcdir="src" destdir="build/classes" classpathref="classpath"/>
+        <javac target="${JavaVersion}" source="${JavaVersion}" srcdir="src" destdir="build/classes" classpathref="classpath"/>
     </target>
 
     <target name="build-all-jars"
