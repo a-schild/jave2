@@ -23,6 +23,9 @@
 
     <target name="compile" depends="clean">
         <mkdir dir="build/classes" />
+        <copy todir="build/classes/it/sauronsoftware/jave/native">
+            <fileset dir="src/it/sauronsoftware/jave/native" />
+        </copy>
         <javac target="${JavaVersion}" source="${JavaVersion}" srcdir="src" destdir="build/classes" classpathref="classpath"/>
     </target>
 
