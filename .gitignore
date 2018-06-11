@@ -4,3 +4,11 @@
 /.idea
 /build/
 /out/
+/jave-core-test/target/
+/jave-core/target/
+/jave-native-linux32/target/
+/jave-native-linux64/target/
+/jave-native-osx64/target/
+/jave-native-win32/target/
+/jave-native-win64/target/
+/jave-core/nbproject/
