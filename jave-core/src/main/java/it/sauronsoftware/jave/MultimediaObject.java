@@ -10,7 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class MultimediaObject {
-    private final static Log _log = LogFactory.getLog(MultimediaObject.class);
+    private final static Log LOG = LogFactory.getLog(MultimediaObject.class);
     /**
      * This regexp is used to parse the ffmpeg output about the size of a video
      * stream.
@@ -93,21 +93,28 @@ public class MultimediaObject {
      */
     public MultimediaInfo getInfo() throws InputFormatException,
             EncoderException {
-        FFMPEGExecutor ffmpeg = locator.createExecutor();
-        ffmpeg.addArgument("-i");
-        ffmpeg.addArgument(inputFile.getAbsolutePath());
-        try {
-            ffmpeg.execute();
-        } catch (IOException e) {
-            throw new EncoderException(e);
+        if (inputFile.canRead())
+        {
+            FFMPEGExecutor ffmpeg = locator.createExecutor();
+            ffmpeg.addArgument("-i");
+            ffmpeg.addArgument(inputFile.getAbsolutePath());
+            try {
+                ffmpeg.execute();
+            } catch (IOException e) {
+                throw new EncoderException(e);
+            }
+            try {
+                RBufferedReader reader = null;
+                reader = new RBufferedReader(new InputStreamReader(ffmpeg
+                        .getErrorStream()));
+                return parseMultimediaInfo(inputFile, reader);
+            } finally {
+                ffmpeg.destroy();
+            }
         }
-        try {
-            RBufferedReader reader = null;
-            reader = new RBufferedReader(new InputStreamReader(ffmpeg
-                    .getErrorStream()));
-            return parseMultimediaInfo(inputFile, reader);
-        } finally {
-            ffmpeg.destroy();
+        else
+        {
+            throw new EncoderException("Input file not found <"+inputFile.getAbsolutePath()+">");
         }
     }
 
@@ -143,7 +150,7 @@ public class MultimediaObject {
             int step = 0;
             while (true) {
                 String line = reader.readLine();
-                _log.warn("Output line: " + line);
+                LOG.debug("Output line: " + line);
                 if (line == null) {
                     break;
                 }
@@ -209,7 +216,7 @@ public class MultimediaObject {
                                                     .parseFloat(m2.group(1));
                                             video.setFrameRate(frameRate);
                                         } catch (NumberFormatException e) {
-                                            _log.info("Invalid frame rate value: " + m2.group(1), e);
+                                            LOG.info("Invalid frame rate value: " + m2.group(1), e);
                                         }
                                         parsed = true;
                                     }

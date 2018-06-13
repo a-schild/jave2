@@ -36,13 +36,13 @@ import org.apache.commons.logging.LogFactory;
  */
 public class DefaultFFMPEGLocator extends FFMPEGLocator 
 {
-    private final static Log _log = LogFactory.getLog(DefaultFFMPEGLocator.class);
-    
+        private final static Log LOG= LogFactory.getLog(FFMPEGExecutor.class);
+        
 	/**
 	 * Trace the version of the bundled ffmpeg executable. It's a counter: every
 	 * time the bundled ffmpeg change it is incremented by 1.
 	 */
-	private static final int myEXEversion = 2;
+	private static final int MY_EXE_VERSION = 2;
 
 	/**
 	 * The ffmpeg executable file path.
@@ -66,7 +66,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator
 
 		// Temp dir?
 		File temp = new File(System.getProperty("java.io.tmpdir"), "jave-"
-				+ myEXEversion);
+				+ MY_EXE_VERSION);
 		if (!temp.exists()) {
 			temp.mkdirs();
 			temp.deleteOnExit();
@@ -87,7 +87,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator
 						exe.getAbsolutePath() });
 			} catch (IOException e) 
                         {
-				_log.error(e);
+				LOG.error(e);
 			}
 		}
 		// Ok.
@@ -126,13 +126,13 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator
                         }
                         else
                         {
-                            _log.error("Could not get native library for "+path);
+                            LOG.error("Could not get native library for "+path);
                             throw new RuntimeException("Cannot retrieve native file "
                                             + path);
                         }
 		} catch (IOException e) 
                 {
-                    _log.error("Cannot write file " + dest.getAbsolutePath(), e);
+                    LOG.error("Cannot write file " + dest.getAbsolutePath(), e);
 			throw new RuntimeException("Cannot write file "
 					+ dest.getAbsolutePath());
 		} finally {

@@ -37,7 +37,8 @@ import java.util.regex.Pattern;
  */
 public class Encoder {
 
-    private final static Log _log = LogFactory.getLog(Encoder.class);
+    private final static Log LOG = LogFactory.getLog(Encoder.class);
+
     /**
      * This regexp is used to parse the ffmpeg output about the supported
      * formats.
@@ -49,7 +50,7 @@ public class Encoder {
      * encoders/decoders.
      */
     private static final Pattern ENCODER_DECODER_PATTERN = Pattern.compile(
-            "^\\s*([D ])([E ])([AVS]).{3}\\s+(.+)$", Pattern.CASE_INSENSITIVE);
+            "^\\s*([AVS]).{5}\\s(\\S+).(.+)$", Pattern.CASE_INSENSITIVE);
     /**
      * This regexp is used to parse the ffmpeg output about the ongoing encoding
      * process.
@@ -126,48 +127,7 @@ public class Encoder {
      * ffmpeg executable.
      */
     public String[] getAudioDecoders() throws EncoderException {
-        ArrayList<String> res = new ArrayList<>();
-        FFMPEGExecutor ffmpeg = locator.createExecutor();
-        ffmpeg.addArgument("-formats");
-        try {
-            ffmpeg.execute();
-            RBufferedReader reader = null;
-            reader = new RBufferedReader(new InputStreamReader(ffmpeg
-                    .getInputStream()));
-            String line;
-            boolean evaluate = false;
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().length() == 0) {
-                    continue;
-                }
-                if (evaluate) {
-                    Matcher matcher = ENCODER_DECODER_PATTERN.matcher(line);
-                    if (matcher.matches()) {
-                        String decoderFlag = matcher.group(1);
-                        String audioVideoFlag = matcher.group(3);
-                        if ("D".equals(decoderFlag)
-                                && "A".equals(audioVideoFlag)) {
-                            String name = matcher.group(4);
-                            res.add(name);
-                        }
-                    } else {
-                        break;
-                    }
-                } else if (line.trim().equals("Codecs:")) {
-                    evaluate = true;
-                }
-            }
-        } catch (IOException e) {
-            throw new EncoderException(e);
-        } finally {
-            ffmpeg.destroy();
-        }
-        int size = res.size();
-        String[] ret = new String[size];
-        for (int i = 0; i < size; i++) {
-            ret[i] = res.get(i);
-        }
-        return ret;
+        return getCoders(false, true);
     }
 
     /**
@@ -180,45 +140,77 @@ public class Encoder {
      * ffmpeg executable.
      */
     public String[] getAudioEncoders() throws EncoderException {
+        return getCoders(true, true);
+    }
+
+    /**
+     * Returns a list with the names of all the coders bundled with the ffmpeg
+     * distribution in use.
+     *
+     * @param encoder Do search encoders, else decoders
+     * @param audio Do search for audio encodes, else video
+     * @return A list with the names of all the included encoders
+     * @throws EncoderException If a problem occurs calling the underlying
+     * ffmpeg executable.
+     */
+    protected String[] getCoders(boolean encoder, boolean audio) throws EncoderException {
         ArrayList<String> res = new ArrayList<>();
         FFMPEGExecutor ffmpeg = locator.createExecutor();
-        ffmpeg.addArgument("-formats");
-        try {
+        ffmpeg.addArgument(encoder ? "-encoders" : "-decoders");
+        try
+        {
             ffmpeg.execute();
             RBufferedReader reader = null;
             reader = new RBufferedReader(new InputStreamReader(ffmpeg
                     .getInputStream()));
             String line;
-            boolean evaluate = false;
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().length() == 0) {
+            String format = audio ? "A" : "V";
+            boolean headerFound = false;
+            boolean evaluateLine = false;
+            while ((line = reader.readLine()) != null)
+            {
+                if (line.trim().length() == 0)
+                {
                     continue;
                 }
-                if (evaluate) {
-                    Matcher matcher = ENCODER_DECODER_PATTERN.matcher(line);
-                    if (matcher.matches()) {
-                        String encoderFlag = matcher.group(2);
-                        String audioVideoFlag = matcher.group(3);
-                        if ("E".equals(encoderFlag)
-                                && "A".equals(audioVideoFlag)) {
-                            String name = matcher.group(4);
-                            res.add(name);
+                if (headerFound)
+                {
+                    if (evaluateLine)
+                    {
+                        Matcher matcher = ENCODER_DECODER_PATTERN.matcher(line);
+                        if (matcher.matches())
+                        {
+                            //String encoderFlag = matcher.group(2);
+                            String audioVideoFlag = matcher.group(1);
+                            if (format.equals(audioVideoFlag))
+                            {
+                                String name = matcher.group(2);
+                                res.add(name);
+                            }
+                        } else
+                        {
+                            break;
                         }
-                    } else {
-                        break;
+                    } else
+                    {
+                        evaluateLine = line.trim().equals("------");
                     }
-                } else if (line.trim().equals("Codecs:")) {
-                    evaluate = true;
+                } else if (line.trim().equals(encoder ? "Encoders:" : "Decoders:"))
+                {
+                    headerFound = true;
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             throw new EncoderException(e);
-        } finally {
+        } finally
+        {
             ffmpeg.destroy();
         }
         int size = res.size();
         String[] ret = new String[size];
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
+        {
             ret[i] = res.get(i);
         }
         return ret;
@@ -234,48 +226,7 @@ public class Encoder {
      * ffmpeg executable.
      */
     public String[] getVideoDecoders() throws EncoderException {
-        ArrayList<String> res = new ArrayList<>();
-        FFMPEGExecutor ffmpeg = locator.createExecutor();
-        ffmpeg.addArgument("-formats");
-        try {
-            ffmpeg.execute();
-            RBufferedReader reader = null;
-            reader = new RBufferedReader(new InputStreamReader(ffmpeg
-                    .getInputStream()));
-            String line;
-            boolean evaluate = false;
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().length() == 0) {
-                    continue;
-                }
-                if (evaluate) {
-                    Matcher matcher = ENCODER_DECODER_PATTERN.matcher(line);
-                    if (matcher.matches()) {
-                        String decoderFlag = matcher.group(1);
-                        String audioVideoFlag = matcher.group(3);
-                        if ("D".equals(decoderFlag)
-                                && "V".equals(audioVideoFlag)) {
-                            String name = matcher.group(4);
-                            res.add(name);
-                        }
-                    } else {
-                        break;
-                    }
-                } else if (line.trim().equals("Codecs:")) {
-                    evaluate = true;
-                }
-            }
-        } catch (IOException e) {
-            throw new EncoderException(e);
-        } finally {
-            ffmpeg.destroy();
-        }
-        int size = res.size();
-        String[] ret = new String[size];
-        for (int i = 0; i < size; i++) {
-            ret[i] = res.get(i);
-        }
-        return ret;
+        return getCoders(false, false);
     }
 
     /**
@@ -288,48 +239,7 @@ public class Encoder {
      * ffmpeg executable.
      */
     public String[] getVideoEncoders() throws EncoderException {
-        ArrayList<String> res = new ArrayList<>();
-        FFMPEGExecutor ffmpeg = locator.createExecutor();
-        ffmpeg.addArgument("-formats");
-        try {
-            ffmpeg.execute();
-            RBufferedReader reader = null;
-            reader = new RBufferedReader(new InputStreamReader(ffmpeg
-                    .getInputStream()));
-            String line;
-            boolean evaluate = false;
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().length() == 0) {
-                    continue;
-                }
-                if (evaluate) {
-                    Matcher matcher = ENCODER_DECODER_PATTERN.matcher(line);
-                    if (matcher.matches()) {
-                        String encoderFlag = matcher.group(2);
-                        String audioVideoFlag = matcher.group(3);
-                        if ("E".equals(encoderFlag)
-                                && "V".equals(audioVideoFlag)) {
-                            String name = matcher.group(4);
-                            res.add(name);
-                        }
-                    } else {
-                        break;
-                    }
-                } else if (line.trim().equals("Codecs:")) {
-                    evaluate = true;
-                }
-            }
-        } catch (IOException e) {
-            throw new EncoderException(e);
-        } finally {
-            ffmpeg.destroy();
-        }
-        int size = res.size();
-        String[] ret = new String[size];
-        for (int i = 0; i < size; i++) {
-            ret[i] = res.get(i);
-        }
-        return ret;
+        return getCoders(true, false);
     }
 
     /**
@@ -344,49 +254,86 @@ public class Encoder {
      * ffmpeg executable.
      */
     public String[] getSupportedEncodingFormats() throws EncoderException {
+        return getSupportedCodingFormats(true);
+    }
+
+    /**
+     * Returns a list with the names of all the file formats supported at
+     * en/de-coding time by the underlying ffmpeg distribution.A multimedia file
+     * could be encoded and generated only if the specified format is in this
+     * list.
+     *
+     * @param encoding
+     * @return A list with the names of all the supported file formats at
+     * encoding time.
+     * @throws EncoderException If a problem occurs calling the underlying
+     * ffmpeg executable.
+     */
+    protected String[] getSupportedCodingFormats(boolean encoding) throws EncoderException {
         ArrayList<String> res = new ArrayList<>();
         FFMPEGExecutor ffmpeg = locator.createExecutor();
         ffmpeg.addArgument("-formats");
-        try {
+        try
+        {
             ffmpeg.execute();
             RBufferedReader reader = null;
             reader = new RBufferedReader(new InputStreamReader(ffmpeg
                     .getInputStream()));
             String line;
-            boolean evaluate = false;
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().length() == 0) {
+            String ed = encoding ? "E" : "D";
+            boolean headerFound = false;
+            boolean evaluateLine = false;
+            while ((line = reader.readLine()) != null)
+            {
+                if (line.trim().length() == 0)
+                {
                     continue;
                 }
-                if (evaluate) {
-                    Matcher matcher = FORMAT_PATTERN.matcher(line);
-                    if (matcher.matches()) {
-                        String encoderFlag = matcher.group(2);
-                        if ("E".equals(encoderFlag)) {
-                            String aux = matcher.group(3);
-                            StringTokenizer st = new StringTokenizer(aux, ",");
-                            while (st.hasMoreTokens()) {
-                                String token = st.nextToken().trim();
-                                if (!res.contains(token)) {
-                                    res.add(token);
+                if (headerFound)
+                {
+                    if (evaluateLine)
+                    {
+                        Matcher matcher = FORMAT_PATTERN.matcher(line);
+                        if (matcher.matches())
+                        {
+                            String encoderFlag = matcher.group(encoding ? 2 : 1);
+                            if (ed.equals(encoderFlag))
+                            {
+                                String aux = matcher.group(3);
+                                StringTokenizer st = new StringTokenizer(aux, ",");
+                                while (st.hasMoreTokens())
+                                {
+                                    String token = st.nextToken().trim();
+                                    if (!res.contains(token))
+                                    {
+                                        res.add(token);
+                                    }
                                 }
                             }
+                        } else
+                        {
+                            break;
                         }
-                    } else {
-                        break;
+                    } else
+                    {
+                        evaluateLine = line.trim().equals("--");
                     }
-                } else if (line.trim().equals("File formats:")) {
-                    evaluate = true;
+                } else if (line.trim().equals("File formats:"))
+                {
+                    headerFound = true;
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             throw new EncoderException(e);
-        } finally {
+        } finally
+        {
             ffmpeg.destroy();
         }
         int size = res.size();
         String[] ret = new String[size];
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
+        {
             ret[i] = res.get(i);
         }
         return ret;
@@ -403,52 +350,7 @@ public class Encoder {
      * ffmpeg executable.
      */
     public String[] getSupportedDecodingFormats() throws EncoderException {
-        ArrayList<String> res = new ArrayList<>();
-        FFMPEGExecutor ffmpeg = locator.createExecutor();
-        ffmpeg.addArgument("-formats");
-        try {
-            ffmpeg.execute();
-            RBufferedReader reader = null;
-            reader = new RBufferedReader(new InputStreamReader(ffmpeg
-                    .getInputStream()));
-            String line;
-            boolean evaluate = false;
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().length() == 0) {
-                    continue;
-                }
-                if (evaluate) {
-                    Matcher matcher = FORMAT_PATTERN.matcher(line);
-                    if (matcher.matches()) {
-                        String decoderFlag = matcher.group(1);
-                        if ("D".equals(decoderFlag)) {
-                            String aux = matcher.group(3);
-                            StringTokenizer st = new StringTokenizer(aux, ",");
-                            while (st.hasMoreTokens()) {
-                                String token = st.nextToken().trim();
-                                if (!res.contains(token)) {
-                                    res.add(token);
-                                }
-                            }
-                        }
-                    } else {
-                        break;
-                    }
-                } else if (line.trim().equals("File formats:")) {
-                    evaluate = true;
-                }
-            }
-        } catch (IOException e) {
-            throw new EncoderException(e);
-        } finally {
-            ffmpeg.destroy();
-        }
-        int size = res.size();
-        String[] ret = new String[size];
-        for (int i = 0; i < size; i++) {
-            ret[i] = res.get(i);
-        }
-        return ret;
+        return getSupportedCodingFormats(false);
     }
 
     /**
@@ -464,8 +366,10 @@ public class Encoder {
     private HashMap<String, String> parseProgressInfoLine(String line) {
         HashMap<String, String> table = null;
         Matcher m = PROGRESS_INFO_PATTERN.matcher(line);
-        while (m.find()) {
-            if (table == null) {
+        while (m.find())
+        {
+            if (table == null)
+            {
                 table = new HashMap<>();
             }
             String key = m.group(1);
@@ -478,8 +382,8 @@ public class Encoder {
     /**
      * Re-encode a multimedia file.
      *
-     * @param multimediaObject The source multimedia file. It cannot be null. Be sure this
-     * file can be decoded (see      {@link Encoder#getSupportedDecodingFormats()},
+     * @param multimediaObject The source multimedia file. It cannot be null. Be
+     * sure this file can be decoded (see null     {@link Encoder#getSupportedDecodingFormats()},
 	 *            {@link Encoder#getAudioDecoders()} and
      * {@link Encoder#getVideoDecoders()}).
      * @param target The target multimedia re-encoded file. It cannot be null.
@@ -501,8 +405,8 @@ public class Encoder {
     /**
      * Re-encode a multimedia file.
      *
-     * @param multimediaObject The source multimedia file. It cannot be null. Be sure this
-     * file can be decoded (see      {@link Encoder#getSupportedDecodingFormats()},
+     * @param multimediaObject The source multimedia file. It cannot be null. Be
+     * sure this file can be decoded (see null     {@link Encoder#getSupportedDecodingFormats()},
 	 *            {@link Encoder#getAudioDecoders()} and
      * {@link Encoder#getVideoDecoders()}).
      * @param target The target multimedia re-encoded file. It cannot be null.
@@ -525,48 +429,58 @@ public class Encoder {
         Float durationAttribute = attributes.getDuration();
         AudioAttributes audioAttributes = attributes.getAudioAttributes();
         VideoAttributes videoAttributes = attributes.getVideoAttributes();
-        if (audioAttributes == null && videoAttributes == null) {
+        if (audioAttributes == null && videoAttributes == null)
+        {
             throw new IllegalArgumentException(
                     "Both audio and video attributes are null");
         }
         target = target.getAbsoluteFile();
         target.getParentFile().mkdirs();
         FFMPEGExecutor ffmpeg = locator.createExecutor();
-        if (offsetAttribute != null) {
+        if (offsetAttribute != null)
+        {
             ffmpeg.addArgument("-ss");
             ffmpeg.addArgument(String.valueOf(offsetAttribute.floatValue()));
         }
         ffmpeg.addArgument("-i");
         ffmpeg.addArgument(multimediaObject.getFile().getAbsolutePath());
-        if (durationAttribute != null) {
+        if (durationAttribute != null)
+        {
             ffmpeg.addArgument("-t");
             ffmpeg.addArgument(String.valueOf(durationAttribute.floatValue()));
         }
-        if (videoAttributes == null) {
+        if (videoAttributes == null)
+        {
             ffmpeg.addArgument("-vn");
-        } else {
+        } else
+        {
             String codec = videoAttributes.getCodec();
-            if (codec != null) {
+            if (codec != null)
+            {
                 ffmpeg.addArgument("-vcodec");
                 ffmpeg.addArgument(codec);
             }
             String tag = videoAttributes.getTag();
-            if (tag != null) {
+            if (tag != null)
+            {
                 ffmpeg.addArgument("-vtag");
                 ffmpeg.addArgument(tag);
             }
             Integer bitRate = videoAttributes.getBitRate();
-            if (bitRate != null) {
+            if (bitRate != null)
+            {
                 ffmpeg.addArgument("-vb");
                 ffmpeg.addArgument(String.valueOf(bitRate.intValue()));
             }
             Integer frameRate = videoAttributes.getFrameRate();
-            if (frameRate != null) {
+            if (frameRate != null)
+            {
                 ffmpeg.addArgument("-r");
                 ffmpeg.addArgument(String.valueOf(frameRate.intValue()));
             }
             VideoSize size = videoAttributes.getSize();
-            if (size != null) {
+            if (size != null)
+            {
                 ffmpeg.addArgument("-s");
                 ffmpeg.addArgument(String.valueOf(size.getWidth()) + "x"
                         + String.valueOf(size.getHeight()));
@@ -593,112 +507,155 @@ public class Encoder {
                 }
             }
         }
-        if (audioAttributes == null) {
+        if (audioAttributes == null)
+        {
             ffmpeg.addArgument("-an");
-        } else {
+        } else
+        {
             String codec = audioAttributes.getCodec();
-            if (codec != null) {
-                if (codec.equals("aac")) {
+            if (codec != null)
+            {
+                if (codec.equals("aac"))
+                {
                     codec = "libvo_aacenc";
                 }
                 ffmpeg.addArgument("-acodec");
                 ffmpeg.addArgument(codec);
             }
             Integer bitRate = audioAttributes.getBitRate();
-            if (bitRate != null) {
+            if (bitRate != null)
+            {
                 ffmpeg.addArgument("-ab");
                 ffmpeg.addArgument(String.valueOf(bitRate.intValue()));
             }
             Integer channels = audioAttributes.getChannels();
-            if (channels != null) {
+            if (channels != null)
+            {
                 ffmpeg.addArgument("-ac");
                 ffmpeg.addArgument(String.valueOf(channels.intValue()));
             }
             Integer samplingRate = audioAttributes.getSamplingRate();
-            if (samplingRate != null) {
+            if (samplingRate != null)
+            {
                 ffmpeg.addArgument("-ar");
                 ffmpeg.addArgument(String.valueOf(samplingRate.intValue()));
             }
             Integer volume = audioAttributes.getVolume();
-            if (volume != null) {
+            if (volume != null)
+            {
                 ffmpeg.addArgument("-vol");
                 ffmpeg.addArgument(String.valueOf(volume.intValue()));
             }
         }
-        if(formatAttribute != null) {
+        if (formatAttribute != null)
+        {
             ffmpeg.addArgument("-f");
             ffmpeg.addArgument(formatAttribute);
         }
         ffmpeg.addArgument("-y");
         ffmpeg.addArgument(target.getAbsolutePath());
-        try {
+        try
+        {
             ffmpeg.execute();
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             throw new EncoderException(e);
         }
-        try {
+        try
+        {
             String lastWarning = null;
             long duration;
             long progress = 0;
             RBufferedReader reader = new RBufferedReader(
                     new InputStreamReader(ffmpeg.getErrorStream()));
             MultimediaInfo info = multimediaObject.getInfo();
-            if (durationAttribute != null) {
+            if (durationAttribute != null)
+            {
                 duration = (long) Math
                         .round((durationAttribute * 1000L));
-            } else {
+            } else
+            {
                 duration = info.getDuration();
-                if (offsetAttribute != null) {
+                if (offsetAttribute != null)
+                {
                     duration -= (long) Math
                             .round((offsetAttribute * 1000L));
                 }
             }
-            if (listener != null) {
+            if (listener != null)
+            {
                 listener.sourceInfo(info);
             }
+            // Step 0 = Before input stuff
+            // Step 1 = Input stuff
+            // Step 2 = Stream Mapping
+            // Step 3 = Output
+            // Step 4 = frame=...
             int step = 0;
             int lineNR = 0;
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null)
+            {
                 lineNR++;
-                if (_log.isDebugEnabled()) {
-                    _log.debug("Input Line (" + lineNR + "): " + line);
+                if (LOG.isDebugEnabled())
+                {
+                    LOG.debug("Input Line (" + lineNR + "): " + line);
                 }
-                if (step == 0) {
-                    if (line.startsWith("WARNING: ")) {
-                        if (listener != null) {
-                            listener.message(line);
-                        }
-                    } else if (!line.startsWith("Output #0")) {
-                        // throw new EncoderException(line);
-                    } else {
-                        step++;
+                if (line.startsWith("WARNING: "))
+                {
+                    if (listener != null)
+                    {
+                        listener.message(line);
                     }
                 }
-                if (step == 1) {
-                    if (line.startsWith("WARNING: ")) {
-                        if (listener != null) {
-                            listener.message(line);
-                        }
-                    } else if (!line.startsWith("Output #0")) {
-                        // throw new EncoderException(line);
-                    } else {
-                        step++;
+                if (step == 0)
+                {
+                    if (line.startsWith("Input #0"))
+                    {
+                        step = 1;
+                    } else
+                    {
+                        // wait for Stream mapping:
                     }
-                } else if (step == 2) {
-                    if (!line.startsWith("  ")) {
-                        step++;
-                    }
-                }
-                if (step == 3) {
-                    if (!line.startsWith("Stream mapping:")) {
+                } else if (step == 1)
+                {
+                    if (line.startsWith("Stream mapping:"))
+                    {
+                        step = 2;
+                    } else if (!line.startsWith("  "))
+                    {
                         throw new EncoderException(line);
-                    } else {
-                        step++;
+                    } else
+                    {
+                        // wait for Stream mapping:
                     }
-                } else if (step == 4) {
-                    if (!line.startsWith("  ")) {
-                        step++;
+                } else if (step == 2)
+                {
+                    if (line.startsWith("Output #0"))
+                    {
+                        step = 3;
+                    } else if (!line.startsWith("  ") && !line.startsWith("Press [q]"))
+                    {
+                        throw new EncoderException(line);
+                    } else
+                    {
+                        // wait for Stream mapping:
+                    }
+                } else if (step == 3)
+                {
+                    if (line.startsWith("  ") )
+                    {
+                        // output details
+                    }
+                    else if (line.startsWith("video:"))
+                    {
+                        step = 4;
+                    } else if (line.startsWith("frame="))
+                    {
+                        // Progressnotification
+                    } else
+                    {
+                        throw new EncoderException(line);
                     }
                 }
                 if (line.startsWith("frame="))
@@ -706,33 +663,40 @@ public class Encoder {
                     try
                     {
                         line = line.trim();
-                        if (line.length() > 0) {
+                        if (line.length() > 0)
+                        {
                             HashMap<String, String> table = parseProgressInfoLine(line);
-                            if (table == null) {
-                                if (listener != null) {
+                            if (table == null)
+                            {
+                                if (listener != null)
+                                {
                                     listener.message(line);
                                 }
                                 lastWarning = line;
-                            } else {
-                                if (listener != null) {
+                            } else
+                            {
+                                if (listener != null)
+                                {
                                     String time = table.get("time");
-                                    if (time != null) {
+                                    if (time != null)
+                                    {
                                         String dParts[] = time.split(":");
                                         // HH:MM:SS.xx
 
-                                        Double seconds = Double.parseDouble(dParts[dParts.length-1]);
-                                        if(dParts.length > 1)
+                                        Double seconds = Double.parseDouble(dParts[dParts.length - 1]);
+                                        if (dParts.length > 1)
                                         {
-                                            seconds += Double.parseDouble(dParts[dParts.length-2]) * 60;
-                                            if(dParts.length > 2)
+                                            seconds += Double.parseDouble(dParts[dParts.length - 2]) * 60;
+                                            if (dParts.length > 2)
                                             {
-                                                seconds += Double.parseDouble(dParts[dParts.length-3]) * 60 * 60;
+                                                seconds += Double.parseDouble(dParts[dParts.length - 3]) * 60 * 60;
                                             }
                                         }
 
                                         int perm = (int) Math.round((seconds * 1000L * 1000L)
                                                 / (double) duration);
-                                        if (perm > 1000) {
+                                        if (perm > 1000)
+                                        {
                                             perm = 1000;
                                         }
                                         listener.progress(perm);
@@ -741,21 +705,24 @@ public class Encoder {
                                 lastWarning = null;
                             }
                         }
-                    }
-                    catch (Exception ex)
+                    } catch (Exception ex)
                     {
-                        _log.warn("Error in progress parsing for line: "+line);
+                        LOG.warn("Error in progress parsing for line: " + line);
                     }
                 }
             }
-            if (lastWarning != null) {
-                if (!SUCCESS_PATTERN.matcher(lastWarning).matches()) {
+            if (lastWarning != null)
+            {
+                if (!SUCCESS_PATTERN.matcher(lastWarning).matches())
+                {
                     throw new EncoderException("No match for: " + SUCCESS_PATTERN + " in " + lastWarning);
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             throw new EncoderException(e);
-        } finally {
+        } finally
+        {
             ffmpeg.destroy();
         }
     }

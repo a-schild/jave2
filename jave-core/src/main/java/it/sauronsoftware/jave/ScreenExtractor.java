@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class ScreenExtractor {
-    private final static Log _log = LogFactory.getLog(ScreenExtractor.class);
+    private final static Log LOG = LogFactory.getLog(ScreenExtractor.class);
 
     /**
      * The locator of the ffmpeg executable used by this extractor.
@@ -66,16 +66,16 @@ public class ScreenExtractor {
         try{
             if (!outputDir.exists()) {
                 if (!outputDir.mkdirs()) {
-                    _log.debug("Failed to create destination folder");
+                    LOG.debug("Failed to create destination folder");
                     throw new SecurityException();
                 }
             }
             if(!inputFile.canRead()){
-                _log.debug("Failed to open input file");
+                LOG.debug("Failed to open input file");
                 throw new SecurityException();
             }
         }catch (SecurityException e){
-            _log.debug("Access denied checking destination folder" + e);
+            LOG.debug("Access denied checking destination folder" + e);
         }
 
         MultimediaInfo multimediaInfo = multimediaObject.getInfo();
@@ -108,7 +108,7 @@ public class ScreenExtractor {
             String line;
             while ((line = reader.readLine()) != null) {
                 lineNR++;
-                _log.debug("Input Line (" + lineNR + "): " + line);
+                LOG.debug("Input Line (" + lineNR + "): " + line);
                 // TODO: Implement additional input stream parsing
             }
         } catch (IOException e) {
@@ -141,11 +141,11 @@ public class ScreenExtractor {
         target.getParentFile().mkdirs();
         try{
             if(!inputFile.canRead()){
-                _log.debug("Failed to open input file");
+                LOG.debug("Failed to open input file");
                 throw new SecurityException();
             }
         }catch (SecurityException e){
-            _log.debug("Access denied checking destination folder" + e);
+            LOG.debug("Access denied checking destination folder" + e);
         }
 
         MultimediaInfo multimediaInfo = multimediaObject.getInfo();
@@ -180,7 +180,7 @@ public class ScreenExtractor {
             String line;
             while ((line = reader.readLine()) != null) {
                 lineNR++;
-                _log.debug("Input Line (" + lineNR + "): " + line);
+                LOG.debug("Input Line (" + lineNR + "): " + line);
                 // TODO: Implement additional input stream parsing
             }
         } catch (IOException e) {

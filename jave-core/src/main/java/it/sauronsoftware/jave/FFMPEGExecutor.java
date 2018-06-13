@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
  */
 class FFMPEGExecutor 
 {
-    private final static Log _log= LogFactory.getLog(FFMPEGExecutor.class);
+    private final static Log LOG= LogFactory.getLog(FFMPEGExecutor.class);
     
 	/**
 	 * The path of the ffmpeg executable.
@@ -99,13 +99,14 @@ class FFMPEGExecutor
 	public void execute() throws IOException 
         {
 		int argsSize = args.size();
-		String[] cmd = new String[argsSize + 1];
+		String[] cmd = new String[argsSize + 2];
 		cmd[0] = ffmpegExecutablePath;
 		for (int i = 0; i < argsSize; i++) 
                 {
 			cmd[i + 1] = args.get(i);
 		}
-                if (_log.isDebugEnabled())
+                cmd[argsSize+1]= "-hide_banner";
+                if (LOG.isDebugEnabled())
                 {
                     StringBuilder sb= new StringBuilder();
                     for (String c : cmd)
@@ -113,7 +114,7 @@ class FFMPEGExecutor
                         sb.append(c);
                         sb.append(' ');
                     }
-                    _log.debug("About to execute "+sb.toString());
+                    LOG.debug("About to execute "+sb.toString());
                 }
 		Runtime runtime = Runtime.getRuntime();
 		ffmpeg = runtime.exec(cmd);
@@ -160,7 +161,7 @@ class FFMPEGExecutor
 				inputStream.close();
 			} catch (Throwable t) 
                         {
-				_log.warn("Error closing input stream", t);
+				LOG.warn("Error closing input stream", t);
 			}
 			inputStream = null;
 		}
@@ -168,7 +169,7 @@ class FFMPEGExecutor
 			try {
 				outputStream.close();
 			} catch (Throwable t) {
-				_log.warn("Error closing output stream", t);
+				LOG.warn("Error closing output stream", t);
 			}
 			outputStream = null;
 		}
@@ -176,7 +177,7 @@ class FFMPEGExecutor
 			try {
 				errorStream.close();
 			} catch (Throwable t) {
-				_log.warn("Error closing error stream", t);
+				LOG.warn("Error closing error stream", t);
 			}
 			errorStream = null;
 		}
