@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.sauronsoftware.jave;
+package it.sauronsoftware.jave.example;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import it.sauronsoftware.jave.DefaultFFMPEGLocator;
+
 
 /**
  *
@@ -14,14 +14,12 @@ import static org.junit.Assert.*;
  */
 public class DefaultFFMPEGLocatorTest {
     
-    public DefaultFFMPEGLocatorTest() {
-    }
-
-    @Test
-    public void testSomeMethod() {
+    public static void main(String [] args)
+    {        // TODO review the generated test code and remove the default call to fail.
         DefaultFFMPEGLocator locator= new  DefaultFFMPEGLocator();
-        String exePath= locator.getFFMPEGExecutablePath();
-        assertNotNull("Native component not found", exePath);
+        //String exePath= locator.getFFMPEGExecutablePath();
+        System.out.println("Done");
     }
     
 }
+

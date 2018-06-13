@@ -19,9 +19,8 @@ public class DefaultFFMPEGLocatorTest {
 
     @Test
     public void testSomeMethod() {
-        DefaultFFMPEGLocator locator= new  DefaultFFMPEGLocator();
-        String exePath= locator.getFFMPEGExecutablePath();
-        assertNotNull("Native component not found", exePath);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
     }
     
 }

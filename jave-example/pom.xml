@@ -6,7 +6,7 @@
         <artifactId>jave-modules</artifactId>
         <version>2.3.0-SNAPSHOT</version>
     </parent>
-    <artifactId>jave-core-test</artifactId>
+    <artifactId>jave-example</artifactId>
     <build>
         <plugins>
             <plugin>
@@ -25,9 +25,32 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>it.sauronsoftware.jave.example.DefaultFFMPEGLocatorTest</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>            
         </plugins>
     </build>
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>it.sauronsoftware</groupId>
             <artifactId>jave-core</artifactId>
@@ -35,30 +58,10 @@
         </dependency>    
         <dependency>
             <groupId>it.sauronsoftware</groupId>
-            <artifactId>jave-native-win32</artifactId>
-            <version>2.3.0-SNAPSHOT</version>
-        </dependency>    
-        <dependency>
-            <groupId>it.sauronsoftware</groupId>
             <artifactId>jave-native-win64</artifactId>
             <version>2.3.0-SNAPSHOT</version>
         </dependency>    
-        <dependency>
-            <groupId>it.sauronsoftware</groupId>
-            <artifactId>jave-native-linux32</artifactId>
-            <version>2.3.0-SNAPSHOT</version>
-        </dependency>    
-        <dependency>
-            <groupId>it.sauronsoftware</groupId>
-            <artifactId>jave-native-linux64</artifactId>
-            <version>2.3.0-SNAPSHOT</version>
-        </dependency>    
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
+           
     </dependencies>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
