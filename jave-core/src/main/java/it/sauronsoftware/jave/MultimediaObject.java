@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class MultimediaObject {
+
     private final static Log LOG = LogFactory.getLog(MultimediaObject.class);
     /**
      * This regexp is used to parse the ffmpeg output about the size of a video
@@ -49,10 +50,10 @@ public class MultimediaObject {
 
     private File inputFile;
 
-
     /**
      * It builds an extractor using a {@link DefaultFFMPEGLocator} instance to
      * locate the ffmpeg executable to use.
+     *
      * @param input Input file for creating MultimediaObject
      */
     public MultimediaObject(File input) {
@@ -61,7 +62,7 @@ public class MultimediaObject {
 
     }
 
-    public File getFile () {
+    public File getFile() {
         return this.inputFile;
     }
 
@@ -98,23 +99,25 @@ public class MultimediaObject {
             FFMPEGExecutor ffmpeg = locator.createExecutor();
             ffmpeg.addArgument("-i");
             ffmpeg.addArgument(inputFile.getAbsolutePath());
-            try {
+            try
+            {
                 ffmpeg.execute();
-            } catch (IOException e) {
+            } catch (IOException e)
+            {
                 throw new EncoderException(e);
             }
-            try {
-                RBufferedReader reader = null;
-                reader = new RBufferedReader(new InputStreamReader(ffmpeg
+            try
+            {
+                RBufferedReader reader = new RBufferedReader(new InputStreamReader(ffmpeg
                         .getErrorStream()));
                 return parseMultimediaInfo(inputFile, reader);
-            } finally {
+            } finally
+            {
                 ffmpeg.destroy();
             }
-        }
-        else
+        } else
         {
-            throw new EncoderException("Input file not found <"+inputFile.getAbsolutePath()+">");
+            throw new EncoderException("Input file not found <" + inputFile.getAbsolutePath() + ">");
         }
     }
 
@@ -132,7 +135,7 @@ public class MultimediaObject {
      * ffmpeg executable.
      */
     private MultimediaInfo parseMultimediaInfo(File source,
-                                               RBufferedReader reader) throws InputFormatException,
+            RBufferedReader reader) throws InputFormatException,
             EncoderException {
         Pattern p1 = Pattern.compile("^\\s*Input #0, (\\w+).+$\\s*",
                 Pattern.CASE_INSENSITIVE);
@@ -146,162 +149,194 @@ public class MultimediaObject {
                 "^\\s*Metadata:",
                 Pattern.CASE_INSENSITIVE);
         MultimediaInfo info = null;
-        try {
+        try
+        {
             int step = 0;
-            while (true) {
+            while (true)
+            {
                 String line = reader.readLine();
                 LOG.debug("Output line: " + line);
-                if (line == null) {
+                if (line == null)
+                {
                     break;
                 }
                 switch (step)
                 {
                     case 0:
+                    {
+                        String token = source.getAbsolutePath() + ": ";
+                        if (line.startsWith(token))
                         {
-                            String token = source.getAbsolutePath() + ": ";
-                            if (line.startsWith(token)) {
-                                String message = line.substring(token.length());
-                                throw new InputFormatException(message);
-                            }       Matcher m = p1.matcher(line);
-                            if (m.matches()) {
-                                String format = m.group(1);
-                                info = new MultimediaInfo();
-                                info.setFormat(format);
-                                step++;
-                            }       break;
+                            String message = line.substring(token.length());
+                            throw new InputFormatException(message);
                         }
+                        Matcher m = p1.matcher(line);
+                        if (m.matches())
+                        {
+                            String format = m.group(1);
+                            info = new MultimediaInfo();
+                            info.setFormat(format);
+                            step++;
+                        }
+                        break;
+                    }
                     case 1:
+                    {
+                        Matcher m = p2.matcher(line);
+                        if (m.matches())
                         {
-                            Matcher m = p2.matcher(line);
-                            if (m.matches()) {
-                                long hours = Integer.parseInt(m.group(1));
-                                long minutes = Integer.parseInt(m.group(2));
-                                long seconds = Integer.parseInt(m.group(3));
-                                long dec = Integer.parseInt(m.group(4));
-                                long duration = (dec * 10L) + (seconds * 1000L)
-                                        + (minutes * 60L * 1000L)
-                                        + (hours * 60L * 60L * 1000L);
-                                info.setDuration(duration);
-                                step++;
-                            } else {
-                                // step = 3;
-                            }       break;
+                            long hours = Integer.parseInt(m.group(1));
+                            long minutes = Integer.parseInt(m.group(2));
+                            long seconds = Integer.parseInt(m.group(3));
+                            long dec = Integer.parseInt(m.group(4));
+                            long duration = (dec * 10L) + (seconds * 1000L)
+                                    + (minutes * 60L * 1000L)
+                                    + (hours * 60L * 60L * 1000L);
+                            info.setDuration(duration);
+                            step++;
+                        } else
+                        {
+                            // step = 3;
                         }
+                        break;
+                    }
                     case 2:
+                    {
+                        Matcher m = p3.matcher(line);
+                        Matcher m4 = p4.matcher(line);
+                        if (m.matches())
                         {
-                            Matcher m = p3.matcher(line);
-                            Matcher m4 = p4.matcher(line);
-                            if (m.matches()) {
-                                String type = m.group(1);
-                                String specs = m.group(2);
-                                if ("Video".equalsIgnoreCase(type)) {
-                                    VideoInfo video = new VideoInfo();
-                                    StringTokenizer st = new StringTokenizer(specs, ",");
-                                    for (int i = 0; st.hasMoreTokens(); i++) {
-                                        String token = st.nextToken().trim();
-                                        if (i == 0) {
-                                            video.setDecoder(token);
-                                        } else {
-                                            boolean parsed = false;
-                                            // Video size.
-                                            Matcher m2 = SIZE_PATTERN.matcher(token);
-                                            if (!parsed && m2.find()) {
-                                                int width = Integer.parseInt(m2
-                                                        .group(1));
-                                                int height = Integer.parseInt(m2
-                                                        .group(2));
-                                                video.setSize(new VideoSize(width,
-                                                        height));
-                                                parsed = true;
-                                            }
-                                            // Frame rate.
-                                            m2 = FRAME_RATE_PATTERN.matcher(token);
-                                            if (!parsed && m2.find()) {
-                                                try {
-                                                    float frameRate = Float
-                                                            .parseFloat(m2.group(1));
-                                                    video.setFrameRate(frameRate);
-                                                } catch (NumberFormatException e) {
-                                                    LOG.info("Invalid frame rate value: " + m2.group(1), e);
-                                                }
-                                                parsed = true;
-                                            }
-                                            // Bit rate.
-                                            m2 = BIT_RATE_PATTERN.matcher(token);
-                                            if (!parsed && m2.find()) {
-                                                int bitRate = Integer.parseInt(m2
-                                                        .group(1));
-                                                video.setBitRate(bitRate);
-                                                parsed = true;
-                                            }
-                                        }
-                                    }
-                                    info.setVideo(video);
-                                } else if ("Audio".equalsIgnoreCase(type)) {
-                                    AudioInfo audio = new AudioInfo();
-                                    StringTokenizer st = new StringTokenizer(specs, ",");
-                                    for (int i = 0; st.hasMoreTokens(); i++) {
-                                        String token = st.nextToken().trim();
-                                        if (i == 0) {
-                                            audio.setDecoder(token);
-                                        } else {
-                                            boolean parsed = false;
-                                            // Sampling rate.
-                                            Matcher m2 = SAMPLING_RATE_PATTERN
-                                                    .matcher(token);
-                                            if (!parsed && m2.find()) {
-                                                int samplingRate = Integer.parseInt(m2
-                                                        .group(1));
-                                                audio.setSamplingRate(samplingRate);
-                                                parsed = true;
-                                            }
-                                            // Channels.
-                                            m2 = CHANNELS_PATTERN.matcher(token);
-                                            if (!parsed && m2.find()) {
-                                                String ms = m2.group(1);
-                                                if ("mono".equalsIgnoreCase(ms)) {
-                                                    audio.setChannels(1);
-                                                } else if ("stereo"
-                                                        .equalsIgnoreCase(ms)) {
-                                                    audio.setChannels(2);
-                                                }
-                                                parsed = true;
-                                            }
-                                            // Bit rate.
-                                            m2 = BIT_RATE_PATTERN.matcher(token);
-                                            if (!parsed && m2.find()) {
-                                                int bitRate = Integer.parseInt(m2
-                                                        .group(1));
-                                                audio.setBitRate(bitRate);
-                                                parsed = true;
-                                            }
-                                        }
-                                    }
-                                    info.setAudio(audio);
-                                }
-                            } else // if (m4.matches())
+                            String type = m.group(1);
+                            String specs = m.group(2);
+                            if ("Video".equalsIgnoreCase(type))
                             {
-                                // Stay on level 2
+                                VideoInfo video = new VideoInfo();
+                                StringTokenizer st = new StringTokenizer(specs, ",");
+                                for (int i = 0; st.hasMoreTokens(); i++)
+                                {
+                                    String token = st.nextToken().trim();
+                                    if (i == 0)
+                                    {
+                                        video.setDecoder(token);
+                                    } else
+                                    {
+                                        boolean parsed = false;
+                                        // Video size.
+                                        Matcher m2 = SIZE_PATTERN.matcher(token);
+                                        if (!parsed && m2.find())
+                                        {
+                                            int width = Integer.parseInt(m2
+                                                    .group(1));
+                                            int height = Integer.parseInt(m2
+                                                    .group(2));
+                                            video.setSize(new VideoSize(width,
+                                                    height));
+                                            parsed = true;
+                                        }
+                                        // Frame rate.
+                                        m2 = FRAME_RATE_PATTERN.matcher(token);
+                                        if (!parsed && m2.find())
+                                        {
+                                            try
+                                            {
+                                                float frameRate = Float
+                                                        .parseFloat(m2.group(1));
+                                                video.setFrameRate(frameRate);
+                                            } catch (NumberFormatException e)
+                                            {
+                                                LOG.info("Invalid frame rate value: " + m2.group(1), e);
+                                            }
+                                            parsed = true;
+                                        }
+                                        // Bit rate.
+                                        m2 = BIT_RATE_PATTERN.matcher(token);
+                                        if (!parsed && m2.find())
+                                        {
+                                            int bitRate = Integer.parseInt(m2
+                                                    .group(1));
+                                            video.setBitRate(bitRate);
+                                            parsed = true;
+                                        }
+                                    }
+                                }
+                                info.setVideo(video);
+                            } else if ("Audio".equalsIgnoreCase(type))
+                            {
+                                AudioInfo audio = new AudioInfo();
+                                StringTokenizer st = new StringTokenizer(specs, ",");
+                                for (int i = 0; st.hasMoreTokens(); i++)
+                                {
+                                    String token = st.nextToken().trim();
+                                    if (i == 0)
+                                    {
+                                        audio.setDecoder(token);
+                                    } else
+                                    {
+                                        boolean parsed = false;
+                                        // Sampling rate.
+                                        Matcher m2 = SAMPLING_RATE_PATTERN
+                                                .matcher(token);
+                                        if (!parsed && m2.find())
+                                        {
+                                            int samplingRate = Integer.parseInt(m2
+                                                    .group(1));
+                                            audio.setSamplingRate(samplingRate);
+                                            parsed = true;
+                                        }
+                                        // Channels.
+                                        m2 = CHANNELS_PATTERN.matcher(token);
+                                        if (!parsed && m2.find())
+                                        {
+                                            String ms = m2.group(1);
+                                            if ("mono".equalsIgnoreCase(ms))
+                                            {
+                                                audio.setChannels(1);
+                                            } else if ("stereo"
+                                                    .equalsIgnoreCase(ms))
+                                            {
+                                                audio.setChannels(2);
+                                            }
+                                            parsed = true;
+                                        }
+                                        // Bit rate.
+                                        m2 = BIT_RATE_PATTERN.matcher(token);
+                                        if (!parsed && m2.find())
+                                        {
+                                            int bitRate = Integer.parseInt(m2
+                                                    .group(1));
+                                            audio.setBitRate(bitRate);
+                                            parsed = true;
+                                        }
+                                    }
+                                }
+                                info.setAudio(audio);
                             }
-                            /*
+                        } else // if (m4.matches())
+                        {
+                            // Stay on level 2
+                        }
+                        /*
                             else
                             {
                             step = 3;
                             }
-                            */     break;
-                        }
+                         */ break;
+                    }
                     default:
                         break;
                 }
-                if (line.startsWith("frame=")) {
+                if (line.startsWith("frame="))
+                {
                     reader.reinsertLine(line);
                     break;
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             throw new EncoderException(e);
         }
-        if (info == null) {
+        if (info == null)
+        {
             throw new InputFormatException();
         }
         return info;

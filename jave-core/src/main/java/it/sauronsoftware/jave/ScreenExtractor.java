@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class ScreenExtractor {
+
     private final static Log LOG = LogFactory.getLog(ScreenExtractor.class);
 
     /**
@@ -26,9 +27,9 @@ public class ScreenExtractor {
 
     /**
      *
-     * @return 
+     * @return
      */
-    public  int getNumberOfScreens(){
+    public int getNumberOfScreens() {
         return numberOfScreens;
     }
 
@@ -58,23 +59,27 @@ public class ScreenExtractor {
      * @throws EncoderException If a problems occurs during the encoding
      * process.
      */
-
-    public void render (MultimediaObject multimediaObject, int width, int height, int seconds, File outputDir,
-                        String fileNamePrefix, String extension, int quality)
+    public void render(MultimediaObject multimediaObject, int width, int height, int seconds, File outputDir,
+            String fileNamePrefix, String extension, int quality)
             throws InputFormatException, EncoderException {
         File inputFile = multimediaObject.getFile();
-        try{
-            if (!outputDir.exists()) {
-                if (!outputDir.mkdirs()) {
+        try
+        {
+            if (!outputDir.exists())
+            {
+                if (!outputDir.mkdirs())
+                {
                     LOG.debug("Failed to create destination folder");
                     throw new SecurityException();
                 }
             }
-            if(!inputFile.canRead()){
+            if (!inputFile.canRead())
+            {
                 LOG.debug("Failed to open input file");
                 throw new SecurityException();
             }
-        }catch (SecurityException e){
+        } catch (SecurityException e)
+        {
             LOG.debug("Access denied checking destination folder" + e);
         }
 
@@ -95,30 +100,35 @@ public class ScreenExtractor {
         ffmpeg.addArgument(String.format("%s%s%s-%%04d.%s",
                 outputDir.getAbsolutePath(), File.separator, fileNamePrefix, extension));
 
-        try {
+        try
+        {
             ffmpeg.execute();
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             throw new EncoderException(e);
         }
-        try {
+        try
+        {
             RBufferedReader reader = new RBufferedReader(
                     new InputStreamReader(ffmpeg.getErrorStream()));
             int step = 0;
             int lineNR = 0;
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null)
+            {
                 lineNR++;
                 LOG.debug("Input Line (" + lineNR + "): " + line);
                 // TODO: Implement additional input stream parsing
             }
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             throw new EncoderException(e);
-        } finally {
+        } finally
+        {
             ffmpeg.destroy();
         }
 
     }
-
 
     /**
      * Generate a single screenshot from source video.
@@ -134,17 +144,20 @@ public class ScreenExtractor {
      * @throws EncoderException If a problems occurs during the encoding
      * process.
      */
-    public void render (MultimediaObject multimediaObject, int width, int height, int seconds, File target, int quality)
+    public void render(MultimediaObject multimediaObject, int width, int height, int seconds, File target, int quality)
             throws EncoderException {
         File inputFile = multimediaObject.getFile();
         target = target.getAbsoluteFile();
         target.getParentFile().mkdirs();
-        try{
-            if(!inputFile.canRead()){
+        try
+        {
+            if (!inputFile.canRead())
+            {
                 LOG.debug("Failed to open input file");
                 throw new SecurityException();
             }
-        }catch (SecurityException e){
+        } catch (SecurityException e)
+        {
             LOG.debug("Access denied checking destination folder" + e);
         }
 
@@ -167,25 +180,31 @@ public class ScreenExtractor {
         ffmpeg.addArgument(String.valueOf(quality));
         ffmpeg.addArgument(target.getAbsolutePath());
 
-        try {
+        try
+        {
             ffmpeg.execute();
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             throw new EncoderException(e);
         }
-        try {
+        try
+        {
             RBufferedReader reader = new RBufferedReader(
                     new InputStreamReader(ffmpeg.getErrorStream()));
             int step = 0;
             int lineNR = 0;
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null)
+            {
                 lineNR++;
                 LOG.debug("Input Line (" + lineNR + "): " + line);
                 // TODO: Implement additional input stream parsing
             }
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             throw new EncoderException(e);
-        } finally {
+        } finally
+        {
             ffmpeg.destroy();
         }
 

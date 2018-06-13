@@ -20,19 +20,19 @@ package it.sauronsoftware.jave;
 
 /**
  * This expection is thrown if a source file format is not recognized.
- * 
+ *
  * @author Carlo Pelliccia
  */
 public class InputFormatException extends EncoderException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	InputFormatException() {
-		super();
-	}
+    InputFormatException() {
+        super();
+    }
 
-	InputFormatException(String message) {
-		super(message);
-	}
+    InputFormatException(String message) {
+        super(message);
+    }
 
 }

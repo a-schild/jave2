@@ -89,17 +89,16 @@ public class VideoAttributes implements Serializable {
     /**
      * @param x264Profile the x264Profile to set
      */
-    public void setX264Profile(X264_PROFILE x264Profile) 
-    {
+    public void setX264Profile(X264_PROFILE x264Profile) {
         this.x264Profile = x264Profile;
     }
-    
-    public enum X264_PROFILE { BASELINE("baseline"), MAIN("main"), HIGH("high"), 
-        HIGH10("high10"), HIGH422("high422"), HIGH444("high444"); 
+
+    public enum X264_PROFILE {
+        BASELINE("baseline"), MAIN("main"), HIGH("high"),
+        HIGH10("high10"), HIGH422("high422"), HIGH444("high444");
         private final String modeName;
 
-        private X264_PROFILE(String modeName) 
-        {
+        private X264_PROFILE(String modeName) {
             this.modeName = modeName;
         }
 
@@ -107,8 +106,8 @@ public class VideoAttributes implements Serializable {
             return modeName;
         }
     };
-    
-    private X264_PROFILE    x264Profile= null;
+
+    private X264_PROFILE x264Profile = null;
 
     /**
      * Returns the codec name for the encoding process.
@@ -217,11 +216,11 @@ public class VideoAttributes implements Serializable {
         return faststart;
     }
 
-    public void addFilter (VideoFilter videoFilter) {
+    public void addFilter(VideoFilter videoFilter) {
         this.videoFilters.add(videoFilter);
     }
 
-    public ArrayList<VideoFilter> getVideoFilters () {
+    public ArrayList<VideoFilter> getVideoFilters() {
         return this.videoFilters;
     }
 
@@ -231,11 +230,11 @@ public class VideoAttributes implements Serializable {
     public void setFaststart(boolean faststart) {
         this.faststart = faststart;
     }
-    
+
     @Override
     public String toString() {
         return getClass().getName() + "(codec=" + codec + ", bitRate="
-                + bitRate + ", frameRate=" + frameRate + ", size=" + size + ", faststart="+faststart+")";
+                + bitRate + ", frameRate=" + frameRate + ", size=" + size + ", faststart=" + faststart + ")";
     }
 
 }

@@ -12,12 +12,26 @@
     <version>2.3.0-SNAPSHOT</version>
     <name>Jave main project</name>
     <description>Jave main project</description>
+    <url>https://github.com/a-schild/jave2</url>
+    
+    <licenses>
+        <license>
+            <name>GPL-v3.0</name>
+            <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
+        </license>
+    </licenses>
+  
+    <scm>
+        <connection>scm:git:https://github.com/a-schild/jave2</connection>
+        <url>https://github.com/a-schild/jave2</url>
+    </scm>
+  
     <modules>
         <module>jave-native-win32</module>
         <module>jave-native-win64</module>
         <module>jave-native-linux32</module>
         <module>jave-native-linux64</module>
-<!--        <module>jave-native-osx64</module>-->
+        <!--        <module>jave-native-osx64</module>-->
         <module>jave-core</module>
         <module>jave-core-test</module>
         <module>jave-example</module>

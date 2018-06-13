@@ -27,169 +27,175 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * A ffmpeg process wrapper.
- * 
+ *
  * @author Carlo Pelliccia
  */
-class FFMPEGExecutor 
-{
-    private final static Log LOG= LogFactory.getLog(FFMPEGExecutor.class);
-    
-	/**
-	 * The path of the ffmpeg executable.
-	 */
-	private final String ffmpegExecutablePath;
+class FFMPEGExecutor {
 
-	/**
-	 * Arguments for the executable.
-	 */
-	private final ArrayList<String> args = new ArrayList<>();
+    private final static Log LOG = LogFactory.getLog(FFMPEGExecutor.class);
 
-	/**
-	 * The process representing the ffmpeg execution.
-	 */
-	private Process ffmpeg = null;
+    /**
+     * The path of the ffmpeg executable.
+     */
+    private final String ffmpegExecutablePath;
 
-	/**
-	 * A process killer to kill the ffmpeg process with a shutdown hook, useful
-	 * if the jvm execution is shutted down during an ongoing encoding process.
-	 */
-	private ProcessKiller ffmpegKiller = null;
+    /**
+     * Arguments for the executable.
+     */
+    private final ArrayList<String> args = new ArrayList<>();
 
-	/**
-	 * A stream reading from the ffmpeg process standard output channel.
-	 */
-	private InputStream inputStream = null;
+    /**
+     * The process representing the ffmpeg execution.
+     */
+    private Process ffmpeg = null;
 
-	/**
-	 * A stream writing in the ffmpeg process standard input channel.
-	 */
-	private OutputStream outputStream = null;
+    /**
+     * A process killer to kill the ffmpeg process with a shutdown hook, useful
+     * if the jvm execution is shutted down during an ongoing encoding process.
+     */
+    private ProcessKiller ffmpegKiller = null;
 
-	/**
-	 * A stream reading from the ffmpeg process standard error channel.
-	 */
-	private InputStream errorStream = null;
+    /**
+     * A stream reading from the ffmpeg process standard output channel.
+     */
+    private InputStream inputStream = null;
 
-	/**
-	 * It build the executor.
-	 * 
-	 * @param ffmpegExecutablePath
-	 *            The path of the ffmpeg executable.
-	 */
-	public FFMPEGExecutor(String ffmpegExecutablePath) {
-		this.ffmpegExecutablePath = ffmpegExecutablePath;
-	}
+    /**
+     * A stream writing in the ffmpeg process standard input channel.
+     */
+    private OutputStream outputStream = null;
 
-	/**
-	 * Adds an argument to the ffmpeg executable call.
-	 * 
-	 * @param arg
-	 *            The argument.
-	 */
-	public void addArgument(String arg) {
-		args.add(arg);
-	}
+    /**
+     * A stream reading from the ffmpeg process standard error channel.
+     */
+    private InputStream errorStream = null;
 
-	/**
-	 * Executes the ffmpeg process with the previous given arguments.
-	 * 
-	 * @throws IOException
-	 *             If the process call fails.
-	 */
-	public void execute() throws IOException 
+    /**
+     * It build the executor.
+     *
+     * @param ffmpegExecutablePath The path of the ffmpeg executable.
+     */
+    public FFMPEGExecutor(String ffmpegExecutablePath) {
+        this.ffmpegExecutablePath = ffmpegExecutablePath;
+    }
+
+    /**
+     * Adds an argument to the ffmpeg executable call.
+     *
+     * @param arg The argument.
+     */
+    public void addArgument(String arg) {
+        args.add(arg);
+    }
+
+    /**
+     * Executes the ffmpeg process with the previous given arguments.
+     *
+     * @throws IOException If the process call fails.
+     */
+    public void execute() throws IOException {
+        int argsSize = args.size();
+        String[] cmd = new String[argsSize + 2];
+        cmd[0] = ffmpegExecutablePath;
+        for (int i = 0; i < argsSize; i++)
         {
-		int argsSize = args.size();
-		String[] cmd = new String[argsSize + 2];
-		cmd[0] = ffmpegExecutablePath;
-		for (int i = 0; i < argsSize; i++) 
-                {
-			cmd[i + 1] = args.get(i);
-		}
-                cmd[argsSize+1]= "-hide_banner";
-                if (LOG.isDebugEnabled())
-                {
-                    StringBuilder sb= new StringBuilder();
-                    for (String c : cmd)
-                    {
-                        sb.append(c);
-                        sb.append(' ');
-                    }
-                    LOG.debug("About to execute "+sb.toString());
-                }
-		Runtime runtime = Runtime.getRuntime();
-		ffmpeg = runtime.exec(cmd);
-		ffmpegKiller = new ProcessKiller(ffmpeg);
-		runtime.addShutdownHook(ffmpegKiller);
-		inputStream = ffmpeg.getInputStream();
-		outputStream = ffmpeg.getOutputStream();
-		errorStream = ffmpeg.getErrorStream();
-	}
+            cmd[i + 1] = args.get(i);
+        }
+        cmd[argsSize + 1] = "-hide_banner";
+        if (LOG.isDebugEnabled())
+        {
+            StringBuilder sb = new StringBuilder();
+            for (String c : cmd)
+            {
+                sb.append(c);
+                sb.append(' ');
+            }
+            LOG.debug("About to execute " + sb.toString());
+        }
+        Runtime runtime = Runtime.getRuntime();
+        ffmpeg = runtime.exec(cmd);
+        ffmpegKiller = new ProcessKiller(ffmpeg);
+        runtime.addShutdownHook(ffmpegKiller);
+        inputStream = ffmpeg.getInputStream();
+        outputStream = ffmpeg.getOutputStream();
+        errorStream = ffmpeg.getErrorStream();
+    }
 
-	/**
-	 * Returns a stream reading from the ffmpeg process standard output channel.
-	 * 
-	 * @return A stream reading from the ffmpeg process standard output channel.
-	 */
-	public InputStream getInputStream() {
-		return inputStream;
-	}
+    /**
+     * Returns a stream reading from the ffmpeg process standard output channel.
+     *
+     * @return A stream reading from the ffmpeg process standard output channel.
+     */
+    public InputStream getInputStream() {
+        return inputStream;
+    }
 
-	/**
-	 * Returns a stream writing in the ffmpeg process standard input channel.
-	 * 
-	 * @return A stream writing in the ffmpeg process standard input channel.
-	 */
-	public OutputStream getOutputStream() {
-		return outputStream;
-	}
+    /**
+     * Returns a stream writing in the ffmpeg process standard input channel.
+     *
+     * @return A stream writing in the ffmpeg process standard input channel.
+     */
+    public OutputStream getOutputStream() {
+        return outputStream;
+    }
 
-	/**
-	 * Returns a stream reading from the ffmpeg process standard error channel.
-	 * 
-	 * @return A stream reading from the ffmpeg process standard error channel.
-	 */
-	public InputStream getErrorStream() {
-		return errorStream;
-	}
+    /**
+     * Returns a stream reading from the ffmpeg process standard error channel.
+     *
+     * @return A stream reading from the ffmpeg process standard error channel.
+     */
+    public InputStream getErrorStream() {
+        return errorStream;
+    }
 
-	/**
-	 * If there's a ffmpeg execution in progress, it kills it.
-	 */
-	public void destroy() {
-		if (inputStream != null) {
-			try {
-				inputStream.close();
-			} catch (Throwable t) 
-                        {
-				LOG.warn("Error closing input stream", t);
-			}
-			inputStream = null;
-		}
-		if (outputStream != null) {
-			try {
-				outputStream.close();
-			} catch (Throwable t) {
-				LOG.warn("Error closing output stream", t);
-			}
-			outputStream = null;
-		}
-		if (errorStream != null) {
-			try {
-				errorStream.close();
-			} catch (Throwable t) {
-				LOG.warn("Error closing error stream", t);
-			}
-			errorStream = null;
-		}
-		if (ffmpeg != null) {
-			ffmpeg.destroy();
-			ffmpeg = null;
-		}
-		if (ffmpegKiller != null) {
-			Runtime runtime = Runtime.getRuntime();
-			runtime.removeShutdownHook(ffmpegKiller);
-			ffmpegKiller = null;
-		}
-	}
+    /**
+     * If there's a ffmpeg execution in progress, it kills it.
+     */
+    public void destroy() {
+        if (inputStream != null)
+        {
+            try
+            {
+                inputStream.close();
+            } catch (Throwable t)
+            {
+                LOG.warn("Error closing input stream", t);
+            }
+            inputStream = null;
+        }
+        if (outputStream != null)
+        {
+            try
+            {
+                outputStream.close();
+            } catch (Throwable t)
+            {
+                LOG.warn("Error closing output stream", t);
+            }
+            outputStream = null;
+        }
+        if (errorStream != null)
+        {
+            try
+            {
+                errorStream.close();
+            } catch (Throwable t)
+            {
+                LOG.warn("Error closing error stream", t);
+            }
+            errorStream = null;
+        }
+        if (ffmpeg != null)
+        {
+            ffmpeg.destroy();
+            ffmpeg = null;
+        }
+        if (ffmpegKiller != null)
+        {
+            Runtime runtime = Runtime.getRuntime();
+            runtime.removeShutdownHook(ffmpegKiller);
+            ffmpegKiller = null;
+        }
+    }
 
 }

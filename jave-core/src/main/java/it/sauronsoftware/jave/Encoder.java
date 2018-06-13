@@ -58,36 +58,6 @@ public class Encoder {
     private static final Pattern PROGRESS_INFO_PATTERN = Pattern.compile(
             "\\s*(\\w+)\\s*=\\s*(\\S+)\\s*", Pattern.CASE_INSENSITIVE);
     /**
-     * This regexp is used to parse the ffmpeg output about the size of a video
-     * stream.
-     */
-    private static final Pattern SIZE_PATTERN = Pattern.compile(
-            "(\\d+)x(\\d+)", Pattern.CASE_INSENSITIVE);
-    /**
-     * This regexp is used to parse the ffmpeg output about the frame rate value
-     * of a video stream.
-     */
-    private static final Pattern FRAME_RATE_PATTERN = Pattern.compile(
-            "([\\d.]+)\\s+(?:fps|tbr)", Pattern.CASE_INSENSITIVE);
-    /**
-     * This regexp is used to parse the ffmpeg output about the bit rate value
-     * of a stream.
-     */
-    private static final Pattern BIT_RATE_PATTERN = Pattern.compile(
-            "(\\d+)\\s+kb/s", Pattern.CASE_INSENSITIVE);
-    /**
-     * This regexp is used to parse the ffmpeg output about the sampling rate of
-     * an audio stream.
-     */
-    private static final Pattern SAMPLING_RATE_PATTERN = Pattern.compile(
-            "(\\d+)\\s+Hz", Pattern.CASE_INSENSITIVE);
-    /**
-     * This regexp is used to parse the ffmpeg output about the channels number
-     * of an audio stream.
-     */
-    private static final Pattern CHANNELS_PATTERN = Pattern.compile(
-            "(mono|stereo)", Pattern.CASE_INSENSITIVE);
-    /**
      * This regexp is used to parse the ffmpeg output about the success of an
      * encoding operation.
      */
@@ -383,7 +353,7 @@ public class Encoder {
      * Re-encode a multimedia file.
      *
      * @param multimediaObject The source multimedia file. It cannot be null. Be
-     * sure this file can be decoded (see null null     {@link Encoder#getSupportedDecodingFormats()},
+     * sure this file can be decoded (see null null null null     {@link Encoder#getSupportedDecodingFormats()},
 	 *            {@link Encoder#getAudioDecoders()} and
      * {@link Encoder#getVideoDecoders()}).
      * @param target The target multimedia re-encoded file. It cannot be null.
@@ -406,7 +376,7 @@ public class Encoder {
      * Re-encode a multimedia file.
      *
      * @param multimediaObject The source multimedia file. It cannot be null. Be
-     * sure this file can be decoded (see null null     {@link Encoder#getSupportedDecodingFormats()},
+     * sure this file can be decoded (see null null null null     {@link Encoder#getSupportedDecodingFormats()},
 	 *            {@link Encoder#getAudioDecoders()} and
      * {@link Encoder#getVideoDecoders()}).
      * @param target The target multimedia re-encoded file. It cannot be null.

@@ -20,27 +20,27 @@ package it.sauronsoftware.jave;
 
 /**
  * Encoding expection.
- * 
+ *
  * @author Carlo Pelliccia
  */
 public class EncoderException extends Exception {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	EncoderException() {
-		super();
-	}
+    EncoderException() {
+        super();
+    }
 
-	EncoderException(String message) {
-		super(message);
-	}
+    EncoderException(String message) {
+        super(message);
+    }
 
-	EncoderException(Throwable cause) {
-		super(cause);
-	}
+    EncoderException(Throwable cause) {
+        super(cause);
+    }
 
-	EncoderException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    EncoderException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }

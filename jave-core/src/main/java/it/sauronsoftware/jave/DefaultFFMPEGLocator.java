@@ -19,10 +19,11 @@
 package it.sauronsoftware.jave;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -31,128 +32,106 @@ import org.apache.commons.logging.LogFactory;
  * executable bundled with the library distributions. It should work both for
  * windows and many linux distributions. If it doesn't, try compiling your own
  * ffmpeg executable and plug it in JAVE with a custom {@link FFMPEGLocator}.
- * 
+ *
  * @author Carlo Pelliccia
  */
-public class DefaultFFMPEGLocator extends FFMPEGLocator 
-{
-        private final static Log LOG= LogFactory.getLog(FFMPEGExecutor.class);
-        
-	/**
-	 * Trace the version of the bundled ffmpeg executable. It's a counter: every
-	 * time the bundled ffmpeg change it is incremented by 1.
-	 */
-	private static final int MY_EXE_VERSION = 2;
+public class DefaultFFMPEGLocator extends FFMPEGLocator {
 
-	/**
-	 * The ffmpeg executable file path.
-	 */
-	private final String path;
+    private final static Log LOG = LogFactory.getLog(FFMPEGExecutor.class);
 
-	/**
-	 * It builds the default FFMPEGLocator, exporting the ffmpeg executable on a
-	 * temp file.
-	 */
-	public DefaultFFMPEGLocator() 
+    /**
+     * Trace the version of the bundled ffmpeg executable. It's a counter: every
+     * time the bundled ffmpeg change it is incremented by 1.
+     */
+    private static final int MY_EXE_VERSION = 2;
+
+    /**
+     * The ffmpeg executable file path.
+     */
+    private final String path;
+
+    /**
+     * It builds the default FFMPEGLocator, exporting the ffmpeg executable on a
+     * temp file.
+     */
+    public DefaultFFMPEGLocator() {
+        // Windows?
+        boolean isWindows;
+        String os = System.getProperty("os.name").toLowerCase();
+        isWindows = os.contains("windows");
+
+        // Temporary folder
+        File temporaryFolder = new File(System.getProperty("java.io.tmpdir"), "jave-"
+                + MY_EXE_VERSION);
+        if (!temporaryFolder.exists())
         {
-		// Windows?
-		boolean isWindows;
-		String os = System.getProperty("os.name").toLowerCase();
-		if (os.contains("windows")) {
-			isWindows = true;
-		} else {
-			isWindows = false;
-		}
+            temporaryFolder.mkdirs();
+            temporaryFolder.deleteOnExit();
+        }
+        // ffmpeg executable export on disk.
+        String suffix = isWindows ? ".exe" : "";
+        String arch = System.getProperty("os.arch");
 
-		// Temp dir?
-		File temp = new File(System.getProperty("java.io.tmpdir"), "jave-"
-				+ MY_EXE_VERSION);
-		if (!temp.exists()) {
-			temp.mkdirs();
-			temp.deleteOnExit();
-		}
-		// ffmpeg executable export on disk.
-		String suffix = isWindows ? ".exe" : "";
-                String arch= System.getProperty("os.arch");
-
-		File exe = new File(temp, "ffmpeg-"+arch + suffix);
-		if (!exe.exists()) {
-			copyFile("ffmpeg-"+arch + suffix, exe);
-		}
-		// Need a chmod?
-		if (!isWindows) {
-			Runtime runtime = Runtime.getRuntime();
-			try {
-				runtime.exec(new String[] { "/bin/chmod", "755",
-						exe.getAbsolutePath() });
-			} catch (IOException e) 
-                        {
-				LOG.error(e);
-			}
-		}
-		// Ok.
-                this.path= exe.getAbsolutePath();
-	}
-
-        @Override
-	protected String getFFMPEGExecutablePath() {
-		return path;
-	}
-
-	/**
-	 * Copies a file bundled in the package to the supplied destination.
-	 * 
-	 * @param path
-	 *            The name of the bundled file.
-	 * @param dest
-	 *            The destination.
-	 * @throws RuntimeException
-	 *             If aun unexpected error occurs.
-	 */
-	private void copyFile(String path, File dest) throws RuntimeException {
-		InputStream input = null;
-		OutputStream output = null;
-		try {
-			input = getClass().getResourceAsStream("native/"+path);
-                        if (input != null)
-                        {
-                            output = new FileOutputStream(dest);
-                            byte[] buffer = new byte[1024];
-                            int l;
-                            while ((l = input.read(buffer)) != -1) 
-                            {
-                                    output.write(buffer, 0, l);
-                            }
-                        }
-                        else
-                        {
-                            LOG.error("Could not get native library for "+path);
-                            throw new RuntimeException("Cannot retrieve native file "
-                                            + path);
-                        }
-		} catch (IOException e) 
+        File exe = new File(temporaryFolder, "ffmpeg-" + arch + suffix);
+        if (!exe.exists())
+        {
+            copyFile("ffmpeg-" + arch + suffix, exe);
+        }
+        // Need a chmod?
+        if (!isWindows)
+        {
+            Runtime runtime = Runtime.getRuntime();
+            try
+            {
+                runtime.exec(new String[]
                 {
-                    LOG.error("Cannot write file " + dest.getAbsolutePath(), e);
-			throw new RuntimeException("Cannot write file "
-					+ dest.getAbsolutePath());
-		} finally {
-			if (output != null) {
-				try {
-					output.close();
-				} catch (Throwable t) 
-                                {
-					; // Silent ignore
-				}
-			}
-			if (input != null) {
-				try {
-					input.close();
-				} catch (Throwable t) 
-                                {
-					; // Silent ignore
-				}
-			}
-		}
-	}
+                    "/bin/chmod", "755",
+                    exe.getAbsolutePath()
+                });
+            } catch (IOException e)
+            {
+                LOG.error(e);
+            }
+        }
+        // Ok.
+        this.path = exe.getAbsolutePath();
+    }
 
+    @Override
+    protected String getFFMPEGExecutablePath() {
+        return path;
+    }
+
+    /**
+     * Copies a file bundled in the package to the supplied destination.
+     *
+     * @param path The name of the bundled file.
+     * @param dest The destination.
+     * @throws RuntimeException If aun unexpected error occurs.
+     */
+    private void copyFile(String path, File dest) throws RuntimeException {
+        copy(getClass().getResourceAsStream("native/" + path), dest.getAbsolutePath());
+    }
+
+    /**
+     * Copy a file from source to destination.
+     *
+     * @param source The name of the bundled file.
+     * @param destination the destination
+     * @return True if succeeded , False if not
+     */
+    private boolean copy(InputStream source, String destination) {
+        boolean success = true;
+
+        try
+        {
+            Files.copy(source, Paths.get(destination), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex)
+        {
+            LOG.warn("Cannot write file " + destination, ex);
+            success = false;
+        }
+
+        return success;
+    }
 }
