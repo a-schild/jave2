@@ -243,6 +243,40 @@ public class EncoderTest {
         assertTrue("Encoding problem not found", message.contains(compareTo));
     }
     
+    /**
+     * Test of encode method, of class Encoder.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testEncode4argsLarge3() throws Exception {
+        System.out.println("encode");
+        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
+        File source = new File("src/test/resources/AV36_1.AVI");
+        File target = new File("target/testoutput/target4Large3.flv");
+        if (target.exists())
+        {
+            target.delete();
+        }
+        AudioAttributes audio = new AudioAttributes();
+        audio.setCodec("libmp3lame");
+        audio.setBitRate(64000);
+        audio.setChannels(1);
+        audio.setSamplingRate(22050);
+        VideoAttributes video = new VideoAttributes();
+        video.setCodec("flv");
+        video.setBitRate(160000);
+        video.setFrameRate(15);
+        video.setSize(new VideoSize(400, 300));
+        EncodingAttributes attrs = new EncodingAttributes();
+        attrs.setFormat("flv");
+        attrs.setAudioAttributes(audio);
+        attrs.setVideoAttributes(video);
+        Encoder encoder = new Encoder();
+        PListener listener = new PListener();
+        encoder.encode(new MultimediaObject(source), target, attrs, listener);
+        assertNotNull(listener.getInfo());
+        assertTrue("Output file missing", target.exists());
+    }
     
     
     protected class PListener implements EncoderProgressListener
