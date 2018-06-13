@@ -21,6 +21,7 @@
         <module>jave-core</module>
         <module>jave-core-test</module>
         <module>jave-example</module>
+        <module>jave-all-deps</module>
     </modules>
     
 </project>
