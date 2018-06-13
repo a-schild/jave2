@@ -383,7 +383,7 @@ public class Encoder {
      * Re-encode a multimedia file.
      *
      * @param multimediaObject The source multimedia file. It cannot be null. Be
-     * sure this file can be decoded (see null     {@link Encoder#getSupportedDecodingFormats()},
+     * sure this file can be decoded (see null null     {@link Encoder#getSupportedDecodingFormats()},
 	 *            {@link Encoder#getAudioDecoders()} and
      * {@link Encoder#getVideoDecoders()}).
      * @param target The target multimedia re-encoded file. It cannot be null.
@@ -406,7 +406,7 @@ public class Encoder {
      * Re-encode a multimedia file.
      *
      * @param multimediaObject The source multimedia file. It cannot be null. Be
-     * sure this file can be decoded (see null     {@link Encoder#getSupportedDecodingFormats()},
+     * sure this file can be decoded (see null null     {@link Encoder#getSupportedDecodingFormats()},
 	 *            {@link Encoder#getAudioDecoders()} and
      * {@link Encoder#getVideoDecoders()}).
      * @param target The target multimedia re-encoded file. It cannot be null.
@@ -608,54 +608,62 @@ public class Encoder {
                         listener.message(line);
                     }
                 }
-                if (step == 0)
+                switch (step)
                 {
-                    if (line.startsWith("Input #0"))
+                    case 0:
                     {
-                        step = 1;
-                    } else
-                    {
-                        // wait for Stream mapping:
+                        if (line.startsWith("Input #0"))
+                        {
+                            step = 1;
+                        } else
+                        {
+                            // wait for Stream mapping:
+                        }
                     }
-                } else if (step == 1)
-                {
-                    if (line.startsWith("Stream mapping:"))
+                    break;
+                    case 1:
                     {
-                        step = 2;
-                    } else if (!line.startsWith("  "))
-                    {
-                        throw new EncoderException(line);
-                    } else
-                    {
-                        // wait for Stream mapping:
+                        if (line.startsWith("Stream mapping:"))
+                        {
+                            step = 2;
+                        } else if (!line.startsWith("  "))
+                        {
+                            throw new EncoderException(line);
+                        } else
+                        {
+                            // wait for Stream mapping:
+                        }
                     }
-                } else if (step == 2)
-                {
-                    if (line.startsWith("Output #0"))
+                    break;
+                    case 2:
                     {
-                        step = 3;
-                    } else if (!line.startsWith("  ") && !line.startsWith("Press [q]"))
-                    {
-                        throw new EncoderException(line);
-                    } else
-                    {
-                        // wait for Stream mapping:
+                        if (line.startsWith("Output #0"))
+                        {
+                            step = 3;
+                        } else if (!line.startsWith("  ") && !line.startsWith("Press [q]"))
+                        {
+                            throw new EncoderException(line);
+                        } else
+                        {
+                            // wait for Stream mapping:
+                        }
                     }
-                } else if (step == 3)
-                {
-                    if (line.startsWith("  ") )
+                    break;
+                    case 3:
                     {
-                        // output details
-                    }
-                    else if (line.startsWith("video:"))
-                    {
-                        step = 4;
-                    } else if (line.startsWith("frame="))
-                    {
-                        // Progressnotification
-                    } else
-                    {
-                        throw new EncoderException(line);
+                        if (line.startsWith("  "))
+                        {
+                            // output details
+                        } else if (line.startsWith("video:"))
+                        {
+                            step = 4;
+                        } else if (line.startsWith("frame="))
+                        {
+                            // Progressnotification
+                        } else
+                        {
+                            throw new EncoderException(line);
+                        }
                     }
                 }
                 if (line.startsWith("frame="))
