@@ -55,10 +55,9 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
      * temp file.
      */
     public DefaultFFMPEGLocator() {
-        // Windows?
-        boolean isWindows;
         String os = System.getProperty("os.name").toLowerCase();
-        isWindows = os.contains("windows");
+        boolean isWindows = os.contains("windows");
+        boolean isMac = os.contains("mac");
 
         // Temporary folder
         File temporaryFolder = new File(System.getProperty("java.io.tmpdir"), "jave-"
@@ -69,7 +68,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
             temporaryFolder.deleteOnExit();
         }
         // ffmpeg executable export on disk.
-        String suffix = isWindows ? ".exe" : "";
+        String suffix = isWindows ? ".exe" : "-osx";
         String arch = System.getProperty("os.arch");
 
         File exe = new File(temporaryFolder, "ffmpeg-" + arch + suffix);

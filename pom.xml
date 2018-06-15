@@ -31,7 +31,7 @@
         <module>jave-native-win64</module>
         <module>jave-native-linux32</module>
         <module>jave-native-linux64</module>
-        <!--        <module>jave-native-osx64</module>-->
+        <module>jave-native-osx64</module>
         <module>jave-core</module>
         <module>jave-core-test</module>
         <module>jave-example</module>
