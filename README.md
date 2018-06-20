@@ -12,7 +12,7 @@ Many other formats, containers and operations are supported by JAVE2.
 
 ## Requirements
 
-JAVE2 requires a Java 8 or higher and a Windows or Linux OS 
+JAVE2 requires a Java 8 or higher and a Windows, Linux OS or OS-X
 on a i386 / 32 bit or amd64 / 64 bit hardware architecture.
 JAVE2 can also be easily ported to other OS and hardware configurations, 
 see the JAVE2 manual for details.
@@ -28,7 +28,6 @@ Jave2 consists of two main components:
 2. The jave-native-<platform> dependencies, which include the binary executables per platform
 
 There exists a jave-all-deps project, which includes core and all windows und linux binaries.
-The OS-X version is not yet functional, but intended to be done some time in the future
 
 ## License
 

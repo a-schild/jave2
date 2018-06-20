@@ -629,14 +629,17 @@ public class Encoder {
                             step = 4;
                         } else if (line.startsWith("frame="))
                         {
-                            // Progressnotification
+                            // Progressnotification video
+                        } else if (line.startsWith("size="))
+                        {
+                            // Progressnotification audio
                         } else
                         {
                             throw new EncoderException(line);
                         }
                     }
                 }
-                if (line.startsWith("frame="))
+                if (line.startsWith("frame=") || line.startsWith("size="))
                 {
                     try
                     {
