@@ -93,7 +93,7 @@ public class EncoderTest {
      * @throws java.lang.Exception
      */
     @Test
-    public void testEncode3args() throws Exception {
+    public void testEncodeVideo1() throws Exception {
         System.out.println("encode");
         Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         
@@ -127,7 +127,7 @@ public class EncoderTest {
      * @throws java.lang.Exception
      */
     @Test
-    public void testEncode4args() throws Exception {
+    public void testEncodeVideo2() throws Exception {
         System.out.println("encode");
         Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/dance1.avi");
@@ -162,7 +162,7 @@ public class EncoderTest {
      * @throws java.lang.Exception
      */
     @Test
-    public void testEncode4argsLarge() throws Exception {
+    public void testEncodeVideo3() throws Exception {
         System.out.println("encode");
         Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/AV36_1.AVI");
@@ -205,7 +205,7 @@ public class EncoderTest {
      * @throws java.lang.Exception
      */
     @Test
-    public void testEncode4argsLarge2() throws Exception {
+    public void testEncodeVideo4() throws Exception {
         System.out.println("encode");
         Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/AV36_1.AVI");
@@ -248,7 +248,7 @@ public class EncoderTest {
      * @throws java.lang.Exception
      */
     @Test
-    public void testEncode4argsLarge3() throws Exception {
+    public void testEncodeVideo5() throws Exception {
         System.out.println("encode");
         Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/AV36_1.AVI");
@@ -305,6 +305,43 @@ public class EncoderTest {
         encoder.encode(new MultimediaObject(source), target, attrs, listener);
         assertNotNull(listener.getInfo());
         assertTrue("Output file missing", target.exists());
+    }
+
+    /**
+     * Test of encode method, of class Encoder.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testEncodeAudio2() throws Exception {
+        System.out.println("encode");
+        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
+        File source = new File("src/test/resources/Alesis-Fusion-Clean-Guitar-C3.wav");
+        File target = new File("target/testoutput/Alesis-Fusion-Clean-Guitar-C3.mp3");
+        if (target.exists())
+        {
+            target.delete();
+        }
+        AudioAttributes audio = new AudioAttributes();
+        audio.setCodec("libmp3lame");
+        audio.setBitRate(new Integer(128000));
+        audio.setChannels(new Integer(2));
+        audio.setSamplingRate(new Integer(42100));
+        EncodingAttributes attrs = new EncodingAttributes();
+        attrs.setFormat("mp3");
+        attrs.setAudioAttributes(audio);
+        Encoder encoder = new Encoder();
+        PListener listener = new PListener();
+        String message= null;
+        String compareTo= "Specified sample rate";
+        try
+        {
+            encoder.encode(new MultimediaObject(source), target, attrs, listener);
+        }
+        catch (EncoderException ex)
+        {
+            message= ex.getMessage();
+        }
+        assertTrue("Encoding problem not found", message.contains(compareTo));
     }
     
     protected class PListener implements EncoderProgressListener
