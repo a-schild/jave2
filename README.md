@@ -1,4 +1,4 @@
-# jave2
+# JAVE
 
 The JAVE (Java Audio Video Encoder) library is Java wrapper on the ffmpeg
 project. Developers can take take advantage of JAVE2 to transcode audio 
