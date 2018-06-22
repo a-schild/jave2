@@ -13,9 +13,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -35,12 +32,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
      * Trace the version of the bundled ffmpeg executable. It's a counter: every
      * time the bundled ffmpeg change it is incremented by 1.
      */
-    private static final int MY_EXE_VERSION = 2;
-
-    /**
-     * Keep a LocalDate of current Jave2 Version
-     */
-    private static final LocalDate LOCAL_DATE = LocalDate.of(2018, 06, 21);
+    private static final String MY_EXE_VERSION = "2.3";
 
     /**
      * The ffmpeg executable file path.
@@ -57,7 +49,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         boolean isMac = os.contains("mac");
 
         // Dir Folder
-        File dirFolder = new File(System.getProperty("java.io.tmpdir"), "jave-" + MY_EXE_VERSION);
+        File dirFolder = new File(System.getProperty("java.io.tmpdir"), "jave/");
         if (!dirFolder.exists())
         {
             dirFolder.mkdirs();
@@ -68,38 +60,15 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         String arch = System.getProperty("os.arch");
 
         //File
-        File ffmpegFile = new File(dirFolder, "ffmpeg-" + arch + suffix);
+        File ffmpegFile = new File(dirFolder, "ffmpeg-" + arch +"-"+MY_EXE_VERSION+ suffix);
         LOG.debug("Executable path: "+ffmpegFile.getAbsolutePath());
 
         //Check the version of existing .exe file
         if (ffmpegFile.exists())
         {
-            try
-            {
-                //Retrieve the File Creation Date
-                BasicFileAttributes attributes = Files.readAttributes(ffmpegFile.toPath(), BasicFileAttributes.class);
-
-                //Convert to Java8 LocalDate
-                LocalDate date_file_created = attributes.creationTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-                //Check if the file was created from a previous version of Jave2
-                if (date_file_created.isBefore(LOCAL_DATE))
-                {
-                    ffmpegFile.delete();
-                    LOG.info("ffmpegFile created before the latest update of library, deleted old file");
-                } else
-                {
-                    LOG.debug("ffmpegFile same version as in library");
-                }
-
-            } catch (IOException ex)
-            {
-                LOG.error("Error in ffmpegFile handling", ex);
-            }
+            // OK, already present
         }
-
-        //If the file doesn't already exists
-        if (!ffmpegFile.exists())
+        else
         {
             copyFile("ffmpeg-" + arch + suffix, ffmpegFile);
         }
