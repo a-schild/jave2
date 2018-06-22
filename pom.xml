@@ -5,7 +5,8 @@
     <artifactId>jave-modules</artifactId>
     <packaging>pom</packaging>
     <properties>
-        <revision>2.3.0</revision>
+        <revision>2.3.1-SNAPSHOT</revision>
+        <!-- Don't forget to change it also in DefaultFFMPEGLocator.java  -->
     </properties>
 
     <version>${revision}</version>
