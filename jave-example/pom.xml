@@ -1,11 +1,9 @@
     <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>it.sauronsoftware</groupId>
-        <artifactId>jave-modules</artifactId>
-        <version>${revision}</version>
-    </parent>
+    <groupId>ws.schild</groupId>
+    <packaging>jar</packaging>
+    <version>2.4.0-SNAPSHOT</version>
     <artifactId>jave-example</artifactId>
     <build>
         <plugins>
@@ -31,7 +29,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>it.sauronsoftware.jave.example.DefaultFFMPEGLocatorTest</mainClass>
+                            <mainClass>ws.schild.jave.example.DefaultFFMPEGLocatorTest</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -52,14 +50,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>it.sauronsoftware</groupId>
+            <groupId>ws.schild</groupId>
             <artifactId>jave-core</artifactId>
-            <version>${revision}</version>
+            <version>2.4.0-SNAPSHOT</version>
         </dependency>    
         <dependency>
-            <groupId>it.sauronsoftware</groupId>
+            <groupId>ws.schild</groupId>
             <artifactId>jave-native-win64</artifactId>
-            <version>${revision}</version>
+            <version>2.4.0-SNAPSHOT</version>
         </dependency>    
            
     </dependencies>
