@@ -18,7 +18,7 @@ public class DefaultFFMPEGLocatorTest {
     }
 
     @Test
-    public void testSomeMethod() {
+    public void testFindExecutable() {
         DefaultFFMPEGLocator locator= new  DefaultFFMPEGLocator();
         String exePath= locator.getFFMPEGExecutablePath();
         assertNotNull("Native component not found", exePath);
