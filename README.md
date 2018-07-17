@@ -22,6 +22,12 @@ see the JAVE manual for details.
 For the documentation, please have a look at the project wiki pages here:
 https://github.com/a-schild/jave2/wiki
 
+For maven users, add this to your pom file.
+It includes all binaries for the supported platforms
+<groupId>ws.schild</groupId>
+<artifactId>jave-all-deps</artifactId>
+<version>2.4.0</version>
+
 
 Jave2 consists of two main components:
 1. The jave-core dependency, which includes all the java code, which is platform independent
