@@ -199,7 +199,7 @@ public class EncoderTest {
         {
             message= ex.getMessage();
         }
-        assertEquals("Encoding problem not found", compareTo, message);
+        assertEquals(compareTo, message, "Encoding problem not found");
     }
     
     /**
@@ -346,6 +346,37 @@ public class EncoderTest {
         assertTrue(message.contains(compareTo), "Encoding problem not found");
     }
     
+    
+    /**
+     * Test of encode method, of class Encoder.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testEncodeAudio3() throws Exception {
+        System.out.println("encode");
+        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
+        File source = new File("src/test/resources/testfile3.wmv");
+        File target = new File("target/testoutput/testfile3.mp3");
+        if (target.exists())
+        {
+            target.delete();
+        }
+        Encoder encoder = new Encoder();
+        PListener listener = new PListener();
+        String message= null;
+        String compareTo= "Specified sample rate";
+        AudioAttributes audio = new AudioAttributes();
+        audio.setCodec("libmp3lame");
+        audio.setBitRate(new Integer(128000));
+        audio.setChannels(new Integer(2));
+        audio.setSamplingRate(new Integer(44100));
+        EncodingAttributes attrs = new EncodingAttributes();
+        attrs.setFormat("mp3");
+        attrs.setAudioAttributes(audio);
+        encoder.encode(new MultimediaObject(source), target, attrs);
+        assertTrue(target.exists(), "Output file missing");
+    }
+
     protected class PListener implements EncoderProgressListener
     {
         private MultimediaInfo _info= null;

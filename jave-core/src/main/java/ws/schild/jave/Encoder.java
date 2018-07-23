@@ -633,7 +633,18 @@ public class Encoder {
                         } else if (line.startsWith("size="))
                         {
                             // Progressnotification audio
-                        } else
+                        }
+                        else if (line.endsWith("Queue input is backward in time")
+                                || line.contains("Application provided invalid, non monotonically increasing dts to muxer in stream"))
+                        {
+                            // Ignore these non-fatal errors, if they are fatal, the next line(s)
+                            // will trow the full error
+                            if (listener != null)
+                            {
+                                listener.message(line);
+                            }
+                        }
+                        else
                         {
                             throw new EncoderException(line);
                         }

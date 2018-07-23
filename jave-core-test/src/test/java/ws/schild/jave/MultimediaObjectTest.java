@@ -50,7 +50,7 @@ public class MultimediaObjectTest {
         assertEquals(320, result.getVideo().getSize().getWidth());
         assertEquals(240, result.getVideo().getSize().getHeight());
         assertEquals(4817, result.getVideo().getBitRate());
-        assertEquals(15.0f, result.getVideo().getFrameRate(), 0);
+        assertEquals(15.0f, result.getVideo().getFrameRate());
     }
     
 }
