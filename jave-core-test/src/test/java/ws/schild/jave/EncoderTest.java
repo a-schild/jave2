@@ -10,8 +10,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -30,7 +32,7 @@ public class EncoderTest {
         System.out.println("getAudioDecoders");
         Encoder instance = new Encoder();
         String[] result = instance.getAudioDecoders();
-        assertTrue("No audio decoders found", result != null && result.length >0);
+        assertTrue(result != null && result.length >0, "No audio decoders found");
     }
 
     /**
@@ -41,7 +43,7 @@ public class EncoderTest {
         System.out.println("getAudioEncoders");
         Encoder instance = new Encoder();
         String[] result = instance.getAudioEncoders();
-        assertTrue("No audio encoders found", result != null && result.length >0);
+        assertTrue(result != null && result.length >0, "No audio encoders found");
     }
 
     /**
@@ -52,7 +54,7 @@ public class EncoderTest {
         System.out.println("getVideoDecoders");
         Encoder instance = new Encoder();
         String[] result = instance.getVideoDecoders();
-        assertTrue("No video decoders found", result != null && result.length >0);
+        assertTrue(result != null && result.length >0, "No video decoders found");
     }
 
     /**
@@ -63,7 +65,7 @@ public class EncoderTest {
         System.out.println("getVideoEncoders");
         Encoder instance = new Encoder();
         String[] result = instance.getVideoEncoders();
-        assertTrue("No video enecoders found", result != null && result.length >0);
+        assertTrue(result != null && result.length >0, "No video enecoders found");
     }
 
     /**
@@ -74,7 +76,7 @@ public class EncoderTest {
         System.out.println("getSupportedEncodingFormats");
         Encoder instance = new Encoder();
         String[] result = instance.getSupportedEncodingFormats();
-        assertTrue("No supported encoding formats found", result != null && result.length >0);
+        assertTrue(result != null && result.length >0, "No supported encoding formats found");
     }
 
     /**
@@ -85,7 +87,7 @@ public class EncoderTest {
         System.out.println("getSupportedDecodingFormats");
         Encoder instance = new Encoder();
         String[] result = instance.getSupportedDecodingFormats();
-        assertTrue("No supported decoding formats found", result != null && result.length >0);
+        assertTrue(result != null && result.length >0, "No supported decoding formats found");
     }
 
     /**
@@ -119,7 +121,7 @@ public class EncoderTest {
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
         encoder.encode(new MultimediaObject(source), target, attrs);
-        assertTrue("Output file missing", target.exists());
+        assertTrue( target.exists(), "Output file missing");
     }
 
     /**
@@ -154,7 +156,7 @@ public class EncoderTest {
         PListener listener = new PListener();
         encoder.encode(new MultimediaObject(source), target, attrs, listener);
         assertNotNull(listener.getInfo());
-        assertTrue("Output file missing", target.exists());
+        assertTrue( target.exists(), "Output file missing");
     }
 
     /**
@@ -240,7 +242,7 @@ public class EncoderTest {
         {
             message= ex.getMessage();
         }
-        assertTrue("Encoding problem not found", message.contains(compareTo));
+        assertTrue(message.contains(compareTo), "Encoding problem not found");
     }
     
     /**
@@ -275,7 +277,7 @@ public class EncoderTest {
         PListener listener = new PListener();
         encoder.encode(new MultimediaObject(source), target, attrs, listener);
         assertNotNull(listener.getInfo());
-        assertTrue("Output file missing", target.exists());
+        assertTrue(target.exists(), "Output file missing");
     }
     
     /**
@@ -304,7 +306,7 @@ public class EncoderTest {
         PListener listener = new PListener();
         encoder.encode(new MultimediaObject(source), target, attrs, listener);
         assertNotNull(listener.getInfo());
-        assertTrue("Output file missing", target.exists());
+        assertTrue(target.exists(), "Output file missing");
     }
 
     /**
@@ -341,7 +343,7 @@ public class EncoderTest {
         {
             message= ex.getMessage();
         }
-        assertTrue("Encoding problem not found", message.contains(compareTo));
+        assertTrue(message.contains(compareTo), "Encoding problem not found");
     }
     
     protected class PListener implements EncoderProgressListener

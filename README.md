@@ -26,7 +26,7 @@ For maven users, add this to your pom file.
 It includes all binaries for the supported platforms
 <groupId>ws.schild</groupId>
 <artifactId>jave-all-deps</artifactId>
-<version>2.4.0</version>
+<version>2.4.1-SNAPSHOT</version>
 
 
 Jave2 consists of two main components:

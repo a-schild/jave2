@@ -233,7 +233,7 @@ public class Encoder {
      * could be encoded and generated only if the specified format is in this
      * list.
      *
-     * @param encoding
+     * @param encoding True for encoding job, false to decode a file
      * @return A list with the names of all the supported file formats at
      * encoding time.
      * @throws EncoderException If a problem occurs calling the underlying

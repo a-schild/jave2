@@ -27,7 +27,7 @@ public class ScreenExtractor {
 
     /**
      *
-     * @return
+     * @return The number of screens found
      */
     public int getNumberOfScreens() {
         return numberOfScreens;

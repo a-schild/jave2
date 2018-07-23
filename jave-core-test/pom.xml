@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ws.schild</groupId>
     <packaging>jar</packaging>
-    <version>2.4.0</version>
+    <version>2.4.1-SNAPSHOT</version>
     <artifactId>jave-core-test</artifactId>
     <build>
         <plugins>
@@ -29,38 +29,63 @@
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-core</artifactId>
-            <version>2.4.0</version>
+            <version>2.4.1-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-native-win32</artifactId>
-            <version>2.4.0</version>
+            <version>2.4.1-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-native-win64</artifactId>
-            <version>2.4.0</version>
+            <version>2.4.1-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-native-linux32</artifactId>
-            <version>2.4.0</version>
+            <version>2.4.1-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-native-linux64</artifactId>
-            <version>2.4.0</version>
+            <version>2.4.1-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-native-osx64</artifactId>
-            <version>2.4.0</version>
+            <version>2.4.1-SNAPSHOT</version>
         </dependency>    
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <scope>test</scope>
+            <version>2.44.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.opera</groupId>
+            <artifactId>operadriver</artifactId>
+            <scope>test</scope>
+            <version>1.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-remote-driver</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
             <scope>test</scope>
+            <version>4.11</version>
         </dependency>
     </dependencies>
     <properties>
