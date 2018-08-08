@@ -28,7 +28,7 @@ public class ConversionOutputAnalyzerTest {
     @Test
     public void testAnalyzeNewLine1() {
         System.out.println("analyzeNewLine 1");
-        File file = new File("src/test/resources/testoutput1.log");
+        File file = new File("src/test/resources/testoutput1.txt");
         ConversionOutputAnalyzer oa1= new ConversionOutputAnalyzer(0, null);
         
         try

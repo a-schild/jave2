@@ -1,0 +1,78 @@
+Input #0, matroska,webm, from 'K:\ceshi\1.mkv':
+  Metadata:
+  encoder : libebml v1.3.4 + libmatroska v1.4.5
+  creation_time : 2018-06-19T12:16:12.000000Z
+  Duration: 02:19:55.70, start: 0.000000, bitrate: 1816 kb/s
+  Stream #0:0: Video: h264 (High), yuv420p(progressive), 1280x720 [SAR 1:1 DAR 16:9], 23.98 fps, 23.98 tbr, 1k tbn, 47.95 tbc (default)
+    Metadata:
+      BPS : 1686071
+      BPS-eng : 1686071
+      DURATION : 02:19:55.637000000
+      DURATION-eng : 02:19:55.637000000
+      NUMBER_OF_FRAMES: 201294
+      NUMBER_OF_FRAMES-eng: 201294
+      NUMBER_OF_BYTES : 1769455275
+      NUMBER_OF_BYTES-eng: 1769455275
+      _STATISTICS_WRITING_APP: mkvmerge v10.0.0 ('To Drown In You') 32bit
+      _STATISTICS_WRITING_APP-eng: mkvmerge v10.0.0 ('To Drown In You') 32bit
+      _STATISTICS_WRITING_DATE_UTC: 2018-06-19 12:16:12
+      _STATISTICS_WRITING_DATE_UTC-eng: 2018-06-19 12:16:12
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+      _STATISTICS_TAGS-eng: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+    Stream #0:1(eng): Audio: aac (LC), 48000 Hz, stereo, fltp (default)
+      Metadata:
+      BPS : 127989
+      BPS-eng : 127989
+      DURATION : 02:19:55.691000000
+      DURATION-eng : 02:19:55.691000000
+      NUMBER_OF_FRAMES: 393548
+      NUMBER_OF_FRAMES-eng: 393548
+      NUMBER_OF_BYTES : 134319826
+      NUMBER_OF_BYTES-eng: 134319826
+      _STATISTICS_WRITING_APP: mkvmerge v10.0.0 ('To Drown In You') 32bit
+      _STATISTICS_WRITING_APP-eng: mkvmerge v10.0.0 ('To Drown In You') 32bit
+      _STATISTICS_WRITING_DATE_UTC: 2018-06-19 12:16:12
+      _STATISTICS_WRITING_DATE_UTC-eng: 2018-06-19 12:16:12
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+      _STATISTICS_TAGS-eng: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+Output #0, mp4, to 'K:\ceshi\3.mp4':
+  Metadata:
+    encoder : Lavf57.83.100
+      Stream #0:0: Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 23.98 fps, 23.98 tbr, 16k tbn, 1k tbc (default)
+        Metadata:
+        BPS : 1686071
+        BPS-eng : 1686071
+        DURATION : 02:19:55.637000000
+        DURATION-eng : 02:19:55.637000000
+        NUMBER_OF_FRAMES: 201294
+        NUMBER_OF_FRAMES-eng: 201294
+        NUMBER_OF_BYTES : 1769455275
+        NUMBER_OF_BYTES-eng: 1769455275
+        _STATISTICS_WRITING_APP: mkvmerge v10.0.0 ('To Drown In You') 32bit
+        _STATISTICS_WRITING_APP-eng: mkvmerge v10.0.0 ('To Drown In You') 32bit
+        _STATISTICS_WRITING_DATE_UTC: 2018-06-19 12:16:12
+        _STATISTICS_WRITING_DATE_UTC-eng: 2018-06-19 12:16:12
+        _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+        _STATISTICS_TAGS-eng: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+      Stream #0:1(eng): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp (default)
+        Metadata:
+        BPS : 127989
+         BPS-eng : 127989
+        DURATION : 02:19:55.691000000
+        DURATION-eng : 02:19:55.691000000
+        NUMBER_OF_FRAMES: 393548
+        NUMBER_OF_FRAMES-eng: 393548
+        NUMBER_OF_BYTES : 134319826
+        NUMBER_OF_BYTES-eng: 134319826
+         _STATISTICS_WRITING_APP: mkvmerge v10.0.0 ('To Drown In You') 32bit
+        _STATISTICS_WRITING_APP-eng: mkvmerge v10.0.0 ('To Drown In You') 32bit
+        _STATISTICS_WRITING_DATE_UTC: 2018-06-19 12:16:12
+        _STATISTICS_WRITING_DATE_UTC-eng: 2018-06-19 12:16:12
+        _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+        _STATISTICS_TAGS-eng: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (copy)
+Press [q] to stop, [?] for help
+frame=20948 fps=3230 q=-1.0 Lsize= 251523kB time=00:14:33.80 bitrate=2358.1kbits/s speed= 135x
+video:237058kB audio:13653kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 0.324333%
