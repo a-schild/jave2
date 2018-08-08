@@ -34,6 +34,10 @@ public class EncoderException extends Exception {
     EncoderException(String message) {
         super(message);
     }
+    
+    EncoderException(int step, int lineNumber, String message) {
+        super("In step: "+step+" Error in line "+lineNumber+" : <"+message+">");
+    }
 
     EncoderException(Throwable cause) {
         super(cause);

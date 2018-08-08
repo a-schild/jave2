@@ -32,7 +32,7 @@ It includes all binaries for the supported platforms
 <!-- https://mvnrepository.com/artifact/ws.schild/jave-all-deps -->
 <groupId>ws.schild</groupId>
 <artifactId>jave-all-deps</artifactId>
-<version>2.4.1</version>
+<version>2.4.2-SNAPSHOT</version>
 ```
 
 ###For gradle us this:

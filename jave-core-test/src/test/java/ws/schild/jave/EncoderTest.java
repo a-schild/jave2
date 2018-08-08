@@ -190,7 +190,7 @@ public class EncoderTest {
         Encoder encoder = new Encoder();
         PListener listener = new PListener();
         String message= null;
-        String compareTo= "Unknown encoder 'libfaac'";
+        String compareTo= "In step: 1 Error in line 10 : <Unknown encoder 'libfaac'>";
         try
         {
             encoder.encode(new MultimediaObject(source), target, attrs, listener);

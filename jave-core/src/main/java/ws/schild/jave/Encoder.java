@@ -25,7 +25,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,12 +50,7 @@ public class Encoder {
      */
     private static final Pattern ENCODER_DECODER_PATTERN = Pattern.compile(
             "^\\s*([AVS]).{5}\\s(\\S+).(.+)$", Pattern.CASE_INSENSITIVE);
-    /**
-     * This regexp is used to parse the ffmpeg output about the ongoing encoding
-     * process.
-     */
-    private static final Pattern PROGRESS_INFO_PATTERN = Pattern.compile(
-            "\\s*(\\w+)\\s*=\\s*(\\S+)\\s*", Pattern.CASE_INSENSITIVE);
+
     /**
      * This regexp is used to parse the ffmpeg output about the success of an
      * encoding operation.
@@ -324,32 +318,6 @@ public class Encoder {
     }
 
     /**
-     * Private utility. Parse a line and try to match its contents against the
-     * {@link Encoder#PROGRESS_INFO_PATTERN} pattern. It the line can be parsed,
-     * it returns a hashtable with progress informations, otherwise it returns
-     * null.
-     *
-     * @param line The line from the ffmpeg output.
-     * @return A hashtable with the value reported in the line, or null if the
-     * given line can not be parsed.
-     */
-    private HashMap<String, String> parseProgressInfoLine(String line) {
-        HashMap<String, String> table = null;
-        Matcher m = PROGRESS_INFO_PATTERN.matcher(line);
-        while (m.find())
-        {
-            if (table == null)
-            {
-                table = new HashMap<>();
-            }
-            String key = m.group(1);
-            String value = m.group(2);
-            table.put(key, value);
-        }
-        return table;
-    }
-
-    /**
      * Re-encode a multimedia file.
      *
      * @param multimediaObject The source multimedia file. It cannot be null. Be
@@ -535,7 +503,6 @@ public class Encoder {
         {
             String lastWarning = null;
             long duration;
-            long progress = 0;
             RBufferedReader reader = new RBufferedReader(
                     new InputStreamReader(ffmpeg.getErrorStream()));
             MultimediaInfo info = multimediaObject.getInfo();
@@ -556,154 +523,13 @@ public class Encoder {
             {
                 listener.sourceInfo(info);
             }
-            // Step 0 = Before input stuff
-            // Step 1 = Input stuff
-            // Step 2 = Stream Mapping
-            // Step 3 = Output
-            // Step 4 = frame=...
-            int step = 0;
-            int lineNR = 0;
             String line;
+            ConversionOutputAnalyzer outputAnalyzer= new ConversionOutputAnalyzer(duration, listener);
             while ((line = reader.readLine()) != null)
             {
-                lineNR++;
-                if (LOG.isDebugEnabled())
-                {
-                    LOG.debug("Input Line (" + lineNR + "): " + line);
-                }
-                if (line.startsWith("WARNING: "))
-                {
-                    if (listener != null)
-                    {
-                        listener.message(line);
-                    }
-                }
-                switch (step)
-                {
-                    case 0:
-                    {
-                        if (line.startsWith("Input #0"))
-                        {
-                            step = 1;
-                        } else
-                        {
-                            // wait for Stream mapping:
-                        }
-                    }
-                    break;
-                    case 1:
-                    {
-                        if (line.startsWith("Stream mapping:"))
-                        {
-                            step = 2;
-                        } else if (!line.startsWith("  "))
-                        {
-                            throw new EncoderException(line);
-                        } else
-                        {
-                            // wait for Stream mapping:
-                        }
-                    }
-                    break;
-                    case 2:
-                    {
-                        if (line.startsWith("Output #0"))
-                        {
-                            step = 3;
-                        } else if (!line.startsWith("  ") && !line.startsWith("Press [q]"))
-                        {
-                            throw new EncoderException(line);
-                        } else
-                        {
-                            // wait for Stream mapping:
-                        }
-                    }
-                    break;
-                    case 3:
-                    {
-                        if (line.startsWith("  "))
-                        {
-                            // output details
-                        } else if (line.startsWith("video:"))
-                        {
-                            step = 4;
-                        } else if (line.startsWith("frame="))
-                        {
-                            // Progressnotification video
-                        } else if (line.startsWith("size="))
-                        {
-                            // Progressnotification audio
-                        }
-                        else if (line.endsWith("Queue input is backward in time")
-                                || line.contains("Application provided invalid, non monotonically increasing dts to muxer in stream"))
-                        {
-                            // Ignore these non-fatal errors, if they are fatal, the next line(s)
-                            // will trow the full error
-                            if (listener != null)
-                            {
-                                listener.message(line);
-                            }
-                        }
-                        else
-                        {
-                            throw new EncoderException(line);
-                        }
-                    }
-                }
-                if (line.startsWith("frame=") || line.startsWith("size="))
-                {
-                    try
-                    {
-                        line = line.trim();
-                        if (line.length() > 0)
-                        {
-                            HashMap<String, String> table = parseProgressInfoLine(line);
-                            if (table == null)
-                            {
-                                if (listener != null)
-                                {
-                                    listener.message(line);
-                                }
-                                lastWarning = line;
-                            } else
-                            {
-                                if (listener != null)
-                                {
-                                    String time = table.get("time");
-                                    if (time != null)
-                                    {
-                                        String dParts[] = time.split(":");
-                                        // HH:MM:SS.xx
-
-                                        Double seconds = Double.parseDouble(dParts[dParts.length - 1]);
-                                        if (dParts.length > 1)
-                                        {
-                                            seconds += Double.parseDouble(dParts[dParts.length - 2]) * 60;
-                                            if (dParts.length > 2)
-                                            {
-                                                seconds += Double.parseDouble(dParts[dParts.length - 3]) * 60 * 60;
-                                            }
-                                        }
-
-                                        int perm = (int) Math.round((seconds * 1000L * 1000L)
-                                                / (double) duration);
-                                        if (perm > 1000)
-                                        {
-                                            perm = 1000;
-                                        }
-                                        listener.progress(perm);
-                                    }
-                                }
-                                lastWarning = null;
-                            }
-                        }
-                    } catch (Exception ex)
-                    {
-                        LOG.warn("Error in progress parsing for line: " + line);
-                    }
-                }
+                outputAnalyzer.analyzeNewLine(line);
             }
-            if (lastWarning != null)
+            if (outputAnalyzer.getLastWarning() != null)
             {
                 if (!SUCCESS_PATTERN.matcher(lastWarning).matches())
                 {
