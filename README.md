@@ -26,19 +26,30 @@ or at this file
 
 https://github.com/a-schild/jave2/blob/master/jave-example/src/main/java/ws/schild/jave/example/DefaultFFMPEGLocatorTest.java
 
-###For maven users, add this to your pom file.
+## Supported Operating Systems
+| Operating System | Windows x32,x64 | MacOS x32,x64 | Linux x32,x64 |
+| ------- | :-----: | :-: | :-----: |
+| Supported? | YES | YES  | YES  |
+
+### For maven users, add this to your pom file.
+
 It includes all binaries for the supported platforms
-```
+
 <!-- https://mvnrepository.com/artifact/ws.schild/jave-all-deps -->
-<groupId>ws.schild</groupId>
-<artifactId>jave-all-deps</artifactId>
-<version>2.4.2</version>
+``` XML
+<dependency>
+ <groupId>ws.schild</groupId>
+ <artifactId>jave-all-deps</artifactId>
+ <version>2.4.2</version>
+</dependency>
 ```
 
-###For gradle us this:
+### For gradle us this:
+
 It includes all binaries for the supported platforms
-```
+
 // https://mvnrepository.com/artifact/ws.schild/jave-all-deps
+``` XML
 compile group: 'ws.schild', name: 'jave-all-deps', version: '2.4.2'
 ```
 
