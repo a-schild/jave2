@@ -60,83 +60,92 @@ There exists a jave-all-deps project, which includes core and all windows und li
 ## Examples
 
 #### Converting any audio to mp3
-					try {
-						File source = new File("file path");		
-						File target = new File("file path);
-      
-					//Audio Attributes
-						AudioAttributes audio = new AudioAttributes();
-						audio.setCodec("libmp3lame");
-						audio.setBitRate(128000);
-						audio.setChannels(2);
-						audio.setSamplingRate(44100);
-						
-						//Encoding attributes
-						EncodingAttributes attrs = new EncodingAttributes();
-						attrs.setFormat("mp3");
-						attrs.setAudioAttributes(audio);
-						
-						//Encode                                            
-						Encoder encoder = new Encoder();
-						encoder.encode(new MultimediaObject(source), target, attrs);
-      
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						succeeded = false;
-					}
+
+``` JAVA
+   try {                                                            
+	File source = new File("file path");		                 
+	File target = new File("file path);                          
+                                                                 
+       //Audio Attributes                                               
+	AudioAttributes audio = new AudioAttributes();               
+	audio.setCodec("libmp3lame");                                
+	audio.setBitRate(128000);                                    
+	audio.setChannels(2);                                        
+	audio.setSamplingRate(44100);                                
+	                                                             
+	//Encoding attributes                                        
+	EncodingAttributes attrs = new EncodingAttributes();         
+	attrs.setFormat("mp3");                                      
+	attrs.setAudioAttributes(audio);                             
+	                                                             
+	//Encode                                                     
+	Encoder encoder = new Encoder();                             
+	encoder.encode(new MultimediaObject(source), target, attrs); 
+                                                                 
+   } catch (Exception ex) {                                         
+	ex.printStackTrace();                                        
+	succeeded = false;                                           
+   }                
+
+```
      
 ## More advanced examples    
 
 #### Converting any audio to mp3 with a progress listener
-     ConvertProgressListener listener = new ConvertProgressListener();
 
-					try {
-						File source = new File("file path");		
-						File target = new File("file path);
-      
-					//Audio Attributes
-						AudioAttributes audio = new AudioAttributes();
-						audio.setCodec("libmp3lame");
-						audio.setBitRate(128000);
-						audio.setChannels(2);
-						audio.setSamplingRate(44100);
-						
-						//Encoding attributes
-						EncodingAttributes attrs = new EncodingAttributes();
-						attrs.setFormat("mp3");
-						attrs.setAudioAttributes(audio);
-						
-						//Encode                                            
-						Encoder encoder = new Encoder();
-						encoder.encode(new MultimediaObject(source), target, attrs,listener);
-      
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						succeeded = false;
-					}
+``` JAVA 
+   ConvertProgressListener listener = new ConvertProgressListener();
+
+   try {                                                            
+	File source = new File("file path");		                 
+	File target = new File("file path);                          
+                                                                 
+       //Audio Attributes                                               
+	AudioAttributes audio = new AudioAttributes();               
+	audio.setCodec("libmp3lame");                                
+	audio.setBitRate(128000);                                    
+	audio.setChannels(2);                                        
+	audio.setSamplingRate(44100);                                
+	                                                             
+	//Encoding attributes                                        
+	EncodingAttributes attrs = new EncodingAttributes();         
+	attrs.setFormat("mp3");                                      
+	attrs.setAudioAttributes(audio);                             
+	                                                             
+	//Encode                                                     
+	Encoder encoder = new Encoder();                             
+	encoder.encode(new MultimediaObject(source), target, attrs,listener); 
+                                                                 
+   } catch (Exception ex) {                                         
+	ex.printStackTrace();                                        
+	succeeded = false;                                           
+   }                                                                
 
 
   public class ConvertProgressListener implements EncoderProgressListener {
-		int current = 1;
-		
-		public ConvertProgressListener() {
-		}
-		
-		public void message(String m) {
-    //code
-		}
-		
-		public void progress(int p) {
-			
-    //Find %100 progress
-		 	double progress = p / 1000.00;
-			 System.out.println(progress);
-   
-		}
-		
-		public void sourceInfo(MultimediaInfo m) {
-   //code
-		}
+	                                                                     
+     public ConvertProgressListener() {   
+        //code
+     }                                                                    
+	                                                                     
+     public void message(String m) {                                      
+       //code                                                              
+     }                                                                    
+	                                                                     
+     public void progress(int p) {                                        
+		                                                                 
+       //Find %100 progress                                              
+	double progress = p / 1000.00;                                    
+	System.out.println(progress);                                     
+                                                                         
+     }                                                                    
+	                                                                     
+      public void sourceInfo(MultimediaInfo m) {                           
+         //code                                                          
+      }                                                                    
+   }                                                                                                                                                
+```
+
 ---
 
 ## License
