@@ -69,7 +69,7 @@ class FFMPEGExecutor {
      * A stream reading from the ffmpeg process standard error channel.
      */
     private InputStream errorStream = null;
-
+    
     /**
      * It build the executor.
      *
@@ -91,6 +91,7 @@ class FFMPEGExecutor {
     /**
      * Executes the ffmpeg process with the previous given arguments.
      *
+     * @return process exit code
      * @throws IOException If the process call fails.
      */
     public void execute() throws IOException {
@@ -101,7 +102,7 @@ class FFMPEGExecutor {
         {
             cmd[i + 1] = args.get(i);
         }
-        cmd[argsSize + 1] = "-hide_banner";
+        cmd[argsSize + 1] = "-hide_banner";  // Don't show banner
         if (LOG.isDebugEnabled())
         {
             StringBuilder sb = new StringBuilder();
@@ -198,4 +199,13 @@ class FFMPEGExecutor {
         }
     }
 
+    /**
+     * Return the exit code of the ffmpeg process
+     * 
+     * @return 
+     */
+    public int getProcessExitCode()
+    {
+        return ffmpeg.exitValue();
+    }
 }

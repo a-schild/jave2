@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,7 +63,15 @@ public class Encoder {
      * The locator of the ffmpeg executable used by this encoder.
      */
     private final FFMPEGLocator locator;
-
+    /**
+     * The executor used to do the conversion
+     */
+    private FFMPEGExecutor ffmpeg;
+    /**
+     * List of unhandled messages from ffmpeng run
+     */
+    private List<String>    unhandledMessages= null;
+    
     /**
      * It builds an encoder using a {@link DefaultFFMPEGLocator} instance to
      * locate the ffmpeg executable to use.
@@ -374,7 +383,7 @@ public class Encoder {
         }
         target = target.getAbsoluteFile();
         target.getParentFile().mkdirs();
-        FFMPEGExecutor ffmpeg = locator.createExecutor();
+        ffmpeg = locator.createExecutor();
         if (offsetAttribute != null)
         {
             ffmpeg.addArgument("-ss");
@@ -492,6 +501,10 @@ public class Encoder {
         }
         ffmpeg.addArgument("-y");
         ffmpeg.addArgument(target.getAbsolutePath());
+        
+//        ffmpeg.addArgument("-loglevel");
+//        ffmpeg.addArgument("warning"); // Only report errors
+        
         try
         {
             ffmpeg.execute();
@@ -536,10 +549,37 @@ public class Encoder {
                     throw new EncoderException("No match for: " + SUCCESS_PATTERN + " in " + lastWarning);
                 }
             }
+            unhandledMessages= outputAnalyzer.getUnhandledMessages();
+            int exitCode= ffmpeg.getProcessExitCode();
+            if (exitCode != 0)
+            {
+                LOG.error("Process exit code: "+exitCode+" for "+multimediaObject.getFile().getName()+" to "+ target.getName());
+                throw new EncoderException("Exit code of ffmpeg encoding run is "+exitCode);
+            }
         } catch (IOException e)
         {
             throw new EncoderException(e);
         } finally
+        {
+            ffmpeg.destroy();
+        }
+    }
+
+    /**
+     * Return the list of unhandled output messages of the ffmpeng encoder run
+     * 
+     * @return the unhandledMessages list of unhandled messages, can be null or empty
+     */
+    public List<String> getUnhandledMessages() {
+        return unhandledMessages;
+    }
+    
+    /**
+     * Force the encoding process to stop
+     */
+    public void abortEncoding()
+    {
+        if (ffmpeg != null)
         {
             ffmpeg.destroy();
         }

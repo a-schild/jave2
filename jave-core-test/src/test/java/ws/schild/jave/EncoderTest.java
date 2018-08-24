@@ -8,6 +8,7 @@ package ws.schild.jave;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -100,7 +101,7 @@ public class EncoderTest {
         Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         
         File source = new File("src/test/resources/dance1.avi");
-        File target = new File("target/testoutput/target3.3gp");
+        File target = new File("target/testoutput/testEncodeVideo1.3gp");
         if (target.exists())
         {
             target.delete();
@@ -133,7 +134,7 @@ public class EncoderTest {
         System.out.println("encode");
         Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/dance1.avi");
-        File target = new File("target/testoutput/target4.3gp");
+        File target = new File("target/testoutput/testEncodeVideo2.3gp");
         if (target.exists())
         {
             target.delete();
@@ -168,7 +169,7 @@ public class EncoderTest {
         System.out.println("encode");
         Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/AV36_1.AVI");
-        File target = new File("target/testoutput/target4Large.3gp");
+        File target = new File("target/testoutput/testEncodeVideo3.3gp");
         if (target.exists())
         {
             target.delete();
@@ -189,17 +190,18 @@ public class EncoderTest {
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
         PListener listener = new PListener();
-        String message= null;
-        String compareTo= "In step: 1 Error in line 10 : <Unknown encoder 'libfaac'>";
+        String errorMessage= "Exit code of ffmpeg encoding run is 1";
+        boolean exceptionThrown= false;
         try
         {
             encoder.encode(new MultimediaObject(source), target, attrs, listener);
         }
         catch (EncoderException ex)
         {
-            message= ex.getMessage();
+            assertEquals(ex.getMessage(), errorMessage, "Not expected error message");
+            exceptionThrown= true;
         }
-        assertEquals(compareTo, message, "Encoding problem not found");
+        assertTrue( exceptionThrown, "No exception occured");
     }
     
     /**
@@ -211,7 +213,7 @@ public class EncoderTest {
         System.out.println("encode");
         Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/AV36_1.AVI");
-        File target = new File("target/testoutput/target4Large2.3gp");
+        File target = new File("target/testoutput/testEncodeVideo4.3gp");
         if (target.exists())
         {
             target.delete();
@@ -232,17 +234,18 @@ public class EncoderTest {
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
         PListener listener = new PListener();
-        String message= null;
-        String compareTo= "codec not currently supported in container";
+        boolean exceptionThrown= false;
+        String errorMessage= "Exit code of ffmpeg encoding run is 1";
         try
         {
             encoder.encode(new MultimediaObject(source), target, attrs, listener);
         }
         catch (EncoderException ex)
         {
-            message= ex.getMessage();
+            assertEquals(ex.getMessage(), errorMessage, "Not expected error message");
+            exceptionThrown= true;
         }
-        assertTrue(message.contains(compareTo), "Encoding problem not found");
+        assertTrue( exceptionThrown, "No exception occured");
     }
     
     /**
@@ -254,7 +257,7 @@ public class EncoderTest {
         System.out.println("encode");
         Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/AV36_1.AVI");
-        File target = new File("target/testoutput/target4Large3.flv");
+        File target = new File("target/testoutput/testEncodeVideo5.flv");
         if (target.exists())
         {
             target.delete();
@@ -289,16 +292,16 @@ public class EncoderTest {
         System.out.println("encode");
         Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/Alesis-Fusion-Clean-Guitar-C3.wav");
-        File target = new File("target/testoutput/Alesis-Fusion-Clean-Guitar-C3.mp3");
+        File target = new File("target/testoutput/testEncodeAudio1.mp3");
         if (target.exists())
         {
             target.delete();
         }
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec("libmp3lame");
-        audio.setBitRate(new Integer(128000));
-        audio.setChannels(new Integer(2));
-        audio.setSamplingRate(new Integer(44100));
+        audio.setBitRate(128000);
+        audio.setChannels(2);
+        audio.setSamplingRate(44100);
         EncodingAttributes attrs = new EncodingAttributes();
         attrs.setFormat("mp3");
         attrs.setAudioAttributes(audio);
@@ -318,32 +321,33 @@ public class EncoderTest {
         System.out.println("encode");
         Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/Alesis-Fusion-Clean-Guitar-C3.wav");
-        File target = new File("target/testoutput/Alesis-Fusion-Clean-Guitar-C3.mp3");
+        File target = new File("target/testoutput/testEncodeAudio2.mp3");
         if (target.exists())
         {
             target.delete();
         }
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec("libmp3lame");
-        audio.setBitRate(new Integer(128000));
-        audio.setChannels(new Integer(2));
-        audio.setSamplingRate(new Integer(42100));
+        audio.setBitRate(128000);
+        audio.setChannels(2);
+        audio.setSamplingRate(42100);
         EncodingAttributes attrs = new EncodingAttributes();
         attrs.setFormat("mp3");
         attrs.setAudioAttributes(audio);
         Encoder encoder = new Encoder();
         PListener listener = new PListener();
-        String message= null;
-        String compareTo= "Specified sample rate";
+        String errorMessage= "Exit code of ffmpeg encoding run is 1";
+        boolean exceptionThrown= false;
         try
         {
             encoder.encode(new MultimediaObject(source), target, attrs, listener);
         }
         catch (EncoderException ex)
         {
-            message= ex.getMessage();
+            assertEquals(ex.getMessage(), errorMessage, "Not expected error message");
+            exceptionThrown= true;
         }
-        assertTrue(message.contains(compareTo), "Encoding problem not found");
+        assertTrue( exceptionThrown, "No exception occured");
     }
     
     
@@ -356,7 +360,7 @@ public class EncoderTest {
         System.out.println("encode");
         Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/testfile3.wmv");
-        File target = new File("target/testoutput/testfile3.mp3");
+        File target = new File("target/testoutput/testEncodeAudio3.mp3");
         if (target.exists())
         {
             target.delete();
@@ -367,9 +371,9 @@ public class EncoderTest {
         String compareTo= "Specified sample rate";
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec("libmp3lame");
-        audio.setBitRate(new Integer(128000));
-        audio.setChannels(new Integer(2));
-        audio.setSamplingRate(new Integer(44100));
+        audio.setBitRate(128000);
+        audio.setChannels(2);
+        audio.setSamplingRate(44100);
         EncodingAttributes attrs = new EncodingAttributes();
         attrs.setFormat("mp3");
         attrs.setAudioAttributes(audio);
@@ -377,6 +381,79 @@ public class EncoderTest {
         assertTrue(target.exists(), "Output file missing");
     }
 
+    /**
+     * Test of encode method, of class Encoder.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testEncodeAudio4() throws Exception {
+        System.out.println("encode");
+        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
+        File source = new File("src/test/resources/buggy.ogg");
+        File target = new File("target/testoutput/testEncodeAudio4.mp3");
+        if (target.exists())
+        {
+            target.delete();
+        }
+        
+        Encoder encoder = new Encoder();
+        PListener listener = new PListener();
+        String message= null;
+        String compareTo= "Specified sample rate";
+        AudioAttributes audio = new AudioAttributes();
+        audio.setCodec("libmp3lame");
+        EncodingAttributes attrs = new EncodingAttributes();
+        attrs.setFormat("mp3");
+        attrs.setAudioAttributes(audio);
+        encoder.encode(new MultimediaObject(source), target, attrs);
+        assertTrue(target.exists(), "Output file missing");
+    }
+
+    /**
+     * Test of encode method, of class Encoder.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testAbortEncoder() throws Exception {
+        System.out.println("encode");
+        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
+        File source = new File("src/test/resources/testfile3.wmv");
+        File target = new File("target/testoutput/testAbortEncoder.mp3");
+        if (target.exists())
+        {
+            target.delete();
+        }
+        Encoder encoder = new Encoder();
+        PListener listener = new PListener();
+        String message= null;
+        String compareTo= "Specified sample rate";
+        AudioAttributes audio = new AudioAttributes();
+        audio.setCodec("libmp3lame");
+        audio.setBitRate(128000);
+        audio.setChannels(2);
+        audio.setSamplingRate(44100);
+        EncodingAttributes attrs = new EncodingAttributes();
+        attrs.setFormat("mp3");
+        attrs.setAudioAttributes(audio);
+
+        Runnable task = () -> {
+            try
+            {
+                encoder.encode(new MultimediaObject(source), target, attrs, listener);
+                assertTrue(target.exists(), "Output file missing");
+            }
+            catch (EncoderException ex)
+            {
+                throw new AssertionError("Unexpected exception in encoder", ex);
+            }
+        };
+        
+        Thread thread = new Thread(task);
+        thread.start();
+        TimeUnit.MILLISECONDS.sleep(100);
+        encoder.abortEncoding();
+    }
+    
     protected class PListener implements EncoderProgressListener
     {
         private MultimediaInfo _info= null;

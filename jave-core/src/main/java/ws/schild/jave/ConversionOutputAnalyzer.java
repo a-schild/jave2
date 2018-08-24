@@ -16,6 +16,8 @@
 package ws.schild.jave;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
@@ -44,10 +46,9 @@ public class ConversionOutputAnalyzer {
     // Step 3 = Output
     // Step 4 = frame=...
     private int step = 0;
-    private boolean streamMappingFound= false;
-    private boolean outputFound= false;
     private int lineNR = 0;
     private String lastWarning= null;
+    private final List<String> unhandledMessages= new LinkedList<>();
     
     public ConversionOutputAnalyzer(long duration, EncoderProgressListener listener) {
         this.duration= duration;
@@ -91,16 +92,17 @@ public class ConversionOutputAnalyzer {
                 {
                     if (line.startsWith("Stream mapping:"))
                     {
-                        streamMappingFound= true;
+                        // streamMappingFound
                         step = 2;
                     }
                     else if (line.startsWith("Output #0"))
                     {
-                        outputFound= true;
+                        // outputFound
                         step = 2;
                     } else if (!line.startsWith("  "))
                     {
-                        throw new EncoderException(step, lineNR, line);
+                        LOG.info("Unhandled message in step: "+step+" Line: "+ lineNR +" message: <"+line+">");
+                        unhandledMessages.add(line);
                     } else
                     {
                         // wait for Stream mapping:
@@ -111,15 +113,16 @@ public class ConversionOutputAnalyzer {
                 {
                     if (line.startsWith("Output #0"))
                     {
-                        outputFound= true;
+                        // outputFound
                         step = 3;
                     } else if (line.startsWith("Stream mapping:"))
                     {
-                        streamMappingFound= true;
+                        // streamMappingFound
                         step = 3;
                     } else if (!line.startsWith("  "))
                     {
-                        throw new EncoderException(step, lineNR, line);
+                        LOG.info("Unhandled message in step: "+step+" Line: "+ lineNR +" message: <"+line+">");
+                        unhandledMessages.add(line);
                     } else
                     {
                         // wait for Stream mapping:
@@ -152,7 +155,8 @@ public class ConversionOutputAnalyzer {
                     }
                     else
                     {
-                        throw new EncoderException(step, lineNR, line);
+                        LOG.info("Unhandled message in step: "+step+" Line: "+ lineNR +" message: <"+line+">");
+                        unhandledMessages.add(line);
                     }
                 }
             }
@@ -240,6 +244,13 @@ public class ConversionOutputAnalyzer {
             table.put(key, value);
         }
         return table;
+    }
+
+    /**
+     * @return the unhandledMessages
+     */
+    public List<String> getUnhandledMessages() {
+        return unhandledMessages;
     }
     
 }
