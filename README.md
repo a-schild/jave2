@@ -97,11 +97,11 @@ There exists a jave-all-deps project, which includes core and all windows und li
             try
             {
                 encoder.encode(new MultimediaObject(source), target, attrs, listener);
-                assertTrue(target.exists(), "Output file missing");
+                // Conversion finished, continue with your code
             }
             catch (EncoderException ex)
             {
-                throw new AssertionError("Unexpected exception in encoder", ex);
+                // Unexpected exception in encoder
             }
         };
         
