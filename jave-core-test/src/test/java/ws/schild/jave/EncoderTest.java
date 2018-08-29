@@ -288,7 +288,42 @@ public class EncoderTest {
      * @throws java.lang.Exception
      */
     @Test
-    public void testEncodeVideo6() throws Exception {
+    public void testEncodeAudio09() throws Exception {
+        System.out.println("encode");
+        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
+        File source = new File("src/test/resources/testfile09.mp3");
+        if (source.exists())
+        {
+            File target = new File("target/testoutput/testEncodeAudio09.wav");
+            if (target.exists())
+            {
+                target.delete();
+            }
+
+            //Set Audio Attributes
+            AudioAttributes audio = new AudioAttributes();
+            audio.setCodec("pcm_s16le");
+            audio.setChannels(2);
+            audio.setSamplingRate(44100);
+
+            //Set encoding attributes
+            EncodingAttributes attributes = new EncodingAttributes();
+            attributes.setFormat("wav");
+            attributes.setAudioAttributes(audio);
+            Encoder encoder = new Encoder();
+            PListener listener = new PListener();
+            encoder.encode(new MultimediaObject(source), target, attributes, listener);
+            assertNotNull(listener.getInfo());
+            assertTrue(target.exists(), "Output file missing");
+        }
+    }
+    
+    /**
+     * Test of encode method, of class Encoder.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testEncodeVideo10() throws Exception {
         System.out.println("encode");
         Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/private/test10.mpg");
