@@ -282,6 +282,45 @@ public class EncoderTest {
         assertNotNull(listener.getInfo());
         assertTrue(target.exists(), "Output file missing");
     }
+
+    /**
+     * Test of encode method, of class Encoder.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testEncodeVideo6() throws Exception {
+        System.out.println("encode");
+        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
+        File source = new File("src/test/resources/private/test10.mpg");
+        if (source.exists())
+        {
+            File target = new File("target/testoutput/testEncodeVideo10.mp4");
+            if (target.exists())
+            {
+                target.delete();
+            }
+
+            AudioAttributes audio = new AudioAttributes();
+            audio.setCodec("eac3");
+            audio.setBitRate(97000);
+            audio.setSamplingRate(48000);
+            audio.setChannels(2);
+            VideoAttributes video = new VideoAttributes();
+            video.setCodec("mpeg4");
+            video.setBitRate(1500000);
+            video.setFrameRate(30);
+            video.setSize(new VideoSize(320, 240));
+            EncodingAttributes attrs = new EncodingAttributes();
+            attrs.setFormat("mp4");
+            attrs.setVideoAttributes(video);
+            attrs.setAudioAttributes(audio);
+            Encoder encoder = new Encoder();
+            PListener listener = new PListener();
+            encoder.encode(new MultimediaObject(source), target, attrs, listener);
+            assertNotNull(listener.getInfo());
+            assertTrue(target.exists(), "Output file missing");
+        }
+    }
     
     /**
      * Test of encode method, of class Encoder.
