@@ -37,7 +37,7 @@ It includes all binaries for the supported platforms
 <dependency>
  <groupId>ws.schild</groupId>
  <artifactId>jave-all-deps</artifactId>
- <version>2.4.2</version>
+ <version>2.4.3</version>
 </dependency>
 ```
 
@@ -46,7 +46,7 @@ It includes all binaries for the supported platforms
 It includes all binaries for the supported platforms
 
 ``` XML
-compile group: 'ws.schild', name: 'jave-all-deps', version: '2.4.2'
+compile group: 'ws.schild', name: 'jave-all-deps', version: '2.4.3'
 ```
 
 ### Main Components of Jave2
@@ -90,7 +90,7 @@ There exists a jave-all-deps project, which includes core and all windows und li
      
 ## More advanced examples    
 
-#### Running the convertsion in a separate thread, so it can be aborted (only in version 2.4.3 and up)
+#### Running the conversion in a separate thread, so it can be aborted (only in version 2.4.3 and up)
 ``` JAVA 
        ... prepare the encoder just as usual and then start it in a thread ...
        Runnable task = () -> {

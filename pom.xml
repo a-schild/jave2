@@ -4,11 +4,11 @@
     <artifactId>jave-modules</artifactId>
     <packaging>pom</packaging>
     <properties>
-        <revision>2.4.3-SNAPSHOT</revision>
+        <revision>2.4.3</revision>
         <!-- Don't forget to change it also in DefaultFFMPEGLocator.java  -->
     </properties>
 
-    <version>2.4.3-SNAPSHOT</version>
+    <version>2.4.3</version>
     <name>Jave master project</name>
     <description>Jave master project</description>
     <url>https://github.com/a-schild/jave2</url>
