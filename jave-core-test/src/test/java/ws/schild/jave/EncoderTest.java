@@ -9,8 +9,6 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -98,7 +96,6 @@ public class EncoderTest {
     @Test
     public void testEncodeVideo1() throws Exception {
         System.out.println("encode");
-        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         
         File source = new File("src/test/resources/dance1.avi");
         File target = new File("target/testoutput/testEncodeVideo1.3gp");
@@ -132,7 +129,6 @@ public class EncoderTest {
     @Test
     public void testEncodeVideo2() throws Exception {
         System.out.println("encode");
-        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/dance1.avi");
         File target = new File("target/testoutput/testEncodeVideo2.3gp");
         if (target.exists())
@@ -167,7 +163,6 @@ public class EncoderTest {
     @Test
     public void testEncodeVideo3() throws Exception {
         System.out.println("encode");
-        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/AV36_1.AVI");
         File target = new File("target/testoutput/testEncodeVideo3.3gp");
         if (target.exists())
@@ -211,7 +206,6 @@ public class EncoderTest {
     @Test
     public void testEncodeVideo4() throws Exception {
         System.out.println("encode");
-        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/AV36_1.AVI");
         File target = new File("target/testoutput/testEncodeVideo4.3gp");
         if (target.exists())
@@ -255,7 +249,6 @@ public class EncoderTest {
     @Test
     public void testEncodeVideo5() throws Exception {
         System.out.println("encode");
-        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/AV36_1.AVI");
         File target = new File("target/testoutput/testEncodeVideo5.flv");
         if (target.exists())
@@ -290,7 +283,6 @@ public class EncoderTest {
     @Test
     public void testEncodeAudio09() throws Exception {
         System.out.println("encode");
-        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/testfile09.mp3");
         if (source.exists())
         {
@@ -325,7 +317,6 @@ public class EncoderTest {
     @Test
     public void testEncodeVideo10() throws Exception {
         System.out.println("encode");
-        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/private/test10.mpg");
         if (source.exists())
         {
@@ -364,7 +355,6 @@ public class EncoderTest {
     @Test
     public void testEncodeAudio1() throws Exception {
         System.out.println("encode");
-        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/Alesis-Fusion-Clean-Guitar-C3.wav");
         File target = new File("target/testoutput/testEncodeAudio1.mp3");
         if (target.exists())
@@ -393,7 +383,6 @@ public class EncoderTest {
     @Test
     public void testEncodeAudio2() throws Exception {
         System.out.println("encode");
-        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/Alesis-Fusion-Clean-Guitar-C3.wav");
         File target = new File("target/testoutput/testEncodeAudio2.mp3");
         if (target.exists())
@@ -432,7 +421,6 @@ public class EncoderTest {
     @Test
     public void testEncodeAudio3() throws Exception {
         System.out.println("encode");
-        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/testfile3.wmv");
         File target = new File("target/testoutput/testEncodeAudio3.mp3");
         if (target.exists())
@@ -462,7 +450,6 @@ public class EncoderTest {
     @Test
     public void testEncodeAudio4() throws Exception {
         System.out.println("encode");
-        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/buggy.ogg");
         File target = new File("target/testoutput/testEncodeAudio4.mp3");
         if (target.exists())
@@ -490,7 +477,6 @@ public class EncoderTest {
     @Test
     public void testAbortEncoder() throws Exception {
         System.out.println("encode");
-        Logger.getLogger("it.sauronsoftware.jave.FFMPEGExecutor").setLevel(Level.FINEST);
         File source = new File("src/test/resources/testfile3.wmv");
         File target = new File("target/testoutput/testAbortEncoder.mp3");
         if (target.exists())
