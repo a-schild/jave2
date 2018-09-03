@@ -41,12 +41,59 @@ It includes all binaries for the supported platforms
 </dependency>
 ```
 
+You can use maven dependencies to include the libraries in your projects.
+Include the following in your pom files.
+### For all platforms [ Remember always to check the latest release [here](https://github.com/a-schild/jave2/releases/latest) ]
+
+``` XML
+<dependency>
+
+    <groupId>ws.schild</groupId>
+
+    <artifactId>jave-all-deps</artifactId>
+
+    <version>2.4.2</version>
+
+</dependency>
+
+```
+
+### For one platform only (Linux 64Bit in this case)
+``` XML
+<dependency>
+
+    <groupId>ws.schild</groupId>
+
+    <artifactId>jave-core</artifactId>
+
+    <version>2.4.3</version>
+
+</dependency>
+
+<dependency>
+
+    <groupId>ws.schild</groupId>
+
+    <artifactId>jave-native-linux64</artifactId>
+
+    <version>2.4.3</version>
+
+</dependency>
+
+```
+
 ### Use with Gradle
 
 It includes all binaries for the supported platforms
 
 ``` XML
 compile group: 'ws.schild', name: 'jave-all-deps', version: '2.4.3'
+```
+
+### For one platform only (Linux 64Bit in this case)
+``` XML
+compile group: 'ws.schild', name: 'jave-core', version: '2.4.3'
+compile group: 'ws.schild', name: 'jave-native-linux64', version: '2.4.3'
 ```
 
 ### Main Components of Jave2
