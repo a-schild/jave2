@@ -52,7 +52,7 @@ Include the following in your pom files.
 
     <artifactId>jave-all-deps</artifactId>
 
-    <version>2.4.2</version>
+    <version>2.4.3</version>
 
 </dependency>
 
