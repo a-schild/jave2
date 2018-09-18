@@ -63,11 +63,16 @@ public class EncodingAttributes implements Serializable {
     private VideoAttributes videoAttributes = null;
 
     /**
+     * Should we try to copy over the meta data?
+     */
+    private boolean mapMetaData= false;
+    
+    /**
      * Returns the format name for the encoded target multimedia file.
      *
      * @return The format name for the encoded target multimedia file.
      */
-    String getFormat() {
+    public String getFormat() {
         return format;
     }
 
@@ -86,7 +91,7 @@ public class EncodingAttributes implements Serializable {
      *
      * @return The start offset time (seconds).
      */
-    Float getOffset() {
+    public Float getOffset() {
         return offset;
     }
 
@@ -105,7 +110,7 @@ public class EncodingAttributes implements Serializable {
      *
      * @return The duration (seconds) of the re-encoded stream.
      */
-    Float getDuration() {
+    public Float getDuration() {
         return duration;
     }
 
@@ -127,7 +132,7 @@ public class EncodingAttributes implements Serializable {
      * @return The attributes for the encoding of the audio stream in the target
      * multimedia file.
      */
-    AudioAttributes getAudioAttributes() {
+    public AudioAttributes getAudioAttributes() {
         return audioAttributes;
     }
 
@@ -150,7 +155,7 @@ public class EncodingAttributes implements Serializable {
      * @return The attributes for the encoding of the video stream in the target
      * multimedia file.
      */
-    VideoAttributes getVideoAttributes() {
+    public VideoAttributes getVideoAttributes() {
         return videoAttributes;
     }
 
@@ -172,6 +177,22 @@ public class EncodingAttributes implements Serializable {
                 + offset + ", duration=" + duration + ", audioAttributes="
                 + audioAttributes + ", videoAttributes=" + videoAttributes
                 + ")";
+    }
+
+    /**
+     * @return the mapMetaData
+     */
+    public boolean isMapMetaData() {
+        return mapMetaData;
+    }
+
+    /**
+     * Copy over meta data from original file to new output if possible
+     * 
+     * @param mapMetaData the mapMetaData to set
+     */
+    public void setMapMetaData(boolean mapMetaData) {
+        this.mapMetaData = mapMetaData;
     }
 
 }

@@ -470,6 +470,36 @@ public class EncoderTest {
         assertTrue(target.exists(), "Output file missing");
     }
 
+
+    /**
+     * Test of encode method, of class Encoder.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testEncodeAudio5() throws Exception {
+        System.out.println("encode");
+        File source = new File("src/test/resources/cj2009-10-05d01t07.ku100_at37.flac");
+        File target = new File("target/testoutput/testEncodeAudio5.mp3");
+        if (target.exists())
+        {
+            target.delete();
+        }
+        
+        Encoder encoder = new Encoder();
+        PListener listener = new PListener();
+        String message= null;
+        String compareTo= "Specified sample rate";
+        AudioAttributes audio = new AudioAttributes();
+        audio.setCodec("libmp3lame");
+        EncodingAttributes attrs = new EncodingAttributes();
+        attrs.setFormat("mp3");
+        attrs.setAudioAttributes(audio);
+        attrs.setMapMetaData(true);
+        encoder.encode(new MultimediaObject(source), target, attrs);
+        assertTrue(target.exists(), "Output file missing");
+    }    
+            
+            
     /**
      * Test of encode method, of class Encoder.
      * @throws java.lang.Exception

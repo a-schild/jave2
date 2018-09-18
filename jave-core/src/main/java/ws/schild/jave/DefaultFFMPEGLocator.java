@@ -106,7 +106,16 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
      * @throws RuntimeException If an unexpected error occurs.
      */
     private void copyFile(String path, File dest) {
-        copy(getClass().getResourceAsStream("native/" + path), dest.getAbsolutePath());
+        String resourceName= "native/" + path;
+        try
+        {
+            copy(getClass().getResourceAsStream(resourceName), dest.getAbsolutePath());
+        }
+        catch (NullPointerException ex)
+        {
+            LOG.error("Could not find ffmpeg executable for "+resourceName+" is the correct platform jar included?");
+            throw ex;
+        }
     }
 
     /**

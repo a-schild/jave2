@@ -502,6 +502,12 @@ public class Encoder {
         ffmpeg.addArgument("-y");
         ffmpeg.addArgument(target.getAbsolutePath());
         
+        if (attributes.isMapMetaData())
+        {   // Copy over meta data if possible
+            ffmpeg.addArgument("-map_metadata");
+            ffmpeg.addArgument("0");
+        }
+        
 //        ffmpeg.addArgument("-loglevel");
 //        ffmpeg.addArgument("warning"); // Only report errors
         

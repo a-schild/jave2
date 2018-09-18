@@ -180,6 +180,8 @@ For bug reports use the github site https://github.com/a-schild/jave2/issues
 
 ## Changelog
 - 2.4.4-SNAPSHOT Prepared for next development steps
+        More informative error message when not finding ffmpeg executable
+        Added option to copy over meta data if possible (setMapMetaData(true) in EncodingAttributes)
 - 2.4.3 Upgraded windows and osx binaries to 4.0.2 from https://ffmpeg.zeranoe.com/builds/  
         Upgraded linux binaries to 4.0.2 from https://johnvansickle.com/ffmpeg/  
         Made output handling more robust,   
