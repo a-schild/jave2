@@ -108,108 +108,108 @@ There exists a jave-all-deps project, which includes core and all windows und li
 
 #### Converting any audio to mp3
 ``` JAVA
-   try {                                                            
-	File source = new File("file path");		                 
-	File target = new File("file path);                          
-                                                                 
-       //Audio Attributes                                               
-	AudioAttributes audio = new AudioAttributes();               
-	audio.setCodec("libmp3lame");                                
-	audio.setBitRate(128000);                                    
-	audio.setChannels(2);                                        
-	audio.setSamplingRate(44100);                                
-	                                                             
-	//Encoding attributes                                        
-	EncodingAttributes attrs = new EncodingAttributes();         
-	attrs.setFormat("mp3");                                      
-	attrs.setAudioAttributes(audio);                             
-	                                                             
-	//Encode                                                     
-	Encoder encoder = new Encoder();                             
-	encoder.encode(new MultimediaObject(source), target, attrs); 
-                                                                 
-   } catch (Exception ex) {                                         
-	ex.printStackTrace();                                        
-	succeeded = false;                                           
-   }                
-
+try {                                                         
+                                                             
+ File source = new File("file path");		                 
+ File target = new File("file path);                         
+                                                              
+     //Audio Attributes                                       
+ AudioAttributes audio = new AudioAttributes();              
+ audio.setCodec("libmp3lame");                               
+ audio.setBitRate(128000);                                   
+ audio.setChannels(2);                                       
+ audio.setSamplingRate(44100);                               
+                                                             
+ //Encoding attributes                                       
+ EncodingAttributes attrs = new EncodingAttributes();        
+ attrs.setFormat("mp3");                                     
+ attrs.setAudioAttributes(audio);                            
+                                                             
+ //Encode                                                    
+ Encoder encoder = new Encoder();                            
+ encoder.encode(new MultimediaObject(source), target, attrs);
+                                                              
+} catch (Exception ex) {                                      
+ ex.printStackTrace();                                       
+ succeeded = false;                                          
+}                                                             
 ```
      
 ## More advanced examples    
 
 #### Running the conversion in a separate thread, so it can be aborted (only in version 2.4.3 and up)
 ``` JAVA 
-       ... prepare the encoder just as usual and then start it in a thread ...
-       Runnable task = () -> {
-            try
-            {
-                encoder.encode(new MultimediaObject(source), target, attrs, listener);
-                // Conversion finished, continue with your code
-            }
-            catch (EncoderException ex)
-            {
-                // Unexpected exception in encoder
-            }
-        };
-        
-        Thread thread = new Thread(task);
-        thread.start();
-        TimeUnit.MILLISECONDS.sleep(100);
-        encoder.abortEncoding();
+   ... prepare the encoder just as usual and then start it in a thread ...        
+ Runnable task = () -> {                                                           
+     try                                                                          
+     {                                                                            
+            encoder.encode(new MultimediaObject(source), target, attrs, listener);
+            // Conversion finished, continue with your code                       
+     }                                                                            
+     catch (EncoderException ex)                                                  
+     {                                                                            
+         // Unexpected exception in encoder                                       
+     }                                                                            
+ };                                                                               
+                                                                                  
+ Thread thread = new Thread(task);                                                
+ thread.start();                                                                  
+ TimeUnit.MILLISECONDS.sleep(100);                                                
+ encoder.abortEncoding();                                                         
 ```
 
 #### Converting any audio to mp3 with a progress listener
 ``` JAVA 
-   ConvertProgressListener listener = new ConvertProgressListener();
+ConvertProgressListener listener = new ConvertProgressListener();      
+                                                                       
+try {                                                                  
+                                                                     
+ 	File source = new File("file path");		                         
+ 	File target = new File("file path);                                  
+                                                                       
+        //Audio Attributes                                             
+ 	AudioAttributes audio = new AudioAttributes();                       
+ 	audio.setCodec("libmp3lame");                                        
+ 	audio.setBitRate(128000);                                            
+ 	audio.setChannels(2);                                                
+ 	audio.setSamplingRate(44100);                                        
+ 	                                                                     
+ 	//Encoding attributes                                                
+ 	EncodingAttributes attrs = new EncodingAttributes();                 
+ 	attrs.setFormat("mp3");                                              
+ 	attrs.setAudioAttributes(audio);                                     
+ 	                                                                     
+ 	//Encode                                                             
+ 	Encoder encoder = new Encoder();                                     
+ 	encoder.encode(new MultimediaObject(source), target, attrs,listener);
+                                                                       
+} catch (Exception ex) {                                               
+ 	ex.printStackTrace();                                                
+ 	succeeded = false;                                                   
+}                                                                      
 
-   try {                                                            
-	File source = new File("file path");		                 
-	File target = new File("file path);                          
-                                                                 
-       //Audio Attributes                                               
-	AudioAttributes audio = new AudioAttributes();               
-	audio.setCodec("libmp3lame");                                
-	audio.setBitRate(128000);                                    
-	audio.setChannels(2);                                        
-	audio.setSamplingRate(44100);                                
-	                                                             
-	//Encoding attributes                                        
-	EncodingAttributes attrs = new EncodingAttributes();         
-	attrs.setFormat("mp3");                                      
-	attrs.setAudioAttributes(audio);                             
-	                                                             
-	//Encode                                                     
-	Encoder encoder = new Encoder();                             
-	encoder.encode(new MultimediaObject(source), target, attrs,listener); 
-                                                                 
-   } catch (Exception ex) {                                         
-	ex.printStackTrace();                                        
-	succeeded = false;                                           
-   }                                                                
-
-
-  public class ConvertProgressListener implements EncoderProgressListener {
-	                                                                     
-     public ConvertProgressListener() {   
-        //code
-     }                                                                    
-	                                                                     
-     public void message(String m) {                                      
-       //code                                                              
-     }                                                                    
-	                                                                     
-     public void progress(int p) {                                        
-		                                                                 
-       //Find %100 progress                                              
-	double progress = p / 1000.00;                                    
-	System.out.println(progress);                                     
+public class ConvertProgressListener implements EncoderProgressListener {
                                                                          
-     }                                                                    
+   public ConvertProgressListener() {                                    
+    //code                                                               
+   }                                                                     
+                                                                         
+   public void message(String m) {                                       
+     //code                                                              
+   }                                                                     
+                                                                         
+   public void progress(int p) {                                         
 	                                                                     
-      public void sourceInfo(MultimediaInfo m) {                           
-         //code                                                          
-      }                                                                    
-   }                                                                                                                                                
+     //Find %100 progress                                                
+double progress = p / 1000.00;                                           
+System.out.println(progress);                                            
+                                                                         
+   }                                                                     
+                                                                         
+    public void sourceInfo(MultimediaInfo m) {                           
+       //code                                                            
+    }                                                                    
+ }                                                                                                                                                                                                                     
 ```
 
 ---
@@ -226,19 +226,19 @@ You can send comments to andre@schild.ws
 For bug reports use the github site https://github.com/a-schild/jave2/issues
 
 ## Changelog
-- 2.4.4-SNAPSHOT Prepared for next development steps
+- **2.4.4-SNAPSHOT** Prepared for next development steps
         More informative error message when not finding ffmpeg executable
         Added option to copy over meta data if possible (setMapMetaData(true) in EncodingAttributes)
-- 2.4.3 Upgraded windows and osx binaries to 4.0.2 from https://ffmpeg.zeranoe.com/builds/  
+- **2.4.3** Upgraded windows and osx binaries to 4.0.2 from https://ffmpeg.zeranoe.com/builds/  
         Upgraded linux binaries to 4.0.2 from https://johnvansickle.com/ffmpeg/  
         Made output handling more robust,   
         we now only throw an encoder exception when encoder exit code is not 0  
         Unknown conversion lines can betrieved via encoder.getUnhandledMessages()  
         Added abortEncoding method to be able to stop the running encoder  
-- 2.4.2 Enhanced output parsing when using copy operator for streams  
+- **2.4.2** Enhanced output parsing when using copy operator for streams  
         Refactoring of outpout analyzer in own class for simpler unit tests  
-- 2.4.1 Allow conversion of "corrupt" input files, as generated by some softwares
-- 2.4.0 Renaming packages to ws.schild.jave for publishing in maven central  
+- **2.4.1** Allow conversion of "corrupt" input files, as generated by some softwares
+- **2.4.0** Renaming packages to ws.schild.jave for publishing in maven central  
         First version released via maven central
 
 ## Credits
