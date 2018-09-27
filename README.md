@@ -11,13 +11,20 @@ Many other formats, containers and operations are supported by JAVE2.
 
 ## Supported Operating Systems + Requirements 
 
-1)JAVE requires a Java 8
->JAVE can also be easily ported to other OS and hardware configurations, 
+> JAVE requires **Java 8**
+
+> JAVE can also be easily ported to other OS and hardware configurations, 
 see the JAVE manual for details.
 
 | Operating System | Windows x32,x64 | MacOS x32,x64 | Linux x32,x64 |
 | ------- | :-----: | :-: | :-----: |
 | Supported? | YES | YES  | YES  |
+
+## Projects using Jave2
+* [XR3Player](https://github.com/goxr3plus/XR3Player)
+* [XR3Converter](https://github.com/goxr3plus/XR3Converter)
+* ....
+
 
 
 ## Usage Example
