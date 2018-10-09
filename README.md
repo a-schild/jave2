@@ -223,7 +223,7 @@ System.out.println(progress);
 
 ## License
 
-JAVE2 is Free Software and it is licensed under GPL 2 (you will find a copy of
+JAVE2 is Free Software and it is licensed under GPL3 LICENSE (you will find a copy of
 the license bundled into the downloadable software distribution).
 
 
