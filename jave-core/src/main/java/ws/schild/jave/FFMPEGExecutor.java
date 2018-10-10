@@ -201,11 +201,22 @@ class FFMPEGExecutor {
 
     /**
      * Return the exit code of the ffmpeg process
+     * If the process is not yet terminated, it waits for the termination
+     * of the process
      * 
      * @return 
      */
     public int getProcessExitCode()
     {
+        // Make sure it's terminated
+        try
+        {
+            ffmpeg.waitFor();
+        }
+        catch (InterruptedException ex)
+        {
+            LOG.warn("Interrupted during waiting on process, forced shutdown?", ex);
+        }
         return ffmpeg.exitValue();
     }
 }
