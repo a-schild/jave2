@@ -44,7 +44,7 @@ It includes all binaries for the supported platforms
 <dependency>
  <groupId>ws.schild</groupId>
  <artifactId>jave-all-deps</artifactId>
- <version>2.4.3</version>
+ <version>2.4.4</version>
 </dependency>
 ```
 
@@ -59,7 +59,7 @@ Include the following in your pom files.
 
     <artifactId>jave-all-deps</artifactId>
 
-    <version>2.4.3</version>
+    <version>2.4.4</version>
 
 </dependency>
 
@@ -73,7 +73,7 @@ Include the following in your pom files.
 
     <artifactId>jave-core</artifactId>
 
-    <version>2.4.3</version>
+    <version>2.4.4</version>
 
 </dependency>
 
@@ -83,7 +83,7 @@ Include the following in your pom files.
 
     <artifactId>jave-native-linux64</artifactId>
 
-    <version>2.4.3</version>
+    <version>2.4.4</version>
 
 </dependency>
 
@@ -94,13 +94,13 @@ Include the following in your pom files.
 It includes all binaries for the supported platforms
 
 ``` XML
-compile group: 'ws.schild', name: 'jave-all-deps', version: '2.4.3'
+compile group: 'ws.schild', name: 'jave-all-deps', version: '2.4.4'
 ```
 
 ### For one platform only (Linux 64Bit in this case)
 ``` XML
-compile group: 'ws.schild', name: 'jave-core', version: '2.4.3'
-compile group: 'ws.schild', name: 'jave-native-linux64', version: '2.4.3'
+compile group: 'ws.schild', name: 'jave-core', version: '2.4.4'
+compile group: 'ws.schild', name: 'jave-native-linux64', version: '2.4.4'
 ```
 
 ### Main Components of Jave2
@@ -144,7 +144,7 @@ try {
      
 ## More advanced examples    
 
-#### Running the conversion in a separate thread, so it can be aborted (only in version 2.4.3 and up)
+#### Running the conversion in a separate thread, so it can be aborted (only in version 2.4.4 and up)
 ``` JAVA 
    ... prepare the encoder just as usual and then start it in a thread ...        
  Runnable task = () -> {                                                           
@@ -233,7 +233,7 @@ You can send comments to andre@schild.ws
 For bug reports use the github site https://github.com/a-schild/jave2/issues
 
 ## Changelog
-- **2.4.4-SNAPSHOT** 
+- **2.4.4** 
    - Prepared for next development steps
    - More informative error message when not finding ffmpeg executable
    - Added option to copy over meta data if possible (setMapMetaData(true) in EncodingAttributes)

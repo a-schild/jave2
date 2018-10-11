@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ws.schild</groupId>
     <packaging>jar</packaging>
-    <version>2.4.4-SNAPSHOT</version>
+    <version>2.4.4</version>
     <artifactId>jave-core-test</artifactId>
     <build>
         <plugins>
@@ -29,32 +29,32 @@
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-core</artifactId>
-            <version>2.4.4-SNAPSHOT</version>
+            <version>2.4.4</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-native-win32</artifactId>
-            <version>2.4.4-SNAPSHOT</version>
+            <version>2.4.4</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-native-win64</artifactId>
-            <version>2.4.4-SNAPSHOT</version>
+            <version>2.4.4</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-native-linux32</artifactId>
-            <version>2.4.4-SNAPSHOT</version>
+            <version>2.4.4</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-native-linux64</artifactId>
-            <version>2.4.4-SNAPSHOT</version>
+            <version>2.4.4</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-native-osx64</artifactId>
-            <version>2.4.4-SNAPSHOT</version>
+            <version>2.4.4</version>
         </dependency>    
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
