@@ -4,7 +4,7 @@
     <groupId>ws.schild</groupId>
     <artifactId>jave-core</artifactId>
     <packaging>jar</packaging>
-    <version>2.4.4</version>
+    <version>2.4.5-SNAPSHOT</version>
     <name>Jave core package</name>
     <description>The JAVE (Java Audio Video Encoder) library is Java wrapper on the 
         ffmpeg project. Developers can take take advantage of JAVE2 to transcode 

@@ -233,8 +233,9 @@ You can send comments to andre@schild.ws
 For bug reports use the github site https://github.com/a-schild/jave2/issues
 
 ## Changelog
-- **2.4.4** 
+- **2.4.5-SNAPSHOT** 
    - Prepared for next development steps
+- **2.4.4** 
    - More informative error message when not finding ffmpeg executable
    - Added option to copy over meta data if possible (setMapMetaData(true) in EncodingAttributes)
    - Better handling of process exist code
