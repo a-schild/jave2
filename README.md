@@ -54,39 +54,25 @@ Include the following in your pom files.
 
 ``` XML
 <dependency>
-
     <groupId>ws.schild</groupId>
-
     <artifactId>jave-all-deps</artifactId>
-
     <version>2.4.4</version>
-
 </dependency>
-
 ```
 
 ### For one platform only (Linux 64Bit in this case)
 ``` XML
 <dependency>
-
     <groupId>ws.schild</groupId>
-
     <artifactId>jave-core</artifactId>
-
     <version>2.4.4</version>
-
 </dependency>
 
 <dependency>
-
     <groupId>ws.schild</groupId>
-
     <artifactId>jave-native-linux64</artifactId>
-
     <version>2.4.4</version>
-
 </dependency>
-
 ```
 
 ### Use with Gradle
@@ -116,7 +102,6 @@ There exists a jave-all-deps project, which includes core and all windows und li
 #### Converting any audio to mp3
 ``` JAVA
 try {                                                         
-                                                             
  File source = new File("file path");		                 
  File target = new File("file path);                         
                                                               
@@ -170,7 +155,6 @@ try {
 ConvertProgressListener listener = new ConvertProgressListener();      
                                                                        
 try {                                                                  
-                                                                     
  	File source = new File("file path");		                         
  	File target = new File("file path);                                  
                                                                        
@@ -223,8 +207,10 @@ System.out.println(progress);
 
 ## License
 
-JAVE2 is Free Software and it is licensed under [GPL3 LICENSE](https://github.com/a-schild/jave2/blob/master/LICENSE) (you will find a copy of
-the license bundled into the downloadable software distribution).
+JAVE2 is Free Software and it is licensed under [GPL3 LICENSE]
+(https://github.com/a-schild/jave2/blob/master/LICENSE) 
+(you will find a copy of the license bundled into the 
+downloadable software distribution).
 
 
 ## Feedback
