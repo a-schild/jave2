@@ -3,10 +3,11 @@
 The JAVE2 (Java Audio Video Encoder) library is Java wrapper on the ffmpeg
 project. Developers can take take advantage of JAVE2 to transcode audio 
 and video files from a format to another. In example you can transcode
-an **AVI** file to a MPEG one, you can change a **DivX** video stream into a
-(youtube like) Flash **FLV** one, you can convert a **WAV** audio file to a **MP3** or a
+an **AVI** file to a **MPEG** one, you can change a **DivX** video stream into a
+(youtube like) **Flash FLV** one, you can convert a **WAV** audio file to a **MP3** or a
 **Ogg Vorbis** one, you can separate and transcode audio and video tracks, you can
 resize videos, changing their sizes and proportions and so on.
+
 Many other formats, containers and operations are supported by JAVE2.
 
 ## Supported Operating Systems + Requirements 
@@ -207,10 +208,10 @@ System.out.println(progress);
 
 ## License
 
-JAVE2 is Free Software and it is licensed under [GPL3 LICENSE]
-(https://github.com/a-schild/jave2/blob/master/LICENSE) 
-(you will find a copy of the license bundled into the 
-downloadable software distribution).
+JAVE2 is Free Software and it is licensed under [GPL3 LICENSE](https://github.com/a-schild/jave2/blob/master/LICENSE) 
+
+> You will find a copy of the license bundled into the 
+downloadable software distribution.
 
 
 ## Feedback
