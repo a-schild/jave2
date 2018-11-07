@@ -453,6 +453,13 @@ public class Encoder {
                     ffmpeg.addArgument(videoFilter.getExpression());
                 }
             }
+
+            Integer quality = videoAttributes.getQuality();
+            if (quality != null)
+            {
+                ffmpeg.addArgument("-qscale:v");
+                ffmpeg.addArgument(String.valueOf(quality.intValue()));
+            }
         }
         if (audioAttributes == null)
         {
@@ -492,6 +499,12 @@ public class Encoder {
             {
                 ffmpeg.addArgument("-vol");
                 ffmpeg.addArgument(String.valueOf(volume.intValue()));
+            }
+            Integer quality = audioAttributes.getQuality();
+            if (quality != null)
+            {
+                ffmpeg.addArgument("-qscale:a");
+                ffmpeg.addArgument(String.valueOf(quality.intValue()));
             }
         }
         if (formatAttribute != null)

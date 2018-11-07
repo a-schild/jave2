@@ -28,7 +28,7 @@ import java.util.ArrayList;
  */
 public class VideoAttributes implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     /**
      * This value can be setted in the codec field to perform a direct stream
      * copy, without re-encoding of the audio stream.
@@ -58,6 +58,13 @@ public class VideoAttributes implements Serializable {
      * source video size will not be modified.
      */
     private VideoSize size = null;
+    
+    /**
+     * The audio quality value for the encoding process. If null or not specified
+     * the ffmpeg default will be used
+     */
+    private Integer quality = null;
+
 
     private final ArrayList<VideoFilter> videoFilters = new ArrayList<>();
     /**
@@ -231,10 +238,29 @@ public class VideoAttributes implements Serializable {
         this.faststart = faststart;
     }
 
+    /**
+     * @return the quality
+     */
+    public Integer getQuality() {
+        return quality;
+    }
+
+    /**
+     * The video quality value for the encoding process. If null or not specified
+     * the ffmpeg default will be used
+     * 
+     * @param quality the quality to set
+     */
+    public void setQuality(Integer quality) {
+        this.quality = quality;
+    }
+
     @Override
     public String toString() {
-        return getClass().getName() + "(codec=" + codec + ", bitRate="
-                + bitRate + ", frameRate=" + frameRate + ", size=" + size + ", faststart=" + faststart + ")";
+        return getClass().getName() + "(codec=" + codec 
+                + ", bitRate=" + bitRate + ", frameRate=" + frameRate
+                + ", size=" + size +", faststart=" + faststart
+                + ", quality="+quality+ ")";
     }
 
 }

@@ -27,7 +27,7 @@ import java.io.Serializable;
  */
 public class AudioAttributes implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     /**
      * This value can be setted in the codec field to perform a direct stream
@@ -65,6 +65,12 @@ public class AudioAttributes implements Serializable {
      */
     private Integer volume = null;
 
+    /**
+     * The audio quality value for the encoding process. If null or not specified
+     * the ffmpeg default will be used
+     */
+    private Integer quality = null;
+    
     /**
      * Returns the codec name for the encoding process.
      *
@@ -168,11 +174,27 @@ public class AudioAttributes implements Serializable {
         this.volume = volume;
     }
 
+    /**
+     * @return the audio conversion quality
+     */
+    public Integer getQuality() {
+        return quality;
+    }
+
+    /**
+     * The audio quality value for the encoding process. If null or not specified
+     * the ffmpeg default will be used
+     * 
+     * @param quality the audio conversion quality to set
+     */
+    public void setQuality(Integer quality) {
+        this.quality = quality;
+    }
+
     @Override
     public String toString() {
         return getClass().getName() + "(codec=" + codec + ", bitRate="
                 + bitRate + ", samplingRate=" + samplingRate + ", channels="
-                + channels + ", volume=" + volume + ")";
+                + channels + ", volume=" + volume + ", quality="+quality+ ")";
     }
-
 }
