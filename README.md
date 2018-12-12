@@ -223,6 +223,9 @@ For bug reports use the github site https://github.com/a-schild/jave2/issues
 - **2.4.5-SNAPSHOT** 
    - Prepared for next development steps
    - Added video and audio quality flags for conversion (see VideoAttributes.quality and AudioAttributes.quality)
+   - Changed aac de/encoder from libvo_aacenc to default aac settings from ffmpeg
+   - Upgraded windows and osx binaries to 4.1 from https://ffmpeg.zeranoe.com/builds/  
+   - Upgraded linux binaries to 4.1 from https://johnvansickle.com/ffmpeg/  
 - **2.4.4** 
    - More informative error message when not finding ffmpeg executable
    - Added option to copy over meta data if possible (setMapMetaData(true) in EncodingAttributes)

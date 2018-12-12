@@ -38,6 +38,7 @@ public class EncoderTest {
 
     /**
      * Test of getAudioDecoders method, of class Encoder.
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetAudioDecoders() throws Exception {
@@ -49,6 +50,7 @@ public class EncoderTest {
 
     /**
      * Test of getAudioEncoders method, of class Encoder.
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetAudioEncoders() throws Exception {
@@ -60,6 +62,7 @@ public class EncoderTest {
 
     /**
      * Test of getVideoDecoders method, of class Encoder.
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetVideoDecoders() throws Exception {
@@ -71,6 +74,7 @@ public class EncoderTest {
 
     /**
      * Test of getVideoEncoders method, of class Encoder.
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetVideoEncoders() throws Exception {
@@ -82,6 +86,7 @@ public class EncoderTest {
 
     /**
      * Test of getSupportedEncodingFormats method, of class Encoder.
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetSupportedEncodingFormats() throws Exception {
@@ -93,6 +98,7 @@ public class EncoderTest {
 
     /**
      * Test of getSupportedDecodingFormats method, of class Encoder.
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetSupportedDecodingFormats() throws Exception {
@@ -397,6 +403,41 @@ public class EncoderTest {
     }
 
     
+    /**
+     * Test of encode method, of class Encoder.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testEncodeVideo12() throws Exception {
+        System.out.println("encode");
+        
+        File source = new File("src/test/resources/small.mp4");
+        File target = new File("target/testoutput/testEncodeVideo12.mp4");
+        if (target.exists())
+        {
+            target.delete();
+        }
+        AudioAttributes audioAttr = new AudioAttributes();
+        VideoAttributes videoAttr = new VideoAttributes();
+        EncodingAttributes encodingAttr = new EncodingAttributes();
+
+        audioAttr.setChannels(2);
+        audioAttr.setCodec("aac");
+        audioAttr.setBitRate(128000);
+        audioAttr.setSamplingRate(44100);
+
+        videoAttr.setCodec("libx264");
+        videoAttr.setBitRate(4000000);
+
+        encodingAttr.setAudioAttributes(audioAttr);
+        encodingAttr.setVideoAttributes(videoAttr);
+        encodingAttr.setFormat("mp4");
+
+        Encoder encoder = new Encoder();
+        encoder.encode(new MultimediaObject(source), target, encodingAttr);
+        assertTrue(target.exists(), "Output file missing");
+    }
+                
     /**
      * Test of encode method, of class Encoder.
      * @throws java.lang.Exception

@@ -469,10 +469,6 @@ public class Encoder {
             String codec = audioAttributes.getCodec();
             if (codec != null)
             {
-                if (codec.equals("aac"))
-                {
-                    codec = "libvo_aacenc";
-                }
                 ffmpeg.addArgument("-acodec");
                 ffmpeg.addArgument(codec);
             }
