@@ -45,7 +45,7 @@ It includes all binaries for the supported platforms
 <dependency>
  <groupId>ws.schild</groupId>
  <artifactId>jave-all-deps</artifactId>
- <version>2.4.4</version>
+ <version>2.4.5</version>
 </dependency>
 ```
 
@@ -57,7 +57,7 @@ Include the following in your pom files.
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-all-deps</artifactId>
-    <version>2.4.4</version>
+    <version>2.4.5</version>
 </dependency>
 ```
 
@@ -66,13 +66,13 @@ Include the following in your pom files.
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-core</artifactId>
-    <version>2.4.4</version>
+    <version>2.4.5</version>
 </dependency>
 
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-native-linux64</artifactId>
-    <version>2.4.4</version>
+    <version>2.4.5</version>
 </dependency>
 ```
 
@@ -81,13 +81,13 @@ Include the following in your pom files.
 It includes all binaries for the supported platforms
 
 ``` XML
-compile group: 'ws.schild', name: 'jave-all-deps', version: '2.4.4'
+compile group: 'ws.schild', name: 'jave-all-deps', version: '2.4.5'
 ```
 
 ### For one platform only (Linux 64Bit in this case)
 ``` XML
-compile group: 'ws.schild', name: 'jave-core', version: '2.4.4'
-compile group: 'ws.schild', name: 'jave-native-linux64', version: '2.4.4'
+compile group: 'ws.schild', name: 'jave-core', version: '2.4.5'
+compile group: 'ws.schild', name: 'jave-native-linux64', version: '2.4.5'
 ```
 
 ### Main Components of Jave2
@@ -220,8 +220,7 @@ You can send comments to andre@schild.ws
 For bug reports use the github site https://github.com/a-schild/jave2/issues
 
 ## Changelog
-- **2.4.5-SNAPSHOT** 
-   - Prepared for next development steps
+- **2.4.5** 
    - Added video and audio quality flags for conversion (see VideoAttributes.quality and AudioAttributes.quality)
    - Changed aac de/encoder from libvo_aacenc to default aac settings from ffmpeg
    - Upgraded windows and osx binaries to 4.1 from https://ffmpeg.zeranoe.com/builds/  
