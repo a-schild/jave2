@@ -220,6 +220,8 @@ You can send comments to andre@schild.ws
 For bug reports use the github site https://github.com/a-schild/jave2/issues
 
 ## Changelog
+- **2.4.6** 
+   - Prepare for next dev cycle
 - **2.4.5** 
    - Added video and audio quality flags for conversion (see VideoAttributes.quality and AudioAttributes.quality)
    - Changed aac de/encoder from libvo_aacenc to default aac settings from ffmpeg
