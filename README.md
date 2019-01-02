@@ -61,17 +61,41 @@ Include the following in your pom files.
 </dependency>
 ```
 
-### For one platform only (Linux 64Bit in this case)
+Generally if you want to use for one platform and more what you have to do is add the jave-core:
+
 ``` XML
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-core</artifactId>
     <version>2.4.5</version>
 </dependency>
+```
 
+and then the specific jar(s) for your platform(s) :
+
+### For one platform only (Linux 64Bit in this case)
+``` XML
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-native-linux64</artifactId>
+    <version>2.4.5</version>
+</dependency>
+```
+
+### For one platform only (Windows 64Bit in this case)
+``` XML
+<dependency>
+    <groupId>ws.schild</groupId>
+    <artifactId>jave-native-win64</artifactId>
+    <version>2.4.5</version>
+</dependency>
+```
+
+### For one platform only (MACOS 64Bit in this case)
+``` XML
+<dependency>
+    <groupId>ws.schild</groupId>
+    <artifactId>jave-native-osx64</artifactId>
     <version>2.4.5</version>
 </dependency>
 ```
