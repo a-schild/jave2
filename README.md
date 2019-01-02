@@ -51,16 +51,7 @@ It includes all binaries for the supported platforms
 
 You can use maven dependencies to include the libraries in your projects.
 Include the following in your pom files.
-### For all platforms [ Remember always to check the latest release [here](https://github.com/a-schild/jave2/releases/latest) ]
-
-``` XML
-<dependency>
-    <groupId>ws.schild</groupId>
-    <artifactId>jave-all-deps</artifactId>
-    <version>2.4.5</version>
-</dependency>
-```
-
+### [ Remember always to check the latest release [here](https://github.com/a-schild/jave2/releases/latest) ]
 Generally if you want to use for one platform and more what you have to do is add the jave-core:
 
 ``` XML
