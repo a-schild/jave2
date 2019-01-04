@@ -52,26 +52,42 @@ It includes all binaries for the supported platforms
 You can use maven dependencies to include the libraries in your projects.
 Include the following in your pom files.
 ### [ Remember always to check the latest release [here](https://github.com/a-schild/jave2/releases/latest) ]
+=======
+Generally if you want to use for one platform or more what you have to do is add the jave-core:
 
-``` XML
-<dependency>
-    <groupId>ws.schild</groupId>
-    <artifactId>jave-all-deps</artifactId>
-    <version>2.4.5</version>
-</dependency>
-```
-
-### For one platform only (Linux 64Bit in this case)
 ``` XML
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-core</artifactId>
     <version>2.4.5</version>
 </dependency>
+```
 
+and then the specific jar(s) for your platform(s) :
+
+### For one platform only (Linux 64Bit in this case)
+``` XML
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-native-linux64</artifactId>
+    <version>2.4.5</version>
+</dependency>
+```
+
+### For one platform only (Windows 64Bit in this case)
+``` XML
+<dependency>
+    <groupId>ws.schild</groupId>
+    <artifactId>jave-native-win64</artifactId>
+    <version>2.4.5</version>
+</dependency>
+```
+
+### For one platform only (MACOS 64Bit in this case)
+``` XML
+<dependency>
+    <groupId>ws.schild</groupId>
+    <artifactId>jave-native-osx64</artifactId>
     <version>2.4.5</version>
 </dependency>
 ```
