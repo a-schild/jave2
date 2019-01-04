@@ -58,12 +58,18 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         String os = System.getProperty("os.name").toLowerCase();
         boolean isWindows = os.contains("windows");
         boolean isMac = os.contains("mac");
+        LOG.debug("Os name is <"+os+"> isWindows: "+isWindows+" isMac: "+isMac);
 
         // Dir Folder
         File dirFolder = new File(System.getProperty("java.io.tmpdir"), "jave/");
         if (!dirFolder.exists())
         {
+            LOG.debug("Creating jave temp folder to place executables in <"+dirFolder.getAbsolutePath()+">");
             dirFolder.mkdirs();
+        }
+        else
+        {
+            LOG.debug("Jave temp folder exists in <"+dirFolder.getAbsolutePath()+">");
         }
 
         // -----------------ffmpeg executable export on disk.-----------------------------
@@ -78,9 +84,11 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         if (ffmpegFile.exists())
         {
             // OK, already present
+            LOG.debug("Executable exists in <"+ffmpegFile.getAbsolutePath()+">");
         }
         else
         {
+            LOG.debug("Need to copy executable to <"+ffmpegFile.getAbsolutePath()+">");
             copyFile("ffmpeg-" + arch + suffix, ffmpegFile);
         }
 
@@ -120,7 +128,22 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         String resourceName= "native/" + path;
         try
         {
-            copy(getClass().getResourceAsStream(resourceName), dest.getAbsolutePath());
+            LOG.debug("Copy from resource <"+resourceName+"> to target <"+dest.getAbsolutePath()+">");
+            if (copy(getClass().getResourceAsStream(resourceName), dest.getAbsolutePath()))
+            {
+                if (dest.exists())
+                {
+                    LOG.debug("Target <"+dest.getAbsolutePath()+"> exists");
+                }
+                else
+                {
+                    LOG.fatal("Target <"+dest.getAbsolutePath()+"> does not exist");
+                }
+            }
+            else
+            {
+                LOG.fatal("Copy resource to target <"+dest.getAbsolutePath()+"> failed");
+            }
         }
         catch (NullPointerException ex)
         {
@@ -144,7 +167,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
             Files.copy(source, Paths.get(destination), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex)
         {
-            LOG.warn("Cannot write file " + destination, ex);
+            LOG.fatal("Cannot write file " + destination, ex);
             success = false;
         }
 

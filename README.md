@@ -51,7 +51,7 @@ It includes all binaries for the supported platforms
 
 You can use maven dependencies to include the libraries in your projects.
 Include the following in your pom files.
-### For all platforms [ Remember always to check the latest release [here](https://github.com/a-schild/jave2/releases/latest) ]
+### [ Remember always to check the latest release [here](https://github.com/a-schild/jave2/releases/latest) ]
 
 ``` XML
 <dependency>
@@ -222,6 +222,7 @@ For bug reports use the github site https://github.com/a-schild/jave2/issues
 ## Changelog
 - **2.4.6** 
    - Prepare for next dev cycle
+   - Corrected win32 executable name, thanks to WavyPeng
 - **2.4.5** 
    - Added video and audio quality flags for conversion (see VideoAttributes.quality and AudioAttributes.quality)
    - Changed aac de/encoder from libvo_aacenc to default aac settings from ffmpeg
