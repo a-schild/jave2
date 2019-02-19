@@ -437,7 +437,38 @@ public class EncoderTest {
         encoder.encode(new MultimediaObject(source), target, encodingAttr);
         assertTrue(target.exists(), "Output file missing");
     }
-                
+
+    /**
+     * Test of encode method, of class Encoder.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testEncodeAudio10() throws Exception {
+        System.out.println("encode");
+        
+        File source = new File("src/test/resources/4channels.ogg");
+        File target = new File("target/testoutput/4channels.flac");
+        if (target.exists())
+        {
+            target.delete();
+        }
+        AudioAttributes audioAttr = new AudioAttributes();
+        EncodingAttributes encodingAttr = new EncodingAttributes();
+
+        audioAttr.setCodec("flac");
+        audioAttr.setBitRate(360000);
+        audioAttr.setChannels(4);
+//        audio.setVolume(new Integer(1000));
+//        audio.setQuality(new Integer(1000));
+        audioAttr.setSamplingRate(48000);
+        encodingAttr.setFormat("flac");
+        encodingAttr.setAudioAttributes(audioAttr);
+        
+        Encoder encoder = new Encoder();
+        encoder.encode(new MultimediaObject(source), target, encodingAttr);
+        assertTrue(target.exists(), "Output file missing");
+    }
+    
     /**
      * Test of encode method, of class Encoder.
      * @throws java.lang.Exception

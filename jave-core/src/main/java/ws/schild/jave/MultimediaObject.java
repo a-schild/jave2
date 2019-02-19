@@ -41,7 +41,7 @@ public class MultimediaObject {
      * of an audio stream.
      */
     private static final Pattern CHANNELS_PATTERN = Pattern.compile(
-            "(mono|stereo)", Pattern.CASE_INSENSITIVE);
+            "(mono|stereo|quad)", Pattern.CASE_INSENSITIVE);
 
     /**
      * The locator of the ffmpeg executable used by this extractor.
@@ -254,7 +254,7 @@ public class MultimediaObject {
                                         {
                                             int bitRate = Integer.parseInt(m2
                                                     .group(1));
-                                            video.setBitRate(bitRate);
+                                            video.setBitRate(bitRate*1000);
                                             parsed = true;
                                         }
                                     }
@@ -295,6 +295,10 @@ public class MultimediaObject {
                                                     .equalsIgnoreCase(ms))
                                             {
                                                 audio.setChannels(2);
+                                            } else if ("quad"
+                                                    .equalsIgnoreCase(ms))
+                                            {
+                                                audio.setChannels(4);
                                             }
                                             parsed = true;
                                         }
@@ -304,7 +308,7 @@ public class MultimediaObject {
                                         {
                                             int bitRate = Integer.parseInt(m2
                                                     .group(1));
-                                            audio.setBitRate(bitRate);
+                                            audio.setBitRate(bitRate*1000);
                                             parsed = true;
                                         }
                                     }

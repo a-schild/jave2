@@ -135,19 +135,19 @@ public class AudioAttributes implements Serializable {
     }
 
     /**
-     * Returns the channels value (1=mono, 2=stereo) for the encoding process.
+     * Returns the channels value (1=mono, 2=stereo, 4=quad) for the encoding process.
      *
-     * @return The channels value (1=mono, 2=stereo) for the encoding process.
+     * @return The channels value (1=mono, 2=stereo, 4=quad) for the encoding process.
      */
     Integer getChannels() {
         return channels;
     }
 
     /**
-     * Sets the channels value (1=mono, 2=stereo) for the encoding process. If
+     * Sets the channels value (1=mono, 2=stereo, 4=quad) for the encoding process. If
      * null or not specified a default value will be picked.
      *
-     * @param channels The channels value (1=mono, 2=stereo) for the encoding
+     * @param channels The channels value (1=mono, 2=stereo, 4=quad) for the encoding
      * process.
      */
     public void setChannels(Integer channels) {

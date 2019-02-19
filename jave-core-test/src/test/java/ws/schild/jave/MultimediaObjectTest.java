@@ -50,8 +50,8 @@ public class MultimediaObjectTest {
      * @throws java.lang.Exception
      */
     @Test
-    public void testGetInfo() throws Exception {
-        System.out.println("getInfo");
+    public void testGetInfo01() throws Exception {
+        System.out.println("testGetInfo01");
         File file = new File("src/test/resources/dance1.avi");
         MultimediaObject instance = new MultimediaObject(file);
         MultimediaInfo result = instance.getInfo();
@@ -62,8 +62,27 @@ public class MultimediaObjectTest {
         assertEquals("rawvideo", result.getVideo().getDecoder());
         assertEquals(320, result.getVideo().getSize().getWidth());
         assertEquals(240, result.getVideo().getSize().getHeight());
-        assertEquals(4817, result.getVideo().getBitRate());
+        assertEquals(4817000, result.getVideo().getBitRate());
         assertEquals(15.0f, result.getVideo().getFrameRate());
     }
     
+    /**
+     * Test of getInfo method, of class MultimediaObject.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testGetInfo02() throws Exception {
+        System.out.println("testGetInfo02");
+        File file = new File("src/test/resources/4channels.ogg");
+        MultimediaObject instance = new MultimediaObject(file);
+        MultimediaInfo result = instance.getInfo();
+        
+        assertEquals("ogg", result.getFormat());
+        assertEquals(20000, result.getDuration());
+        assertNull(result.getVideo());
+        assertEquals("vorbis", result.getAudio().getDecoder());
+        assertEquals(48000, result.getAudio().getSamplingRate());
+        assertEquals(4, result.getAudio().getChannels());
+        assertEquals(959000, result.getAudio().getBitRate());
+    }
 }
