@@ -239,6 +239,8 @@ For bug reports use the github site https://github.com/a-schild/jave2/issues
 - **2.4.6** 
    - Prepare for next dev cycle
    - Corrected win32 executable name, thanks to WavyPeng
+   - The bitrate was returned in kBps instead of Bps
+   - The channel detection did only work for mono+stereo, but not for quad (It does still not work for others)
 - **2.4.5** 
    - Added video and audio quality flags for conversion (see VideoAttributes.quality and AudioAttributes.quality)
    - Changed aac de/encoder from libvo_aacenc to default aac settings from ffmpeg
