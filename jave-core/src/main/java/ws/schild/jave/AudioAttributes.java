@@ -167,7 +167,13 @@ public class AudioAttributes implements Serializable {
      * Sets the volume value for the encoding process. If null or not specified
      * a default value will be picked. If 256 no volume change will be
      * performed.
-     *
+     * 
+     * volume is the "amplitude ratio" or "sound pressure level" ratio
+     * 2560 is volume=20dB
+     * The formula is dBnumber=20*lg(amplitude ratio)
+     * 128 means reducing by 50%
+     * 512 means doubling the volume
+     * 
      * @param volume The volume value for the encoding process.
      */
     public void setVolume(Integer volume) {
@@ -184,6 +190,14 @@ public class AudioAttributes implements Serializable {
     /**
      * The audio quality value for the encoding process. If null or not specified
      * the ffmpeg default will be used
+     * 
+     * The value depends on the choosen codec
+     * 
+     * For mp3 you can see here:
+     * https://trac.ffmpeg.org/wiki/Encode/MP3
+     * 
+     * Or more general
+     * https://ffmpeg.org/ffmpeg-codecs.html
      * 
      * @param quality the audio conversion quality to set
      */

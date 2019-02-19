@@ -457,9 +457,9 @@ public class EncoderTest {
 
         audioAttr.setCodec("flac");
         audioAttr.setBitRate(360000);
-        audioAttr.setChannels(4);
-//        audio.setVolume(new Integer(1000));
-//        audio.setQuality(new Integer(1000));
+//        audioAttr.setChannels(4);
+        audioAttr.setVolume(1000);
+        audioAttr.setQuality(1000);
         audioAttr.setSamplingRate(48000);
         encodingAttr.setFormat("flac");
         encodingAttr.setAudioAttributes(audioAttr);

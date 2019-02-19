@@ -45,6 +45,7 @@ public class Encoder {
      */
     private static final Pattern FORMAT_PATTERN = Pattern
             .compile("^\\s*([D ])([E ])\\s+([\\w,]+)\\s+.+$");
+
     /**
      * This regexp is used to parse the ffmpeg output about the included
      * encoders/decoders.
@@ -59,14 +60,19 @@ public class Encoder {
     private static final Pattern SUCCESS_PATTERN = Pattern.compile(
             "^\\s*video\\:\\S+\\s+audio\\:\\S+\\s+subtitle\\:\\S+\\s+global headers\\:\\S+.*$",
             Pattern.CASE_INSENSITIVE);
+
     /**
      * The locator of the ffmpeg executable used by this encoder.
      */
     private final FFMPEGLocator locator;
+    
     /**
      * The executor used to do the conversion
+     * Is saved here, so we can abort the conversion process
+     * 
      */
     private FFMPEGExecutor ffmpeg;
+    
     /**
      * List of unhandled messages from ffmpeng run
      */
@@ -128,13 +134,13 @@ public class Encoder {
      */
     protected String[] getCoders(boolean encoder, boolean audio) throws EncoderException {
         ArrayList<String> res = new ArrayList<>();
-        FFMPEGExecutor ffmpeg = locator.createExecutor();
-        ffmpeg.addArgument(encoder ? "-encoders" : "-decoders");
+        FFMPEGExecutor localFFMPEG = locator.createExecutor();
+        localFFMPEG.addArgument(encoder ? "-encoders" : "-decoders");
         try
         {
-            ffmpeg.execute();
-            RBufferedReader reader = null;
-            reader = new RBufferedReader(new InputStreamReader(ffmpeg
+            localFFMPEG.execute();
+            RBufferedReader reader = 
+                    new RBufferedReader(new InputStreamReader(localFFMPEG
                     .getInputStream()));
             String line;
             String format = audio ? "A" : "V";
@@ -178,7 +184,7 @@ public class Encoder {
             throw new EncoderException(e);
         } finally
         {
-            ffmpeg.destroy();
+            localFFMPEG.destroy();
         }
         int size = res.size();
         String[] ret = new String[size];
@@ -244,13 +250,13 @@ public class Encoder {
      */
     protected String[] getSupportedCodingFormats(boolean encoding) throws EncoderException {
         ArrayList<String> res = new ArrayList<>();
-        FFMPEGExecutor ffmpeg = locator.createExecutor();
-        ffmpeg.addArgument("-formats");
+        FFMPEGExecutor localFFMPEG = locator.createExecutor();
+        localFFMPEG.addArgument("-formats");
         try
         {
-            ffmpeg.execute();
-            RBufferedReader reader = null;
-            reader = new RBufferedReader(new InputStreamReader(ffmpeg
+            localFFMPEG.execute();
+            RBufferedReader reader = 
+                    new RBufferedReader(new InputStreamReader(localFFMPEG
                     .getInputStream()));
             String line;
             String ed = encoding ? "E" : "D";
@@ -301,7 +307,7 @@ public class Encoder {
             throw new EncoderException(e);
         } finally
         {
-            ffmpeg.destroy();
+            localFFMPEG.destroy();
         }
         int size = res.size();
         String[] ret = new String[size];
@@ -328,6 +334,8 @@ public class Encoder {
 
     /**
      * Re-encode a multimedia file.
+     * 
+     * This method is not reentrant, instead create multiple object instances
      *
      * @param multimediaObject The source multimedia file. It cannot be null. Be
      * sure this file can be decoded (see null null null null     {@link Encoder#getSupportedDecodingFormats()},
@@ -351,6 +359,8 @@ public class Encoder {
 
     /**
      * Re-encode a multimedia file.
+     *
+     * This method is not reentrant, instead create multiple object instances
      *
      * @param multimediaObject The source multimedia file. It cannot be null. Be
      * sure this file can be decoded (see null null null null     {@link Encoder#getSupportedDecodingFormats()},
@@ -577,6 +587,7 @@ public class Encoder {
         } finally
         {
             ffmpeg.destroy();
+            ffmpeg= null;
         }
     }
 
@@ -597,6 +608,7 @@ public class Encoder {
         if (ffmpeg != null)
         {
             ffmpeg.destroy();
+            ffmpeg= null;
         }
     }
 }
