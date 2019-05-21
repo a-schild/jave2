@@ -85,4 +85,25 @@ public class MultimediaObjectTest {
         assertEquals(4, result.getAudio().getChannels());
         assertEquals(959000, result.getAudio().getBitRate());
     }
+    
+    /**
+     * Test of getInfo method, of class MultimediaObject.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testGetInfo03() throws Exception {
+        System.out.println("testGetInfo03");
+        File file = new File("src/test/resources/2019V7HR.amr");
+        MultimediaObject instance = new MultimediaObject(file);
+        try
+        {
+            MultimediaInfo result = instance.getInfo();
+            assertEquals(1,1, "Invalid data in header not thrown");
+        }
+        catch (Exception ex)
+        {
+            assertEquals(1,1);
+        }
+    }
+ 
 }

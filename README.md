@@ -238,6 +238,8 @@ For bug reports use the github site https://github.com/a-schild/jave2/issues
 ## Changelog
 - **2.4.7-SNAPSHOT** 
    - Prepare for next dev cycle
+   - Upgraded windows and osx binaries to 4.1.3 from https://ffmpeg.zeranoe.com/builds/  
+   - Upgraded linux binaries to 4.1.3 from https://johnvansickle.com/ffmpeg/  
 - **2.4.6** 
    - Corrected win32 executable name, thanks to WavyPeng
    - The bitrate was returned in kBps instead of Bps
