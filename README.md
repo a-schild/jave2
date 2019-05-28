@@ -45,7 +45,7 @@ It includes all binaries for the supported platforms
 <dependency>
  <groupId>ws.schild</groupId>
  <artifactId>jave-all-deps</artifactId>
- <version>2.4.6</version>
+ <version>2.5.0</version>
 </dependency>
 ```
 
@@ -59,7 +59,7 @@ Generally if you want to use for one platform or more what you have to do is add
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-core</artifactId>
-    <version>2.4.6</version>
+    <version>2.5.0</version>
 </dependency>
 ```
 
@@ -69,8 +69,8 @@ and then the specific jar(s) for your platform(s) :
 ``` XML
 <dependency>
     <groupId>ws.schild</groupId>
-    <artifactId>jave-native-linux64</artifactId>
-    <version>2.4.6</version>
+    <artifactId>jave-nativebin-linux64</artifactId>
+    <version>2.5.0</version>
 </dependency>
 ```
 
@@ -78,8 +78,8 @@ and then the specific jar(s) for your platform(s) :
 ``` XML
 <dependency>
     <groupId>ws.schild</groupId>
-    <artifactId>jave-native-win64</artifactId>
-    <version>2.4.6</version>
+    <artifactId>jave-nativebin-win64</artifactId>
+    <version>2.5.0</version>
 </dependency>
 ```
 
@@ -87,8 +87,8 @@ and then the specific jar(s) for your platform(s) :
 ``` XML
 <dependency>
     <groupId>ws.schild</groupId>
-    <artifactId>jave-native-osx64</artifactId>
-    <version>2.4.6</version>
+    <artifactId>jave-nativebin-osx64</artifactId>
+    <version>2.5.0</version>
 </dependency>
 ```
 
@@ -97,19 +97,19 @@ and then the specific jar(s) for your platform(s) :
 It includes all binaries for the supported platforms
 
 ``` XML
-compile group: 'ws.schild', name: 'jave-all-deps', version: '2.4.6'
+compile group: 'ws.schild', name: 'jave-all-deps', version: '2.5.0'
 ```
 
 ### For one platform only (Linux 64Bit in this case)
 ``` XML
-compile group: 'ws.schild', name: 'jave-core', version: '2.4.6'
-compile group: 'ws.schild', name: 'jave-native-linux64', version: '2.4.6'
+compile group: 'ws.schild', name: 'jave-core', version: '2.5.0'
+compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '2.5.0'
 ```
 
 ### Main Components of Jave2
 Jave2 consists of two main components:
 1. The `jave-core` dependency, which includes all the java code, which is platform independent
-2. The `jave-native-<platform>` dependencies, which include the binary executables per platform
+2. The `jave-nativebin-<platform>` dependencies, which include the binary executables per platform
 
 There exists a jave-all-deps project, which includes core and all windows und linux binaries.
 
@@ -236,9 +236,10 @@ You can send comments to andre@schild.ws
 For bug reports use the github site https://github.com/a-schild/jave2/issues
 
 ## Changelog
-- **2.5.0-SNAPSHOT** 
+- **2.5.0** 
    - Prepare for next dev cycle
    - Renamed build artifacts with native in the name to nativebin to avoid module conflicts in Java 9+
+     You will have to change your build dependencies if you did selectively include platforms
 - **2.4.7** 
    - Upgraded maven build infrastructure
    - Upgraded windows and osx binaries to 4.1.3 from https://ffmpeg.zeranoe.com/builds/  
