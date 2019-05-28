@@ -236,7 +236,7 @@ You can send comments to andre@schild.ws
 For bug reports use the github site https://github.com/a-schild/jave2/issues
 
 ## Changelog
-- **2.4.7-SNAPSHOT** 
+- **2.4.7** 
    - Prepare for next dev cycle
    - Upgraded maven build infrastructure
    - Upgraded windows and osx binaries to 4.1.3 from https://ffmpeg.zeranoe.com/builds/  
