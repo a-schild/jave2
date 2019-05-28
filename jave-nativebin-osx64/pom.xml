@@ -3,9 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ws.schild</groupId>
     <packaging>jar</packaging>
-    <version>2.4.7</version>
-    <artifactId>jave-native-linux32</artifactId>
-    <name>Jave linux 32 bit native package</name>
+    <version>2.5.0-SNAPSHOT</version>
+    <artifactId>jave-nativebin-osx64</artifactId>
+    <name>Jave OSX 64 bit native package</name>
     <description>The JAVE (Java Audio Video Encoder) library is Java wrapper on the 
         ffmpeg project. Developers can take take advantage of JAVE2 to transcode 
         audio and video files from a format to another. In example you can transcode 
@@ -15,7 +15,7 @@
         you can resize videos, changing their sizes and proportions and so on. 
         Many other formats, containers and operations are supported by JAVE2.</description>
     <url>https://github.com/a-schild/jave2</url>
-    <licenses>
+        <licenses>
         <license>
             <name>GPL-v3.0</name>
             <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
@@ -29,7 +29,7 @@
             <organizationUrl>https://www.aarboard.ch</organizationUrl>
         </developer>
     </developers>
-    <properties>
+   <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
