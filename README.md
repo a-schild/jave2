@@ -209,8 +209,8 @@ public class ConvertProgressListener implements EncoderProgressListener {
    public void progress(int p) {                                         
 	                                                                     
      //Find %100 progress                                                
-double progress = p / 1000.00;                                           
-System.out.println(progress);                                            
+	 double progress = p / 1000.00;                                           
+	 System.out.println(progress);                                            
                                                                          
    }                                                                     
                                                                          
@@ -236,6 +236,9 @@ You can send comments to andre@schild.ws
 For bug reports use the github site https://github.com/a-schild/jave2/issues
 
 ## Changelog
+- **2.5.1-SNAPSHOT** 
+   - Prepare for next dev cycle
+   - Renamed native folder where the executables are to nativebin too, to prevent Java 9+ problems
 - **2.5.0** 
    - Prepare for next dev cycle
    - Renamed build artifacts with native in the name to nativebin to avoid module conflicts in Java 9+

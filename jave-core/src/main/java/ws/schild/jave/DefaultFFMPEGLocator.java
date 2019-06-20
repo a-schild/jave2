@@ -43,7 +43,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
      * Trace the version of the bundled ffmpeg executable. It's a counter: every
      * time the bundled ffmpeg change it is incremented by 1.
      */
-    private static final String MY_EXE_VERSION = "2.5.0";
+    private static final String MY_EXE_VERSION = "2.5.1-SNAPSHOT";
 
     /**
      * The ffmpeg executable file path.
@@ -125,7 +125,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
      * @throws RuntimeException If an unexpected error occurs.
      */
     private void copyFile(String path, File dest) {
-        String resourceName= "native/" + path;
+        String resourceName= "nativebin/" + path;
         try
         {
             LOG.debug("Copy from resource <"+resourceName+"> to target <"+dest.getAbsolutePath()+">");
