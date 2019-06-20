@@ -146,11 +146,11 @@ try {
      
 ## More advanced examples    
 
-Can be found [**here**](https://github.com/a-schild/jave2/Examples.md)
+Can be found [**here**](https://github.com/a-schild/jave2/blob/master/Examples.md)
 
 ## Changelog
 
-Can be found [**here**](https://github.com/a-schild/jave2/Changelog.md)
+Can be found [**here**](https://github.com/a-schild/jave2/blob/master/Changelog.md)
 
 ## License
 
