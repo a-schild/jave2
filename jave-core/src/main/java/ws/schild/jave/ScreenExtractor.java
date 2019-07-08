@@ -62,7 +62,7 @@ public class ScreenExtractor {
     public void render(MultimediaObject multimediaObject, int width, int height, int seconds, File outputDir,
             String fileNamePrefix, String extension, int quality)
             throws InputFormatException, EncoderException {
-        File inputFile = multimediaObject.getFile();
+        String inputSource = multimediaObject.isURL() ? multimediaObject.getURL().toString() : multimediaObject.getFile().getAbsolutePath();
         try
         {
             if (!outputDir.exists())
@@ -73,7 +73,7 @@ public class ScreenExtractor {
                     throw new SecurityException();
                 }
             }
-            if (!inputFile.canRead())
+            if (!multimediaObject.isURL() && !multimediaObject.getFile().canRead())
             {
                 LOG.debug("Failed to open input file");
                 throw new SecurityException();
@@ -84,11 +84,11 @@ public class ScreenExtractor {
         }
 
         MultimediaInfo multimediaInfo = multimediaObject.getInfo();
-        numberOfScreens = (int) Math.ceil((multimediaInfo.getDuration() * .001) / seconds + 1);
+        numberOfScreens = Math.round(((float)multimediaInfo.getDuration()) / 1000.0f / seconds);
 
         FFMPEGExecutor ffmpeg = this.locator.createExecutor();
         ffmpeg.addArgument("-i");
-        ffmpeg.addArgument(inputFile.getAbsolutePath());
+        ffmpeg.addArgument(inputSource);
         ffmpeg.addArgument("-f");
         ffmpeg.addArgument("image2");
         ffmpeg.addArgument("-vf");
@@ -146,12 +146,12 @@ public class ScreenExtractor {
      */
     public void render(MultimediaObject multimediaObject, int width, int height, int seconds, File target, int quality)
             throws EncoderException {
-        File inputFile = multimediaObject.getFile();
+        String inputSource = multimediaObject.isURL() ? multimediaObject.getURL().toString() : multimediaObject.getFile().getAbsolutePath();
         target = target.getAbsoluteFile();
         target.getParentFile().mkdirs();
         try
         {
-            if (!inputFile.canRead())
+            if (!multimediaObject.isURL() && !multimediaObject.getFile().canRead())
             {
                 LOG.debug("Failed to open input file");
                 throw new SecurityException();
@@ -162,12 +162,12 @@ public class ScreenExtractor {
         }
 
         MultimediaInfo multimediaInfo = multimediaObject.getInfo();
-        int duration = (int) (multimediaInfo.getDuration() * .001);
+        int duration = (int) (multimediaInfo.getDuration() / 1000);
         numberOfScreens = seconds <= duration ? 1 : 0;
 
         FFMPEGExecutor ffmpeg = this.locator.createExecutor();
         ffmpeg.addArgument("-i");
-        ffmpeg.addArgument(inputFile.getAbsolutePath());
+        ffmpeg.addArgument(inputSource);
         ffmpeg.addArgument("-f");
         ffmpeg.addArgument("image2");
         ffmpeg.addArgument("-vframes");
