@@ -3,6 +3,7 @@ package ws.schild.jave;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,6 +50,7 @@ public class MultimediaObject {
     private final FFMPEGLocator locator;
 
     private File inputFile;
+    private URL  inputURL;
 
     /**
      * It builds an extractor using a {@link DefaultFFMPEGLocator} instance to
@@ -62,14 +64,48 @@ public class MultimediaObject {
 
     }
 
+    /**
+     * It builds an extractor using a {@link DefaultFFMPEGLocator} instance to
+     * locate the ffmpeg executable to use.
+     *
+     * @param input Input URL for creating MultimediaObject
+     */
+    public MultimediaObject(URL input) {
+        this.locator = new DefaultFFMPEGLocator();
+        this.inputURL = input;
+
+    }
+
+    /**
+     * 
+     * @return file
+     */    
     public File getFile() {
         return this.inputFile;
+    }
+    
+    public URL getURL() {
+        return this.inputURL;
     }
 
     public void setFile(File file) {
         this.inputFile = file;
     }
 
+    public void setUR(URL input) {
+        this.inputURL = input;
+    }
+    
+    /**
+     * Check if we have a file or an URL
+     * 
+     * @return true if this object references an URL
+     */
+    public boolean isURL()
+    {
+        return inputURL != null;
+    }
+    
     /**
      * It builds an extractor with a custom {@link FFMPEGLocator}.
      *
@@ -94,11 +130,18 @@ public class MultimediaObject {
      */
     public MultimediaInfo getInfo() throws InputFormatException,
             EncoderException {
-        if (inputFile.canRead())
+        if (isURL() || inputFile.canRead())
         {
             FFMPEGExecutor ffmpeg = locator.createExecutor();
             ffmpeg.addArgument("-i");
-            ffmpeg.addArgument(inputFile.getAbsolutePath());
+            if (isURL())
+            {
+                ffmpeg.addArgument(inputURL.toString());
+            }
+            else
+            {
+                ffmpeg.addArgument(inputFile.getAbsolutePath());
+            }
             try
             {
                 ffmpeg.execute();
@@ -110,7 +153,14 @@ public class MultimediaObject {
             {
                 RBufferedReader reader = new RBufferedReader(new InputStreamReader(ffmpeg
                         .getErrorStream()));
-                return parseMultimediaInfo(inputFile, reader);
+                if (isURL())
+                {
+                    return parseMultimediaInfo(inputURL.toString(), reader);
+                }
+                else
+                {
+                    return parseMultimediaInfo(inputFile.getAbsolutePath(), reader);
+                }
             } finally
             {
                 ffmpeg.destroy();
@@ -125,7 +175,7 @@ public class MultimediaObject {
      * Private utility. It parses the ffmpeg output, extracting informations
      * about a source multimedia file.
      *
-     * @param source The source multimedia file.
+     * @param source The source multimedia object.
      * @param reader The ffmpeg output channel.
      * @return A set of informations about the source multimedia file and its
      * contents.
@@ -134,7 +184,7 @@ public class MultimediaObject {
      * @throws EncoderException If a problem occurs calling the underlying
      * ffmpeg executable.
      */
-    private MultimediaInfo parseMultimediaInfo(File source,
+    private MultimediaInfo parseMultimediaInfo(String source,
             RBufferedReader reader) throws InputFormatException,
             EncoderException {
         Pattern p1 = Pattern.compile("^\\s*Input #0, (\\w+).+$\\s*",
@@ -164,7 +214,7 @@ public class MultimediaObject {
                 {
                     case 0:
                     {
-                        String token = source.getAbsolutePath() + ": ";
+                        String token = source + ": ";
                         if (line.startsWith(token))
                         {
                             String message = line.substring(token.length());
