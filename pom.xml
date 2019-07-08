@@ -55,6 +55,7 @@
         <module>jave-nativebin-osx64</module>
         <module>jave-core</module>
         <module>jave-core-test</module>
+        <module>jave-core-test-java11</module>
         <module>jave-example</module>
         <module>jave-all-deps</module>
     </modules>
