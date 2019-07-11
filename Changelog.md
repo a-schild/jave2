@@ -5,6 +5,7 @@
    - Prepare for next dev cycle
    - Renamed native folder where the executables are to nativebin too, to prevent Java 9+ problems
    - Allow to create a MultimediaObject with an URL instead of a file as conversion source
+   - More diagnostic output when ffmpeg executable could not be found via getResourceAsStream() 
 - **2.5.0** 
    - Prepare for next dev cycle
    - Renamed build artifacts with native in the name to nativebin to avoid module conflicts in Java 9+
