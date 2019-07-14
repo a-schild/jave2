@@ -19,6 +19,7 @@
 package ws.schild.jave;
 
 import java.io.File;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -156,14 +157,14 @@ public class EncoderTest {
         }
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec("libfaac");
-        audio.setBitRate(128000);
-        audio.setSamplingRate(44100);
+        audio.setBitRate(64000);
+        audio.setSamplingRate(6400);
         audio.setChannels(2);
         VideoAttributes video = new VideoAttributes();
         video.setCodec("mpeg4");
-        video.setBitRate(160000);
+        video.setBitRate(60000);
         video.setFrameRate(15);
-        video.setSize(new VideoSize(176, 144));
+        video.setSize(new VideoSize(160, 120));
         EncodingAttributes attrs = new EncodingAttributes();
         attrs.setFormat("3gp");
         attrs.setAudioAttributes(audio);
@@ -438,6 +439,43 @@ public class EncoderTest {
         assertTrue(target.exists(), "Output file missing");
     }
 
+    /**
+     * Test of encode method, of class Encoder.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testEncodeVideo13() throws Exception {
+        System.out.println("encode");
+        
+        URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
+        File target = new File("target/testoutput/testEncodeVideo13.mp4");
+        if (target.exists())
+        {
+            target.delete();
+        }
+        AudioAttributes audioAttr = new AudioAttributes();
+        VideoAttributes videoAttr = new VideoAttributes();
+        EncodingAttributes encodingAttr = new EncodingAttributes();
+
+        audioAttr.setChannels(2);
+        audioAttr.setCodec("aac");
+        audioAttr.setBitRate(128000);
+        audioAttr.setSamplingRate(44100);
+
+        videoAttr.setCodec("libx264");
+        videoAttr.setBitRate(4000000);
+
+        encodingAttr.setAudioAttributes(audioAttr);
+        encodingAttr.setVideoAttributes(videoAttr);
+        encodingAttr.setFormat("mp4");
+
+        Encoder encoder = new Encoder();
+        encoder.encode(new MultimediaObject(source), target, encodingAttr);
+        assertTrue(target.exists(), "Output file missing");
+    }
+    
+    
+    
     /**
      * Test of encode method, of class Encoder.
      * @throws java.lang.Exception

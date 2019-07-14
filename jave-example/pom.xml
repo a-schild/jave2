@@ -70,7 +70,7 @@
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
-            <artifactId>jave-nativebin-win64</artifactId>
+            <artifactId>jave-nativebin-linux32</artifactId>
             <version>2.5.1-SNAPSHOT</version>
         </dependency>    
         <!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->

@@ -339,7 +339,7 @@ public class Encoder {
      *
      * @param multimediaObject The source multimedia file. It cannot be null. Be
      * sure this file can be decoded (see null null null null     {@link Encoder#getSupportedDecodingFormats()},
-	 *            {@link Encoder#getAudioDecoders()} and
+     *            {@link Encoder#getAudioDecoders()} and
      * {@link Encoder#getVideoDecoders()}).
      * @param target The target multimedia re-encoded file. It cannot be null.
      * If this file already exists, it will be overwrited.
@@ -400,7 +400,14 @@ public class Encoder {
             ffmpeg.addArgument(String.valueOf(offsetAttribute.floatValue()));
         }
         ffmpeg.addArgument("-i");
-        ffmpeg.addArgument(multimediaObject.getFile().getAbsolutePath());
+        if ( multimediaObject.isURL() )
+        {
+            ffmpeg.addArgument(multimediaObject.getURL().toString());
+        }
+        else
+        {
+            ffmpeg.addArgument(multimediaObject.getFile().getAbsolutePath());
+        }
         if (durationAttribute != null)
         {
             ffmpeg.addArgument("-t");
@@ -540,21 +547,28 @@ public class Encoder {
         try
         {
             String lastWarning = null;
-            long duration;
+            long duration= 0;
             RBufferedReader reader = new RBufferedReader(
                     new InputStreamReader(ffmpeg.getErrorStream()));
-            MultimediaInfo info = multimediaObject.getInfo();
+            MultimediaInfo info = null;
+            if ( !multimediaObject.isURL() )
+            {           
+                info= multimediaObject.getInfo();
+            }
             if (durationAttribute != null)
             {
                 duration = (long) Math
                         .round((durationAttribute * 1000L));
             } else
             {
-                duration = info.getDuration();
-                if (offsetAttribute != null)
+                if (info != null)
                 {
-                    duration -= (long) Math
-                            .round((offsetAttribute * 1000L));
+                    duration = info.getDuration();
+                    if (offsetAttribute != null)
+                    {
+                        duration -= (long) Math
+                                .round((offsetAttribute * 1000L));
+                    }
                 }
             }
             if (listener != null)

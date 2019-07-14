@@ -19,6 +19,7 @@
 package ws.schild.jave;
 
 import java.io.File;
+import java.net.URL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
@@ -106,4 +107,17 @@ public class MultimediaObjectTest {
         }
     }
  
+    /**
+     * Test of getInfo method, of class MultimediaObject.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testGetInfo04() throws Exception {
+        System.out.println("testGetInfo04");
+        URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
+        MultimediaObject instance = new MultimediaObject(source);
+        MultimediaInfo result = instance.getInfo();
+        assertEquals(result.getFormat(), "mpeg", "Invalid video format");
+        assertEquals(result.getDuration(), 29800, "Invalid duration");
+    }
 }

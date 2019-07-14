@@ -18,6 +18,7 @@
  */
 package ws.schild.jave;
 
+import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 
@@ -33,6 +34,16 @@ public class DefaultFFMPEGLocatorTest {
 
     @Test
     public void testFindExecutable() {
+        // We first remove any old executables, to make sure the copy/deploy works
+        File dirFolder = new File(System.getProperty("java.io.tmpdir"), "jave/");
+        if (dirFolder.exists() && dirFolder.isDirectory())
+        {
+            for (File f : dirFolder.listFiles())
+            {
+                f.delete();
+            }
+            dirFolder.delete();
+        }
         DefaultFFMPEGLocator locator= new  DefaultFFMPEGLocator();
         String exePath= locator.getFFMPEGExecutablePath();
         assertNotNull("Native component not found", exePath);

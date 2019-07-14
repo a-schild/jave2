@@ -113,7 +113,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
     }
 
     @Override
-    protected String getFFMPEGExecutablePath() {
+    public String getFFMPEGExecutablePath() {
         return path;
     }
 
@@ -129,20 +129,28 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         try
         {
             LOG.debug("Copy from resource <"+resourceName+"> to target <"+dest.getAbsolutePath()+">");
-            if (copy(getClass().getResourceAsStream(resourceName), dest.getAbsolutePath()))
+            InputStream is= getClass().getResourceAsStream(resourceName);
+            if (is != null)
             {
-                if (dest.exists())
+                if (copy(is, dest.getAbsolutePath()))
                 {
-                    LOG.debug("Target <"+dest.getAbsolutePath()+"> exists");
+                    if (dest.exists())
+                    {
+                        LOG.debug("Target <"+dest.getAbsolutePath()+"> exists");
+                    }
+                    else
+                    {
+                        LOG.fatal("Target <"+dest.getAbsolutePath()+"> does not exist");
+                    }
                 }
                 else
                 {
-                    LOG.fatal("Target <"+dest.getAbsolutePath()+"> does not exist");
+                    LOG.fatal("Copy resource to target <"+dest.getAbsolutePath()+"> failed");
                 }
             }
             else
             {
-                LOG.fatal("Copy resource to target <"+dest.getAbsolutePath()+"> failed");
+                LOG.fatal("Could not find ffmpeg platform executable in resources for <"+resourceName+">");
             }
         }
         catch (NullPointerException ex)
