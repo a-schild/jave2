@@ -125,11 +125,11 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
      * @throws RuntimeException If an unexpected error occurs.
      */
     private void copyFile(String path, File dest) {
-        String resourceName= "nativebin/" + path;
+        String resourceName= "ws/schild/jave/nativebin/" + path;
         try
         {
             LOG.debug("Copy from resource <"+resourceName+"> to target <"+dest.getAbsolutePath()+">");
-            InputStream is= getClass().getResourceAsStream(resourceName);
+            InputStream is= ClassLoader.getSystemResourceAsStream(resourceName);
             if (is != null)
             {
                 if (copy(is, dest.getAbsolutePath()))
