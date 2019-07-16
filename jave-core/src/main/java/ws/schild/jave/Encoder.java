@@ -592,7 +592,7 @@ public class Encoder {
             int exitCode= ffmpeg.getProcessExitCode();
             if (exitCode != 0)
             {
-                LOG.error("Process exit code: "+exitCode+" for "+multimediaObject.getFile().getName()+" to "+ target.getName());
+                LOG.error("Process exit code: {} for {} to {}", exitCode, multimediaObject.getFile().getName(), target.getName());
                 throw new EncoderException("Exit code of ffmpeg encoding run is "+exitCode);
             }
         } catch (IOException e)

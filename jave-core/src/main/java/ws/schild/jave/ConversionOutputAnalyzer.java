@@ -61,10 +61,7 @@ public class ConversionOutputAnalyzer {
     public void analyzeNewLine(String line) throws EncoderException
     {
         lineNR++;
-        if (LOG.isDebugEnabled())
-        {
-            LOG.debug("Input Line (" + lineNR + "): <" + line +">");
-        }
+        LOG.debug("Input Line ({}): <{}>", lineNR, line);
         if (line.startsWith("WARNING: "))
         {
             if (listener != null)
@@ -104,7 +101,7 @@ public class ConversionOutputAnalyzer {
                         step = 2;
                     } else if (!line.startsWith("  "))
                     {
-                        LOG.info("Unhandled message in step: "+step+" Line: "+ lineNR +" message: <"+line+">");
+                        LOG.info("Unhandled message in step: {} Line: {} message: <{}>", step, lineNR, line);
                         unhandledMessages.add(line);
                     } else
                     {
@@ -124,7 +121,7 @@ public class ConversionOutputAnalyzer {
                         step = 3;
                     } else if (!line.startsWith("  "))
                     {
-                        LOG.info("Unhandled message in step: "+step+" Line: "+ lineNR +" message: <"+line+">");
+                        LOG.info("Unhandled message in step: {} Line: {} message: <{}>", step, lineNR, line);
                         unhandledMessages.add(line);
                     } else
                     {
@@ -158,7 +155,7 @@ public class ConversionOutputAnalyzer {
                     }
                     else
                     {
-                        LOG.info("Unhandled message in step: "+step+" Line: "+ lineNR +" message: <"+line+">");
+                        LOG.info("Unhandled message in step: {} Line: {} message: <{}>", step, lineNR, line);
                         unhandledMessages.add(line);
                     }
                 }
@@ -212,7 +209,7 @@ public class ConversionOutputAnalyzer {
                     }
                 } catch (Exception ex)
                 {
-                    LOG.warn("Error in progress parsing for line: " + line);
+                    LOG.warn("Error in progress parsing for line: {}", line);
                 }
             }
         }

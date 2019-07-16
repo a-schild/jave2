@@ -58,18 +58,18 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         String os = System.getProperty("os.name").toLowerCase();
         boolean isWindows = os.contains("windows");
         boolean isMac = os.contains("mac");
-        LOG.debug("Os name is <"+os+"> isWindows: "+isWindows+" isMac: "+isMac);
+        LOG.debug("Os name is <{}> isWindows: {} isMac: {}", os, isWindows, isMac);
 
         // Dir Folder
         File dirFolder = new File(System.getProperty("java.io.tmpdir"), "jave/");
         if (!dirFolder.exists())
         {
-            LOG.debug("Creating jave temp folder to place executables in <"+dirFolder.getAbsolutePath()+">");
+            LOG.debug("Creating jave temp folder to place executables in <{}>", dirFolder.getAbsolutePath());
             dirFolder.mkdirs();
         }
         else
         {
-            LOG.debug("Jave temp folder exists in <"+dirFolder.getAbsolutePath()+">");
+            LOG.debug("Jave temp folder exists in <{}>", dirFolder.getAbsolutePath());
         }
 
         // -----------------ffmpeg executable export on disk.-----------------------------
@@ -78,17 +78,17 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
 
         //File
         File ffmpegFile = new File(dirFolder, "ffmpeg-" + arch +"-"+MY_EXE_VERSION+ suffix);
-        LOG.debug("Executable path: "+ffmpegFile.getAbsolutePath());
+        LOG.debug("Executable path: {}", ffmpegFile.getAbsolutePath());
 
         //Check the version of existing .exe file
         if (ffmpegFile.exists())
         {
             // OK, already present
-            LOG.debug("Executable exists in <"+ffmpegFile.getAbsolutePath()+">");
+            LOG.debug("Executable exists in <{}>", ffmpegFile.getAbsolutePath());
         }
         else
         {
-            LOG.debug("Need to copy executable to <"+ffmpegFile.getAbsolutePath()+">");
+            LOG.debug("Need to copy executable to <{}>", ffmpegFile.getAbsolutePath());
             copyFile("ffmpeg-" + arch + suffix, ffmpegFile);
         }
 
@@ -109,7 +109,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
 
         // Everything seems okay
         path = ffmpegFile.getAbsolutePath();
-        LOG.debug("ffmpeg executable found: "+path);
+        LOG.debug("ffmpeg executable found: {}", path);
     }
 
     @Override
@@ -128,13 +128,13 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
        String resourceName= "nativebin/" + path;
         try
         {
-            LOG.debug("Copy from resource <"+resourceName+"> to target <"+dest.getAbsolutePath()+">");
+            LOG.debug("Copy from resource <{}> to target <{}>", resourceName, dest.getAbsolutePath());
             InputStream is= getClass().getResourceAsStream(resourceName);
             if (is == null)
             {
                 // Use this for Java 9+ only if required
                 resourceName= "ws/schild/jave/nativebin/" + path;
-                LOG.debug("Alternative copy from SystemResourceAsStream <"+resourceName+"> to target <"+dest.getAbsolutePath()+">");
+                LOG.debug("Alternative copy from SystemResourceAsStream <{}> to target <{}>", resourceName, dest.getAbsolutePath());
                 is= ClassLoader.getSystemResourceAsStream(resourceName);
             }
             if (is != null)
@@ -143,26 +143,26 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
                 {
                     if (dest.exists())
                     {
-                        LOG.debug("Target <"+dest.getAbsolutePath()+"> exists");
+                        LOG.debug("Target <{}> exists", dest.getAbsolutePath());
                     }
                     else
                     {
-                        LOG.error("Target <"+dest.getAbsolutePath()+"> does not exist");
+                        LOG.error("Target <{}> does not exist", dest.getAbsolutePath());
                     }
                 }
                 else
                 {
-                    LOG.error("Copy resource to target <"+dest.getAbsolutePath()+"> failed");
+                    LOG.error("Copy resource to target <{}> failed", dest.getAbsolutePath());
                 }
             }
             else
             {
-                LOG.error("Could not find ffmpeg platform executable in resources for <"+resourceName+">");
+                LOG.error("Could not find ffmpeg platform executable in resources for <{}>", resourceName);
             }
         }
         catch (NullPointerException ex)
         {
-            LOG.error("Could not find ffmpeg executable for "+resourceName+" is the correct platform jar included?");
+            LOG.error("Could not find ffmpeg executable for {} is the correct platform jar included?", resourceName);
             throw ex;
         }
     }

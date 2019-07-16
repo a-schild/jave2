@@ -111,7 +111,7 @@ class FFMPEGExecutor {
                 sb.append(c);
                 sb.append(' ');
             }
-            LOG.debug("About to execute " + sb.toString());
+            LOG.debug("About to execute {}", sb.toString());
         }
         Runtime runtime = Runtime.getRuntime();
         ffmpeg = runtime.exec(cmd);

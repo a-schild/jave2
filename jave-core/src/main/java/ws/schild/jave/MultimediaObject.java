@@ -205,7 +205,7 @@ public class MultimediaObject {
             while (true)
             {
                 String line = reader.readLine();
-                LOG.debug("Output line: " + line);
+                LOG.debug("Output line: {}", line);
                 if (line == null)
                 {
                     break;

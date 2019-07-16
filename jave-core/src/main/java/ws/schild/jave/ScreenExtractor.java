@@ -80,7 +80,7 @@ public class ScreenExtractor {
             }
         } catch (SecurityException e)
         {
-            LOG.debug("Access denied checking destination folder" + e);
+            LOG.debug("Access denied checking destination folder",  e);
         }
 
         MultimediaInfo multimediaInfo = multimediaObject.getInfo();
@@ -117,7 +117,7 @@ public class ScreenExtractor {
             while ((line = reader.readLine()) != null)
             {
                 lineNR++;
-                LOG.debug("Input Line (" + lineNR + "): " + line);
+                LOG.debug("Input Line ({}): {}", lineNR, line);
                 // TODO: Implement additional input stream parsing
             }
         } catch (IOException e)
@@ -158,7 +158,7 @@ public class ScreenExtractor {
             }
         } catch (SecurityException e)
         {
-            LOG.debug("Access denied checking destination folder" + e);
+            LOG.debug("Access denied checking destination folder", e);
         }
 
         MultimediaInfo multimediaInfo = multimediaObject.getInfo();
@@ -197,7 +197,7 @@ public class ScreenExtractor {
             while ((line = reader.readLine()) != null)
             {
                 lineNR++;
-                LOG.debug("Input Line (" + lineNR + "): " + line);
+                LOG.debug("Input Line ({}): {}", lineNR, line);
                 // TODO: Implement additional input stream parsing
             }
         } catch (IOException e)
