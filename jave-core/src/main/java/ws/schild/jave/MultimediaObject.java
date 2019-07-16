@@ -7,12 +7,12 @@ import java.net.URL;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MultimediaObject {
 
-    private final static Log LOG = LogFactory.getLog(MultimediaObject.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MultimediaObject.class);
     /**
      * This regexp is used to parse the ffmpeg output about the size of a video
      * stream.

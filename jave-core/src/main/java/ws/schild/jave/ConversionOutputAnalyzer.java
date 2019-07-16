@@ -23,15 +23,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author a.schild
  */
 public class ConversionOutputAnalyzer {
-    private final static Log LOG = LogFactory.getLog(ConversionOutputAnalyzer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ConversionOutputAnalyzer.class);
 
         /**
      * This regexp is used to parse the ffmpeg output about the ongoing encoding

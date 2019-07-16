@@ -18,8 +18,6 @@
  */
 package ws.schild.jave;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +27,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Main class of the package. Instances can encode audio and video streams.
@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
  */
 public class Encoder {
 
-    private final static Log LOG = LogFactory.getLog(Encoder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Encoder.class);
 
     /**
      * This regexp is used to parse the ffmpeg output about the supported

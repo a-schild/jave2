@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ws.schild</groupId>
     <packaging>jar</packaging>
-    <version>2.5.1</version>
+    <version>2.6.0-SNAPSHOT</version>
     <artifactId>jave-core-test</artifactId>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -12,7 +12,7 @@
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <junit-jupiter-api.version>5.4.2</junit-jupiter-api.version>
-        <commons-logging.version>1.2</commons-logging.version>
+        <slf4j-simple.version>1.7.26</slf4j-simple.version>
     </properties>
     <build>
         <plugins>
@@ -38,32 +38,32 @@
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-core</artifactId>
-            <version>2.5.1</version>
+            <version>2.6.0-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-win32</artifactId>
-            <version>2.5.1</version>
+            <version>2.6.0-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-win64</artifactId>
-            <version>2.5.1</version>
+            <version>2.6.0-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-linux32</artifactId>
-            <version>2.5.1</version>
+            <version>2.6.0-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-linux64</artifactId>
-            <version>2.5.1</version>
+            <version>2.6.0-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-osx64</artifactId>
-            <version>2.5.1</version>
+            <version>2.6.0-SNAPSHOT</version>
         </dependency>    
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
@@ -72,11 +72,12 @@
             <version>${junit-jupiter-api.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
         <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>${commons-logging.version}</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j-simple.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>

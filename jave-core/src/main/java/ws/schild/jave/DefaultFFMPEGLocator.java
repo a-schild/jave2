@@ -24,8 +24,8 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The default ffmpeg executable locator, which exports on disk the ffmpeg
@@ -37,13 +37,13 @@ import org.apache.commons.logging.LogFactory;
  */
 public class DefaultFFMPEGLocator extends FFMPEGLocator {
 
-    private final static Log LOG = LogFactory.getLog(FFMPEGExecutor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultFFMPEGLocator.class);
 
     /**
      * Trace the version of the bundled ffmpeg executable. It's a counter: every
      * time the bundled ffmpeg change it is incremented by 1.
      */
-    private static final String MY_EXE_VERSION = "2.5.1";
+    private static final String MY_EXE_VERSION = "2.6.0-SNAPSHOT";
 
     /**
      * The ffmpeg executable file path.
@@ -103,7 +103,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
                 });
             } catch (IOException e)
             {
-                LOG.error(e);
+                LOG.error("Error setting executable via chmod", e);
             }
         }
 
@@ -147,17 +147,17 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
                     }
                     else
                     {
-                        LOG.fatal("Target <"+dest.getAbsolutePath()+"> does not exist");
+                        LOG.error("Target <"+dest.getAbsolutePath()+"> does not exist");
                     }
                 }
                 else
                 {
-                    LOG.fatal("Copy resource to target <"+dest.getAbsolutePath()+"> failed");
+                    LOG.error("Copy resource to target <"+dest.getAbsolutePath()+"> failed");
                 }
             }
             else
             {
-                LOG.fatal("Could not find ffmpeg platform executable in resources for <"+resourceName+">");
+                LOG.error("Could not find ffmpeg platform executable in resources for <"+resourceName+">");
             }
         }
         catch (NullPointerException ex)
@@ -182,7 +182,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
             Files.copy(source, Paths.get(destination), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex)
         {
-            LOG.fatal("Cannot write file " + destination, ex);
+            LOG.error("Cannot write file " + destination, ex);
             success = false;
         }
 
