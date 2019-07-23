@@ -39,7 +39,7 @@ public class ConcatEncoderTest {
      */
     @Test
     public void testConcatVideo1() throws Exception {
-        System.out.println("encode");
+        System.out.println("concat two identical videos");
         
         File source1 = new File("src/test/resources/dance1.avi");
         File source2 = new File("src/test/resources/dance1.avi");
@@ -70,13 +70,9 @@ public class ConcatEncoderTest {
         assertTrue( target.exists(), "Output file missing");
     }
 
-    /**
-     * Test of encode method, of class Encoder.
-     * @throws java.lang.Exception
-     */
     @Test
     public void testContactAudio01() throws Exception {
-        System.out.println("encode");
+        System.out.println("concat two wmv files and build wav from it");
         File source1 = new File("src/test/resources/testfile3.wmv");
         File source2 = new File("src/test/resources/testfile3.wmv");
         File target = new File("target/testoutput/testContactAudio01.wav");

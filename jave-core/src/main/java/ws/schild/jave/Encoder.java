@@ -333,14 +333,20 @@ public class Encoder {
     }
 
     /**
-     * Re-encode a multimedia file.
+     * Re-encode a multimedia file(s).
      * 
      * This method is not reentrant, instead create multiple object instances
      *
      * @param multimediaObject The source multimedia file. It cannot be null. Be
-     * sure this file can be decoded (see null null null null     {@link Encoder#getSupportedDecodingFormats()},
-     *            {@link Encoder#getAudioDecoders()} and
+     * sure this file can be decoded (see null null null null  
+     * {@link Encoder#getSupportedDecodingFormats()},
+     * {@link Encoder#getAudioDecoders()} and
      * {@link Encoder#getVideoDecoders()}).
+     * When passing multiple sources, make sure that they are compatible in the
+     * way that ffmpeg can concat them. We don't use the complex filter at the moment
+     * Perhaps you will need to first transcode/resize them
+     * https://trac.ffmpeg.org/wiki/Concatenate -> "Concat protocol"
+     * 
      * @param target The target multimedia re-encoded file. It cannot be null.
      * If this file already exists, it will be overwrited.
      * @param attributes A set of attributes for the encoding process.
@@ -393,14 +399,17 @@ public class Encoder {
     }
     
     /**
-     * Re-encode a multimedia file.
+     * Re-encode a multimedia file(s).
      *
      * This method is not reentrant, instead create multiple object instances
      *
      * @param multimediaObjects The source multimedia files. It cannot be null. Be
      * sure this file can be decoded (see null null null null     {@link Encoder#getSupportedDecodingFormats()},
      *            {@link Encoder#getAudioDecoders()} and* {@link Encoder#getVideoDecoders()})
-     * When multiple sources are specified, they are concatenated together
+     * When passing multiple sources, make sure that they are compatible in the
+     * way that ffmpeg can concat them. We don't use the complex filter at the moment
+     * Perhaps you will need to first transcode/resize them
+     * https://trac.ffmpeg.org/wiki/Concatenate -> "Concat protocol"
      * 
      * @param target The target multimedia re-encoded file. It cannot be null.
      * If this file already exists, it will be overwrited.
