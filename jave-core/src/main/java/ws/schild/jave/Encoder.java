@@ -357,6 +357,12 @@ public class Encoder {
         encode(multimediaObject, target, attributes, null);
     }
 
+    public void encode(List<MultimediaObject> multimediaObjects, File target, EncodingAttributes attributes)
+            throws IllegalArgumentException, InputFormatException,
+            EncoderException {
+        encode(multimediaObjects, target, attributes, null);
+    }
+    
     /**
      * Re-encode a multimedia file.
      *
@@ -381,6 +387,37 @@ public class Encoder {
     public void encode(MultimediaObject multimediaObject, File target, EncodingAttributes attributes,
             EncoderProgressListener listener) throws IllegalArgumentException,
             InputFormatException, EncoderException {
+        List<MultimediaObject> src= new ArrayList<>();
+        src.add(multimediaObject);
+        encode(src, target, attributes, listener);
+    }
+    
+    /**
+     * Re-encode a multimedia file.
+     *
+     * This method is not reentrant, instead create multiple object instances
+     *
+     * @param multimediaObjects The source multimedia files. It cannot be null. Be
+     * sure this file can be decoded (see null null null null     {@link Encoder#getSupportedDecodingFormats()},
+     *            {@link Encoder#getAudioDecoders()} and* {@link Encoder#getVideoDecoders()})
+     * When multiple sources are specified, they are concatenated together
+     * 
+     * @param target The target multimedia re-encoded file. It cannot be null.
+     * If this file already exists, it will be overwrited.
+     * @param attributes A set of attributes for the encoding process.
+     * @param listener An optional progress listener for the encoding process.
+     * It can be null.
+     * @throws IllegalArgumentException If both audio and video parameters are
+     * null.
+     * @throws InputFormatException If the source multimedia file cannot be
+     * decoded.
+     * @throws EncoderException If a problems occurs during the encoding
+     * process.
+     */
+    public void encode(List<MultimediaObject> multimediaObjects, File target, EncodingAttributes attributes,
+            EncoderProgressListener listener) throws IllegalArgumentException,
+            InputFormatException, EncoderException {
+        
         String formatAttribute = attributes.getFormat();
         Float offsetAttribute = attributes.getOffset();
         Float durationAttribute = attributes.getDuration();
@@ -400,13 +437,43 @@ public class Encoder {
             ffmpeg.addArgument(String.valueOf(offsetAttribute.floatValue()));
         }
         ffmpeg.addArgument("-i");
-        if ( multimediaObject.isURL() )
+        if (multimediaObjects.size() == 1)
         {
-            ffmpeg.addArgument(multimediaObject.getURL().toString());
+            // Simple case with one inpit source
+            if ( multimediaObjects.get(0).isURL() )
+            {
+                ffmpeg.addArgument(multimediaObjects.get(0).getURL().toString());
+            }
+            else
+            {
+                ffmpeg.addArgument(multimediaObjects.get(0).getFile().getAbsolutePath());
+            }
         }
         else
         {
-            ffmpeg.addArgument(multimediaObject.getFile().getAbsolutePath());
+            StringBuilder inFiles= new StringBuilder();
+            inFiles.append("concat:");
+            boolean isFirst= true;
+            for (MultimediaObject in : multimediaObjects)
+            {
+                if (isFirst)
+                {
+                    isFirst= false;
+                }
+                else
+                {
+                    inFiles.append("|");
+                }
+                if (in.isURL())
+                {
+                    inFiles.append(in.getURL().toString());
+                }
+                else
+                {
+                    inFiles.append(in.getFile().getAbsolutePath());
+                }
+            }
+            ffmpeg.addArgument(inFiles.toString());
         }
         if (durationAttribute != null)
         {
@@ -551,9 +618,9 @@ public class Encoder {
             RBufferedReader reader = new RBufferedReader(
                     new InputStreamReader(ffmpeg.getErrorStream()));
             MultimediaInfo info = null;
-            if ( !multimediaObject.isURL() )
+            if (multimediaObjects.size() == 1 && !multimediaObjects.get(0).isURL() )
             {           
-                info= multimediaObject.getInfo();
+                info= multimediaObjects.get(0).getInfo();
             }
             if (durationAttribute != null)
             {
@@ -592,7 +659,7 @@ public class Encoder {
             int exitCode= ffmpeg.getProcessExitCode();
             if (exitCode != 0)
             {
-                LOG.error("Process exit code: {} for {} to {}", exitCode, multimediaObject.getFile().getName(), target.getName());
+                LOG.error("Process exit code: {}  to {}", exitCode, target.getName());
                 throw new EncoderException("Exit code of ffmpeg encoding run is "+exitCode);
             }
         } catch (IOException e)

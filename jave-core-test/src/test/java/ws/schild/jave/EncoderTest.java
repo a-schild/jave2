@@ -20,8 +20,6 @@ package ws.schild.jave;
 
 import java.io.File;
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -703,47 +701,4 @@ public class EncoderTest {
         encoder.abortEncoding();
     }
     
-    protected class PListener implements EncoderProgressListener
-    {
-        private MultimediaInfo _info= null;
-        private final List<String> _messages= new LinkedList<>();
-        private final List<Integer> _progress= new LinkedList<>();
-        
-        @Override
-        public void sourceInfo(MultimediaInfo info) {
-            _info= info;
-        }
-
-        @Override
-        public void progress(int permil) {
-            _progress.add(permil);
-        }
-
-        @Override
-        public void message(String message) {
-            _messages.add(message);
-        }
-
-        /**
-         * @return the _info
-         */
-        public MultimediaInfo getInfo() {
-            return _info;
-        }
-
-        /**
-         * @return the _messages
-         */
-        public List<String> getMessages() {
-            return _messages;
-        }
-
-        /**
-         * @return the _progress
-         */
-        public List<Integer> getProgress() {
-            return _progress;
-        }
-        
-    }
 }
