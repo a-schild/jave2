@@ -30,9 +30,10 @@ import org.junit.jupiter.api.Test;
  *
  * @author a.schild
  */
-public class ConversionOutputAnalyzerTest {
+public class ConversionOutputAnalyzerTest extends AMediaTest {
     
     public ConversionOutputAnalyzerTest() {
+        super(null, "ConversionOutputAnalyzer");
     }
 
     /**
@@ -41,7 +42,7 @@ public class ConversionOutputAnalyzerTest {
     @Test
     public void testAnalyzeNewLine1() {
         System.out.println("analyzeNewLine 1");
-        File file = new File("src/test/resources/testoutput1.txt");
+        File file = new File(getResourceSourcePath(), "testoutput1.txt");
         ConversionOutputAnalyzer oa1= new ConversionOutputAnalyzer(0, null);
         
         try

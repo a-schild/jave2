@@ -5,6 +5,7 @@
    - Prepare for next dev cycle
    - Change of logging api to slf4j as logging facade in version 1.7.x
    - The encode methods now accept a List<> of MultimediaObject's, which are the concatenated
+   - Implemented set thread cound for encoding / decoding stages (Max number of cores/cpus to use)
 - **2.5.1** 
    - Renamed native folder where the executables are to nativebin too, to prevent Java 9+ problems
    - Allow to create a MultimediaObject with an URL instead of a file as conversion source

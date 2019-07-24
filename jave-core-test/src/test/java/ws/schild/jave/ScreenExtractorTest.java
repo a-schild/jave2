@@ -7,10 +7,6 @@ package ws.schild.jave;
 
 import java.io.File;
 import java.net.URL;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,27 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author andre
  */
-public class ScreenExtractorTest {
+public class ScreenExtractorTest extends AMediaTest{
     
     public ScreenExtractorTest() {
+        super(null, "ScreenExtractor");
     }
     
-    @BeforeAll
-    public static void setUpClass() {
-    }
-    
-    @AfterAll
-    public static void tearDownClass() {
-    }
-    
-    @BeforeEach
-    public void setUp() {
-    }
-    
-    @AfterEach
-    public void tearDown() {
-    }
-
     /**
      * Test of render method, of class ScreenExtractor.
      */
@@ -46,7 +27,7 @@ public class ScreenExtractorTest {
     public void testRenderImages_01() throws Exception {
         System.out.println("render images 01");
         URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
-        File target = new File("target/testoutput/extractor01");
+        File target = new File(getResourceTargetPath(), "extractor01");
         if (target.exists())
         {
             for (File f : target.listFiles())
@@ -75,8 +56,8 @@ public class ScreenExtractorTest {
     @Test
     public void testRenderImages_02() throws Exception {
         System.out.println("render images 02");
-        File source = new File("src/test/resources/AV36_1.AVI");
-        File target = new File("target/testoutput/extractor02");
+        File source = new File(getResourceSourcePath(), "AV36_1.AVI");
+        File target = new File(getResourceTargetPath(), "extractor02");
         if (target.exists())
         {
             for (File f : target.listFiles())
@@ -105,8 +86,8 @@ public class ScreenExtractorTest {
     @Test
     public void testRenderImages_03() throws Exception {
         System.out.println("render images 03");
-        File source = new File("src/test/resources/zelda first commercial.mpeg");
-        File target = new File("target/testoutput/extractor03");
+        File source = new File(getResourceSourcePath(), "zelda first commercial.mpeg");
+        File target = new File(getResourceTargetPath(), "extractor03");
         if (target.exists())
         {
             for (File f : target.listFiles())
@@ -136,7 +117,7 @@ public class ScreenExtractorTest {
     public void testRenderImage_01() throws Exception {
         System.out.println("render image 01");
         URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
-        File target = new File("target/testoutput/extractor01.jpg");
+        File target = new File(getResourceTargetPath(), "extractor01.jpg");
         if (target.exists())
         {
             target.delete();
@@ -159,7 +140,7 @@ public class ScreenExtractorTest {
     public void testRenderImage_02() throws Exception {
         System.out.println("render image 02");
         URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
-        File target = new File("target/testoutput/extractor02.jpg");
+        File target = new File(getResourceTargetPath(), "extractor02.jpg");
         if (target.exists())
         {
             target.delete();

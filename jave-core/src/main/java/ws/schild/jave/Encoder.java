@@ -345,7 +345,7 @@ public class Encoder {
      * When passing multiple sources, make sure that they are compatible in the
      * way that ffmpeg can concat them. We don't use the complex filter at the moment
      * Perhaps you will need to first transcode/resize them
-     * https://trac.ffmpeg.org/wiki/Concatenate -> "Concat protocol"
+     * https://trac.ffmpeg.org/wiki/Concatenate @see "Concat protocol"
      * 
      * @param target The target multimedia re-encoded file. It cannot be null.
      * If this file already exists, it will be overwrited.
@@ -409,7 +409,7 @@ public class Encoder {
      * When passing multiple sources, make sure that they are compatible in the
      * way that ffmpeg can concat them. We don't use the complex filter at the moment
      * Perhaps you will need to first transcode/resize them
-     * https://trac.ffmpeg.org/wiki/Concatenate -> "Concat protocol"
+     * https://trac.ffmpeg.org/wiki/Concatenate @see "Concat protocol"
      * 
      * @param target The target multimedia re-encoded file. It cannot be null.
      * If this file already exists, it will be overwrited.
@@ -440,10 +440,22 @@ public class Encoder {
         target = target.getAbsoluteFile();
         target.getParentFile().mkdirs();
         ffmpeg = locator.createExecutor();
+        // Set global options
+        if (attributes.getFilterThreads() != -1)
+        {
+            ffmpeg.addArgument("--filter_thread");
+            ffmpeg.addArgument(Integer.toString(attributes.getFilterThreads()));
+        }
         if (offsetAttribute != null)
         {
             ffmpeg.addArgument("-ss");
             ffmpeg.addArgument(String.valueOf(offsetAttribute.floatValue()));
+        }
+        // Set input options, must be before -i argument
+        if (attributes.getDecodingThreads()!= -1)
+        {
+            ffmpeg.addArgument("-threads");
+            ffmpeg.addArgument(Integer.toString(attributes.getDecodingThreads()));
         }
         ffmpeg.addArgument("-i");
         if (multimediaObjects.size() == 1)
@@ -601,6 +613,13 @@ public class Encoder {
             ffmpeg.addArgument("-f");
             ffmpeg.addArgument(formatAttribute);
         }
+        // Set output options
+        if (attributes.getEncodingThreads()!= -1)
+        {
+            ffmpeg.addArgument("-threads");
+            ffmpeg.addArgument(Integer.toString(attributes.getEncodingThreads()));
+        }
+        
         ffmpeg.addArgument("-y");
         ffmpeg.addArgument(target.getAbsolutePath());
         

@@ -28,9 +28,10 @@ import org.junit.jupiter.api.Test;
  *
  * @author a.schild
  */
-public class ConcatEncoderTest {
+public class ConcatEncoderTest extends AMediaTest{
     
     public ConcatEncoderTest() {
+        super(null, "ConcatEncoder");
     }
 
     /**
@@ -41,9 +42,9 @@ public class ConcatEncoderTest {
     public void testConcatVideo1() throws Exception {
         System.out.println("concat two identical videos");
         
-        File source1 = new File("src/test/resources/dance1.avi");
-        File source2 = new File("src/test/resources/dance1.avi");
-        File target = new File("target/testoutput/testConcatVideo1.3gp");
+        File source1 = new File(getResourceSourcePath(), "dance1.avi");
+        File source2 = new File(getResourceSourcePath(), "dance1.avi");
+        File target = new File(getResourceTargetPath(), "testConcatVideo1.3gp");
         if (target.exists())
         {
             target.delete();
@@ -73,9 +74,9 @@ public class ConcatEncoderTest {
     @Test
     public void testContactAudio01() throws Exception {
         System.out.println("concat two wmv files and build wav from it");
-        File source1 = new File("src/test/resources/testfile3.wmv");
-        File source2 = new File("src/test/resources/testfile3.wmv");
-        File target = new File("target/testoutput/testContactAudio01.wav");
+        File source1 = new File(getResourceSourcePath(), "testfile3.wmv");
+        File source2 = new File(getResourceSourcePath(), "testfile3.wmv");
+        File target = new File(getResourceTargetPath(), "testContactAudio01.wav");
         if (target.exists())
         {
             target.delete();
