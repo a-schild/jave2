@@ -28,9 +28,10 @@ import org.junit.jupiter.api.Test;
  *
  * @author a.schild
  */
-public class MultimediaObjectTest {
+public class MultimediaObjectTest extends AMediaTest {
     
     public MultimediaObjectTest() {
+        super(null, "MultimediaObject");
     }
 
     /**
@@ -39,7 +40,7 @@ public class MultimediaObjectTest {
     @Test
     public void testGetFile() {
         System.out.println("getFile");
-        File file = new File("src/test/resources/dance1.avi");
+        File file = new File(getResourceSourcePath(), "dance1.avi");
         MultimediaObject instance = new MultimediaObject(file);
         File expResult = file;
         File result = instance.getFile();
@@ -53,7 +54,7 @@ public class MultimediaObjectTest {
     @Test
     public void testGetInfo01() throws Exception {
         System.out.println("testGetInfo01");
-        File file = new File("src/test/resources/dance1.avi");
+        File file = new File(getResourceSourcePath(), "dance1.avi");
         MultimediaObject instance = new MultimediaObject(file);
         MultimediaInfo result = instance.getInfo();
         
@@ -74,7 +75,7 @@ public class MultimediaObjectTest {
     @Test
     public void testGetInfo02() throws Exception {
         System.out.println("testGetInfo02");
-        File file = new File("src/test/resources/4channels.ogg");
+        File file = new File(getResourceSourcePath(), "4channels.ogg");
         MultimediaObject instance = new MultimediaObject(file);
         MultimediaInfo result = instance.getInfo();
         
@@ -94,7 +95,7 @@ public class MultimediaObjectTest {
     @Test
     public void testGetInfo03() throws Exception {
         System.out.println("testGetInfo03");
-        File file = new File("src/test/resources/2019V7HR.amr");
+        File file = new File(getResourceSourcePath(), "2019V7HR.amr");
         MultimediaObject instance = new MultimediaObject(file);
         try
         {

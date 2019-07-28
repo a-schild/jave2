@@ -18,8 +18,6 @@
  */
 package ws.schild.jave;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +27,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Main class of the package. Instances can encode audio and video streams.
@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
  */
 public class Encoder {
 
-    private final static Log LOG = LogFactory.getLog(Encoder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Encoder.class);
 
     /**
      * This regexp is used to parse the ffmpeg output about the supported
@@ -333,14 +333,20 @@ public class Encoder {
     }
 
     /**
-     * Re-encode a multimedia file.
+     * Re-encode a multimedia file(s).
      * 
      * This method is not reentrant, instead create multiple object instances
      *
      * @param multimediaObject The source multimedia file. It cannot be null. Be
-     * sure this file can be decoded (see null null null null     {@link Encoder#getSupportedDecodingFormats()},
-     *            {@link Encoder#getAudioDecoders()} and
+     * sure this file can be decoded (see null null null null  
+     * {@link Encoder#getSupportedDecodingFormats()},
+     * {@link Encoder#getAudioDecoders()} and
      * {@link Encoder#getVideoDecoders()}).
+     * When passing multiple sources, make sure that they are compatible in the
+     * way that ffmpeg can concat them. We don't use the complex filter at the moment
+     * Perhaps you will need to first transcode/resize them
+     * https://trac.ffmpeg.org/wiki/Concatenate @see "Concat protocol"
+     * 
      * @param target The target multimedia re-encoded file. It cannot be null.
      * If this file already exists, it will be overwrited.
      * @param attributes A set of attributes for the encoding process.
@@ -357,6 +363,12 @@ public class Encoder {
         encode(multimediaObject, target, attributes, null);
     }
 
+    public void encode(List<MultimediaObject> multimediaObjects, File target, EncodingAttributes attributes)
+            throws IllegalArgumentException, InputFormatException,
+            EncoderException {
+        encode(multimediaObjects, target, attributes, null);
+    }
+    
     /**
      * Re-encode a multimedia file.
      *
@@ -381,6 +393,40 @@ public class Encoder {
     public void encode(MultimediaObject multimediaObject, File target, EncodingAttributes attributes,
             EncoderProgressListener listener) throws IllegalArgumentException,
             InputFormatException, EncoderException {
+        List<MultimediaObject> src= new ArrayList<>();
+        src.add(multimediaObject);
+        encode(src, target, attributes, listener);
+    }
+    
+    /**
+     * Re-encode a multimedia file(s).
+     *
+     * This method is not reentrant, instead create multiple object instances
+     *
+     * @param multimediaObjects The source multimedia files. It cannot be null. Be
+     * sure this file can be decoded (see null null null null     {@link Encoder#getSupportedDecodingFormats()},
+     *            {@link Encoder#getAudioDecoders()} and* {@link Encoder#getVideoDecoders()})
+     * When passing multiple sources, make sure that they are compatible in the
+     * way that ffmpeg can concat them. We don't use the complex filter at the moment
+     * Perhaps you will need to first transcode/resize them
+     * https://trac.ffmpeg.org/wiki/Concatenate @see "Concat protocol"
+     * 
+     * @param target The target multimedia re-encoded file. It cannot be null.
+     * If this file already exists, it will be overwrited.
+     * @param attributes A set of attributes for the encoding process.
+     * @param listener An optional progress listener for the encoding process.
+     * It can be null.
+     * @throws IllegalArgumentException If both audio and video parameters are
+     * null.
+     * @throws InputFormatException If the source multimedia file cannot be
+     * decoded.
+     * @throws EncoderException If a problems occurs during the encoding
+     * process.
+     */
+    public void encode(List<MultimediaObject> multimediaObjects, File target, EncodingAttributes attributes,
+            EncoderProgressListener listener) throws IllegalArgumentException,
+            InputFormatException, EncoderException {
+        
         String formatAttribute = attributes.getFormat();
         Float offsetAttribute = attributes.getOffset();
         Float durationAttribute = attributes.getDuration();
@@ -394,19 +440,61 @@ public class Encoder {
         target = target.getAbsoluteFile();
         target.getParentFile().mkdirs();
         ffmpeg = locator.createExecutor();
+        // Set global options
+        if (attributes.getFilterThreads() != -1)
+        {
+            ffmpeg.addArgument("--filter_thread");
+            ffmpeg.addArgument(Integer.toString(attributes.getFilterThreads()));
+        }
         if (offsetAttribute != null)
         {
             ffmpeg.addArgument("-ss");
             ffmpeg.addArgument(String.valueOf(offsetAttribute.floatValue()));
         }
-        ffmpeg.addArgument("-i");
-        if ( multimediaObject.isURL() )
+        // Set input options, must be before -i argument
+        if (attributes.getDecodingThreads()!= -1)
         {
-            ffmpeg.addArgument(multimediaObject.getURL().toString());
+            ffmpeg.addArgument("-threads");
+            ffmpeg.addArgument(Integer.toString(attributes.getDecodingThreads()));
+        }
+        ffmpeg.addArgument("-i");
+        if (multimediaObjects.size() == 1)
+        {
+            // Simple case with one inpit source
+            if ( multimediaObjects.get(0).isURL() )
+            {
+                ffmpeg.addArgument(multimediaObjects.get(0).getURL().toString());
+            }
+            else
+            {
+                ffmpeg.addArgument(multimediaObjects.get(0).getFile().getAbsolutePath());
+            }
         }
         else
         {
-            ffmpeg.addArgument(multimediaObject.getFile().getAbsolutePath());
+            StringBuilder inFiles= new StringBuilder();
+            inFiles.append("concat:");
+            boolean isFirst= true;
+            for (MultimediaObject in : multimediaObjects)
+            {
+                if (isFirst)
+                {
+                    isFirst= false;
+                }
+                else
+                {
+                    inFiles.append("|");
+                }
+                if (in.isURL())
+                {
+                    inFiles.append(in.getURL().toString());
+                }
+                else
+                {
+                    inFiles.append(in.getFile().getAbsolutePath());
+                }
+            }
+            ffmpeg.addArgument(inFiles.toString());
         }
         if (durationAttribute != null)
         {
@@ -525,6 +613,13 @@ public class Encoder {
             ffmpeg.addArgument("-f");
             ffmpeg.addArgument(formatAttribute);
         }
+        // Set output options
+        if (attributes.getEncodingThreads()!= -1)
+        {
+            ffmpeg.addArgument("-threads");
+            ffmpeg.addArgument(Integer.toString(attributes.getEncodingThreads()));
+        }
+        
         ffmpeg.addArgument("-y");
         ffmpeg.addArgument(target.getAbsolutePath());
         
@@ -551,9 +646,9 @@ public class Encoder {
             RBufferedReader reader = new RBufferedReader(
                     new InputStreamReader(ffmpeg.getErrorStream()));
             MultimediaInfo info = null;
-            if ( !multimediaObject.isURL() )
+            if (multimediaObjects.size() == 1 && !multimediaObjects.get(0).isURL() )
             {           
-                info= multimediaObject.getInfo();
+                info= multimediaObjects.get(0).getInfo();
             }
             if (durationAttribute != null)
             {
@@ -592,7 +687,7 @@ public class Encoder {
             int exitCode= ffmpeg.getProcessExitCode();
             if (exitCode != 0)
             {
-                LOG.error("Process exit code: "+exitCode+" for "+multimediaObject.getFile().getName()+" to "+ target.getName());
+                LOG.error("Process exit code: {}  to {}", exitCode, target.getName());
                 throw new EncoderException("Exit code of ffmpeg encoding run is "+exitCode);
             }
         } catch (IOException e)

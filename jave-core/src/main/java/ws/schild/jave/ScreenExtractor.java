@@ -1,15 +1,15 @@
 package ws.schild.jave;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ScreenExtractor {
 
-    private final static Log LOG = LogFactory.getLog(ScreenExtractor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ScreenExtractor.class);
 
     /**
      * The locator of the ffmpeg executable used by this extractor.
@@ -80,7 +80,7 @@ public class ScreenExtractor {
             }
         } catch (SecurityException e)
         {
-            LOG.debug("Access denied checking destination folder" + e);
+            LOG.debug("Access denied checking destination folder",  e);
         }
 
         MultimediaInfo multimediaInfo = multimediaObject.getInfo();
@@ -117,7 +117,7 @@ public class ScreenExtractor {
             while ((line = reader.readLine()) != null)
             {
                 lineNR++;
-                LOG.debug("Input Line (" + lineNR + "): " + line);
+                LOG.debug("Input Line ({}): {}", lineNR, line);
                 // TODO: Implement additional input stream parsing
             }
         } catch (IOException e)
@@ -158,7 +158,7 @@ public class ScreenExtractor {
             }
         } catch (SecurityException e)
         {
-            LOG.debug("Access denied checking destination folder" + e);
+            LOG.debug("Access denied checking destination folder", e);
         }
 
         MultimediaInfo multimediaInfo = multimediaObject.getInfo();
@@ -197,7 +197,7 @@ public class ScreenExtractor {
             while ((line = reader.readLine()) != null)
             {
                 lineNR++;
-                LOG.debug("Input Line (" + lineNR + "): " + line);
+                LOG.debug("Input Line ({}): {}", lineNR, line);
                 // TODO: Implement additional input stream parsing
             }
         } catch (IOException e)

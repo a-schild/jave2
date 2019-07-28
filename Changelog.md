@@ -1,14 +1,18 @@
 # JAVE2
 
 ## Changelog
-- **2.5.1-SNAPSHOT** 
+- **2.6.0-SNAPSHOT** 
    - Prepare for next dev cycle
+   - Change of logging api to slf4j as logging facade in version 1.7.x
+   - The encode methods now accept a List<> of MultimediaObject's, which are the concatenated
+   - Implemented set thread cound for encoding / decoding stages (Max number of cores/cpus to use)
+- **2.5.1** 
    - Renamed native folder where the executables are to nativebin too, to prevent Java 9+ problems
    - Allow to create a MultimediaObject with an URL instead of a file as conversion source
    - Enhanced logging when ffmpeg executable could not be found in resources
    - Make getFFMPEGExecutablePath() public to see what executable is beeing used
+   - Use alternative way to locate executables in jar file for Java 9+
 - **2.5.0** 
-   - Prepare for next dev cycle
    - Renamed build artifacts with native in the name to nativebin to avoid module conflicts in Java 9+
      You will have to change your build dependencies if you did selectively include platforms
 - **2.4.7** 

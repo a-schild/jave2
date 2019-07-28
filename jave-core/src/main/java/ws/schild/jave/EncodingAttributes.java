@@ -68,6 +68,21 @@ public class EncodingAttributes implements Serializable {
     private boolean mapMetaData= false;
     
     /**
+     * Maximum number of cores/cpus to use for conversion
+     * -1 means use default of ffmpeg
+     */
+    private int filterThreads= -1;
+    /**
+     * Number of threads to use for decoding (if supported by codec)
+     */
+    private int decodingThreads= -1;
+    /**
+     * Number of threads to use for encoding (if supported by codec)
+     */
+    private int encodingThreads= -1;
+
+    
+    /**
      * Returns the format name for the encoded target multimedia file.
      *
      * @return The format name for the encoded target multimedia file.
@@ -195,4 +210,59 @@ public class EncodingAttributes implements Serializable {
         this.mapMetaData = mapMetaData;
     }
 
+    /**
+     * @return Maximum number of cores/cpus to use for filtering
+     * -1 means use default of ffmpeg
+     * 
+     */
+    public int getFilterThreads() {
+        return filterThreads;
+    }
+
+    /**
+     * ffmpeg uses multiple cores for filtering
+     * 
+     * @param filterThreads Maximum number of cores/cpus to use
+     * -1 means use default of ffmpeg
+     */
+    public void setFilterThreads(int filterThreads) {
+        this.filterThreads = filterThreads;
+    }
+
+    /**
+     * Number of threads to use for decoding (if supported by codec)
+     * -1 means use default of ffmpeg
+     * @return the decodingThreads
+     */
+    public int getDecodingThreads() {
+        return decodingThreads;
+    }
+
+    /**
+     * Number of threads to use for decoding (if supported by codec)
+     * -1 means use default of ffmpeg
+     * @param decodingThreads the decodingThreads to set
+     */
+    public void setDecodingThreads(int decodingThreads) {
+        this.decodingThreads = decodingThreads;
+    }
+
+    /**
+     * Number of threads to use for encoding (if supported by codec)
+     * -1 means use default of ffmpeg
+     * @return the encodingThreads
+     */
+    public int getEncodingThreads() {
+        return encodingThreads;
+    }
+
+    /**
+     * Number of threads to use for encoding (if supported by codec)
+     * -1 means use default of ffmpeg
+     * @param encodingThreads the encodingThreads to set
+     */
+    public void setEncodingThreads(int encodingThreads) {
+        this.encodingThreads = encodingThreads;
+    }
+    
 }

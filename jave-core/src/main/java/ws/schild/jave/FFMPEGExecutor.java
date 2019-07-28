@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A ffmpeg process wrapper.
@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
  */
 class FFMPEGExecutor {
 
-    private final static Log LOG = LogFactory.getLog(FFMPEGExecutor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FFMPEGExecutor.class);
 
     /**
      * The path of the ffmpeg executable.
@@ -111,7 +111,7 @@ class FFMPEGExecutor {
                 sb.append(c);
                 sb.append(' ');
             }
-            LOG.debug("About to execute " + sb.toString());
+            LOG.debug("About to execute {}", sb.toString());
         }
         Runtime runtime = Runtime.getRuntime();
         ffmpeg = runtime.exec(cmd);
