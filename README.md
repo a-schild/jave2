@@ -24,6 +24,7 @@ see the JAVE manual for details.
 ## Projects using Jave2
 * [XR3Player](https://github.com/goxr3plus/XR3Player)
 * [XR3Converter](https://github.com/goxr3plus/XR3Converter)
+* [On Github] (https://github.com/a-schild/jave2/network/dependents)
 * ....
 
 

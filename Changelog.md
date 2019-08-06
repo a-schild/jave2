@@ -1,8 +1,9 @@
 # JAVE2
 
 ## Changelog
-- **2.6.0** 
+- **2.6.1** 
    - Prepare for next dev cycle
+- **2.6.0** 
    - Change of logging api to slf4j as logging facade in version 1.7.x
    - The encode methods now accept a List<> of MultimediaObject's, which are the concatenated
    - Implemented set thread cound for encoding / decoding stages (Max number of cores/cpus to use)
