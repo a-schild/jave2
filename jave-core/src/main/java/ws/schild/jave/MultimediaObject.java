@@ -12,6 +12,13 @@ import org.slf4j.LoggerFactory;
 
 public class MultimediaObject {
 
+    /**
+     * @param readURLOnce the readURLOnce to set
+     */
+    public void setReadURLOnce(boolean readURLOnce) {
+        this.readURLOnce = readURLOnce;
+    }
+
     private static final Logger LOG = LoggerFactory.getLogger(MultimediaObject.class);
     /**
      * This regexp is used to parse the ffmpeg output about the size of a video
@@ -51,6 +58,12 @@ public class MultimediaObject {
 
     private File inputFile;
     private URL  inputURL;
+    /**
+     * When true, we try to not read the source more than once
+     * One of the side effects is, that no progressbar is available.
+     * 
+     */
+    private boolean readURLOnce= false; 
 
     /**
      * It builds an extractor using a {@link DefaultFFMPEGLocator} instance to
@@ -61,7 +74,6 @@ public class MultimediaObject {
     public MultimediaObject(File input) {
         this.locator = new DefaultFFMPEGLocator();
         this.inputFile = input;
-
     }
 
     /**
@@ -73,7 +85,20 @@ public class MultimediaObject {
     public MultimediaObject(URL input) {
         this.locator = new DefaultFFMPEGLocator();
         this.inputURL = input;
-
+    }
+    
+    /**
+     * It builds an extractor using a {@link DefaultFFMPEGLocator} instance to
+     * locate the ffmpeg executable to use.
+     *
+     * @param input Input URL for creating MultimediaObject
+     * @param readURLOnce When true, we try to not read the source more than once
+     * One of the side effects is, that no progressbar is available.
+     */
+    public MultimediaObject(URL input, boolean readURLOnce) {
+        this.locator = new DefaultFFMPEGLocator();
+        this.inputURL = input;
+        this.readURLOnce= readURLOnce;
     }
 
     /**
@@ -394,5 +419,12 @@ public class MultimediaObject {
             throw new InputFormatException();
         }
         return info;
+    }
+
+    /**
+     * @return the readURLOnce
+     */
+    public boolean isReadURLOnce() {
+        return readURLOnce;
     }
 }
