@@ -127,7 +127,6 @@ public class ScreenExtractor {
         {
             ffmpeg.destroy();
         }
-
     }
 
     /**
@@ -210,4 +209,90 @@ public class ScreenExtractor {
 
     }
 
+    /**
+     * Generate exactly <b>one</b> screenshots from source video
+     *
+     * @param multimediaObject Source MultimediaObject @see MultimediaObject
+     * @param width Output width, pass -1 to use video width and height
+     * @param height Output height (Ignored when width = -1)
+     * @param millis At which second in the video should the screenshot be made
+     * @param outputFile Outputfile
+     * @param quality The range is between 1-31 with 31 being the worst quality
+     * @throws InputFormatException If the source multimedia file cannot be
+     * decoded.
+     * @throws EncoderException If a problems occurs during the encoding
+     * process.
+     */
+    public void renderOneImage(MultimediaObject multimediaObject, 
+            int width, int height,
+            long millis, 
+            File outputFile,
+            int quality)
+            throws InputFormatException, EncoderException {
+        String inputSource = multimediaObject.isURL() ? multimediaObject.getURL().toString() : multimediaObject.getFile().getAbsolutePath();
+        try
+        {
+            if (outputFile.exists())
+            {
+                outputFile.delete();
+            }
+            if (!multimediaObject.isURL() && !multimediaObject.getFile().canRead())
+            {
+                LOG.debug("Failed to open input file");
+                throw new SecurityException();
+            }
+        } catch (SecurityException e)
+        {
+            LOG.debug("Access denied checking destination folder",  e);
+        }
+
+        MultimediaInfo multimediaInfo = multimediaObject.getInfo();
+
+        FFMPEGExecutor ffmpeg = this.locator.createExecutor();
+        ffmpeg.addArgument("-i");
+        ffmpeg.addArgument(inputSource);
+        ffmpeg.addArgument("-ss");
+        ffmpeg.addArgument(Utils.buildTimeDuration(millis));
+        ffmpeg.addArgument("-vframes");
+        ffmpeg.addArgument("1");
+        if (width != -1)
+        {
+            ffmpeg.addArgument("-s");
+            ffmpeg.addArgument(String.format("%sx%s", String.valueOf(width), String.valueOf(height)));
+        }
+
+        ffmpeg.addArgument("-qscale");
+        ffmpeg.addArgument(String.valueOf(quality));
+        ffmpeg.addArgument(outputFile.getAbsolutePath());
+
+        try
+        {
+            ffmpeg.execute();
+        } catch (IOException e)
+        {
+            throw new EncoderException(e);
+        }
+        try
+        {
+            RBufferedReader reader = new RBufferedReader(
+                    new InputStreamReader(ffmpeg.getErrorStream()));
+            int step = 0;
+            int lineNR = 0;
+            String line;
+            while ((line = reader.readLine()) != null)
+            {
+                lineNR++;
+                LOG.debug("Input Line ({}): {}", lineNR, line);
+                // TODO: Implement additional input stream parsing
+            }
+        } catch (IOException e)
+        {
+            throw new EncoderException(e);
+        } finally
+        {
+            ffmpeg.destroy();
+        }
+
+    }
+    
 }

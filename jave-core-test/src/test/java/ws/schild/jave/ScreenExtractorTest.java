@@ -154,5 +154,49 @@ public class ScreenExtractorTest extends AMediaTest{
         instance.render(multimediaObject, width, height, seconds, target, quality);
         assertTrue(target.exists(), "Output file missing");
     }
+
+    /**
+     * Test of render method, of class ScreenExtractor.
+     */
+    @Test
+    public void testRenderOneImage00() throws Exception {
+        System.out.println("render one image 00");
+        File source = new File(getResourceSourcePath(), "zelda first commercial.mpeg");
+        File target = new File(getResourceTargetPath(), "RenderOneImage00.jpg");
+        if (target.exists())
+        {
+            target.delete();
+        }
+        MultimediaObject multimediaObject = new MultimediaObject(source);
+        int width = -1;
+        int height = -1;
+        int seconds = 15000;
+        int quality = 1;
+        ScreenExtractor instance = new ScreenExtractor();
+        instance.renderOneImage(multimediaObject, width, height, seconds, target, quality);
+        assertTrue(target.exists(), "Output file missing");
+    }
     
+    
+    /**
+     * Test of render method, of class ScreenExtractor.
+     */
+    @Test
+    public void testRenderOneImage01() throws Exception {
+        System.out.println("render one image 01");
+        File source = new File(getResourceSourcePath(), "zelda first commercial.mpeg");
+        File target = new File(getResourceTargetPath(), "RenderOneImage01.jpg");
+        if (target.exists())
+        {
+            target.delete();
+        }
+        MultimediaObject multimediaObject = new MultimediaObject(source);
+        int width = 60;
+        int height = 60;
+        int seconds = 15000;
+        int quality = 1;
+        ScreenExtractor instance = new ScreenExtractor();
+        instance.renderOneImage(multimediaObject, width, height, seconds, target, quality);
+        assertTrue(target.exists(), "Output file missing");
+    }
 }

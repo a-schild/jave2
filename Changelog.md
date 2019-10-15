@@ -3,6 +3,8 @@
 ## Changelog
 - **2.6.1** 
    - Prepare for next dev cycle
+   - Added additional method to screen extractor to extract a given image from a video
+     at the give time in milisenconds, and optional, specify size of resulting image
 - **2.6.0** 
    - Change of logging api to slf4j as logging facade in version 1.7.x
    - The encode methods now accept a List<> of MultimediaObject's, which are the concatenated
