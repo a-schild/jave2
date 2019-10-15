@@ -47,8 +47,8 @@ public class ScreenExtractor {
      * Generates screenshots from source video.
      *
      * @param multimediaObject Source MultimediaObject @see MultimediaObject
-     * @param width Output width
-     * @param height Output height
+     * @param width Output width, pass -1 to use video width and height
+     * @param height Output height (Ignored when width = -1)
      * @param seconds Interval in seconds between screens
      * @param outputDir Destination of output images
      * @param fileNamePrefix Name all thumbnails will start with
@@ -93,8 +93,11 @@ public class ScreenExtractor {
         ffmpeg.addArgument("image2");
         ffmpeg.addArgument("-vf");
         ffmpeg.addArgument(String.format("fps=fps=1/%s", String.valueOf(seconds)));
-        ffmpeg.addArgument("-s");
-        ffmpeg.addArgument(String.format("%sx%s", String.valueOf(width), String.valueOf(height)));
+        if (width != -1)
+        {
+            ffmpeg.addArgument("-s");
+            ffmpeg.addArgument(String.format("%sx%s", String.valueOf(width), String.valueOf(height)));
+        }
         ffmpeg.addArgument("-qscale");
         ffmpeg.addArgument(String.valueOf(quality));
         ffmpeg.addArgument(String.format("%s%s%s-%%04d.%s",
@@ -133,21 +136,21 @@ public class ScreenExtractor {
      * Generate a single screenshot from source video.
      *
      * @param multimediaObject Source MultimediaObject @see MultimediaObject
-     * @param width Output width
-     * @param height Output height
+     * @param width Output width, pass -1 to use video width and height
+     * @param height Output height (Ignored when width = -1)
      * @param seconds Interval in seconds between screens
-     * @param target Destination of output image
+     * @param outputDir Destination folder of output image
      * @param quality The range is between 1-31 with 31 being the worst quality
      * @throws InputFormatException If the source multimedia file cannot be
      * decoded.
      * @throws EncoderException If a problems occurs during the encoding
      * process.
      */
-    public void render(MultimediaObject multimediaObject, int width, int height, int seconds, File target, int quality)
+    public void render(MultimediaObject multimediaObject, int width, int height, int seconds, File outputDir, int quality)
             throws EncoderException {
         String inputSource = multimediaObject.isURL() ? multimediaObject.getURL().toString() : multimediaObject.getFile().getAbsolutePath();
-        target = target.getAbsoluteFile();
-        target.getParentFile().mkdirs();
+        outputDir = outputDir.getAbsoluteFile();
+        outputDir.getParentFile().mkdirs();
         try
         {
             if (!multimediaObject.isURL() && !multimediaObject.getFile().canRead())
@@ -172,12 +175,15 @@ public class ScreenExtractor {
         ffmpeg.addArgument("-vframes");
         ffmpeg.addArgument("1");
         ffmpeg.addArgument("-ss");
-        ffmpeg.addArgument(String.valueOf(seconds));
-        ffmpeg.addArgument("-s");
-        ffmpeg.addArgument(String.format("%sx%s", String.valueOf(width), String.valueOf(height)));
+        ffmpeg.addArgument(Utils.buildTimeDuration(seconds*1000));
+        if (width != -1)
+        {
+            ffmpeg.addArgument("-s");
+            ffmpeg.addArgument(String.format("%sx%s", String.valueOf(width), String.valueOf(height)));
+        }
         ffmpeg.addArgument("-qscale");
         ffmpeg.addArgument(String.valueOf(quality));
-        ffmpeg.addArgument(target.getAbsolutePath());
+        ffmpeg.addArgument(outputDir.getAbsolutePath());
 
         try
         {
@@ -245,8 +251,6 @@ public class ScreenExtractor {
         {
             LOG.debug("Access denied checking destination folder",  e);
         }
-
-        MultimediaInfo multimediaInfo = multimediaObject.getInfo();
 
         FFMPEGExecutor ffmpeg = this.locator.createExecutor();
         ffmpeg.addArgument("-i");
