@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author Carlo Pelliccia
  */
-class FFMPEGExecutor {
+public class FFMPEGExecutor {
 
     private final static Log LOG = LogFactory.getLog(FFMPEGExecutor.class);
 
@@ -218,5 +218,48 @@ class FFMPEGExecutor {
             LOG.warn("Interrupted during waiting on process, forced shutdown?", ex);
         }
         return ffmpeg.exitValue();
+    }
+    
+    /**
+     * if shutdown runtime now,if some cmd need long time to run so that will worked not ok 
+     * so, here is other version method executeWithNotShutDownRuntimeNowAndNotOpenStream  
+	 * and the version method executeWithNotShutDownRuntimeNowAndNotOpenStream is not need open any stream
+     * @return: void      
+     */
+    public void executeWithNotShutDownRuntimeNowAndNotOpenStream() throws Exception {      
+        int argsSize = args.size();
+        if(argsSize <= 0)
+        {
+        	throw new Exception("you must add some Arguments!");
+        }
+        String[] cmd = new String[argsSize + 2];
+        cmd[0] = ffmpegExecutablePath;
+        for (int i = 0; i < argsSize; i++)
+        {
+            cmd[i + 1] = args.get(i);
+        }
+        cmd[argsSize + 1] = "-hide_banner";  // Don't show banner
+        if (LOG.isDebugEnabled())
+        {
+            StringBuilder sb = new StringBuilder();
+            for (String c : cmd)
+            {
+                sb.append(c);
+                sb.append(' ');
+            }
+            LOG.debug("About to execute " + sb.toString());
+        }
+        Runtime runtime = Runtime.getRuntime();
+        runtime.exec(cmd);
+        
+        //if shutdown runtime now,if some cmd need long time to run so that will worked not ok 
+        //so, here is other version method executeWithNotShutDownRuntimeNowAndNotOpenStream
+        //ffmpegKiller = new ProcessKiller(ffmpeg);
+        //runtime.addShutdownHook(ffmpegKiller);
+        
+		// the version method executeWithNotShutDownRuntimeNowAndNotOpenStream is not need open any stream
+        //inputStream = ffmpeg.getInputStream();
+        //outputStream = ffmpeg.getOutputStream();
+        //errorStream = ffmpeg.getErrorStream();
     }
 }
