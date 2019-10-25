@@ -1,8 +1,10 @@
 # JAVE2
 
 ## Changelog
-- **2.6.1** 
+- **2.7.0-SNAPSHOT**
    - Prepare for next dev cycle
+   - Make FFMPEGLocator.createExecutor() to allow it to be used in other contexts
+- **2.6.1** 
    - Added additional method to screen extractor to extract a given image from a video
      at the give time in milisenconds, and optional, specify size of resulting image
 - **2.6.0** 
