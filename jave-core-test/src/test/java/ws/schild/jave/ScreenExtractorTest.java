@@ -22,6 +22,7 @@ public class ScreenExtractorTest extends AMediaTest{
     
     /**
      * Test of render method, of class ScreenExtractor.
+     * @throws java.lang.Exception
      */
     @Test
     public void testRenderImages_01() throws Exception {
@@ -52,6 +53,7 @@ public class ScreenExtractorTest extends AMediaTest{
 
     /**
      * Test of render method, of class ScreenExtractor.
+     * @throws java.lang.Exception
      */
     @Test
     public void testRenderImages_02() throws Exception {
@@ -82,6 +84,7 @@ public class ScreenExtractorTest extends AMediaTest{
 
     /**
      * Test of render method, of class ScreenExtractor.
+     * @throws java.lang.Exception
      */
     @Test
     public void testRenderImages_03() throws Exception {
@@ -112,6 +115,7 @@ public class ScreenExtractorTest extends AMediaTest{
     
     /**
      * Test of render method, of class ScreenExtractor.
+     * @throws java.lang.Exception
      */
     @Test
     public void testRenderImage_01() throws Exception {
@@ -135,6 +139,7 @@ public class ScreenExtractorTest extends AMediaTest{
     
     /**
      * Test of render method, of class ScreenExtractor.
+     * @throws java.lang.Exception
      */
     @Test
     public void testRenderImage_02() throws Exception {
@@ -157,6 +162,7 @@ public class ScreenExtractorTest extends AMediaTest{
 
     /**
      * Test of render method, of class ScreenExtractor.
+     * @throws java.lang.Exception
      */
     @Test
     public void testRenderOneImage00() throws Exception {
@@ -180,6 +186,7 @@ public class ScreenExtractorTest extends AMediaTest{
     
     /**
      * Test of render method, of class ScreenExtractor.
+     * @throws java.lang.Exception
      */
     @Test
     public void testRenderOneImage01() throws Exception {
