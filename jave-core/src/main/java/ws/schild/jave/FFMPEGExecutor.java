@@ -90,11 +90,13 @@ public class FFMPEGExecutor {
 
     /**
      * Executes the ffmpeg process with the previous given arguments.
-     *
-     * @return process exit code
+     * 
+     * @param destroyOnRuntimeShutdown destroy process if the runtime VM is shutdown
+     * @param openIOStreams     Open IO streams for input/output and errorout, 
+     * should be false when destroyOnRuntimeShutdown is false too
      * @throws IOException If the process call fails.
      */
-    public void execute() throws IOException {
+    public void execute(boolean destroyOnRuntimeShutdown, boolean openIOStreams) throws IOException {
         int argsSize = args.size();
         String[] cmd = new String[argsSize + 2];
         cmd[0] = ffmpegExecutablePath;
@@ -115,11 +117,28 @@ public class FFMPEGExecutor {
         }
         Runtime runtime = Runtime.getRuntime();
         ffmpeg = runtime.exec(cmd);
-        ffmpegKiller = new ProcessKiller(ffmpeg);
-        runtime.addShutdownHook(ffmpegKiller);
-        inputStream = ffmpeg.getInputStream();
-        outputStream = ffmpeg.getOutputStream();
-        errorStream = ffmpeg.getErrorStream();
+        if (destroyOnRuntimeShutdown)
+        {
+            ffmpegKiller = new ProcessKiller(ffmpeg);
+            runtime.addShutdownHook(ffmpegKiller);
+        }
+        if (openIOStreams)
+        {
+            inputStream = ffmpeg.getInputStream();
+            outputStream = ffmpeg.getOutputStream();
+            errorStream = ffmpeg.getErrorStream();
+        }
+    }
+    
+    /**
+     * Executes the ffmpeg process with the previous given arguments.
+     * Default to kill processes when the JVM terminates, and the various
+     * IOStreams are opened as required
+     *
+     * @throws IOException If the process call fails.
+     */
+    public void execute() throws IOException {
+        execute(true, true);
     }
 
     /**
@@ -218,48 +237,5 @@ public class FFMPEGExecutor {
             LOG.warn("Interrupted during waiting on process, forced shutdown?", ex);
         }
         return ffmpeg.exitValue();
-    }
-    
-    /**
-     * if shutdown runtime now,if some cmd need long time to run so that will worked not ok 
-     * so, here is other version method executeWithNotShutDownRuntimeNowAndNotOpenStream  
-	 * and the version method executeWithNotShutDownRuntimeNowAndNotOpenStream is not need open any stream
-     * @return: void      
-     */
-    public void executeWithNotShutDownRuntimeNowAndNotOpenStream() throws Exception {      
-        int argsSize = args.size();
-        if(argsSize <= 0)
-        {
-        	throw new Exception("you must add some Arguments!");
-        }
-        String[] cmd = new String[argsSize + 2];
-        cmd[0] = ffmpegExecutablePath;
-        for (int i = 0; i < argsSize; i++)
-        {
-            cmd[i + 1] = args.get(i);
-        }
-        cmd[argsSize + 1] = "-hide_banner";  // Don't show banner
-        if (LOG.isDebugEnabled())
-        {
-            StringBuilder sb = new StringBuilder();
-            for (String c : cmd)
-            {
-                sb.append(c);
-                sb.append(' ');
-            }
-            LOG.debug("About to execute " + sb.toString());
-        }
-        Runtime runtime = Runtime.getRuntime();
-        runtime.exec(cmd);
-        
-        //if shutdown runtime now,if some cmd need long time to run so that will worked not ok 
-        //so, here is other version method executeWithNotShutDownRuntimeNowAndNotOpenStream
-        //ffmpegKiller = new ProcessKiller(ffmpeg);
-        //runtime.addShutdownHook(ffmpegKiller);
-        
-		// the version method executeWithNotShutDownRuntimeNowAndNotOpenStream is not need open any stream
-        //inputStream = ffmpeg.getInputStream();
-        //outputStream = ffmpeg.getOutputStream();
-        //errorStream = ffmpeg.getErrorStream();
     }
 }
