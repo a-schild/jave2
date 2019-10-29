@@ -223,7 +223,7 @@ public class FFMPEGExecutor {
      * If the process is not yet terminated, it waits for the termination
      * of the process
      * 
-     * @return 
+     * @return process exit code
      */
     public int getProcessExitCode()
     {

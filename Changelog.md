@@ -4,7 +4,8 @@
 - **2.7.0-SNAPSHOT**
    - Prepare for next dev cycle
    - Make FFMPEGLocator.createExecutor() to allow it to be used in other contexts
-   - added execute method to FFMPEGExecutor to leave the ffmpeg processes running after JVM shutdown 
+   - added execute method to FFMPEGExecutor to leave the ffmpeg processes running after JVM shutdown
+   - First implementation of drawtext filter
 - **2.6.1** 
    - Added additional method to screen extractor to extract a given image from a video
      at the give time in milisenconds, and optional, specify size of resulting image

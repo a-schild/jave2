@@ -53,4 +53,18 @@ public class Utils {
         return retVal.toString();
     }
     
+    /**
+     * Escape all special characters []=;, to be safe to use in command line
+     * @param argumentIn
+     * @return 
+     */
+    public static String escapeArgument(String argumentIn)
+    {
+        String retVal= argumentIn.replace("[", "\\[");
+        retVal= retVal.replace("]", "\\]");
+        retVal= retVal.replace("=", "\\=");
+        retVal= retVal.replace(":", "\\:");
+        retVal= retVal.replace(",", "\\,");
+        return retVal;
+    }
 }
