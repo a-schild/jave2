@@ -81,19 +81,19 @@ public class AudioAttributes implements Serializable {
     }
 
     /**
-     * Sets the codec name for the encoding process. If null or not specified
-     * the encoder will perform a direct stream copy.
-     *
-     * Be sure the supplied codec name is in the list returned by
-     * {@link Encoder#getAudioEncoders()}.
+     * Sets the codec name for the encoding process.If null or not specified
+ the encoder will perform a direct stream copy. Be sure the supplied codec name is in the list returned by
+ {@link Encoder#getAudioEncoders()}.
      *
      * A special value can be picked from
      * {@link AudioAttributes#DIRECT_STREAM_COPY}.
      *
      * @param codec The codec name for the encoding process.
+     * @return this instance
      */
-    public void setCodec(String codec) {
+    public AudioAttributes setCodec(String codec) {
         this.codec = codec;
+        return this;
     }
 
     /**
@@ -110,9 +110,11 @@ public class AudioAttributes implements Serializable {
      * a default value will be picked.
      *
      * @param bitRate The bitrate value for the encoding process.
+     * @return this instance
      */
-    public void setBitRate(Integer bitRate) {
+    public AudioAttributes setBitRate(Integer bitRate) {
         this.bitRate = bitRate;
+        return this;
     }
 
     /**
@@ -129,9 +131,11 @@ public class AudioAttributes implements Serializable {
      * specified a default value will be picked.
      *
      * @param samplingRate The samplingRate value for the encoding process.
+     * @return this instance
      */
-    public void setSamplingRate(Integer samplingRate) {
+    public AudioAttributes setSamplingRate(Integer samplingRate) {
         this.samplingRate = samplingRate;
+        return this;
     }
 
     /**
@@ -149,9 +153,11 @@ public class AudioAttributes implements Serializable {
      *
      * @param channels The channels value (1=mono, 2=stereo, 4=quad) for the encoding
      * process.
+     * @return this instance
      */
-    public void setChannels(Integer channels) {
+    public AudioAttributes setChannels(Integer channels) {
         this.channels = channels;
+        return this;
     }
 
     /**
@@ -175,9 +181,11 @@ public class AudioAttributes implements Serializable {
      * 512 means doubling the volume
      * 
      * @param volume The volume value for the encoding process.
+     * @return this instance
      */
-    public void setVolume(Integer volume) {
+    public AudioAttributes setVolume(Integer volume) {
         this.volume = volume;
+        return this;
     }
 
     /**
@@ -200,9 +208,11 @@ public class AudioAttributes implements Serializable {
      * https://ffmpeg.org/ffmpeg-codecs.html
      * 
      * @param quality the audio conversion quality to set
+     * @return this instance
      */
-    public void setQuality(Integer quality) {
+    public AudioAttributes setQuality(Integer quality) {
         this.quality = quality;
+        return this;
     }
 
     @Override

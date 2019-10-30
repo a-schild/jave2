@@ -96,9 +96,11 @@ public class EncodingAttributes implements Serializable {
      * format is supported (see {@link Encoder#getSupportedEncodingFormats()}.
      *
      * @param format The format name for the encoded target multimedia file.
+     * @return this instance
      */
-    public void setFormat(String format) {
+    public EncodingAttributes setFormat(String format) {
         this.format = format;
+        return this;
     }
 
     /**
@@ -115,9 +117,11 @@ public class EncodingAttributes implements Serializable {
      * offset will be applied.
      *
      * @param offset The start offset time (seconds).
+     * @return this instance
      */
-    public void setOffset(Float offset) {
+    public EncodingAttributes setOffset(Float offset) {
         this.offset = offset;
+        return this;
     }
 
     /**
@@ -135,9 +139,11 @@ public class EncodingAttributes implements Serializable {
      * re-encoded in the target stream.
      *
      * @param duration The duration (seconds) of the re-encoded stream.
+     * @return this instance
      */
-    public void setDuration(Float duration) {
+    public EncodingAttributes setDuration(Float duration) {
         this.duration = duration;
+        return this;
     }
 
     /**
@@ -158,9 +164,11 @@ public class EncodingAttributes implements Serializable {
      *
      * @param audioAttributes The attributes for the encoding of the audio
      * stream in the target multimedia file.
+     * @return this instance
      */
-    public void setAudioAttributes(AudioAttributes audioAttributes) {
+    public EncodingAttributes setAudioAttributes(AudioAttributes audioAttributes) {
         this.audioAttributes = audioAttributes;
+        return this;
     }
 
     /**
@@ -181,9 +189,11 @@ public class EncodingAttributes implements Serializable {
      *
      * @param videoAttributes The attributes for the encoding of the video
      * stream in the target multimedia file.
+     * @return this instance
      */
-    public void setVideoAttributes(VideoAttributes videoAttributes) {
+    public EncodingAttributes setVideoAttributes(VideoAttributes videoAttributes) {
         this.videoAttributes = videoAttributes;
+        return this;
     }
 
     @Override
@@ -205,9 +215,11 @@ public class EncodingAttributes implements Serializable {
      * Copy over meta data from original file to new output if possible
      * 
      * @param mapMetaData the mapMetaData to set
+     * @return this instance
      */
-    public void setMapMetaData(boolean mapMetaData) {
+    public EncodingAttributes setMapMetaData(boolean mapMetaData) {
         this.mapMetaData = mapMetaData;
+        return this;
     }
 
     /**
@@ -224,9 +236,11 @@ public class EncodingAttributes implements Serializable {
      * 
      * @param filterThreads Maximum number of cores/cpus to use
      * -1 means use default of ffmpeg
+     * @return this instance
      */
-    public void setFilterThreads(int filterThreads) {
+    public EncodingAttributes setFilterThreads(int filterThreads) {
         this.filterThreads = filterThreads;
+        return this;
     }
 
     /**
@@ -242,9 +256,11 @@ public class EncodingAttributes implements Serializable {
      * Number of threads to use for decoding (if supported by codec)
      * -1 means use default of ffmpeg
      * @param decodingThreads the decodingThreads to set
+     * @return this instance
      */
-    public void setDecodingThreads(int decodingThreads) {
+    public EncodingAttributes setDecodingThreads(int decodingThreads) {
         this.decodingThreads = decodingThreads;
+        return this;
     }
 
     /**
@@ -260,9 +276,11 @@ public class EncodingAttributes implements Serializable {
      * Number of threads to use for encoding (if supported by codec)
      * -1 means use default of ffmpeg
      * @param encodingThreads the encodingThreads to set
+     * @return this instance
      */
-    public void setEncodingThreads(int encodingThreads) {
+    public EncodingAttributes setEncodingThreads(int encodingThreads) {
         this.encodingThreads = encodingThreads;
+        return this;
     }
     
 }

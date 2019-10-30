@@ -6,6 +6,7 @@
    - Make FFMPEGLocator.createExecutor() to allow it to be used in other contexts
    - added execute method to FFMPEGExecutor to leave the ffmpeg processes running after JVM shutdown
    - First implementation of drawtext filter
+   - Most support classes now return the instance when calling setXY() methods
 - **2.6.1** 
    - Added additional method to screen extractor to extract a given image from a video
      at the give time in milisenconds, and optional, specify size of resulting image

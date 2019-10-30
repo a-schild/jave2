@@ -43,7 +43,8 @@ public class VideoFilterTest extends AMediaTest{
         {
             target.delete();
         }
-        VideoFilter vf= new VideoDrawtext("testVideoFilter1", 30, 30, "Arial", null, 30, new Color("ffffff"), new Color("000000"), 2, 2);
+        VideoDrawtext vf= new VideoDrawtext("testVideoFilter1", 30, 30, "Arial", null, 30, new Color("ffffff"));
+        vf.setShadow(new Color("000000"), 2, 2);
         VideoAttributes videoAttributes= new VideoAttributes();
         videoAttributes.addFilter(vf);
         EncodingAttributes attrs = new EncodingAttributes();
@@ -63,7 +64,8 @@ public class VideoFilterTest extends AMediaTest{
         {
             target.delete();
         }
-        VideoFilter vf= new VideoDrawtext("testVideoFilter2", 30, 30, "Arial", null, 30, new Color("ffffff", "44"), new Color("000000", "44"), 2, 2);
+        VideoDrawtext vf= new VideoDrawtext("testVideoFilter2", 30, 30, "Arial", null, 30, new Color("ffffff", "44"));
+        vf.setShadow(new Color("000000", "44"), 2, 2);
         VideoAttributes videoAttributes= new VideoAttributes();
         videoAttributes.addFilter(vf);
         EncodingAttributes attrs = new EncodingAttributes();
@@ -83,7 +85,8 @@ public class VideoFilterTest extends AMediaTest{
         {
             target.delete();
         }
-        VideoFilter vf= new VideoDrawtext("testVideoFilter3 <[]:=,> End of special chars", 30, 30, "Arial", null, 30, new Color("ffffff", "dd"), new Color("000000", "44"), 2, 2);
+        VideoDrawtext vf= new VideoDrawtext("testVideoFilter3 <[]:=,> End of special chars", 30, 30, "Arial", null, 30, new Color("ffffff", "dd"));
+        vf.setShadow(new Color("000000", "44"), 2, 2);
         VideoAttributes videoAttributes= new VideoAttributes();
         videoAttributes.addFilter(vf);
         EncodingAttributes attrs = new EncodingAttributes();

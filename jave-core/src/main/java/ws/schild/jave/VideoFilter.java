@@ -20,8 +20,9 @@ public class VideoFilter {
         return this.expression;
     }
 
-    public void setExpression(String expression) {
+    public VideoFilter setExpression(String expression) {
         this.expression = expression;
+        return this;
     }
 
     @Override

@@ -44,9 +44,11 @@ public class Color {
 
     /**
      * @param color the color to set
+     * @return this instance
      */
-    public void setColor(String color) {
+    public Color setColor(String color) {
         this.color = color;
+        return this;
     }
 
     /**
@@ -58,9 +60,11 @@ public class Color {
 
     /**
      * @param alpha the alpha to set
+     * @return this instance
      */
-    public void setAlpha(String alpha) {
+    public Color setAlpha(String alpha) {
         this.alpha = alpha;
+        return this;
     }
     
     /**

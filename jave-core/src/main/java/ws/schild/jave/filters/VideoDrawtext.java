@@ -21,6 +21,27 @@ import ws.schild.jave.VideoFilter;
  */
 public class VideoDrawtext extends VideoFilter {
 
+    private String watermarkText= null;
+    private int posX= 0;
+    private int posY= 0;
+    
+    private String fontName= null;
+    private File fontFile= null;
+    private float fontSize= 10;
+    private Color fontColor= null;
+    
+    private int lineSpacing= 0;
+    
+    private Color shadowColor= null;
+    private int shadowX= 2;
+    private int shadowY= 2;
+
+    private int boxBorderWidth= 0;
+    private Color boxColor= null;
+
+    private int borderWidth= 0;
+    private Color borderColor= null;
+    
     /**
      * 
      * @param watermarkText Text to be used as watermark
@@ -30,9 +51,6 @@ public class VideoDrawtext extends VideoFilter {
      * @param fontFile Truetype font file (Only required when fontName is NULL)
      * @param fontSize Font size
      * @param fontColor Color of font
-     * @param shadowColor Color of shadow
-     * @param shadowX X Position of shadow, relative to text
-     * @param shadowY Y Position of shadow, relative to text
      */
     public VideoDrawtext(
             String watermarkText,
@@ -41,11 +59,286 @@ public class VideoDrawtext extends VideoFilter {
             String fontName,
             File fontFile,
             float fontSize,
-            Color fontColor,
+            Color fontColor
+            ) throws IllegalArgumentException
+    {
+        this.watermarkText= watermarkText;
+        this.posX= posX;
+        this.posY= posY;
+        this.fontName= fontName;
+        this.fontFile = fontFile;
+        this.fontSize= fontSize;
+        this.fontColor= fontColor;
+    }
+
+    /**
+     * 
+     * @param shadowColor Color of shadow
+     * @param shadowX X Position of shadow, relative to text
+     * @param shadowY Y Position of shadow, relative to text
+     * @return this instance
+     */    
+    public VideoDrawtext setShadow(
             Color shadowColor,
             int shadowX,
-            int shadowY
-            ) throws IllegalArgumentException
+            int shadowY)
+    {
+            this.shadowColor= shadowColor;
+            this.shadowX= shadowX;
+            this.shadowY= shadowY;
+            return this;
+    }
+
+    /**
+     * @return the watermarkText
+     */
+    public String getWatermarkText() {
+        return watermarkText;
+    }
+
+    /**
+     * @param watermarkText the watermarkText to set
+     * @return this instance
+     */
+    public VideoDrawtext setWatermarkText(String watermarkText) {
+        this.watermarkText = watermarkText;
+        return this;
+    }
+
+    /**
+     * @return the posX
+     */
+    public int getPosX() {
+        return posX;
+    }
+
+    /**
+     * @param posX the posX to set
+     * @return this instance
+     */
+    public VideoDrawtext setPosX(int posX) {
+        this.posX = posX;
+        return this;
+    }
+
+    /**
+     * @return the posY
+     */
+    public int getPosY() {
+        return posY;
+    }
+
+    /**
+     * @param posY the posY to set
+     * @return this instance
+     */
+    public VideoDrawtext setPosY(int posY) {
+        this.posY = posY;
+        return this;
+    }
+
+    /**
+     * @return the fontName
+     */
+    public String getFontName() {
+        return fontName;
+    }
+
+    /**
+     * @param fontName the fontName to set
+     * @return this instance
+     */
+    public VideoDrawtext setFontName(String fontName) {
+        this.fontName = fontName;
+        return this;
+    }
+
+    /**
+     * @return the fontFile
+     */
+    public File getFontFile() {
+        return fontFile;
+    }
+
+    /**
+     * @param fontFile the fontFile to set
+     * @return this instance
+     */
+    public VideoDrawtext setFontFile(File fontFile) {
+        this.fontFile = fontFile;
+        return this;
+    }
+
+    /**
+     * @return the fontSize
+     */
+    public float getFontSize() {
+        return fontSize;
+    }
+
+    /**
+     * @param fontSize the fontSize to set
+     * @return this instance
+     */
+    public VideoDrawtext setFontSize(float fontSize) {
+        this.fontSize = fontSize;
+        return this;
+    }
+
+    /**
+     * @return the fontColor
+     */
+    public Color getFontColor() {
+        return fontColor;
+    }
+
+    /**
+     * @param fontColor the fontColor to set
+     * @return this instance
+     */
+    public VideoDrawtext setFontColor(Color fontColor) {
+        this.fontColor = fontColor;
+        return this;
+    }
+
+    /**
+     * @return the shadowColor
+     */
+    public Color getShadowColor() {
+        return shadowColor;
+    }
+
+    /**
+     * @param shadowColor the shadowColor to set
+     * @return this instance
+     */
+    public VideoDrawtext setShadowColor(Color shadowColor) {
+        this.shadowColor = shadowColor;
+        return this;
+    }
+
+    /**
+     * @return the shadowX
+     */
+    public int getShadowX() {
+        return shadowX;
+    }
+
+    /**
+     * @param shadowX the shadowX to set
+     * @return this instance
+     */
+    public VideoDrawtext setShadowX(int shadowX) {
+        this.shadowX = shadowX;
+        return this;
+    }
+
+    /**
+     * @return the shadowY
+     */
+    public int getShadowY() {
+        return shadowY;
+    }
+
+    /**
+     * @param shadowY the shadowY to set
+     * @return this instance
+     */
+    public VideoDrawtext setShadowY(int shadowY) {
+        this.shadowY = shadowY;
+        return this;
+    }
+    
+    public VideoDrawtext setBox(int borderWidth, Color color)
+    {
+        this.setBoxBorderWidth(borderWidth);
+        this.setBoxColor(color);
+        return this;
+    }
+
+    /**
+     * @return the boxBorderWidth
+     */
+    public int getBoxBorderWidth() {
+        return boxBorderWidth;
+    }
+
+    /**
+     * @param boxBorderWidth the boxBorderWidth to set
+     * @return this instance
+     */
+    public VideoDrawtext setBoxBorderWidth(int boxBorderWidth) {
+        this.boxBorderWidth = boxBorderWidth;
+        return this;
+    }
+
+    /**
+     * @return the boxColor
+     */
+    public Color getBoxColor() {
+        return boxColor;
+    }
+
+    /**
+     * @param boxColor the boxColor to set
+     * @return this instance
+     */
+    public VideoDrawtext setBoxColor(Color boxColor) {
+        this.boxColor = boxColor;
+        return this;
+    }
+
+
+    /**
+     * @return the borderWidth
+     */
+    public int getBorderWidth() {
+        return borderWidth;
+    }
+
+    /**
+     * @param borderWidth the borderWidth to set
+     * @return this instance
+     */
+    public VideoDrawtext setBorderWidth(int borderWidth) {
+        this.borderWidth = borderWidth;
+        return this;
+    }
+
+    /**
+     * @return the borderColor
+     */
+    public Color getBorderColor() {
+        return borderColor;
+    }
+
+    /**
+     * @param borderColor the borderColor to set
+     * @return this instance
+     */
+    public VideoDrawtext setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+        return this;
+    }
+
+    /**
+     * @return the lineSpacing
+     */
+    public int getLineSpacing() {
+        return lineSpacing;
+    }
+
+    /**
+     * @param lineSpacing the lineSpacing to set
+     * @return this instance
+     */
+    public VideoDrawtext setLineSpacing(int lineSpacing) {
+        this.lineSpacing = lineSpacing;
+        return this;
+    }
+    
+    @Override
+    public String getExpression()
     {
         StringBuilder sb= new StringBuilder();
         sb.append("drawtext=text='");
@@ -72,6 +365,12 @@ public class VideoDrawtext extends VideoFilter {
         sb.append(Float.toString(fontSize));
         sb.append(":fontcolor=");
         sb.append(fontColor.getFfmpegColor());
+        
+        if (lineSpacing != 0)
+        {
+            sb.append(":line_spacing:").append(Integer.toString(lineSpacing));
+        }
+        
         if (shadowColor != null)
         {
             sb.append(":shadowcolor");
@@ -81,8 +380,22 @@ public class VideoDrawtext extends VideoFilter {
             sb.append(":shadowy=");
             sb.append(Integer.toString(shadowY));
         }
+        if (boxColor != null)
+        {
+            sb.append(":box=1:boxcolor");
+            sb.append(boxColor.getFfmpegColor());
+            sb.append(":boxborderw=");
+            sb.append(Integer.toString(boxBorderWidth));
+        }
+        if (borderWidth != 0)
+        {
+            sb.append(":bordercolor");
+            sb.append(borderColor.getFfmpegColor());
+            sb.append(":borderw=");
+            sb.append(Integer.toString(boxBorderWidth));
+        }
         
-        setExpression(sb.toString());
+        return sb.toString();
     }
-    
+
 }

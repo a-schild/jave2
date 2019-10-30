@@ -61,9 +61,11 @@ public class MultimediaInfo {
      * Sets the multimedia file format name.
      *
      * @param format The multimedia file format name.
+     * @return this instance
      */
-    void setFormat(String format) {
+    public MultimediaInfo setFormat(String format) {
         this.format = format;
+        return this;
     }
 
     /**
@@ -81,9 +83,11 @@ public class MultimediaInfo {
      * Sets the stream duration in millis.
      *
      * @param duration The stream duration in millis.
+     * @return this instance
      */
-    void setDuration(long duration) {
+    public MultimediaInfo setDuration(long duration) {
         this.duration = duration;
+        return this;
     }
 
     /**
@@ -100,9 +104,11 @@ public class MultimediaInfo {
      * Sets a set of audio-specific informations.
      *
      * @param audio A set of audio-specific informations.
+     * @return this instance
      */
-    void setAudio(AudioInfo audio) {
+    public MultimediaInfo setAudio(AudioInfo audio) {
         this.audio = audio;
+        return this;
     }
 
     /**
@@ -119,9 +125,11 @@ public class MultimediaInfo {
      * Sets a set of video-specific informations.
      *
      * @param video A set of video-specific informations.
+     * @return this instance
      */
-    void setVideo(VideoInfo video) {
+    public MultimediaInfo setVideo(VideoInfo video) {
         this.video = video;
+        return this;
     }
 
     @Override
