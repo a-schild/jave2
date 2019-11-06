@@ -1,8 +1,7 @@
 # JAVE2
 
 ## Changelog
-- **2.7.0-SNAPSHOT**
-   - Prepare for next dev cycle
+- **2.7.0**
    - Make FFMPEGLocator.createExecutor() to allow it to be used in other contexts
    - added execute method to FFMPEGExecutor to leave the ffmpeg processes running after JVM shutdown
    - First implementation of drawtext filter
