@@ -1,7 +1,11 @@
 # JAVE2
 
 ## Changelog
-- **2.7.0**
+- **2.7.1**
+   - Prepare for next dev cycle
+   - Allow additional arguments on watermark filter
+   - Make positions optional (use -1 for posX and posY) and then use the setAddArgument() method
+- **2.7.1-SNAPSHOT**
    - Make FFMPEGLocator.createExecutor() to allow it to be used in other contexts
    - added execute method to FFMPEGExecutor to leave the ffmpeg processes running after JVM shutdown
    - First implementation of drawtext filter

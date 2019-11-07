@@ -22,10 +22,10 @@ import ws.schild.jave.VideoFilter;
 public class VideoDrawtext extends VideoFilter {
 
     private String watermarkText= null;
-    private int posX= 0;
-    private int posY= 0;
+    private int posX= -1;
+    private int posY= -1;
     
-    private String fontName= null;
+    private String fontName= "Arial";
     private File fontFile= null;
     private float fontSize= 10;
     private Color fontColor= null;
@@ -41,12 +41,25 @@ public class VideoDrawtext extends VideoFilter {
 
     private int borderWidth= 0;
     private Color borderColor= null;
+    private String addArgument= null;
     
     /**
-     * 
      * @param watermarkText Text to be used as watermark
-     * @param posX  X Position of watermark text (From the left)
-     * @param posY  Y Position of watermark text (From the top)
+     * @param fontColor Color of font
+     */
+    public VideoDrawtext(
+            String watermarkText,
+            Color fontColor
+            ) throws IllegalArgumentException
+    {
+        this.watermarkText= watermarkText;
+        this.fontColor= fontColor;
+    }
+
+    /**
+     * @param watermarkText Text to be used as watermark
+     * @param posX  X Position of watermark text (From the left) ignored if posX &amp; posY are both -1
+     * @param posY  Y Position of watermark text (From the top) ignored if posX &amp; posY are both -1
      * @param fontName Use this font (Can be null, but then we need a fontFile)
      * @param fontFile Truetype font file (Only required when fontName is NULL)
      * @param fontSize Font size
@@ -71,6 +84,7 @@ public class VideoDrawtext extends VideoFilter {
         this.fontColor= fontColor;
     }
 
+    
     /**
      * 
      * @param shadowColor Color of shadow
@@ -113,6 +127,8 @@ public class VideoDrawtext extends VideoFilter {
     }
 
     /**
+     * ignored if posX &amp; posY are both -1
+     * 
      * @param posX the posX to set
      * @return this instance
      */
@@ -122,6 +138,8 @@ public class VideoDrawtext extends VideoFilter {
     }
 
     /**
+     * ignored if posX &amp; posY are both -1
+     * 
      * @return the posY
      */
     public int getPosY() {
@@ -336,17 +354,61 @@ public class VideoDrawtext extends VideoFilter {
         this.lineSpacing = lineSpacing;
         return this;
     }
-    
+
+    /**
+     * @return the addArgument
+     */
+    public String getAddArgument() {
+        return addArgument;
+    }
+
+    /**
+     * Add an additional argument to the command line
+     * https://superuser.com/questions/939357/position-text-on-bottom-right-corner
+     * 
+     * Bottom right
+     * x=w-tw:y=h-th
+     * Bottom right with 10 pixel padding
+     * x=w-tw-10:y=h-th-10
+     * Top right
+     * x=w-tw
+     * Top right with 10 pixel padding
+     * x=w-tw-10:y=10
+     * Top left
+     * x=0:y=0
+     * Top left with 10 pixel padding
+     * x=10:y=10
+     * Bottom left
+     * y=h-th
+     * Bottom left with 10 pixel padding
+     * x=10:h-th-10
+     * centered
+     * x=(w-text_w)/2:y=(h-text_h)/2
+     * 
+     * Can be used to speicfy other positions like "x=(w-text_w)/2:y=(h-text_h)/2" 
+     * for centered text water mark
+     * 
+     * @param addArgument the addArgument to set
+     * @return this instance
+     */
+    public VideoDrawtext setAddArgument(String addArgument) {
+        this.addArgument = addArgument;
+        return this;
+    }
+
     @Override
     public String getExpression()
     {
         StringBuilder sb= new StringBuilder();
         sb.append("drawtext=text='");
         sb.append(Utils.escapeArgument(watermarkText));
-        sb.append("':x=");
-        sb.append(Integer.toString(posX));
-        sb.append("':y=");
-        sb.append(Integer.toString(posY));
+        if (posX != -1 && posY != -1)
+        {
+            sb.append("':x=");
+            sb.append(Integer.toString(posX));
+            sb.append("':y=");
+            sb.append(Integer.toString(posY));
+        }
         if (fontName != null)
         {
             sb.append(":font=");
@@ -393,6 +455,11 @@ public class VideoDrawtext extends VideoFilter {
             sb.append(borderColor.getFfmpegColor());
             sb.append(":borderw=");
             sb.append(Integer.toString(boxBorderWidth));
+        }
+        if (addArgument != null)
+        {
+            sb.append(":");
+            sb.append(addArgument);
         }
         
         return sb.toString();

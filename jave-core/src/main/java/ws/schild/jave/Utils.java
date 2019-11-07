@@ -55,8 +55,8 @@ public class Utils {
     
     /**
      * Escape all special characters []=;, to be safe to use in command line
-     * @param argumentIn
-     * @return 
+     * @param argumentIn input argument to escape
+     * @return escaped string
      */
     public static String escapeArgument(String argumentIn)
     {

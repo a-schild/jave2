@@ -95,4 +95,27 @@ public class VideoFilterTest extends AMediaTest{
         encoder.encode(new MultimediaObject(source), target, attrs);
         assertTrue( target.exists(), "Output file missing");
     }
+
+
+    @Test
+    public void testVideoFilter4() throws Exception {
+        System.out.println("testVideoFilter4");
+        
+        File source = new File(getResourceSourcePath(), "testfile3.wmv ");
+        File target = new File(getResourceTargetPath(), "testVideoFilter4.mp4");
+        if (target.exists())
+        {
+            target.delete();
+        }
+        VideoDrawtext vf= new VideoDrawtext("testVideoFilter4 center", -1, -1, "Arial", null, 30, new Color("ffffff", "44"));
+        vf.setAddArgument("x=(w-text_w)/2:y=(h-text_h)/2");
+        vf.setShadow(new Color("000000", "44"), 2, 2);
+        VideoAttributes videoAttributes= new VideoAttributes();
+        videoAttributes.addFilter(vf);
+        EncodingAttributes attrs = new EncodingAttributes();
+        attrs.setVideoAttributes(videoAttributes);
+        Encoder encoder = new Encoder();
+        encoder.encode(new MultimediaObject(source), target, attrs);
+        assertTrue( target.exists(), "Output file missing");
+    }
 }
