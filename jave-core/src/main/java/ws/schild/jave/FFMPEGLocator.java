@@ -42,7 +42,7 @@ public abstract class FFMPEGLocator {
      * @return A newly instanced {@link FFMPEGExecutor}, using this locator to
      * call the ffmpeg executable.
      */
-    FFMPEGExecutor createExecutor() {
+    public FFMPEGExecutor createExecutor() {
         return new FFMPEGExecutor(getFFMPEGExecutablePath());
     }
 

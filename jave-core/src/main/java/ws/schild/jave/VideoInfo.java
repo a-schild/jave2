@@ -59,10 +59,12 @@ public class VideoInfo {
     /**
      * Sets the video stream decoder name.
      *
-     * @param decoder The video stream decoder name.
+     * @param codec The video stream decoder name.
+     * @return this instance
      */
-    void setDecoder(String codec) {
+    public VideoInfo setDecoder(String codec) {
         this.decoder = codec;
+        return this;
     }
 
     /**
@@ -78,9 +80,11 @@ public class VideoInfo {
      * Sets the video size.
      *
      * @param size The video size.
+     * @return this instance
      */
-    void setSize(VideoSize size) {
+    public VideoInfo setSize(VideoSize size) {
         this.size = size;
+        return this;
     }
 
     /**
@@ -97,9 +101,11 @@ public class VideoInfo {
      * Sets the video frame rate.
      *
      * @param frameRate The video frame rate.
+     * @return this instance
      */
-    void setFrameRate(float frameRate) {
+    public VideoInfo setFrameRate(float frameRate) {
         this.frameRate = frameRate;
+        return this;
     }
 
     /**
@@ -116,9 +122,11 @@ public class VideoInfo {
      * Sets the video stream (average) bit rate.
      *
      * @param bitRate The video stream (average) bit rate.
+     * @return this instance
      */
-    void setBitRate(int bitRate) {
+    public VideoInfo setBitRate(int bitRate) {
         this.bitRate = bitRate;
+        return this;
     }
 
     @Override

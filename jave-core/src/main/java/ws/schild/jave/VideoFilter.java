@@ -8,6 +8,10 @@ public class VideoFilter {
 
     private String expression;
 
+    public VideoFilter() {
+        this.expression = "";
+    }
+    
     public VideoFilter(String expression) {
         this.expression = expression;
     }
@@ -16,8 +20,9 @@ public class VideoFilter {
         return this.expression;
     }
 
-    public void setExpression(String expression) {
+    public VideoFilter setExpression(String expression) {
         this.expression = expression;
+        return this;
     }
 
     @Override

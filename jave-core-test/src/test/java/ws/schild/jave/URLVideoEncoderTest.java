@@ -20,6 +20,8 @@ package ws.schild.jave;
 
 import java.io.File;
 import java.net.URL;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
@@ -63,10 +65,48 @@ public class URLVideoEncoderTest extends AMediaTest{
         encodingAttr.setVideoAttributes(videoAttr);
         encodingAttr.setFormat("mp4");
 
+        PListener listener = new PListener();
         Encoder encoder = new Encoder();
-        encoder.encode(new MultimediaObject(source), target, encodingAttr);
+        encoder.encode(new MultimediaObject(source, false), target, encodingAttr, listener);
+        assertNotNull(listener.getInfo(), "URL should be able to read twice");
         assertTrue(target.exists(), "Output file missing");
     }
     
+    /**
+     * Test of encode method, of class Encoder.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testEncodeVideo14() throws Exception {
+        System.out.println("testEncodeVideo14");
+        
+        URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
+        File target = new File(getResourceTargetPath(), "testEncodeVideo14.mp4");
+        if (target.exists())
+        {
+            target.delete();
+        }
+        AudioAttributes audioAttr = new AudioAttributes();
+        VideoAttributes videoAttr = new VideoAttributes();
+        EncodingAttributes encodingAttr = new EncodingAttributes();
+
+        audioAttr.setChannels(2);
+        audioAttr.setCodec("aac");
+        audioAttr.setBitRate(128000);
+        audioAttr.setSamplingRate(44100);
+
+        videoAttr.setCodec("libx264");
+        videoAttr.setBitRate(4000000);
+
+        encodingAttr.setAudioAttributes(audioAttr);
+        encodingAttr.setVideoAttributes(videoAttr);
+        encodingAttr.setFormat("mp4");
+
+        Encoder encoder = new Encoder();
+        PListener listener = new PListener();
+        encoder.encode(new MultimediaObject(source, true), target, encodingAttr, listener);
+        assertNull(listener.getInfo(), "URL should not be read twice");
+        assertTrue(target.exists(), "Output file missing");
+    }
     
 }

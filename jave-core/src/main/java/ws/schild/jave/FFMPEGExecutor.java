@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Carlo Pelliccia
  */
-class FFMPEGExecutor {
+public class FFMPEGExecutor {
 
     private static final Logger LOG = LoggerFactory.getLogger(FFMPEGExecutor.class);
 
@@ -90,11 +90,13 @@ class FFMPEGExecutor {
 
     /**
      * Executes the ffmpeg process with the previous given arguments.
-     *
-     * @return process exit code
+     * 
+     * @param destroyOnRuntimeShutdown destroy process if the runtime VM is shutdown
+     * @param openIOStreams     Open IO streams for input/output and errorout, 
+     * should be false when destroyOnRuntimeShutdown is false too
      * @throws IOException If the process call fails.
      */
-    public void execute() throws IOException {
+    public void execute(boolean destroyOnRuntimeShutdown, boolean openIOStreams) throws IOException {
         int argsSize = args.size();
         String[] cmd = new String[argsSize + 2];
         cmd[0] = ffmpegExecutablePath;
@@ -115,11 +117,28 @@ class FFMPEGExecutor {
         }
         Runtime runtime = Runtime.getRuntime();
         ffmpeg = runtime.exec(cmd);
-        ffmpegKiller = new ProcessKiller(ffmpeg);
-        runtime.addShutdownHook(ffmpegKiller);
-        inputStream = ffmpeg.getInputStream();
-        outputStream = ffmpeg.getOutputStream();
-        errorStream = ffmpeg.getErrorStream();
+        if (destroyOnRuntimeShutdown)
+        {
+            ffmpegKiller = new ProcessKiller(ffmpeg);
+            runtime.addShutdownHook(ffmpegKiller);
+        }
+        if (openIOStreams)
+        {
+            inputStream = ffmpeg.getInputStream();
+            outputStream = ffmpeg.getOutputStream();
+            errorStream = ffmpeg.getErrorStream();
+        }
+    }
+    
+    /**
+     * Executes the ffmpeg process with the previous given arguments.
+     * Default to kill processes when the JVM terminates, and the various
+     * IOStreams are opened as required
+     *
+     * @throws IOException If the process call fails.
+     */
+    public void execute() throws IOException {
+        execute(true, true);
     }
 
     /**
@@ -204,7 +223,7 @@ class FFMPEGExecutor {
      * If the process is not yet terminated, it waits for the termination
      * of the process
      * 
-     * @return 
+     * @return process exit code
      */
     public int getProcessExitCode()
     {

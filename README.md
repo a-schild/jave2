@@ -24,6 +24,7 @@ see the JAVE manual for details.
 ## Projects using Jave2
 * [XR3Player](https://github.com/goxr3plus/XR3Player)
 * [XR3Converter](https://github.com/goxr3plus/XR3Converter)
+* [On Github](https://github.com/a-schild/jave2/network/dependents)
 * ....
 
 
@@ -45,7 +46,7 @@ It includes all binaries for the supported platforms
 <dependency>
  <groupId>ws.schild</groupId>
  <artifactId>jave-all-deps</artifactId>
- <version>2.5.1</version>
+ <version>2.7.1</version>
 </dependency>
 ```
 
@@ -59,7 +60,7 @@ Generally if you want to use for one platform or more what you have to do is add
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-core</artifactId>
-    <version>2.5.1</version>
+    <version>2.7.1</version>
 </dependency>
 ```
 
@@ -70,7 +71,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux64</artifactId>
-    <version>2.5.1</version>
+    <version>2.7.1</version>
 </dependency>
 ```
 
@@ -79,7 +80,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-win64</artifactId>
-    <version>2.5.1</version>
+    <version>2.7.1</version>
 </dependency>
 ```
 
@@ -88,7 +89,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-osx64</artifactId>
-    <version>2.5.1</version>
+    <version>2.7.1</version>
 </dependency>
 ```
 
@@ -97,13 +98,13 @@ and then the specific jar(s) for your platform(s) :
 It includes all binaries for the supported platforms
 
 ``` XML
-compile group: 'ws.schild', name: 'jave-all-deps', version: '2.5.1'
+compile group: 'ws.schild', name: 'jave-all-deps', version: '2.7.1'
 ```
 
 ### For one platform only (Linux 64Bit in this case)
 ``` XML
-compile group: 'ws.schild', name: 'jave-core', version: '2.5.1'
-compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '2.5.1'
+compile group: 'ws.schild', name: 'jave-core', version: '2.7.1'
+compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '2.7.1'
 ```
 
 ### Main Components of Jave2

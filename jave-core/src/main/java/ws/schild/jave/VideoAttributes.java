@@ -86,20 +86,6 @@ public class VideoAttributes implements Serializable {
      */
     private boolean faststart = false;
 
-    /**
-     * @return the x264Profile
-     */
-    public X264_PROFILE getX264Profile() {
-        return x264Profile;
-    }
-
-    /**
-     * @param x264Profile the x264Profile to set
-     */
-    public void setX264Profile(X264_PROFILE x264Profile) {
-        this.x264Profile = x264Profile;
-    }
-
     public enum X264_PROFILE {
         BASELINE("baseline"), MAIN("main"), HIGH("high"),
         HIGH10("high10"), HIGH422("high422"), HIGH444("high444");
@@ -136,9 +122,11 @@ public class VideoAttributes implements Serializable {
      * {@link VideoAttributes#DIRECT_STREAM_COPY}.
      *
      * @param codec The codec name for the encoding process.
+     * @return this instance
      */
-    public void setCodec(String codec) {
+    public VideoAttributes setCodec(String codec) {
         this.codec = codec;
+        return this;
     }
 
     /**
@@ -154,9 +142,11 @@ public class VideoAttributes implements Serializable {
      * Sets the forced tag/fourcc value for the video stream.
      *
      * @param tag The the forced tag/fourcc value for the video stream.
+     * @return this instance
      */
-    public void setTag(String tag) {
+    public VideoAttributes setTag(String tag) {
         this.tag = tag;
+        return this;
     }
 
     /**
@@ -173,9 +163,11 @@ public class VideoAttributes implements Serializable {
      * a default value will be picked.
      *
      * @param bitRate The bitrate value for the encoding process.
+     * @return this instance
      */
-    public void setBitRate(Integer bitRate) {
+    public VideoAttributes setBitRate(Integer bitRate) {
         this.bitRate = bitRate;
+        return this;
     }
 
     /**
@@ -192,9 +184,11 @@ public class VideoAttributes implements Serializable {
      * specified a default value will be picked.
      *
      * @param frameRate The frame rate value for the encoding process.
+     * @return this instance
      */
-    public void setFrameRate(Integer frameRate) {
+    public VideoAttributes setFrameRate(Integer frameRate) {
         this.frameRate = frameRate;
+        return this;
     }
 
     /**
@@ -211,9 +205,11 @@ public class VideoAttributes implements Serializable {
      * the source video size will not be modified.
      *
      * @param size he video size for the encoding process.
+     * @return this instance
      */
-    public void setSize(VideoSize size) {
+    public VideoAttributes setSize(VideoSize size) {
         this.size = size;
+        return this;
     }
 
     /**
@@ -233,9 +229,11 @@ public class VideoAttributes implements Serializable {
 
     /**
      * @param faststart the faststart to set
+     * @return this instance
      */
-    public void setFaststart(boolean faststart) {
+    public VideoAttributes setFaststart(boolean faststart) {
         this.faststart = faststart;
+        return this;
     }
 
     /**
@@ -250,9 +248,11 @@ public class VideoAttributes implements Serializable {
      * the ffmpeg default will be used
      * 
      * @param quality the quality to set
+     * @return this instance
      */
-    public void setQuality(Integer quality) {
+    public VideoAttributes setQuality(Integer quality) {
         this.quality = quality;
+        return this;
     }
 
     @Override
@@ -261,6 +261,22 @@ public class VideoAttributes implements Serializable {
                 + ", bitRate=" + bitRate + ", frameRate=" + frameRate
                 + ", size=" + size +", faststart=" + faststart
                 + ", quality="+quality+ ")";
+    }
+
+    /**
+     * @return the x264Profile
+     */
+    public X264_PROFILE getX264Profile() {
+        return x264Profile;
+    }
+
+    /**
+     * @param x264Profile the x264Profile to set
+     * @return this instance
+     */
+    public VideoAttributes setX264Profile(X264_PROFILE x264Profile) {
+        this.x264Profile = x264Profile;
+        return this;
     }
 
 }

@@ -646,7 +646,7 @@ public class Encoder {
             RBufferedReader reader = new RBufferedReader(
                     new InputStreamReader(ffmpeg.getErrorStream()));
             MultimediaInfo info = null;
-            if (multimediaObjects.size() == 1 && !multimediaObjects.get(0).isURL() )
+            if (multimediaObjects.size() == 1 && (!multimediaObjects.get(0).isURL() || !multimediaObjects.get(0).isReadURLOnce()) )
             {           
                 info= multimediaObjects.get(0).getInfo();
             }

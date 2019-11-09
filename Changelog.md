@@ -1,11 +1,23 @@
 # JAVE2
 
 ## Changelog
-- **2.6.0-SNAPSHOT** 
-   - Prepare for next dev cycle
+- **2.7.1**
+   - Allow additional arguments on watermark filter
+   - Make positions optional (use -1 for posX and posY) and then use the setAddArgument() method
+- **2.7.1**
+   - Make FFMPEGLocator.createExecutor() to allow it to be used in other contexts
+   - added execute method to FFMPEGExecutor to leave the ffmpeg processes running after JVM shutdown
+   - First implementation of drawtext filter
+   - Most support classes now return the instance when calling setXY() methods
+- **2.6.1** 
+   - Added additional method to screen extractor to extract a given image from a video
+     at the give time in milisenconds, and optional, specify size of resulting image
+- **2.6.0** 
    - Change of logging api to slf4j as logging facade in version 1.7.x
    - The encode methods now accept a List<> of MultimediaObject's, which are the concatenated
    - Implemented set thread cound for encoding / decoding stages (Max number of cores/cpus to use)
+   - URL's as source are now treated as "multiple time readables" per default, can be overriden in the MultimediaObject
+   - Progress listener now works for URL's too, unless the "multiple time readables" flag is set to true
 - **2.5.1** 
    - Renamed native folder where the executables are to nativebin too, to prevent Java 9+ problems
    - Allow to create a MultimediaObject with an URL instead of a file as conversion source

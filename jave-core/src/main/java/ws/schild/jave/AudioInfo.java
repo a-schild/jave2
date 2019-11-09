@@ -61,10 +61,12 @@ public class AudioInfo {
     /**
      * Sets the audio stream decoder name.
      *
-     * @param decoder The audio stream decoder name.
+     * @param format The audio stream format name.
+     * @return this instance
      */
-    void setDecoder(String format) {
+    public AudioInfo setDecoder(String format) {
         this.decoder = format;
+        return this;
     }
 
     /**
@@ -81,9 +83,11 @@ public class AudioInfo {
      * Sets the audio stream sampling rate.
      *
      * @param samplingRate The audio stream sampling rate.
+     * @return this instance
      */
-    void setSamplingRate(int samplingRate) {
+    public AudioInfo setSamplingRate(int samplingRate) {
         this.samplingRate = samplingRate;
+        return this;
     }
 
     /**
@@ -100,9 +104,11 @@ public class AudioInfo {
      * Sets the audio stream channels number (1=mono, 2=stereo).
      *
      * @param channels The audio stream channels number (1=mono, 2=stereo).
+     * @return this instance
      */
-    void setChannels(int channels) {
+    public AudioInfo setChannels(int channels) {
         this.channels = channels;
+        return this;
     }
 
     /**
@@ -119,9 +125,11 @@ public class AudioInfo {
      * Sets the audio stream (average) bit rate.
      *
      * @param bitRate The audio stream (average) bit rate.
+     * @return this instance
      */
-    void setBitRate(int bitRate) {
+    public AudioInfo setBitRate(int bitRate) {
         this.bitRate = bitRate;
+        return this;
     }
 
     @Override
