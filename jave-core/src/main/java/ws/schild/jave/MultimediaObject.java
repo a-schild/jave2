@@ -214,7 +214,10 @@ public class MultimediaObject {
             EncoderException {
         Pattern p1 = Pattern.compile("^\\s*Input #0, (\\w+).+$\\s*",
                 Pattern.CASE_INSENSITIVE);
-        Pattern p2 = Pattern.compile(
+        Pattern p21 = Pattern.compile(
+                "^\\s*Duration:.*$",
+                Pattern.CASE_INSENSITIVE);
+        Pattern p22 = Pattern.compile(
                 "^\\s*Duration: (\\d\\d):(\\d\\d):(\\d\\d)\\.(\\d\\d).*$",
                 Pattern.CASE_INSENSITIVE);
         Pattern p3 = Pattern.compile(
@@ -257,22 +260,32 @@ public class MultimediaObject {
                     }
                     case 1:
                     {
-                        Matcher m = p2.matcher(line);
-                        if (m.matches())
+                        Matcher m1 = p21.matcher(line);
+                        Matcher m2 = p22.matcher(line);
+                        if (m1.matches())
                         {
-                            long hours = Integer.parseInt(m.group(1));
-                            long minutes = Integer.parseInt(m.group(2));
-                            long seconds = Integer.parseInt(m.group(3));
-                            long dec = Integer.parseInt(m.group(4));
-                            long duration = (dec * 10L) + (seconds * 1000L)
-                                    + (minutes * 60L * 1000L)
-                                    + (hours * 60L * 60L * 1000L);
-                            info.setDuration(duration);
-                            step++;
-                        } else
+                            if (m2.matches())
+                            {
+                                long hours = Integer.parseInt(m2.group(1));
+                                long minutes = Integer.parseInt(m2.group(2));
+                                long seconds = Integer.parseInt(m2.group(3));
+                                long dec = Integer.parseInt(m2.group(4));
+                                long duration = (dec * 10L) + (seconds * 1000L)
+                                        + (minutes * 60L * 1000L)
+                                        + (hours * 60L * 60L * 1000L);
+                                info.setDuration(duration);
+                                step++;
+                            } else
+                            {
+                                LOG.warn("Invalid duration found {}", line);
+                                step++;
+                                // step = 3;
+                            }
+                        }
+                        else
                         {
                             // step = 3;
-                        }
+                        }                            
                         break;
                     }
                     case 2:

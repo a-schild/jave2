@@ -1,6 +1,8 @@
 # JAVE2
 
 ## Changelog
+- **2.7.2**
+   - Handle invalid/unknown duration values in containers
 - **2.7.1**
    - Allow additional arguments on watermark filter
    - Make positions optional (use -1 for posX and posY) and then use the setAddArgument() method
