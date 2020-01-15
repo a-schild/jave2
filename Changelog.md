@@ -1,6 +1,8 @@
 # JAVE2
 
 ## Changelog
+- **2.7.3**
+   - Close class reference when binary was extracted from jar file
 - **2.7.2**
    - Handle invalid/unknown duration values in containers
 - **2.7.1**

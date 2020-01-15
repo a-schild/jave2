@@ -43,7 +43,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
      * Trace the version of the bundled ffmpeg executable. It's a counter: every
      * time the bundled ffmpeg change it is incremented by 1.
      */
-    private static final String MY_EXE_VERSION = "2.7.2";
+    private static final String MY_EXE_VERSION = "2.7.3";
 
     /**
      * The ffmpeg executable file path.
@@ -153,6 +153,14 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
                 else
                 {
                     LOG.error("Copy resource to target <{}> failed", dest.getAbsolutePath());
+                }
+                try
+                {
+                    is.close();
+                }
+                catch (IOException ioex)
+                {
+                    LOG.warn("Error in closing input stream", ioex);
                 }
             }
             else
