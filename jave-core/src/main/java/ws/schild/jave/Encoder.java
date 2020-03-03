@@ -430,6 +430,7 @@ public class Encoder {
         String formatAttribute = attributes.getFormat();
         Float offsetAttribute = attributes.getOffset();
         Float durationAttribute = attributes.getDuration();
+        boolean loopAttribute = attributes.getLoop();
         AudioAttributes audioAttributes = attributes.getAudioAttributes();
         VideoAttributes videoAttributes = attributes.getVideoAttributes();
         if (audioAttributes == null && videoAttributes == null)
@@ -457,6 +458,11 @@ public class Encoder {
             ffmpeg.addArgument("-threads");
             ffmpeg.addArgument(Integer.toString(attributes.getDecodingThreads()));
         }
+	if (loopAttribute && durationAttribute != null)
+	{
+		ffmpeg.addArgument("-loop 1");
+	}
+
         ffmpeg.addArgument("-i");
         if (multimediaObjects.size() == 1)
         {
