@@ -460,7 +460,8 @@ public class Encoder {
         }
 	if (loopAttribute && durationAttribute != null)
 	{
-		ffmpeg.addArgument("-loop 1");
+		ffmpeg.addArgument("-loop");
+		ffmpeg.addArgument("1");
 	}
 
         ffmpeg.addArgument("-i");
