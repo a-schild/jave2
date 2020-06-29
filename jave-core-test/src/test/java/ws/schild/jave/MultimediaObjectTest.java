@@ -139,4 +139,34 @@ public class MultimediaObjectTest extends AMediaTest {
         assertEquals("opus", result.getAudio().getDecoder(), "Invalid audio decoder format");
 
     }
+
+    /**
+     * Test of getInfo method, of class MultimediaObject.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testGetInfo06() throws Exception {
+        System.out.println("testGetInfo06");
+        File file = new File(getResourceSourcePath(), "size1.mp4");
+        MultimediaObject instance = new MultimediaObject(file);
+        MultimediaInfo result = instance.getInfo();
+        assertEquals("mov", result.getFormat(),  "Invalid video format");
+        assertEquals(640, result.getVideo().getSize().getHeight(), "Video height not as expected");
+        assertEquals(360, result.getVideo().getSize().getWidth(), "Video width not as expected");
+    }
+
+    /**
+     * Test of getInfo method, of class MultimediaObject.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testGetInfo07() throws Exception {
+        System.out.println("testGetInfo07");
+        File file = new File(getResourceSourcePath(), "size2.mp4");
+        MultimediaObject instance = new MultimediaObject(file);
+        MultimediaInfo result = instance.getInfo();
+        assertEquals("mov", result.getFormat(),  "Invalid video format");
+        assertEquals(960, result.getVideo().getSize().getHeight(), "Video height not as expected");
+        assertEquals(544, result.getVideo().getSize().getWidth(), "Video width not as expected");
+    }
 }

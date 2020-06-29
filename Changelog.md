@@ -1,6 +1,10 @@
 # JAVE2
 
 ## Changelog
+- **2.7.4**
+   - Upgraded to ffmpeg v 4.2.2
+   - Windows and osx binaries from https://ffmpeg.zeranoe.com/builds/  
+   - Linux binaries from https://johnvansickle.com/ffmpeg/  
 - **2.7.3**
    - Close class reference when binary was extracted from jar file
 - **2.7.2**
