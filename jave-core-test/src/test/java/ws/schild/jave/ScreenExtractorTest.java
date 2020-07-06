@@ -15,11 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author andre
  */
 public class ScreenExtractorTest extends AMediaTest{
-    
+
     public ScreenExtractorTest() {
         super(null, "ScreenExtractor");
     }
-    
+
     /**
      * Test of render method, of class ScreenExtractor.
      * @throws java.lang.Exception
@@ -112,7 +112,7 @@ public class ScreenExtractorTest extends AMediaTest{
         assertEquals(instance.getNumberOfScreens(), tFiles.length, "Not correct number of output files, expecting: "+ instance.getNumberOfScreens()+" got: "+tFiles.length);
         assertEquals(15, tFiles.length, "Not 15 output files, but "+tFiles.length);
     }
-    
+
     /**
      * Test of render method, of class ScreenExtractor.
      * @throws java.lang.Exception
@@ -135,8 +135,8 @@ public class ScreenExtractorTest extends AMediaTest{
         instance.render(multimediaObject, width, height, seconds, target, quality);
         assertTrue(target.exists(), "Output file missing");
     }
-    
-    
+
+
     /**
      * Test of render method, of class ScreenExtractor.
      * @throws java.lang.Exception
@@ -176,14 +176,14 @@ public class ScreenExtractorTest extends AMediaTest{
         MultimediaObject multimediaObject = new MultimediaObject(source);
         int width = -1;
         int height = -1;
-        int seconds = 15000;
+        int millis = 15000;
         int quality = 1;
         ScreenExtractor instance = new ScreenExtractor();
-        instance.renderOneImage(multimediaObject, width, height, seconds, target, quality);
+        instance.renderOneImage(multimediaObject, width, height, millis, target, quality);
         assertTrue(target.exists(), "Output file missing");
     }
-    
-    
+
+
     /**
      * Test of render method, of class ScreenExtractor.
      * @throws java.lang.Exception
@@ -200,10 +200,33 @@ public class ScreenExtractorTest extends AMediaTest{
         MultimediaObject multimediaObject = new MultimediaObject(source);
         int width = 60;
         int height = 60;
-        int seconds = 15000;
+        int millis = 15000;
         int quality = 1;
         ScreenExtractor instance = new ScreenExtractor();
-        instance.renderOneImage(multimediaObject, width, height, seconds, target, quality);
+        instance.renderOneImage(multimediaObject, width, height, millis, target, quality);
+        assertTrue(target.exists(), "Output file missing");
+    }
+
+    /**
+     * Test of render method, of class ScreenExtractor.
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testRenderOneImage03() throws Exception {
+        System.out.println("render one image 03");
+        File source = new File(getResourceSourcePath(), "testfile3.wmv");
+        File target = new File(getResourceTargetPath(), "RenderOneImage03.jpg");
+        if (target.exists())
+        {
+            target.delete();
+        }
+        MultimediaObject multimediaObject = new MultimediaObject(source);
+        int width = -1;
+        int height = -1;
+        int millis = 56000;
+        int quality = 1;
+        ScreenExtractor instance = new ScreenExtractor();
+        instance.renderOneImage(multimediaObject, width, height, millis, target, quality, true);
         assertTrue(target.exists(), "Output file missing");
     }
 }
