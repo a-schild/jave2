@@ -3,6 +3,8 @@
 ## Changelog
 - **2.8.0**
    - Added -ss option to ScreenExtractor for faster processing
+   - Add loopAttribute to EncodingAttributes, thanks to chrysophylax
+     https://github.com/a-schild/jave2/pull/79
 - **2.7.4**
    - Upgraded to ffmpeg v 4.2.2
    - Windows and osx binaries from https://ffmpeg.zeranoe.com/builds/  
