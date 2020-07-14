@@ -81,7 +81,11 @@ public class EncodingAttributes implements Serializable {
      */
     private int encodingThreads= -1;
 
-    
+    /**
+    * Should the input be treated as a loop
+    */
+    private boolean loop = false;
+
     /**
      * Returns the format name for the encoded target multimedia file.
      *
@@ -146,6 +150,25 @@ public class EncodingAttributes implements Serializable {
         return this;
     }
 
+    /*
+     * Returns if the input is to be considered for looping.
+     * @return if the input will be looped.
+     */
+    public boolean getLoop() {
+	    return loop;
+	}
+
+    /**
+     * Sets if the inputs will be looped or not.
+     *
+     * @param loop if the input should be looped.
+     * @return this instance
+     */
+    public EncodingAttributes setLoop(boolean loop) {
+	    this.loop = loop;
+	    return this;
+	}
+
     /**
      * Returns the attributes for the encoding of the audio stream in the target
      * multimedia file.
@@ -199,7 +222,7 @@ public class EncodingAttributes implements Serializable {
     @Override
     public String toString() {
         return getClass().getName() + "(format=" + format + ", offset="
-                + offset + ", duration=" + duration + ", audioAttributes="
+                + offset + ", duration=" + duration + ",loop=" + loop + ", audioAttributes="
                 + audioAttributes + ", videoAttributes=" + videoAttributes
                 + ")";
     }
