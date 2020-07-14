@@ -216,7 +216,7 @@ public class ScreenExtractor {
     }
 
     /**
-     * Generate exactly <b>one</b> screenshots from source video
+     * Generate exactly <b>one</b> screenshot from source video using frame by frame seeking mode, which is very slow especially for large files.
      *
      * @param multimediaObject Source MultimediaObject @see MultimediaObject
      * @param width Output width, pass -1 to use video width and height
@@ -229,11 +229,37 @@ public class ScreenExtractor {
      * @throws EncoderException If a problems occurs during the encoding
      * process.
      */
-    public void renderOneImage(MultimediaObject multimediaObject, 
+    public void renderOneImage(MultimediaObject multimediaObject,
+                               int width, int height,
+                               long millis,
+                               File outputFile,
+                               int quality)
+            throws InputFormatException, EncoderException {
+        renderOneImage(multimediaObject,width,height,millis,outputFile,quality,false);
+    }
+
+    /**
+     * Generate exactly <b>one</b> screenshot from source video using given seeking mode.
+     *
+     * @param multimediaObject Source MultimediaObject @see MultimediaObject
+     * @param width Output width, pass -1 to use video width and height
+     * @param height Output height (Ignored when width = -1)
+     * @param millis At which second in the video should the screenshot be made
+     * @param outputFile Outputfile
+     * @param quality The range is between 1-31 with 31 being the worst quality
+     * @param keyframesSeeking If True, it forces FFmpeg to parse an input file using keyframes, which is very fast.
+     *                         If False, input will be parsed frame by frame. See <a href="http://trac.ffmpeg.org/wiki/Seeking">FFmpeg Wiki: Seeking</a>
+     * @throws InputFormatException If the source multimedia file cannot be
+     * decoded.
+     * @throws EncoderException If a problems occurs during the encoding
+     * process.
+     */
+    public void renderOneImage(MultimediaObject multimediaObject,
             int width, int height,
-            long millis, 
+            long millis,
             File outputFile,
-            int quality)
+            int quality,
+            boolean keyframesSeeking)
             throws InputFormatException, EncoderException {
         String inputSource = multimediaObject.isURL() ? multimediaObject.getURL().toString() : multimediaObject.getFile().getAbsolutePath();
         try
@@ -253,10 +279,18 @@ public class ScreenExtractor {
         }
 
         FFMPEGExecutor ffmpeg = this.locator.createExecutor();
+        if (keyframesSeeking)
+        {
+            ffmpeg.addArgument("-ss");
+            ffmpeg.addArgument(Utils.buildTimeDuration(millis));
+        }
         ffmpeg.addArgument("-i");
         ffmpeg.addArgument(inputSource);
-        ffmpeg.addArgument("-ss");
-        ffmpeg.addArgument(Utils.buildTimeDuration(millis));
+        if (!keyframesSeeking)
+        {
+            ffmpeg.addArgument("-ss");
+            ffmpeg.addArgument(Utils.buildTimeDuration(millis));
+        }
         ffmpeg.addArgument("-vframes");
         ffmpeg.addArgument("1");
         if (width != -1)
@@ -298,5 +332,5 @@ public class ScreenExtractor {
         }
 
     }
-    
+
 }
