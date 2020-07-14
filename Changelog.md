@@ -1,6 +1,8 @@
 # JAVE2
 
 ## Changelog
+- **2.8.0**
+   - Added -ss option to ScreenExtractor for faster processing
 - **2.7.4**
    - Upgraded to ffmpeg v 4.2.2
    - Windows and osx binaries from https://ffmpeg.zeranoe.com/builds/  

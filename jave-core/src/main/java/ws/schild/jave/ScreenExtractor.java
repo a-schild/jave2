@@ -216,7 +216,7 @@ public class ScreenExtractor {
     }
 
     /**
-     * Generate exactly <b>one</b> screenshot from source video using frame by frame seeking mode, which is very slow especially for large files.
+     * Generate exactly <b>one</b> screenshot from source video
      *
      * @param multimediaObject Source MultimediaObject @see MultimediaObject
      * @param width Output width, pass -1 to use video width and height
@@ -235,7 +235,7 @@ public class ScreenExtractor {
                                File outputFile,
                                int quality)
             throws InputFormatException, EncoderException {
-        renderOneImage(multimediaObject,width,height,millis,outputFile,quality,false);
+        renderOneImage(multimediaObject, width, height, millis, outputFile, quality, true);
     }
 
     /**
@@ -330,7 +330,6 @@ public class ScreenExtractor {
         {
             ffmpeg.destroy();
         }
-
     }
 
 }

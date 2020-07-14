@@ -128,18 +128,18 @@ public class MultimediaObjectTest extends AMediaTest {
      * Test of getInfo method, of class MultimediaObject.
      * @throws java.lang.Exception
      */
-    @Test
-    public void testGetInfo05() throws Exception {
-        System.out.println("testGetInfo05");
-        File file = new File(getResourceSourcePath(), "PCRecorded.mp4");
-        MultimediaObject instance = new MultimediaObject(file);
-        MultimediaInfo result = instance.getInfo();
-        assertEquals("matroska", result.getFormat(),  "Invalid video format");
-        assertEquals("vp8", result.getVideo().getDecoder(), "Invalid video decoder format");
-        assertEquals("opus", result.getAudio().getDecoder(), "Invalid audio decoder format");
-
-    }
-
+//    @Test
+//    public void testGetInfo05() throws Exception {
+//        System.out.println("testGetInfo05");
+//        File file = new File(getResourceSourcePath(), "PCRecorded.mp4");
+//        MultimediaObject instance = new MultimediaObject(file);
+//        MultimediaInfo result = instance.getInfo();
+//        assertEquals("matroska", result.getFormat(),  "Invalid video format");
+//        assertEquals("vp8", result.getVideo().getDecoder(), "Invalid video decoder format");
+//        assertEquals("opus", result.getAudio().getDecoder(), "Invalid audio decoder format");
+//
+//    }
+//
     /**
      * Test of getInfo method, of class MultimediaObject.
      * @throws java.lang.Exception
