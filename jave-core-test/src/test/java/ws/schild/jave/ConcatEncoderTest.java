@@ -93,7 +93,6 @@ public class ConcatEncoderTest extends AMediaTest{
         attributes.setFormat("wav");
         attributes.setAudioAttributes(audio);
         Encoder encoder = new Encoder();
-        PListener listener = new PListener();
         List<MultimediaObject> src= new ArrayList<>();
         src.add(new MultimediaObject(source1));
         src.add(new MultimediaObject(source2));

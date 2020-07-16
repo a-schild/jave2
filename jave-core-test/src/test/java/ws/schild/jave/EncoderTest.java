@@ -120,8 +120,6 @@ public class EncoderTest extends AMediaTest{
         }
         Encoder encoder = new Encoder();
         PListener listener = new PListener();
-        String message= null;
-        String compareTo= "Specified sample rate";
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec("libmp3lame");
         audio.setBitRate(128000);

@@ -291,7 +291,6 @@ public class MultimediaObject {
                     case 2:
                     {
                         Matcher m = p3.matcher(line);
-                        Matcher m4 = p4.matcher(line);
                         if (m.matches())
                         {
                             String type = m.group(1);
