@@ -30,6 +30,9 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ws.schild.process.ProcessLocator;
+import ws.schild.process.ProcessWrapper;
+
 /**
  * Main class of the package. Instances can encode audio and video streams.
  *
@@ -64,14 +67,14 @@ public class Encoder {
     /**
      * The locator of the ffmpeg executable used by this encoder.
      */
-    private final FFMPEGLocator locator;
+    private final ProcessLocator locator;
     
     /**
      * The executor used to do the conversion
      * Is saved here, so we can abort the conversion process
      * 
      */
-    private FFMPEGExecutor ffmpeg;
+    private ProcessWrapper ffmpeg;
     
     /**
      * List of unhandled messages from ffmpeng run
@@ -87,12 +90,12 @@ public class Encoder {
     }
 
     /**
-     * It builds an encoder with a custom {@link FFMPEGLocator}.
+     * It builds an encoder with a custom {@link ProcessLocator}.
      *
      * @param locator The locator picking up the ffmpeg executable used by the
      * encoder.
      */
-    public Encoder(FFMPEGLocator locator) {
+    public Encoder(ProcessLocator locator) {
         this.locator = locator;
     }
 
@@ -134,7 +137,7 @@ public class Encoder {
      */
     protected String[] getCoders(boolean encoder, boolean audio) throws EncoderException {
         ArrayList<String> res = new ArrayList<>();
-        FFMPEGExecutor localFFMPEG = locator.createExecutor();
+        ProcessWrapper localFFMPEG = locator.createExecutor();
         localFFMPEG.addArgument(encoder ? "-encoders" : "-decoders");
         try
         {
@@ -250,7 +253,7 @@ public class Encoder {
      */
     protected String[] getSupportedCodingFormats(boolean encoding) throws EncoderException {
         ArrayList<String> res = new ArrayList<>();
-        FFMPEGExecutor localFFMPEG = locator.createExecutor();
+        ProcessWrapper localFFMPEG = locator.createExecutor();
         localFFMPEG.addArgument("-formats");
         try
         {

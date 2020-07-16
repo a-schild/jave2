@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ws.schild.jave;
+package ws.schild.process;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,9 +30,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author Carlo Pelliccia
  */
-public class FFMPEGExecutor {
+public class ProcessWrapper {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FFMPEGExecutor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProcessWrapper.class);
 
     /**
      * The path of the ffmpeg executable.
@@ -75,7 +75,7 @@ public class FFMPEGExecutor {
      *
      * @param ffmpegExecutablePath The path of the ffmpeg executable.
      */
-    public FFMPEGExecutor(String ffmpegExecutablePath) {
+    public ProcessWrapper(String ffmpegExecutablePath) {
         this.ffmpegExecutablePath = ffmpegExecutablePath;
     }
 

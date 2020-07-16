@@ -10,6 +10,9 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ws.schild.process.ProcessLocator;
+import ws.schild.process.ProcessWrapper;
+
 public class MultimediaObject {
 
     /**
@@ -54,7 +57,7 @@ public class MultimediaObject {
     /**
      * The locator of the ffmpeg executable used by this extractor.
      */
-    private final FFMPEGLocator locator;
+    private final ProcessLocator locator;
 
     private File inputFile;
     private URL  inputURL;
@@ -132,13 +135,13 @@ public class MultimediaObject {
     }
     
     /**
-     * It builds an extractor with a custom {@link FFMPEGLocator}.
+     * It builds an extractor with a custom {@link ProcessLocator}.
      *
      * @param input Input file for creating MultimediaObject
      * @param locator The locator picking up the ffmpeg executable used by the
      * extractor.
      */
-    public MultimediaObject(File input, FFMPEGLocator locator) {
+    public MultimediaObject(File input, ProcessLocator locator) {
         this.locator = locator;
         this.inputFile = input;
     }
@@ -157,7 +160,7 @@ public class MultimediaObject {
             EncoderException {
         if (isURL() || inputFile.canRead())
         {
-            FFMPEGExecutor ffmpeg = locator.createExecutor();
+            ProcessWrapper ffmpeg = locator.createExecutor();
             ffmpeg.addArgument("-i");
             if (isURL())
             {

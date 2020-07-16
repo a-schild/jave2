@@ -16,36 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ws.schild.jave;
+package ws.schild.process;
+
+import ws.schild.jave.Encoder;
 
 /**
- * A package-private utility to add a shutdown hook to kill ongoing encoding
- * processes at the jvm shutdown.
+ * Abstract class whose derived concrete instances are used by {@link Encoder}
+ * to locate the ffmpeg executable path.
  *
  * @author Carlo Pelliccia
+ * @see Encoder
  */
-class ProcessKiller extends Thread {
+public interface ProcessLocator {
 
     /**
-     * The process to kill.
-     */
-    private final Process process;
-
-    /**
-     * Builds the killer.
+     * This method should return the path of a ffmpeg executable suitable for
+     * the current machine.
      *
-     * @param process The process to kill.
+     * @return The path of the ffmpeg executable.
      */
-    public ProcessKiller(Process process) {
-        this.process = process;
-    }
+    public String getExecutablePath();
 
     /**
-     * It kills the supplied process.
+     * It returns a brand new {@link ProcessWrapper}, ready to be used in a
+     * ffmpeg call.
+     *
+     * @return A newly instanced {@link ProcessWrapper}, using this locator to
+     * call the ffmpeg executable.
      */
-    @Override
-    public void run() {
-        process.destroy();
+    default public ProcessWrapper createExecutor() {
+        return new ProcessWrapper(getExecutablePath());
     }
 
 }
