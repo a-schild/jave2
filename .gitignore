@@ -7,3 +7,8 @@
 /*/target/
 /jave-core/nbproject/
 /jave-core-test/src/test/resources/private
+
+# Squelch Eclipse settings
+.settings
+.project
+.classpath
