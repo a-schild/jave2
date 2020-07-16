@@ -17,7 +17,7 @@ Many other formats, containers and operations are supported by JAVE2.
 > JAVE can also be easily ported to other OS and hardware configurations, 
 see the JAVE manual for details.
 
-| Operating System | Windows x32,x64 | MacOS x32,x64 | Linux x32,x64 |
+| Operating System | Windows x32,x64 | MacOS x32,x64 | Linux x32,x64 | Linux arm64
 | ------- | :-----: | :-: | :-----: |
 | Supported? | YES | YES  | YES  |
 
@@ -66,11 +66,20 @@ Generally if you want to use for one platform or more what you have to do is add
 
 and then the specific jar(s) for your platform(s) :
 
-### For one platform only (Linux 64Bit in this case)
+### For one platform only (Linux 64Bit amd/intel in this case)
 ``` XML
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux64</artifactId>
+    <version>2.7.3</version>
+</dependency>
+```
+
+### For one platform only (Linux 64Bit arm in this case)
+``` XML
+<dependency>
+    <groupId>ws.schild</groupId>
+    <artifactId>jave-nativebin-linux-arm64</artifactId>
     <version>2.7.3</version>
 </dependency>
 ```
