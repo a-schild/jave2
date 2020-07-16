@@ -223,7 +223,8 @@ public class MultimediaObject {
         Pattern p3 = Pattern.compile(
                 "^\\s*Stream #\\S+: ((?:Audio)|(?:Video)|(?:Data)): (.*)\\s*$",
                 Pattern.CASE_INSENSITIVE);
-        Pattern p4 = Pattern.compile(
+        @SuppressWarnings("unused")
+		Pattern p4 = Pattern.compile(
                 "^\\s*Metadata:",
                 Pattern.CASE_INSENSITIVE);
         MultimediaInfo info = null;
