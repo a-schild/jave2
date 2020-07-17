@@ -18,6 +18,7 @@
  */
 package ws.schild.jave;
 
+import com.sun.org.apache.xml.internal.serializer.Version;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -77,7 +78,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         String arch = System.getProperty("os.arch");
 
         //File
-        File ffmpegFile = new File(dirFolder, "ffmpeg-" + arch +"-"+MY_EXE_VERSION+ suffix);
+        File ffmpegFile = new File(dirFolder, "ffmpeg-" + arch +"-"+Version.getVersion()+ suffix);
         LOG.debug("Executable path: {}", ffmpegFile.getAbsolutePath());
 
         //Check the version of existing .exe file

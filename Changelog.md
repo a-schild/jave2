@@ -6,6 +6,7 @@
    - Add loopAttribute to EncodingAttributes, thanks to chrysophylax
      https://github.com/a-schild/jave2/pull/79
    - Added support for arm64 linux
+   - Some code cleanups by mressler, thanks for the contribution
 - **2.7.4**
    - Upgraded to ffmpeg v 4.2.2
    - Windows and osx binaries from https://ffmpeg.zeranoe.com/builds/  
