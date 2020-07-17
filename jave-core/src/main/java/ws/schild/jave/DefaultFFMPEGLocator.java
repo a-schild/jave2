@@ -27,6 +27,8 @@ import java.nio.file.StandardCopyOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ws.schild.process.ProcessLocator;
+
 /**
  * The default ffmpeg executable locator, which exports on disk the ffmpeg
  * executable bundled with the library distributions. It should work both for
@@ -35,7 +37,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Carlo Pelliccia
  */
-public class DefaultFFMPEGLocator extends FFMPEGLocator {
+public class DefaultFFMPEGLocator implements ProcessLocator {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFFMPEGLocator.class);
 
@@ -113,7 +115,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
     }
 
     @Override
-    public String getFFMPEGExecutablePath() {
+    public String getExecutablePath() {
         return path;
     }
 

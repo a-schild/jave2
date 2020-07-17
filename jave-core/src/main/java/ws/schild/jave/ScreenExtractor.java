@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ws.schild.process.ProcessLocator;
+import ws.schild.process.ProcessWrapper;
+
 public class ScreenExtractor {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScreenExtractor.class);
@@ -14,7 +17,7 @@ public class ScreenExtractor {
     /**
      * The locator of the ffmpeg executable used by this extractor.
      */
-    private final FFMPEGLocator locator;
+    private final ProcessLocator locator;
     private int numberOfScreens;
 
     /**
@@ -39,7 +42,7 @@ public class ScreenExtractor {
      * @param locator The locator picking up the ffmpeg executable used by the
      * extractor.
      */
-    public ScreenExtractor(FFMPEGLocator locator) {
+    public ScreenExtractor(ProcessLocator locator) {
         this.locator = locator;
     }
 
@@ -86,7 +89,7 @@ public class ScreenExtractor {
         MultimediaInfo multimediaInfo = multimediaObject.getInfo();
         numberOfScreens = Math.round(((float)multimediaInfo.getDuration()) / 1000.0f / seconds);
 
-        FFMPEGExecutor ffmpeg = this.locator.createExecutor();
+        ProcessWrapper ffmpeg = this.locator.createExecutor();
         ffmpeg.addArgument("-i");
         ffmpeg.addArgument(inputSource);
         ffmpeg.addArgument("-f");
@@ -166,7 +169,7 @@ public class ScreenExtractor {
         int duration = (int) (multimediaInfo.getDuration() / 1000);
         numberOfScreens = seconds <= duration ? 1 : 0;
 
-        FFMPEGExecutor ffmpeg = this.locator.createExecutor();
+        ProcessWrapper ffmpeg = this.locator.createExecutor();
         ffmpeg.addArgument("-i");
         ffmpeg.addArgument(inputSource);
         ffmpeg.addArgument("-f");
@@ -276,7 +279,7 @@ public class ScreenExtractor {
             LOG.debug("Access denied checking destination folder",  e);
         }
 
-        FFMPEGExecutor ffmpeg = this.locator.createExecutor();
+        ProcessWrapper ffmpeg = this.locator.createExecutor();
         if (keyframesSeeking)
         {
             ffmpeg.addArgument("-ss");

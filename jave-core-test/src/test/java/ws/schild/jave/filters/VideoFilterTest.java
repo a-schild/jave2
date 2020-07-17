@@ -19,6 +19,7 @@
 package ws.schild.jave.filters;
 
 import ws.schild.jave.*;
+
 import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
