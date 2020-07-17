@@ -27,17 +27,15 @@ import java.nio.file.StandardCopyOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ws.schild.process.ProcessLocator;
-
 /**
  * The default ffmpeg executable locator, which exports on disk the ffmpeg
  * executable bundled with the library distributions. It should work both for
  * windows and many linux distributions. If it doesn't, try compiling your own
- * ffmpeg executable and plug it in JAVE with a custom {@link ProcessLocator}.
+ * ffmpeg executable and plug it in JAVE with a custom {@link FFMPEGLocator}.
  *
  * @author Carlo Pelliccia
  */
-public class DefaultFFMPEGLocator implements ProcessLocator {
+public class DefaultFFMPEGLocator extends FFMPEGLocator {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFFMPEGLocator.class);
 
@@ -115,7 +113,7 @@ public class DefaultFFMPEGLocator implements ProcessLocator {
     }
 
     @Override
-    public String getExecutablePath() {
+    public String getFFMPEGExecutablePath() {
         return path;
     }
 

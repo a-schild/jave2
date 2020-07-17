@@ -45,7 +45,7 @@ public class DefaultFFMPEGLocatorTest {
             dirFolder.delete();
         }
         DefaultFFMPEGLocator locator= new  DefaultFFMPEGLocator();
-        String exePath= locator.getExecutablePath();
+        String exePath= locator.getFFMPEGExecutablePath();
         assertNotNull("Native component not found", exePath);
     }
     

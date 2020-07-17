@@ -7,9 +7,6 @@ import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ws.schild.process.ProcessLocator;
-import ws.schild.process.ProcessWrapper;
-
 public class ScreenExtractor {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScreenExtractor.class);
@@ -17,7 +14,7 @@ public class ScreenExtractor {
     /**
      * The locator of the ffmpeg executable used by this extractor.
      */
-    private final ProcessLocator locator;
+    private final FFMPEGLocator locator;
     private int numberOfScreens;
 
     /**
@@ -37,12 +34,12 @@ public class ScreenExtractor {
     }
 
     /**
-     * It builds an extractor with a custom {@link ProcessLocator}.
+     * It builds an extractor with a custom {@link FFMPEGLocator}.
      *
      * @param locator The locator picking up the ffmpeg executable used by the
      * extractor.
      */
-    public ScreenExtractor(ProcessLocator locator) {
+    public ScreenExtractor(FFMPEGLocator locator) {
         this.locator = locator;
     }
 
@@ -89,7 +86,7 @@ public class ScreenExtractor {
         MultimediaInfo multimediaInfo = multimediaObject.getInfo();
         numberOfScreens = Math.round(((float)multimediaInfo.getDuration()) / 1000.0f / seconds);
 
-        ProcessWrapper ffmpeg = this.locator.createExecutor();
+        FFMPEGExecutor ffmpeg = this.locator.createExecutor();
         ffmpeg.addArgument("-i");
         ffmpeg.addArgument(inputSource);
         ffmpeg.addArgument("-f");
@@ -169,7 +166,7 @@ public class ScreenExtractor {
         int duration = (int) (multimediaInfo.getDuration() / 1000);
         numberOfScreens = seconds <= duration ? 1 : 0;
 
-        ProcessWrapper ffmpeg = this.locator.createExecutor();
+        FFMPEGExecutor ffmpeg = this.locator.createExecutor();
         ffmpeg.addArgument("-i");
         ffmpeg.addArgument(inputSource);
         ffmpeg.addArgument("-f");
@@ -279,7 +276,7 @@ public class ScreenExtractor {
             LOG.debug("Access denied checking destination folder",  e);
         }
 
-        ProcessWrapper ffmpeg = this.locator.createExecutor();
+        FFMPEGExecutor ffmpeg = this.locator.createExecutor();
         if (keyframesSeeking)
         {
             ffmpeg.addArgument("-ss");
