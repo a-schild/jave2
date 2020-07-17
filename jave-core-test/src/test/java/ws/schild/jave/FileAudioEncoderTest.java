@@ -145,9 +145,6 @@ public class FileAudioEncoderTest extends AMediaTest{
             target.delete();
         }
         Encoder encoder = new Encoder();
-        PListener listener = new PListener();
-        String message= null;
-        String compareTo= "Specified sample rate";
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec("libmp3lame");
         audio.setBitRate(128000);
@@ -175,9 +172,6 @@ public class FileAudioEncoderTest extends AMediaTest{
         }
         
         Encoder encoder = new Encoder();
-        PListener listener = new PListener();
-        String message= null;
-        String compareTo= "Specified sample rate";
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec("libmp3lame");
         EncodingAttributes attrs = new EncodingAttributes();
@@ -203,9 +197,6 @@ public class FileAudioEncoderTest extends AMediaTest{
         }
         
         Encoder encoder = new Encoder();
-        PListener listener = new PListener();
-        String message= null;
-        String compareTo= "Specified sample rate";
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec("libmp3lame");
         EncodingAttributes attrs = new EncodingAttributes();

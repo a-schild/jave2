@@ -24,7 +24,9 @@ package ws.schild.jave;
  *
  * @author Carlo Pelliccia
  * @see Encoder
+ * @deprecated  As of 3.0.0. Use {@link ws.schild.process.ProcessLocator} instead. In 3.0.0, this will become an interface with a default method for createExecutor.
  */
+@Deprecated
 public abstract class FFMPEGLocator {
 
     /**
@@ -32,7 +34,9 @@ public abstract class FFMPEGLocator {
      * the current machine.
      *
      * @return The path of the ffmpeg executable.
+     * @deprecated  As of 3.0.0, this will become getExecutablePath. See {@link ws.schild.process.ProcessLocator#getExecutablePath}.
      */
+	@Deprecated
     protected abstract String getFFMPEGExecutablePath();
 
     /**

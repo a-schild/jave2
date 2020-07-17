@@ -99,7 +99,7 @@ public class MultimediaObjectTest extends AMediaTest {
         MultimediaObject instance = new MultimediaObject(file);
         try
         {
-            MultimediaInfo result = instance.getInfo();
+            instance.getInfo();
             assertEquals(1,1, "Invalid data in header not thrown");
         }
         catch (Exception ex)

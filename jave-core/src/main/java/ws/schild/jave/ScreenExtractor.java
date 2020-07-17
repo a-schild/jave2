@@ -114,7 +114,6 @@ public class ScreenExtractor {
         {
             RBufferedReader reader = new RBufferedReader(
                     new InputStreamReader(ffmpeg.getErrorStream()));
-            int step = 0;
             int lineNR = 0;
             String line;
             while ((line = reader.readLine()) != null)
@@ -196,7 +195,6 @@ public class ScreenExtractor {
         {
             RBufferedReader reader = new RBufferedReader(
                     new InputStreamReader(ffmpeg.getErrorStream()));
-            int step = 0;
             int lineNR = 0;
             String line;
             while ((line = reader.readLine()) != null)
@@ -314,7 +312,6 @@ public class ScreenExtractor {
         {
             RBufferedReader reader = new RBufferedReader(
                     new InputStreamReader(ffmpeg.getErrorStream()));
-            int step = 0;
             int lineNR = 0;
             String line;
             while ((line = reader.readLine()) != null)

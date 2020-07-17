@@ -16,17 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ws.schild.jave;
+package ws.schild.process;
 
 /**
  * A package-private utility to add a shutdown hook to kill ongoing encoding
  * processes at the jvm shutdown.
  *
  * @author Carlo Pelliccia
- * @deprecated  As of 3.0.0. Use {@link ws.schild.process.ProcessKiller} instead.
  */
-@Deprecated
-class ProcessKiller extends Thread {
+public class ProcessKiller extends Thread {
 
     /**
      * The process to kill.
