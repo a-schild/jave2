@@ -30,9 +30,9 @@ import ws.schild.jave.Encoder;
  */
 public class EncodingAttributes implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2473587816471032706L;
 
-    /**
+	/**
      * The format name for the encoded target multimedia file. Be sure this
      * format is supported (see {@link Encoder#getSupportedEncodingFormats()}.
      */
@@ -71,18 +71,18 @@ public class EncodingAttributes implements Serializable {
     private boolean mapMetaData= false;
     
     /**
-     * Maximum number of cores/cpus to use for conversion
-     * -1 means use default of ffmpeg
+     * Maximum number of cores/cpus to use for conversion.<br/>
+     * Not set means we use ffmpeg's default.
      */
-    private int filterThreads= -1;
+    private Integer filterThreads;
     /**
      * Number of threads to use for decoding (if supported by codec)
      */
-    private int decodingThreads= -1;
+    private Integer decodingThreads = null;
     /**
      * Number of threads to use for encoding (if supported by codec)
      */
-    private int encodingThreads= -1;
+    private Integer encodingThreads = null;
 
     /**
     * Should the input be treated as a loop
@@ -94,8 +94,8 @@ public class EncodingAttributes implements Serializable {
      *
      * @return The format name for the encoded target multimedia file.
      */
-    public String getFormat() {
-        return format;
+    public Optional<String> getFormat() {
+        return Optional.ofNullable(format);
     }
 
     /**
@@ -115,8 +115,8 @@ public class EncodingAttributes implements Serializable {
      *
      * @return The start offset time (seconds).
      */
-    public Float getOffset() {
-        return offset;
+    public Optional<Float> getOffset() {
+        return Optional.ofNullable(offset);
     }
 
     /**
@@ -136,8 +136,8 @@ public class EncodingAttributes implements Serializable {
      *
      * @return The duration (seconds) of the re-encoded stream.
      */
-    public Float getDuration() {
-        return duration;
+    public Optional<Float> getDuration() {
+        return Optional.ofNullable(duration);
     }
 
     /**
@@ -179,8 +179,8 @@ public class EncodingAttributes implements Serializable {
      * @return The attributes for the encoding of the audio stream in the target
      * multimedia file.
      */
-    public AudioAttributes getAudioAttributes() {
-        return audioAttributes;
+    public Optional<AudioAttributes> getAudioAttributes() {
+        return Optional.ofNullable(audioAttributes);
     }
 
     /**
@@ -204,8 +204,8 @@ public class EncodingAttributes implements Serializable {
      * @return The attributes for the encoding of the video stream in the target
      * multimedia file.
      */
-    public VideoAttributes getVideoAttributes() {
-        return videoAttributes;
+    public Optional<VideoAttributes> getVideoAttributes() {
+        return Optional.ofNullable(videoAttributes);
     }
 
     /**
@@ -253,8 +253,8 @@ public class EncodingAttributes implements Serializable {
      * -1 means use default of ffmpeg
      * 
      */
-    public int getFilterThreads() {
-        return filterThreads;
+    public Optional<Integer> getFilterThreads() {
+        return Optional.ofNullable(filterThreads);
     }
 
     /**
@@ -274,8 +274,8 @@ public class EncodingAttributes implements Serializable {
      * -1 means use default of ffmpeg
      * @return the decodingThreads
      */
-    public int getDecodingThreads() {
-        return decodingThreads;
+    public Optional<Integer> getDecodingThreads() {
+        return Optional.ofNullable(decodingThreads);
     }
 
     /**
@@ -291,22 +291,28 @@ public class EncodingAttributes implements Serializable {
 
     /**
      * Number of threads to use for encoding (if supported by codec)
-     * -1 means use default of ffmpeg
+     * No value (Optional.empty()) means use default of ffmpeg
      * @return the encodingThreads
      */
-    public int getEncodingThreads() {
-        return encodingThreads;
+    public Optional<Integer> getEncodingThreads() {
+        return Optional.ofNullable(encodingThreads);
     }
 
     /**
      * Number of threads to use for encoding (if supported by codec)
-     * -1 means use default of ffmpeg
+     * null means use default of ffmpeg
      * @param encodingThreads the encodingThreads to set
      * @return this instance
      */
-    public EncodingAttributes setEncodingThreads(int encodingThreads) {
+    public EncodingAttributes setEncodingThreads(Integer encodingThreads) {
         this.encodingThreads = encodingThreads;
         return this;
     }
+
+	public void validate() {
+		if (audioAttributes == null && videoAttributes == null) {
+            throw new IllegalArgumentException("Both audio and video attributes are null");
+        }
+	}
     
 }

@@ -112,8 +112,8 @@ public class VideoAttributes implements Serializable {
      *
      * @return The codec name for the encoding process.
      */
-    String getCodec() {
-        return codec;
+    public Optional<String> getCodec() {
+        return Optional.ofNullable(codec);
     }
 
     /**
@@ -139,8 +139,8 @@ public class VideoAttributes implements Serializable {
      *
      * @return The the forced tag/fourcc value for the video stream.
      */
-    String getTag() {
-        return tag;
+    public Optional<String> getTag() {
+        return Optional.ofNullable(tag);
     }
 
     /**
@@ -159,8 +159,8 @@ public class VideoAttributes implements Serializable {
      *
      * @return The bitrate value for the encoding process.
      */
-    Integer getBitRate() {
-        return bitRate;
+    public Optional<Integer> getBitRate() {
+        return Optional.ofNullable(bitRate);
     }
 
     /**
@@ -180,8 +180,8 @@ public class VideoAttributes implements Serializable {
      *
      * @return The frame rate value for the encoding process.
      */
-    Integer getFrameRate() {
-        return frameRate;
+    public Optional<Integer> getFrameRate() {
+        return Optional.ofNullable(frameRate);
     }
 
     /**
@@ -201,8 +201,8 @@ public class VideoAttributes implements Serializable {
      *
      * @return The video size for the encoding process.
      */
-    VideoSize getSize() {
-        return size;
+    public Optional<VideoSize> getSize() {
+        return Optional.ofNullable(size);
     }
 
     /**
@@ -244,8 +244,8 @@ public class VideoAttributes implements Serializable {
     /**
      * @return the quality
      */
-    public Integer getQuality() {
-        return quality;
+    public Optional<Integer> getQuality() {
+        return Optional.ofNullable(quality);
     }
 
     /**
@@ -271,8 +271,8 @@ public class VideoAttributes implements Serializable {
     /**
      * @return the x264Profile
      */
-    public X264_PROFILE getX264Profile() {
-        return x264Profile;
+    public Optional<X264_PROFILE> getX264Profile() {
+        return Optional.ofNullable(x264Profile);
     }
 
     /**
