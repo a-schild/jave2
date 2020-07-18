@@ -18,6 +18,8 @@
  */
 package ws.schild.jave;
 
+import ws.schild.jave.info.MultimediaInfo;
+
 /**
  * Encoding progress listener interface. Instances of implementing classes could
  * be used to listen an encoding process.

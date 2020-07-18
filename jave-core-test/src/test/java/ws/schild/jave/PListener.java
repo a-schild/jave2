@@ -8,6 +8,8 @@ package ws.schild.jave;
 import java.util.LinkedList;
 import java.util.List;
 
+import ws.schild.jave.info.MultimediaInfo;
+
 /**
  *
  * @author a.schild

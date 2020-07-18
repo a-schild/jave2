@@ -16,9 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ws.schild.jave;
+package ws.schild.jave.encode;
 
 import java.io.Serializable;
+import java.util.Optional;
+
+import ws.schild.jave.Encoder;
 
 /**
  * Attributes controlling the encoding process.

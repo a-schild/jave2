@@ -6,9 +6,8 @@
 package ws.schild.jave.filters;
 
 import java.io.File;
-import ws.schild.jave.Color;
-import ws.schild.jave.Utils;
-import ws.schild.jave.VideoFilter;
+
+import ws.schild.utils.Utils;
 
 /**
  * Add a text watermark in the video file

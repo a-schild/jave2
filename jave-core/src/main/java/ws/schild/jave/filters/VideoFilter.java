@@ -1,4 +1,4 @@
-package ws.schild.jave;
+package ws.schild.jave.filters;
 
 /**
  * @author jgiotta

@@ -7,8 +7,12 @@ import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.process.ProcessLocator;
 import ws.schild.process.ProcessWrapper;
+import ws.schild.process.ffmpeg.DefaultFFMPEGLocator;
+import ws.schild.utils.RBufferedReader;
+import ws.schild.utils.Utils;
 
 public class ScreenExtractor {
 

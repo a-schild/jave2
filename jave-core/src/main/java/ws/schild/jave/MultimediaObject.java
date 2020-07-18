@@ -10,8 +10,14 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ws.schild.jave.info.AudioInfo;
+import ws.schild.jave.info.MultimediaInfo;
+import ws.schild.jave.info.VideoInfo;
+import ws.schild.jave.info.VideoSize;
 import ws.schild.process.ProcessLocator;
 import ws.schild.process.ProcessWrapper;
+import ws.schild.process.ffmpeg.DefaultFFMPEGLocator;
+import ws.schild.utils.RBufferedReader;
 
 public class MultimediaObject {
 
