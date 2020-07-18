@@ -72,7 +72,7 @@ public class MultimediaObject {
      * One of the side effects is, that no progressbar is available.
      * 
      */
-    private boolean readURLOnce= false; 
+    private boolean readURLOnce = false; 
 
     /**
      * It builds an extractor using a {@link DefaultFFMPEGLocator} instance to
@@ -107,7 +107,7 @@ public class MultimediaObject {
     public MultimediaObject(URL input, boolean readURLOnce) {
         this.locator = new DefaultFFMPEGLocator();
         this.inputURL = input;
-        this.readURLOnce= readURLOnce;
+        this.readURLOnce = readURLOnce;
     }
 
     /**
@@ -449,4 +449,14 @@ public class MultimediaObject {
     public boolean isReadURLOnce() {
         return readURLOnce;
     }
+    
+    @Override
+    public String toString() {
+    	if (isURL()) {
+    		return getURL().toString();
+    	} else {
+    		return getFile().getAbsolutePath();
+    	}
+    }
+    
 }
