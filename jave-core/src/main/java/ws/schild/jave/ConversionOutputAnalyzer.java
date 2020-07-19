@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public class ConversionOutputAnalyzer {
     private static final Logger LOG = LoggerFactory.getLogger(ConversionOutputAnalyzer.class);
 
-        /**
+    /**
      * This regexp is used to parse the ffmpeg output about the ongoing encoding
      * process.
      */
