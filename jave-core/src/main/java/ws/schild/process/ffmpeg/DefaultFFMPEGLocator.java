@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ws.schild.process.ProcessLocator;
+import ws.schild.process.ProcessWrapper;
 
 /**
  * The default ffmpeg executable locator, which exports on disk the ffmpeg
@@ -128,50 +129,34 @@ public class DefaultFFMPEGLocator implements ProcessLocator {
      */
     private void copyFile(String path, File dest) {
        String resourceName= "nativebin/" + path;
-        try
-        {
+        try {
             LOG.debug("Copy from resource <{}> to target <{}>", resourceName, dest.getAbsolutePath());
             InputStream is= getClass().getResourceAsStream(resourceName);
-            if (is == null)
-            {
+            if (is == null) {
                 // Use this for Java 9+ only if required
                 resourceName= "ws/schild/jave/nativebin/" + path;
                 LOG.debug("Alternative copy from SystemResourceAsStream <{}> to target <{}>", resourceName, dest.getAbsolutePath());
                 is= ClassLoader.getSystemResourceAsStream(resourceName);
             }
-            if (is != null)
-            {
-                if (copy(is, dest.getAbsolutePath()))
-                {
-                    if (dest.exists())
-                    {
+            if (is != null) {
+                if (copy(is, dest.getAbsolutePath())) {
+                    if (dest.exists()) {
                         LOG.debug("Target <{}> exists", dest.getAbsolutePath());
-                    }
-                    else
-                    {
+                    } else {
                         LOG.error("Target <{}> does not exist", dest.getAbsolutePath());
                     }
-                }
-                else
-                {
+                } else {
                     LOG.error("Copy resource to target <{}> failed", dest.getAbsolutePath());
                 }
-                try
-                {
+                try {
                     is.close();
-                }
-                catch (IOException ioex)
-                {
+                } catch (IOException ioex) {
                     LOG.warn("Error in closing input stream", ioex);
                 }
-            }
-            else
-            {
+            } else {
                 LOG.error("Could not find ffmpeg platform executable in resources for <{}>", resourceName);
             }
-        }
-        catch (NullPointerException ex)
-        {
+        } catch (NullPointerException ex) {
             LOG.error("Could not find ffmpeg executable for {} is the correct platform jar included?", resourceName);
             throw ex;
         }
@@ -187,15 +172,18 @@ public class DefaultFFMPEGLocator implements ProcessLocator {
     private boolean copy(InputStream source, String destination) {
         boolean success = true;
 
-        try
-        {
+        try {
             Files.copy(source, Paths.get(destination), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             LOG.error("Cannot write file " + destination, ex);
             success = false;
         }
 
         return success;
+    }
+    
+    @Override
+    public ProcessWrapper createExecutor() {
+    	return new FFMPEGProcess(getExecutablePath());
     }
 }
