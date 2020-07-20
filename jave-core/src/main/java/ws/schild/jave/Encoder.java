@@ -426,7 +426,7 @@ public class Encoder {
 		new ValueArgument(ArgType.GLOBAL, "-ss",             ea -> ea.getOffset().map(Object::toString)),
 		new ValueArgument(ArgType.INFILE, "-threads",        ea -> ea.getDecodingThreads().map(Object::toString)),
 		new PredicateArgument(ArgType.INFILE,  "-loop", "1", ea -> ea.getLoop() && ea.getDuration().isPresent()),
-		new ValueArgument(ArgType.OUTFILE, "-t",              ea -> ea.getDuration().map(Object::toString)),
+		new ValueArgument(ArgType.OUTFILE, "-t",             ea -> ea.getDuration().map(Object::toString)),
 		// Video Options
 		new PredicateArgument(ArgType.OUTFILE, "-vn",        ea -> !ea.getVideoAttributes().isPresent()),
 		new ValueArgument(ArgType.OUTFILE, "-vcodec",        ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getCodec)),
