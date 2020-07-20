@@ -4,13 +4,23 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+/**
+ * A ValueArgument is an EncodingArgument that is optionally present based on
+ * the presence of the provided valueGetter.
+ * @author mressler
+ *
+ */
 public class ValueArgument implements EncodingArgument {
 
 	private ArgType argumentType;
 	private String argumentName;
 	private Function<EncodingAttributes, Optional<String>> valueGetter;
 	
-	public ValueArgument(ArgType argType, String argumentName, Function<EncodingAttributes, Optional<String>> valueGetter) {
+	public ValueArgument(
+		ArgType argType, 
+		String argumentName, 
+		Function<EncodingAttributes, Optional<String>> valueGetter)
+	{
 		this.argumentType = argType;
 		this.argumentName = argumentName;
 		this.valueGetter = valueGetter;

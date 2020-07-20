@@ -4,6 +4,12 @@ import java.util.stream.Stream;
 
 import ws.schild.process.ProcessWrapper;
 
+/**
+ * The standard FFMPEGProcess - enhances the ProcessWrapper by always suppressing
+ * the FFMPEG banner.
+ * @author mressler
+ *
+ */
 public class FFMPEGProcess extends ProcessWrapper {
 
 	public FFMPEGProcess(String ffmpegExecutablePath) {
