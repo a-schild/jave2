@@ -63,7 +63,7 @@ public class EncodingAttributesTest extends AMediaTest{
         video.setFrameRate(15);
         video.setSize(new VideoSize(176, 144));
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp4");
+        attrs.setOutputFormat("mp4");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         attrs.setDecodingThreads(1);

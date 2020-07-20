@@ -35,10 +35,15 @@ public class EncodingAttributes implements Serializable {
 	private static final long serialVersionUID = 2473587816471032706L;
 
 	/**
+     * The format name for the incoming multimedia file.
+     */
+    private String inputFormat = null;
+	
+	/**
      * The format name for the encoded target multimedia file. Be sure this
      * format is supported (see {@link Encoder#getSupportedEncodingFormats()}.
      */
-    private String format = null;
+    private String outputFormat = null;
 
     /**
      * The start offset time (seconds). If null or not specified no start offset
@@ -117,12 +122,32 @@ public class EncodingAttributes implements Serializable {
     }
     
     /**
+     * Returns the format name for the incoming multimedia file.
+     * 
+     * @return The format name for the incoming multimedia file.
+     */
+    public Optional<String> getInputFormat() {
+		return Optional.ofNullable(inputFormat);
+	}
+
+    /**
+     * Sets the format name for the source multimedia file.
+     * 
+     * @param inputFormat the format name for the incoming multimedia file.
+     * @return this instance
+     */
+	public EncodingAttributes setInputFormat(String inputFormat) {
+		this.inputFormat = inputFormat;
+		return this;
+	}
+
+	/**
      * Returns the format name for the encoded target multimedia file.
      *
      * @return The format name for the encoded target multimedia file.
      */
-    public Optional<String> getFormat() {
-        return Optional.ofNullable(format);
+    public Optional<String> getOutputFormat() {
+        return Optional.ofNullable(outputFormat);
     }
 
     /**
@@ -132,8 +157,8 @@ public class EncodingAttributes implements Serializable {
      * @param format The format name for the encoded target multimedia file.
      * @return this instance
      */
-    public EncodingAttributes setFormat(String format) {
-        this.format = format;
+    public EncodingAttributes setOutputFormat(String format) {
+        this.outputFormat = format;
         return this;
     }
 
@@ -251,7 +276,7 @@ public class EncodingAttributes implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getName() + "(format=" + format + ", offset="
+        return getClass().getName() + "(format=" + outputFormat + ", offset="
                 + offset + ", duration=" + duration + ",loop=" + loop + ", audioAttributes="
                 + audioAttributes + ", videoAttributes=" + videoAttributes
                 + ")";

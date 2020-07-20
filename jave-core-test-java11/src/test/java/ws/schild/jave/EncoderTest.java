@@ -140,7 +140,7 @@ public class EncoderTest {
         video.setFrameRate(15);
         video.setSize(new VideoSize(176, 144));
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("3gp");
+        attrs.setOutputFormat("3gp");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
@@ -172,7 +172,7 @@ public class EncoderTest {
         video.setFrameRate(15);
         video.setSize(new VideoSize(176, 144));
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("3gp");
+        attrs.setOutputFormat("3gp");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
@@ -206,7 +206,7 @@ public class EncoderTest {
         video.setFrameRate(15);
         video.setSize(new VideoSize(176, 144));
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("3gp");
+        attrs.setOutputFormat("3gp");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
@@ -249,7 +249,7 @@ public class EncoderTest {
         video.setFrameRate(15);
         video.setSize(new VideoSize(176, 144));
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("3gp");
+        attrs.setOutputFormat("3gp");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
@@ -292,7 +292,7 @@ public class EncoderTest {
         video.setFrameRate(15);
         video.setSize(new VideoSize(400, 300));
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("flv");
+        attrs.setOutputFormat("flv");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
@@ -326,7 +326,7 @@ public class EncoderTest {
 
             //Set encoding attributes
             EncodingAttributes attributes = new EncodingAttributes();
-            attributes.setFormat("wav");
+            attributes.setOutputFormat("wav");
             attributes.setAudioAttributes(audio);
             Encoder encoder = new Encoder();
             PListener listener = new PListener();
@@ -363,7 +363,7 @@ public class EncoderTest {
             video.setFrameRate(30);
             video.setSize(new VideoSize(320, 240));
             EncodingAttributes attrs = new EncodingAttributes();
-            attrs.setFormat("mp4");
+            attrs.setOutputFormat("mp4");
             attrs.setVideoAttributes(video);
             attrs.setAudioAttributes(audio);
             Encoder encoder = new Encoder();
@@ -401,7 +401,7 @@ public class EncoderTest {
         video.setSize(new VideoSize(176, 144));
         video.setQuality(31);
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("3gp");
+        attrs.setOutputFormat("3gp");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
@@ -438,7 +438,7 @@ public class EncoderTest {
 
         encodingAttr.setAudioAttributes(audioAttr);
         encodingAttr.setVideoAttributes(videoAttr);
-        encodingAttr.setFormat("mp4");
+        encodingAttr.setOutputFormat("mp4");
 
         Encoder encoder = new Encoder();
         encoder.encode(new MultimediaObject(source), target, encodingAttr);
@@ -468,7 +468,7 @@ public class EncoderTest {
         audioAttr.setVolume(1000);
         audioAttr.setQuality(1000);
         audioAttr.setSamplingRate(48000);
-        encodingAttr.setFormat("flac");
+        encodingAttr.setOutputFormat("flac");
         encodingAttr.setAudioAttributes(audioAttr);
         
         Encoder encoder = new Encoder();
@@ -495,7 +495,7 @@ public class EncoderTest {
         audio.setChannels(2);
         audio.setSamplingRate(44100);
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp3");
+        attrs.setOutputFormat("mp3");
         attrs.setAudioAttributes(audio);
         Encoder encoder = new Encoder();
         PListener listener = new PListener();
@@ -523,7 +523,7 @@ public class EncoderTest {
         audio.setChannels(2);
         audio.setSamplingRate(42100);
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp3");
+        attrs.setOutputFormat("mp3");
         attrs.setAudioAttributes(audio);
         Encoder encoder = new Encoder();
         PListener listener = new PListener();
@@ -565,7 +565,7 @@ public class EncoderTest {
         audio.setChannels(2);
         audio.setSamplingRate(44100);
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp3");
+        attrs.setOutputFormat("mp3");
         attrs.setAudioAttributes(audio);
         encoder.encode(new MultimediaObject(source), target, attrs);
         assertTrue(target.exists(), "Output file missing");
@@ -592,7 +592,7 @@ public class EncoderTest {
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec("libmp3lame");
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp3");
+        attrs.setOutputFormat("mp3");
         attrs.setAudioAttributes(audio);
         encoder.encode(new MultimediaObject(source), target, attrs);
         assertTrue(target.exists(), "Output file missing");
@@ -620,7 +620,7 @@ public class EncoderTest {
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec("libmp3lame");
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp3");
+        attrs.setOutputFormat("mp3");
         attrs.setAudioAttributes(audio);
         attrs.setMapMetaData(true);
         encoder.encode(new MultimediaObject(source), target, attrs);
@@ -651,7 +651,7 @@ public class EncoderTest {
         audio.setChannels(2);
         audio.setSamplingRate(44100);
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp3");
+        attrs.setOutputFormat("mp3");
         attrs.setAudioAttributes(audio);
 
         Runnable task = () -> {
