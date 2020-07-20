@@ -426,6 +426,8 @@ public class Encoder {
 		new ValueArgument(ArgType.GLOBAL, "-ss",             ea -> ea.getOffset().map(Object::toString)),
 		new ValueArgument(ArgType.INFILE, "-threads",        ea -> ea.getDecodingThreads().map(Object::toString)),
 		new PredicateArgument(ArgType.INFILE,  "-loop", "1", ea -> ea.getLoop() && ea.getDuration().isPresent()),
+		new ValueArgument(ArgType.INFILE, "-f",              ea -> ea.getInputFormat()),
+		new ValueArgument(ArgType.INFILE, "-safe",           ea -> ea.getSafe().map(Object::toString)), 
 		new ValueArgument(ArgType.OUTFILE, "-t",             ea -> ea.getDuration().map(Object::toString)),
 		// Video Options
 		new PredicateArgument(ArgType.OUTFILE, "-vn",        ea -> !ea.getVideoAttributes().isPresent()),
@@ -450,7 +452,7 @@ public class Encoder {
 		new ValueArgument(ArgType.OUTFILE, "-ar",            ea -> ea.getAudioAttributes().flatMap(AudioAttributes::getSamplingRate).map(Object::toString)),
 		new ValueArgument(ArgType.OUTFILE, "-vol",           ea -> ea.getAudioAttributes().flatMap(AudioAttributes::getVolume).map(Object::toString)),
 		new ValueArgument(ArgType.OUTFILE, "-qscale:a",      ea -> ea.getAudioAttributes().flatMap(AudioAttributes::getQuality).map(Object::toString)),
-		new ValueArgument(ArgType.OUTFILE, "-f",             ea -> ea.getFormat()),
+		new ValueArgument(ArgType.OUTFILE, "-f",             ea -> ea.getOutputFormat()),
 		new ValueArgument(ArgType.OUTFILE, "-threads",       ea -> ea.getEncodingThreads().map(Object::toString)),
 		new PredicateArgument(ArgType.OUTFILE, "-map_metadata", "0", ea -> ea.isMapMetaData())
 	));

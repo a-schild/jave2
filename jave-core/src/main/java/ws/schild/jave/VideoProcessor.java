@@ -3,17 +3,13 @@ package ws.schild.jave;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ws.schild.jave.encode.ArgType;
 import ws.schild.jave.encode.EncodingAttributes;
-import ws.schild.jave.encode.ValueArgument;
 import ws.schild.jave.encode.VideoAttributes;
 import ws.schild.jave.progress.EncoderProgressAdapter;
 import ws.schild.jave.progress.VideoProgressListener;
@@ -42,9 +38,6 @@ public class VideoProcessor {
 			locator = new DefaultFFMPEGLocator();
 			encoder = new Encoder(locator);
 			enabled = true;
-			
-			Encoder.addOptionAtIndex(new ValueArgument(ArgType.INFILE, "-f",    ea -> Optional.ofNullable(ea.getExtraContext().get("inputFormat"))), 3);
-			Encoder.addOptionAtIndex(new ValueArgument(ArgType.INFILE, "-safe", ea -> Optional.ofNullable(ea.getExtraContext().get("safe"))), 4);
 		} catch (IllegalStateException ise) {
 			logger.error("Error while starting the VideoService", ise);
 		}
@@ -80,10 +73,8 @@ public class VideoProcessor {
 			MultimediaObject toMerge = fromFile(mergeFile);
 			
 			EncodingAttributes attributes = new EncodingAttributes();
-			HashMap<String, String> extraContext = new HashMap<>();
-			extraContext.put("inputFormat", "concat");
-			extraContext.put("safe", "0");
-			attributes.setExtraContext(extraContext);
+			attributes.setInputFormat("concat");
+			attributes.setSafe(0);
 			
 			VideoAttributes videoAttributes = new VideoAttributes();
 			videoAttributes.setCodec("copy");

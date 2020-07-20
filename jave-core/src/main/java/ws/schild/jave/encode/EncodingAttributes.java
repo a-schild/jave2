@@ -92,9 +92,16 @@ public class EncodingAttributes implements Serializable {
     private Integer encodingThreads = null;
 
     /**
-    * Should the input be treated as a loop
-    */
+     * Should the input be treated as a loop
+     */
     private boolean loop = false;
+    
+    /**
+     * Are the file paths considered "safe"
+     * 
+     * @see <a href="https://www.ffmpeg.org/ffmpeg-formats.html#Options">FFMPEG Documentation</a>
+     */
+    private Integer safe = null;
     
     /**
      * Additional context for custom encoder options. Add context here and 
@@ -205,7 +212,7 @@ public class EncodingAttributes implements Serializable {
         return this;
     }
 
-    /*
+    /**
      * Returns if the input is to be considered for looping.
      * @return if the input will be looped.
      */
@@ -225,6 +232,31 @@ public class EncodingAttributes implements Serializable {
 	}
 
     /**
+     * Returns whether or not the encoder will consider file paths "safe".
+     * 
+     * @return Whether or not the encoder will consider file paths "safe".
+     * @see <a href="https://www.ffmpeg.org/ffmpeg-formats.html#Options">FFMPEG Documentation</a>
+     */
+    public Optional<Integer> getSafe() {
+		return Optional.ofNullable(safe);
+	}
+
+    /**
+     * Are the file paths considered "safe": A file path is considered safe if it does not contain a
+     * protocol specification and is relative and all components only contain characters from the
+     * portable character set (letters, digits, period, underscore and hyphen) and have no period at
+     * the beginning of a component.
+     * 
+     * @param safe 0 for not safe; 1 for safe; is equivalent to 1 if the format was automatically 
+     * probed and 0 otherwise. 1 is the default
+     * @see <a href="https://www.ffmpeg.org/ffmpeg-formats.html#Options">FFMPEG Documentation</a>
+     */
+	public EncodingAttributes setSafe(Integer safe) {
+		this.safe = safe;
+		return this;
+	}
+
+	/**
      * Returns the attributes for the encoding of the audio stream in the target
      * multimedia file.
      *
