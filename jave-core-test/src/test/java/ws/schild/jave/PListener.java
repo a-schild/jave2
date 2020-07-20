@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ws.schild.jave.info.MultimediaInfo;
+import ws.schild.jave.progress.EncoderProgressListener;
 
 /**
  *

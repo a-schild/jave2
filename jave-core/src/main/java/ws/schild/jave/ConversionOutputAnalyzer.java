@@ -26,6 +26,8 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ws.schild.jave.progress.EncoderProgressListener;
+
 /**
  *
  * @author a.schild

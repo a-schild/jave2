@@ -32,6 +32,7 @@ import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.info.VideoSize;
+import ws.schild.jave.progress.EncoderProgressListener;
 
 /**
  *

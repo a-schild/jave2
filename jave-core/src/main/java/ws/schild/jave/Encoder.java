@@ -46,6 +46,7 @@ import ws.schild.jave.encode.VideoAttributes;
 import ws.schild.jave.encode.VideoAttributes.X264_PROFILE;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.info.VideoSize;
+import ws.schild.jave.progress.EncoderProgressListener;
 import ws.schild.process.ProcessLocator;
 import ws.schild.process.ProcessWrapper;
 import ws.schild.process.ffmpeg.DefaultFFMPEGLocator;
