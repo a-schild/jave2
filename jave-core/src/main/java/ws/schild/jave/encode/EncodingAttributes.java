@@ -19,6 +19,8 @@
 package ws.schild.jave.encode;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import ws.schild.jave.Encoder;
@@ -88,7 +90,32 @@ public class EncodingAttributes implements Serializable {
     * Should the input be treated as a loop
     */
     private boolean loop = false;
+    
+    /**
+     * Additional context for custom encoder options. Add context here and 
+     * retrieve/use it by adding an EncodingArgument to your Encoder class
+     * via {@link ws.schild.jave.Encoder#addOptionAtIndex(EncodingArgument, Integer)}
+     */
+    private HashMap<String, String> extraContext = new HashMap<>(); 
 
+    /**
+     * Returns any additional user supplied context. Meant to be used in conjunction
+     * with {@link ws.schild.jave.Encoder#addOptionAtIndex(EncodingArgument, Integer)}
+     */
+    public Map<String, String> getExtraContext() {
+    	return extraContext;
+    }
+    
+    /**
+     * Adds all key/value pairs from context to the extraContext private variable.
+     * Meant to be used in conjunction with {@link ws.schild.jave.Encoder#addOptionAtIndex(EncodingArgument, Integer)}.
+     * Add context here and retrieve the context via an EncodingArgument.
+     */
+    public EncodingAttributes setExtraContext(Map<String, String> context) {
+    	extraContext.putAll(context);
+    	return this;
+    }
+    
     /**
      * Returns the format name for the encoded target multimedia file.
      *

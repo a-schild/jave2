@@ -2,14 +2,12 @@ package ws.schild.jave.progress;
 
 import java.io.PrintStream;
 
-import ws.schild.jave.info.MultimediaInfo;
-
 /**
  * Simple class to echo progress to Standard out - or any PrintStream.
  * @author mressler
  *
  */
-public class EchoingProgressListener implements EncoderProgressListener {
+public class EchoingProgressListener implements VideoProgressListener {
 
 	private String prefix;
 	private PrintStream out;
@@ -28,18 +26,28 @@ public class EchoingProgressListener implements EncoderProgressListener {
 	}
 	
 	@Override
-	public void sourceInfo(MultimediaInfo info) {
-		out.println(prefix + " Info Received: " + info);
+	public void onBegin() {
+		out.println(prefix + " Beginning");
 	}
 
 	@Override
-	public void progress(int permil) {
-		out.println(prefix + " Progress Received: " + permil);
-	}
-
-	@Override
-	public void message(String message) {
+	public void onMessage(String message) {
 		out.println(prefix + " Message Received: " + message);
+	}
+
+	@Override
+	public void onProgress(Double progress) {
+		out.println(prefix + " Progress Notification: " + progress);
+	}
+
+	@Override
+	public void onError(String message) {
+		out.println(prefix + " Error Encountered: " + message);
+	}
+
+	@Override
+	public void onComplete() {
+		out.println(prefix + " Complete!");
 	}
 
 }

@@ -421,7 +421,7 @@ public class Encoder {
         encode(src, target, attributes, listener);
     }
 
-	private static List<EncodingArgument> globalOptions = Arrays.asList(
+	private static List<EncodingArgument> globalOptions = new ArrayList<EncodingArgument>(Arrays.asList(
 		new ValueArgument(ArgType.GLOBAL, "--filter_thread", ea -> ea.getFilterThreads().map(Object::toString)),
 		new ValueArgument(ArgType.GLOBAL, "-ss",             ea -> ea.getOffset().map(Object::toString)),
 		new ValueArgument(ArgType.INFILE, "-threads",        ea -> ea.getDecodingThreads().map(Object::toString)),
@@ -453,7 +453,11 @@ public class Encoder {
 		new ValueArgument(ArgType.OUTFILE, "-f",             ea -> ea.getFormat()),
 		new ValueArgument(ArgType.OUTFILE, "-threads",       ea -> ea.getEncodingThreads().map(Object::toString)),
 		new PredicateArgument(ArgType.OUTFILE, "-map_metadata", "0", ea -> ea.isMapMetaData())
-	);
+	));
+	
+	public static void addOptionAtIndex(EncodingArgument arg, Integer index) {
+		globalOptions.add(index, arg);
+	}
     
     /**
      * Re-encode a multimedia file(s).
