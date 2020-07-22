@@ -1,8 +1,7 @@
 package ws.schild.jave;
 
 /**
- * Created with IntelliJ IDEA. User: jgiotta Date: 8/31/13 Time: 10:56 AM To
- * change this template use File | Settings | File Templates.
+ * @author jgiotta
  */
 public class VideoFilter {
 
