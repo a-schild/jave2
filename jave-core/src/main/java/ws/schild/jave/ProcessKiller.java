@@ -23,7 +23,7 @@ package ws.schild.jave;
  * processes at the jvm shutdown.
  *
  * @author Carlo Pelliccia
- * @deprecated  As of 3.0.0. Use {@link ws.schild.process.ProcessKiller} instead.
+ * @deprecated  As of 3.0.0. Use {@link ws.schild.jave.process.ProcessKiller} instead.
  */
 @Deprecated
 class ProcessKiller extends Thread {

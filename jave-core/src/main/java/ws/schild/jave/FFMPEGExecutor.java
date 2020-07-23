@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * An ffmpeg process wrapper.
  *
  * @author Carlo Pelliccia
- * @deprecated  As of 3.0.0. Use {@link ws.schild.process.ProcessWrapper} instead.
+ * @deprecated  As of 3.0.0. Use {@link ws.schild.jave.process.ProcessWrapper} instead.
  */
 @Deprecated
 public class FFMPEGExecutor {
