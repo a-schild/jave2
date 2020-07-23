@@ -584,7 +584,9 @@ public class Encoder {
         } catch (IOException e) {
             throw new EncoderException(e);
         } finally {
-            ffmpeg.destroy();
+        	if (ffmpeg != null) {
+        		ffmpeg.destroy();
+        	}
             ffmpeg = null;
         }
     }
