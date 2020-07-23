@@ -40,12 +40,6 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFFMPEGLocator.class);
 
     /**
-     * Trace the version of the bundled ffmpeg executable. It's a counter: every
-     * time the bundled ffmpeg change it is incremented by 1.
-     */
-    private static final String MY_EXE_VERSION = "2.8.0-SNAPSHOT";
-
-    /**
      * The ffmpeg executable file path.
      */
     private final String path;
