@@ -207,7 +207,7 @@
         <connection>scm:git:git://github.com/a-schild/jave2.git</connection>
         <developerConnection>scm:git:git@github.com:a-schild/jave2.git</developerConnection>
         <url>https://github.com/a-schild/jave2</url>
-        <tag>HEAD</tag>
+        <tag>dev-3.0-changes</tag>
     </scm>
     <profiles>
         <!-- GPG Signature on release -->
