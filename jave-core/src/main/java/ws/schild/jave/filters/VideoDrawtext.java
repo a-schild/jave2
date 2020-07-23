@@ -18,7 +18,7 @@ import ws.schild.jave.utils.Utils;
  * 
  * @author andre
  */
-public class VideoDrawtext extends VideoFilter {
+public class VideoDrawtext implements VideoFilter {
 
     private String watermarkText= null;
     private int posX= -1;
