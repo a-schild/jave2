@@ -22,6 +22,8 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 
+import ws.schild.process.ffmpeg.DefaultFFMPEGLocator;
+
 
 /**
  *

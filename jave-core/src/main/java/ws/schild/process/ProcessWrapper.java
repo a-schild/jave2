@@ -22,6 +22,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +34,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Carlo Pelliccia
  */
-public class ProcessWrapper {
+public class ProcessWrapper implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProcessWrapper.class);
 
@@ -97,33 +101,25 @@ public class ProcessWrapper {
      * @throws IOException If the process call fails.
      */
     public void execute(boolean destroyOnRuntimeShutdown, boolean openIOStreams) throws IOException {
-        int argsSize = args.size();
-        String[] cmd = new String[argsSize + 2];
-        cmd[0] = ffmpegExecutablePath;
-        for (int i = 0; i < argsSize; i++)
-        {
-            cmd[i + 1] = args.get(i);
+    	Stream<String> execArgs = Stream.concat(Stream.of(ffmpegExecutablePath), args.stream());
+    	
+        execArgs = enhanceArguments(execArgs);
+        
+        List<String> execList = execArgs.collect(Collectors.toList());
+        
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("About to execute {}", execList.stream().collect(Collectors.joining(" ")));
         }
-        cmd[argsSize + 1] = "-hide_banner";  // Don't show banner
-        if (LOG.isDebugEnabled())
-        {
-            StringBuilder sb = new StringBuilder();
-            for (String c : cmd)
-            {
-                sb.append(c);
-                sb.append(' ');
-            }
-            LOG.debug("About to execute {}", sb.toString());
-        }
+        
         Runtime runtime = Runtime.getRuntime();
-        ffmpeg = runtime.exec(cmd);
-        if (destroyOnRuntimeShutdown)
-        {
+        ffmpeg = runtime.exec(execList.toArray(new String[0]));
+        
+        if (destroyOnRuntimeShutdown) {
             ffmpegKiller = new ProcessKiller(ffmpeg);
             runtime.addShutdownHook(ffmpegKiller);
         }
-        if (openIOStreams)
-        {
+        
+        if (openIOStreams) {
             inputStream = ffmpeg.getInputStream();
             outputStream = ffmpeg.getOutputStream();
             errorStream = ffmpeg.getErrorStream();
@@ -131,6 +127,15 @@ public class ProcessWrapper {
     }
     
     /**
+     * Provide an opportunity for subclasses to enhance the argument list before passing off to execute.
+     * @param execArgs The current Stream of arguments
+     * @return A possibly enhanced stream of arguments
+     */
+    protected Stream<String> enhanceArguments(Stream<String> execArgs) {
+		return execArgs;
+	}
+
+	/**
      * Executes the ffmpeg process with the previous given arguments.
      * Default to kill processes when the JVM terminates, and the various
      * IOStreams are opened as required
@@ -172,46 +177,39 @@ public class ProcessWrapper {
      * If there's a ffmpeg execution in progress, it kills it.
      */
     public void destroy() {
-        if (inputStream != null)
-        {
-            try
-            {
+        if (inputStream != null) {
+            try {
                 inputStream.close();
-            } catch (Throwable t)
-            {
+            } catch (Throwable t) {
                 LOG.warn("Error closing input stream", t);
             }
             inputStream = null;
         }
-        if (outputStream != null)
-        {
-            try
-            {
+        
+        if (outputStream != null) {
+            try {
                 outputStream.close();
-            } catch (Throwable t)
-            {
+            } catch (Throwable t) {
                 LOG.warn("Error closing output stream", t);
             }
             outputStream = null;
         }
-        if (errorStream != null)
-        {
-            try
-            {
+        
+        if (errorStream != null) {
+            try {
                 errorStream.close();
-            } catch (Throwable t)
-            {
+            } catch (Throwable t) {
                 LOG.warn("Error closing error stream", t);
             }
             errorStream = null;
         }
-        if (ffmpeg != null)
-        {
+        
+        if (ffmpeg != null) {
             ffmpeg.destroy();
             ffmpeg = null;
         }
-        if (ffmpegKiller != null)
-        {
+        
+        if (ffmpegKiller != null) {
             Runtime runtime = Runtime.getRuntime();
             runtime.removeShutdownHook(ffmpegKiller);
             ffmpegKiller = null;
@@ -228,14 +226,16 @@ public class ProcessWrapper {
     public int getProcessExitCode()
     {
         // Make sure it's terminated
-        try
-        {
+        try {
             ffmpeg.waitFor();
-        }
-        catch (InterruptedException ex)
-        {
+        } catch (InterruptedException ex) {
             LOG.warn("Interrupted during waiting on process, forced shutdown?", ex);
         }
         return ffmpeg.exitValue();
     }
+
+	@Override
+	public void close() {
+		destroy();
+	}
 }

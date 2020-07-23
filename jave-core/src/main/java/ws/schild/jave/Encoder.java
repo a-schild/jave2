@@ -23,15 +23,34 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ws.schild.jave.encode.ArgType;
+import ws.schild.jave.encode.AudioAttributes;
+import ws.schild.jave.encode.EncodingArgument;
+import ws.schild.jave.encode.EncodingAttributes;
+import ws.schild.jave.encode.PredicateArgument;
+import ws.schild.jave.encode.SimpleArgument;
+import ws.schild.jave.encode.ValueArgument;
+import ws.schild.jave.encode.VideoAttributes;
+import ws.schild.jave.encode.VideoAttributes.X264_PROFILE;
+import ws.schild.jave.info.MultimediaInfo;
+import ws.schild.jave.info.VideoSize;
+import ws.schild.jave.progress.EncoderProgressListener;
 import ws.schild.process.ProcessLocator;
 import ws.schild.process.ProcessWrapper;
+import ws.schild.process.ffmpeg.DefaultFFMPEGLocator;
+import ws.schild.utils.RBufferedReader;
 
 /**
  * Main class of the package. Instances can encode audio and video streams.
@@ -79,7 +98,7 @@ public class Encoder {
     /**
      * List of unhandled messages from ffmpeng run
      */
-    private List<String>    unhandledMessages= null;
+    private List<String> unhandledMessages= null;
     
     /**
      * It builds an encoder using a {@link DefaultFFMPEGLocator} instance to
@@ -253,10 +272,10 @@ public class Encoder {
      */
     protected String[] getSupportedCodingFormats(boolean encoding) throws EncoderException {
         ArrayList<String> res = new ArrayList<>();
-        ProcessWrapper localFFMPEG = locator.createExecutor();
-        localFFMPEG.addArgument("-formats");
-        try
-        {
+        
+        try (ProcessWrapper localFFMPEG = locator.createExecutor()) {
+        	localFFMPEG.addArgument("-formats");
+        	
             localFFMPEG.execute();
             RBufferedReader reader = 
                     new RBufferedReader(new InputStreamReader(localFFMPEG
@@ -305,13 +324,10 @@ public class Encoder {
                     headerFound = true;
                 }
             }
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new EncoderException(e);
-        } finally
-        {
-            localFFMPEG.destroy();
         }
+        
         int size = res.size();
         String[] ret = new String[size];
         for (int i = 0; i < size; i++)
@@ -361,14 +377,14 @@ public class Encoder {
      * process.
      */
     public void encode(MultimediaObject multimediaObject, File target, EncodingAttributes attributes)
-            throws IllegalArgumentException, InputFormatException,
-            EncoderException {
+        throws IllegalArgumentException, InputFormatException, EncoderException 
+    {
         encode(multimediaObject, target, attributes, null);
     }
 
     public void encode(List<MultimediaObject> multimediaObjects, File target, EncodingAttributes attributes)
-            throws IllegalArgumentException, InputFormatException,
-            EncoderException {
+        throws IllegalArgumentException, InputFormatException, EncoderException
+    {
         encode(multimediaObjects, target, attributes, null);
     }
     
@@ -393,13 +409,57 @@ public class Encoder {
      * @throws EncoderException If a problems occurs during the encoding
      * process.
      */
-    public void encode(MultimediaObject multimediaObject, File target, EncodingAttributes attributes,
-            EncoderProgressListener listener) throws IllegalArgumentException,
-            InputFormatException, EncoderException {
+    public void encode(
+    	MultimediaObject multimediaObject, 
+    	File target, 
+    	EncodingAttributes attributes,
+        EncoderProgressListener listener) 
+        	throws IllegalArgumentException, InputFormatException, EncoderException 
+    {
         List<MultimediaObject> src= new ArrayList<>();
         src.add(multimediaObject);
         encode(src, target, attributes, listener);
     }
+
+	private static List<EncodingArgument> globalOptions = new ArrayList<EncodingArgument>(Arrays.asList(
+		new ValueArgument(ArgType.GLOBAL, "--filter_thread", ea -> ea.getFilterThreads().map(Object::toString)),
+		new ValueArgument(ArgType.GLOBAL, "-ss",             ea -> ea.getOffset().map(Object::toString)),
+		new ValueArgument(ArgType.INFILE, "-threads",        ea -> ea.getDecodingThreads().map(Object::toString)),
+		new PredicateArgument(ArgType.INFILE,  "-loop", "1", ea -> ea.getLoop() && ea.getDuration().isPresent()),
+		new ValueArgument(ArgType.INFILE, "-f",              ea -> ea.getInputFormat()),
+		new ValueArgument(ArgType.INFILE, "-safe",           ea -> ea.getSafe().map(Object::toString)), 
+		new ValueArgument(ArgType.OUTFILE, "-t",             ea -> ea.getDuration().map(Object::toString)),
+		// Video Options
+		new PredicateArgument(ArgType.OUTFILE, "-vn",        ea -> !ea.getVideoAttributes().isPresent()),
+		new ValueArgument(ArgType.OUTFILE, "-vcodec",        ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getCodec)),
+		new ValueArgument(ArgType.OUTFILE, "-vtag",          ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getTag)),
+		new ValueArgument(ArgType.OUTFILE, "-vb",            ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getBitRate).map(Object::toString)),
+		new ValueArgument(ArgType.OUTFILE, "-r",             ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getFrameRate).map(Object::toString)),
+		new ValueArgument(ArgType.OUTFILE, "-s",             ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getSize).map(VideoSize::asEncoderArgument)),
+		new PredicateArgument(ArgType.OUTFILE, "-movflags", "faststart", ea -> ea.getVideoAttributes().isPresent()),
+		new ValueArgument(ArgType.OUTFILE, "-profile:v",     ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getX264Profile).map(X264_PROFILE::getModeName)),
+		new SimpleArgument(ArgType.OUTFILE, ea -> ea.getVideoAttributes()
+			.map(VideoAttributes::getVideoFilters)
+			.map(Collection::stream)
+			.map(s -> s.flatMap(vf -> Stream.of("-vf", vf.getExpression())))
+			.orElseGet(Stream::empty)),
+		new ValueArgument(ArgType.OUTFILE, "-qscale:v",      ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getQuality).map(Object::toString)),
+		// Audio Options
+		new PredicateArgument(ArgType.OUTFILE, "-an",        ea -> !ea.getAudioAttributes().isPresent()),
+		new ValueArgument(ArgType.OUTFILE, "-acodec",        ea -> ea.getAudioAttributes().flatMap(AudioAttributes::getCodec)),
+		new ValueArgument(ArgType.OUTFILE, "-ab",            ea -> ea.getAudioAttributes().flatMap(AudioAttributes::getBitRate).map(Object::toString)),
+		new ValueArgument(ArgType.OUTFILE, "-ac",            ea -> ea.getAudioAttributes().flatMap(AudioAttributes::getChannels).map(Object::toString)),
+		new ValueArgument(ArgType.OUTFILE, "-ar",            ea -> ea.getAudioAttributes().flatMap(AudioAttributes::getSamplingRate).map(Object::toString)),
+		new ValueArgument(ArgType.OUTFILE, "-vol",           ea -> ea.getAudioAttributes().flatMap(AudioAttributes::getVolume).map(Object::toString)),
+		new ValueArgument(ArgType.OUTFILE, "-qscale:a",      ea -> ea.getAudioAttributes().flatMap(AudioAttributes::getQuality).map(Object::toString)),
+		new ValueArgument(ArgType.OUTFILE, "-f",             ea -> ea.getOutputFormat()),
+		new ValueArgument(ArgType.OUTFILE, "-threads",       ea -> ea.getEncodingThreads().map(Object::toString)),
+		new PredicateArgument(ArgType.OUTFILE, "-map_metadata", "0", ea -> ea.isMapMetaData())
+	));
+	
+	public static void addOptionAtIndex(EncodingArgument arg, Integer index) {
+		globalOptions.add(index, arg);
+	}
     
     /**
      * Re-encode a multimedia file(s).
@@ -426,287 +486,106 @@ public class Encoder {
      * @throws EncoderException If a problems occurs during the encoding
      * process.
      */
-    public void encode(List<MultimediaObject> multimediaObjects, File target, EncodingAttributes attributes,
-            EncoderProgressListener listener) throws IllegalArgumentException,
-            InputFormatException, EncoderException {
+    public void encode(
+    	List<MultimediaObject> multimediaObjects, 
+    	File target, 
+    	EncodingAttributes attributes,
+        EncoderProgressListener listener) 
+        	throws IllegalArgumentException, InputFormatException, EncoderException
+    {
+    	attributes.validate();
         
-        String formatAttribute = attributes.getFormat();
-        Float offsetAttribute = attributes.getOffset();
-        Float durationAttribute = attributes.getDuration();
-        boolean loopAttribute = attributes.getLoop();
-        AudioAttributes audioAttributes = attributes.getAudioAttributes();
-        VideoAttributes videoAttributes = attributes.getVideoAttributes();
-        if (audioAttributes == null && videoAttributes == null)
-        {
-            throw new IllegalArgumentException(
-                    "Both audio and video attributes are null");
-        }
         target = target.getAbsoluteFile();
         target.getParentFile().mkdirs();
         ffmpeg = locator.createExecutor();
+        
         // Set global options
-        if (attributes.getFilterThreads() != -1)
-        {
-            ffmpeg.addArgument("--filter_thread");
-            ffmpeg.addArgument(Integer.toString(attributes.getFilterThreads()));
-        }
-        if (offsetAttribute != null)
-        {
-            ffmpeg.addArgument("-ss");
-            ffmpeg.addArgument(String.valueOf(offsetAttribute.floatValue()));
-        }
+        globalOptions.stream()
+        	.filter(ea -> ArgType.GLOBAL.equals(ea.getArgType()))
+        	.flatMap(eArg -> eArg.getArguments(attributes))
+        	.forEach(ffmpeg::addArgument);
+        
         // Set input options, must be before -i argument
-        if (attributes.getDecodingThreads()!= -1)
-        {
-            ffmpeg.addArgument("-threads");
-            ffmpeg.addArgument(Integer.toString(attributes.getDecodingThreads()));
-        }
-	if (loopAttribute && durationAttribute != null)
-	{
-		ffmpeg.addArgument("-loop");
-		ffmpeg.addArgument("1");
-	}
+        globalOptions.stream()
+        	.filter(ea -> ArgType.INFILE.equals(ea.getArgType()))
+	    	.flatMap(eArg -> eArg.getArguments(attributes))
+	    	.forEach(ffmpeg::addArgument);
 
         ffmpeg.addArgument("-i");
-        if (multimediaObjects.size() == 1)
-        {
-            // Simple case with one inpit source
-            if ( multimediaObjects.get(0).isURL() )
-            {
+        if (multimediaObjects.size() == 1) {
+            // Simple case with one input source
+            if ( multimediaObjects.get(0).isURL() ) {
                 ffmpeg.addArgument(multimediaObjects.get(0).getURL().toString());
-            }
-            else
-            {
+            } else {
                 ffmpeg.addArgument(multimediaObjects.get(0).getFile().getAbsolutePath());
             }
-        }
-        else
-        {
-            StringBuilder inFiles= new StringBuilder();
-            inFiles.append("concat:");
-            boolean isFirst= true;
-            for (MultimediaObject in : multimediaObjects)
-            {
-                if (isFirst)
-                {
-                    isFirst= false;
-                }
-                else
-                {
-                    inFiles.append("|");
-                }
-                if (in.isURL())
-                {
-                    inFiles.append(in.getURL().toString());
-                }
-                else
-                {
-                    inFiles.append(in.getFile().getAbsolutePath());
-                }
-            }
-            ffmpeg.addArgument(inFiles.toString());
-        }
-        if (durationAttribute != null)
-        {
-            ffmpeg.addArgument("-t");
-            ffmpeg.addArgument(String.valueOf(durationAttribute.floatValue()));
-        }
-        if (videoAttributes == null)
-        {
-            ffmpeg.addArgument("-vn");
-        } else
-        {
-            String codec = videoAttributes.getCodec();
-            if (codec != null)
-            {
-                ffmpeg.addArgument("-vcodec");
-                ffmpeg.addArgument(codec);
-            }
-            String tag = videoAttributes.getTag();
-            if (tag != null)
-            {
-                ffmpeg.addArgument("-vtag");
-                ffmpeg.addArgument(tag);
-            }
-            Integer bitRate = videoAttributes.getBitRate();
-            if (bitRate != null)
-            {
-                ffmpeg.addArgument("-vb");
-                ffmpeg.addArgument(String.valueOf(bitRate.intValue()));
-            }
-            Integer frameRate = videoAttributes.getFrameRate();
-            if (frameRate != null)
-            {
-                ffmpeg.addArgument("-r");
-                ffmpeg.addArgument(String.valueOf(frameRate.intValue()));
-            }
-            VideoSize size = videoAttributes.getSize();
-            if (size != null)
-            {
-                ffmpeg.addArgument("-s");
-                ffmpeg.addArgument(String.valueOf(size.getWidth()) + "x"
-                        + String.valueOf(size.getHeight()));
-            }
-
-            if (videoAttributes.isFaststart())
-            {
-                ffmpeg.addArgument("-movflags");
-                ffmpeg.addArgument("faststart");
-            }
-
-            if (videoAttributes.getX264Profile() != null)
-            {
-                ffmpeg.addArgument("-profile:v");
-                ffmpeg.addArgument(videoAttributes.getX264Profile().getModeName());
-            }
-
-            if (videoAttributes.getVideoFilters().size() > 0)
-            {
-                for (VideoFilter videoFilter : videoAttributes.getVideoFilters())
-                {
-                    ffmpeg.addArgument("-vf");
-                    ffmpeg.addArgument(videoFilter.getExpression());
-                }
-            }
-
-            Integer quality = videoAttributes.getQuality();
-            if (quality != null)
-            {
-                ffmpeg.addArgument("-qscale:v");
-                ffmpeg.addArgument(String.valueOf(quality.intValue()));
-            }
-        }
-        if (audioAttributes == null)
-        {
-            ffmpeg.addArgument("-an");
-        } else
-        {
-            String codec = audioAttributes.getCodec();
-            if (codec != null)
-            {
-                ffmpeg.addArgument("-acodec");
-                ffmpeg.addArgument(codec);
-            }
-            Integer bitRate = audioAttributes.getBitRate();
-            if (bitRate != null)
-            {
-                ffmpeg.addArgument("-ab");
-                ffmpeg.addArgument(String.valueOf(bitRate.intValue()));
-            }
-            Integer channels = audioAttributes.getChannels();
-            if (channels != null)
-            {
-                ffmpeg.addArgument("-ac");
-                ffmpeg.addArgument(String.valueOf(channels.intValue()));
-            }
-            Integer samplingRate = audioAttributes.getSamplingRate();
-            if (samplingRate != null)
-            {
-                ffmpeg.addArgument("-ar");
-                ffmpeg.addArgument(String.valueOf(samplingRate.intValue()));
-            }
-            Integer volume = audioAttributes.getVolume();
-            if (volume != null)
-            {
-                ffmpeg.addArgument("-vol");
-                ffmpeg.addArgument(String.valueOf(volume.intValue()));
-            }
-            Integer quality = audioAttributes.getQuality();
-            if (quality != null)
-            {
-                ffmpeg.addArgument("-qscale:a");
-                ffmpeg.addArgument(String.valueOf(quality.intValue()));
-            }
-        }
-        if (formatAttribute != null)
-        {
-            ffmpeg.addArgument("-f");
-            ffmpeg.addArgument(formatAttribute);
-        }
-        // Set output options
-        if (attributes.getEncodingThreads()!= -1)
-        {
-            ffmpeg.addArgument("-threads");
-            ffmpeg.addArgument(Integer.toString(attributes.getEncodingThreads()));
+        } else {
+            ffmpeg.addArgument(multimediaObjects.stream()
+            		.map(Object::toString)
+            		.collect(Collectors.joining("|", "concat:", "")));
         }
         
+        // Set output options. Must be after the -i and before the outfile target
+        globalOptions.stream()
+        	.filter(ea -> ArgType.OUTFILE.equals(ea.getArgType()))
+	    	.flatMap(eArg -> eArg.getArguments(attributes))
+	    	.forEach(ffmpeg::addArgument);
+                
         ffmpeg.addArgument("-y");
         ffmpeg.addArgument(target.getAbsolutePath());
         
-        if (attributes.isMapMetaData())
-        {   // Copy over meta data if possible
-            ffmpeg.addArgument("-map_metadata");
-            ffmpeg.addArgument("0");
-        }
-        
-//        ffmpeg.addArgument("-loglevel");
-//        ffmpeg.addArgument("warning"); // Only report errors
-        
-        try
-        {
+        try {
             ffmpeg.execute();
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new EncoderException(e);
         }
-        try
-        {
+        
+        try {
             String lastWarning = null;
-            long duration= 0;
-            RBufferedReader reader = new RBufferedReader(
-                    new InputStreamReader(ffmpeg.getErrorStream()));
+            long duration = 0;
+            RBufferedReader reader = new RBufferedReader(new InputStreamReader(ffmpeg.getErrorStream()));
             MultimediaInfo info = null;
-            if (multimediaObjects.size() == 1 && (!multimediaObjects.get(0).isURL() || !multimediaObjects.get(0).isReadURLOnce()) )
-            {           
-                info= multimediaObjects.get(0).getInfo();
+            if (multimediaObjects.size() == 1 && (!multimediaObjects.get(0).isURL() || !multimediaObjects.get(0).isReadURLOnce()) ) {           
+                info = multimediaObjects.get(0).getInfo();
             }
-            if (durationAttribute != null)
-            {
-                duration = (long) Math
-                        .round((durationAttribute * 1000L));
-            } else
-            {
-                if (info != null)
-                {
+            
+        	Float offsetAttribute = attributes.getOffset().orElse(null);
+        	Float durationAttribute = attributes.getDuration().orElse(null);
+            if (durationAttribute != null) {
+                duration = (long) Math.round((durationAttribute * 1000L));
+            } else {
+                if (info != null) {
                     duration = info.getDuration();
-                    if (offsetAttribute != null)
-                    {
-                        duration -= (long) Math
-                                .round((offsetAttribute * 1000L));
+                    if (offsetAttribute != null) {
+                        duration -= (long) Math.round((offsetAttribute * 1000L));
                     }
                 }
             }
-            if (listener != null)
-            {
+            
+            if (listener != null) {
                 listener.sourceInfo(info);
             }
             String line;
             ConversionOutputAnalyzer outputAnalyzer= new ConversionOutputAnalyzer(duration, listener);
-            while ((line = reader.readLine()) != null)
-            {
+            while ((line = reader.readLine()) != null) {
                 outputAnalyzer.analyzeNewLine(line);
             }
-            if (outputAnalyzer.getLastWarning() != null)
-            {
-                if (!SUCCESS_PATTERN.matcher(lastWarning).matches())
-                {
+            if (outputAnalyzer.getLastWarning() != null) {
+                if (!SUCCESS_PATTERN.matcher(lastWarning).matches()) {
                     throw new EncoderException("No match for: " + SUCCESS_PATTERN + " in " + lastWarning);
                 }
             }
-            unhandledMessages= outputAnalyzer.getUnhandledMessages();
-            int exitCode= ffmpeg.getProcessExitCode();
-            if (exitCode != 0)
-            {
+            unhandledMessages = outputAnalyzer.getUnhandledMessages();
+            int exitCode = ffmpeg.getProcessExitCode();
+            if (exitCode != 0) {
                 LOG.error("Process exit code: {}  to {}", exitCode, target.getName());
                 throw new EncoderException("Exit code of ffmpeg encoding run is "+exitCode);
             }
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new EncoderException(e);
-        } finally
-        {
+        } finally {
             ffmpeg.destroy();
-            ffmpeg= null;
+            ffmpeg = null;
         }
     }
 

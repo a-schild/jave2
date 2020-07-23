@@ -18,7 +18,7 @@
  */
 package ws.schild.jave.example;
 
-import ws.schild.jave.DefaultFFMPEGLocator;
+import ws.schild.process.ffmpeg.DefaultFFMPEGLocator;
 
 
 /**

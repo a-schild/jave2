@@ -24,6 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
+import ws.schild.jave.encode.AudioAttributes;
+import ws.schild.jave.encode.EncodingAttributes;
+
 /**
  *
  * @author a.schild
@@ -57,7 +60,7 @@ public class FileAudioEncoderTest extends AMediaTest{
         audioAttr.setVolume(1000);
         audioAttr.setQuality(1000);
         audioAttr.setSamplingRate(48000);
-        encodingAttr.setFormat("flac");
+        encodingAttr.setOutputFormat("flac");
         encodingAttr.setAudioAttributes(audioAttr);
         
         Encoder encoder = new Encoder();
@@ -84,7 +87,7 @@ public class FileAudioEncoderTest extends AMediaTest{
         audio.setChannels(2);
         audio.setSamplingRate(44100);
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp3");
+        attrs.setOutputFormat("mp3");
         attrs.setAudioAttributes(audio);
         Encoder encoder = new Encoder();
         PListener listener = new PListener();
@@ -112,7 +115,7 @@ public class FileAudioEncoderTest extends AMediaTest{
         audio.setChannels(2);
         audio.setSamplingRate(42100);
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp3");
+        attrs.setOutputFormat("mp3");
         attrs.setAudioAttributes(audio);
         Encoder encoder = new Encoder();
         PListener listener = new PListener();
@@ -151,7 +154,7 @@ public class FileAudioEncoderTest extends AMediaTest{
         audio.setChannels(2);
         audio.setSamplingRate(44100);
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp3");
+        attrs.setOutputFormat("mp3");
         attrs.setAudioAttributes(audio);
         encoder.encode(new MultimediaObject(source), target, attrs);
         assertTrue(target.exists(), "Output file missing");
@@ -175,7 +178,7 @@ public class FileAudioEncoderTest extends AMediaTest{
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec("libmp3lame");
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp3");
+        attrs.setOutputFormat("mp3");
         attrs.setAudioAttributes(audio);
         encoder.encode(new MultimediaObject(source), target, attrs);
         assertTrue(target.exists(), "Output file missing");
@@ -200,7 +203,7 @@ public class FileAudioEncoderTest extends AMediaTest{
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec("libmp3lame");
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp3");
+        attrs.setOutputFormat("mp3");
         attrs.setAudioAttributes(audio);
         attrs.setMapMetaData(true);
         encoder.encode(new MultimediaObject(source), target, attrs);

@@ -16,9 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ws.schild.jave;
+package ws.schild.jave.encode;
 
 import java.io.Serializable;
+import java.util.Optional;
+
+import ws.schild.jave.Encoder;
 
 /**
  * Attributes controlling the audio encoding process.
@@ -76,8 +79,8 @@ public class AudioAttributes implements Serializable {
      *
      * @return The codec name for the encoding process.
      */
-    String getCodec() {
-        return codec;
+    public Optional<String> getCodec() {
+        return Optional.ofNullable(codec);
     }
 
     /**
@@ -101,8 +104,8 @@ public class AudioAttributes implements Serializable {
      *
      * @return The bitrate value for the encoding process.
      */
-    Integer getBitRate() {
-        return bitRate;
+    public Optional<Integer> getBitRate() {
+        return Optional.ofNullable(bitRate);
     }
 
     /**
@@ -122,8 +125,8 @@ public class AudioAttributes implements Serializable {
      *
      * @return the samplingRate The samplingRate value for the encoding process.
      */
-    Integer getSamplingRate() {
-        return samplingRate;
+    public Optional<Integer> getSamplingRate() {
+        return Optional.ofNullable(samplingRate);
     }
 
     /**
@@ -143,8 +146,8 @@ public class AudioAttributes implements Serializable {
      *
      * @return The channels value (1=mono, 2=stereo, 4=quad) for the encoding process.
      */
-    Integer getChannels() {
-        return channels;
+    public Optional<Integer> getChannels() {
+        return Optional.ofNullable(channels);
     }
 
     /**
@@ -165,8 +168,8 @@ public class AudioAttributes implements Serializable {
      *
      * @return The volume value for the encoding process.
      */
-    Integer getVolume() {
-        return volume;
+    public Optional<Integer> getVolume() {
+        return Optional.ofNullable(volume);
     }
 
     /**
@@ -191,8 +194,8 @@ public class AudioAttributes implements Serializable {
     /**
      * @return the audio conversion quality
      */
-    public Integer getQuality() {
-        return quality;
+    public Optional<Integer> getQuality() {
+        return Optional.ofNullable(quality);
     }
 
     /**

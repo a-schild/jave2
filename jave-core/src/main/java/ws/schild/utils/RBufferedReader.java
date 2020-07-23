@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ws.schild.jave;
+package ws.schild.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
  *
  * @author Carlo Pelliccia
  */
-class RBufferedReader extends BufferedReader {
+public class RBufferedReader extends BufferedReader {
 
     /**
      * Re-inserted lines buffer.

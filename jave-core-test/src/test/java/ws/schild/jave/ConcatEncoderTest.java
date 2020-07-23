@@ -24,6 +24,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
+import ws.schild.jave.encode.AudioAttributes;
+import ws.schild.jave.encode.EncodingAttributes;
+import ws.schild.jave.encode.VideoAttributes;
+import ws.schild.jave.info.VideoSize;
+
 /**
  *
  * @author a.schild
@@ -60,7 +65,7 @@ public class ConcatEncoderTest extends AMediaTest{
         video.setFrameRate(15);
         video.setSize(new VideoSize(176, 144));
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("3gp");
+        attrs.setOutputFormat("3gp");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
@@ -90,7 +95,7 @@ public class ConcatEncoderTest extends AMediaTest{
 
         //Set encoding attributes
         EncodingAttributes attributes = new EncodingAttributes();
-        attributes.setFormat("wav");
+        attributes.setOutputFormat("wav");
         attributes.setAudioAttributes(audio);
         Encoder encoder = new Encoder();
         List<MultimediaObject> src= new ArrayList<>();

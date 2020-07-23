@@ -19,6 +19,8 @@
 package ws.schild.jave.filters;
 
 import ws.schild.jave.*;
+import ws.schild.jave.encode.EncodingAttributes;
+import ws.schild.jave.encode.VideoAttributes;
 
 import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertTrue;

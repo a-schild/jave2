@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ws.schild.jave;
+package ws.schild.jave.info;
 
 import java.io.Serializable;
 
@@ -32,12 +32,12 @@ public class VideoSize implements Serializable {
     /**
      * The video width.
      */
-    private final int width;
+    private final Integer width;
 
     /**
      * The video height.
      */
-    private final int height;
+    private final Integer height;
 
     /**
      * It builds the bean.
@@ -55,7 +55,7 @@ public class VideoSize implements Serializable {
      *
      * @return The video width.
      */
-    public int getWidth() {
+    public Integer getWidth() {
         return width;
     }
 
@@ -64,7 +64,7 @@ public class VideoSize implements Serializable {
      *
      * @return The video height.
      */
-    public int getHeight() {
+    public Integer getHeight() {
         return height;
     }
 
@@ -72,6 +72,10 @@ public class VideoSize implements Serializable {
     public String toString() {
         return getClass().getName() + " (width=" + width + ", height=" + height
                 + ")";
+    }
+    
+    public String asEncoderArgument() {
+    	return getWidth().toString() + "x" + getHeight().toString();
     }
 
 }

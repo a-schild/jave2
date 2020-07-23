@@ -25,6 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
+import ws.schild.jave.encode.AudioAttributes;
+import ws.schild.jave.encode.EncodingAttributes;
+import ws.schild.jave.encode.VideoAttributes;
+
 /**
  *
  * @author a.schild
@@ -63,7 +67,7 @@ public class URLVideoEncoderTest extends AMediaTest{
 
         encodingAttr.setAudioAttributes(audioAttr);
         encodingAttr.setVideoAttributes(videoAttr);
-        encodingAttr.setFormat("mp4");
+        encodingAttr.setOutputFormat("mp4");
 
         PListener listener = new PListener();
         Encoder encoder = new Encoder();
@@ -100,7 +104,7 @@ public class URLVideoEncoderTest extends AMediaTest{
 
         encodingAttr.setAudioAttributes(audioAttr);
         encodingAttr.setVideoAttributes(videoAttr);
-        encodingAttr.setFormat("mp4");
+        encodingAttr.setOutputFormat("mp4");
 
         Encoder encoder = new Encoder();
         PListener listener = new PListener();

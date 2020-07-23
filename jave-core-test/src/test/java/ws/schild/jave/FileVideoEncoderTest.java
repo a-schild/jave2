@@ -24,6 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
+import ws.schild.jave.encode.AudioAttributes;
+import ws.schild.jave.encode.EncodingAttributes;
+import ws.schild.jave.encode.VideoAttributes;
+import ws.schild.jave.info.VideoSize;
+
 /**
  *
  * @author a.schild
@@ -59,7 +64,7 @@ public class FileVideoEncoderTest extends AMediaTest{
         video.setFrameRate(15);
         video.setSize(new VideoSize(176, 144));
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("3gp");
+        attrs.setOutputFormat("3gp");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
@@ -91,7 +96,7 @@ public class FileVideoEncoderTest extends AMediaTest{
         video.setFrameRate(15);
         video.setSize(new VideoSize(160, 120));
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("3gp");
+        attrs.setOutputFormat("3gp");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
@@ -125,7 +130,7 @@ public class FileVideoEncoderTest extends AMediaTest{
         video.setFrameRate(15);
         video.setSize(new VideoSize(176, 144));
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("3gp");
+        attrs.setOutputFormat("3gp");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
@@ -168,7 +173,7 @@ public class FileVideoEncoderTest extends AMediaTest{
         video.setFrameRate(15);
         video.setSize(new VideoSize(176, 144));
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("3gp");
+        attrs.setOutputFormat("3gp");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
@@ -211,7 +216,7 @@ public class FileVideoEncoderTest extends AMediaTest{
         video.setFrameRate(15);
         video.setSize(new VideoSize(400, 300));
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("flv");
+        attrs.setOutputFormat("flv");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
@@ -245,7 +250,7 @@ public class FileVideoEncoderTest extends AMediaTest{
 
             //Set encoding attributes
             EncodingAttributes attributes = new EncodingAttributes();
-            attributes.setFormat("wav");
+            attributes.setOutputFormat("wav");
             attributes.setAudioAttributes(audio);
             Encoder encoder = new Encoder();
             PListener listener = new PListener();
@@ -282,7 +287,7 @@ public class FileVideoEncoderTest extends AMediaTest{
             video.setFrameRate(30);
             video.setSize(new VideoSize(320, 240));
             EncodingAttributes attrs = new EncodingAttributes();
-            attrs.setFormat("mp4");
+            attrs.setOutputFormat("mp4");
             attrs.setVideoAttributes(video);
             attrs.setAudioAttributes(audio);
             Encoder encoder = new Encoder();
@@ -320,7 +325,7 @@ public class FileVideoEncoderTest extends AMediaTest{
         video.setSize(new VideoSize(176, 144));
         video.setQuality(31);
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("3gp");
+        attrs.setOutputFormat("3gp");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         Encoder encoder = new Encoder();
@@ -357,7 +362,7 @@ public class FileVideoEncoderTest extends AMediaTest{
 
         encodingAttr.setAudioAttributes(audioAttr);
         encodingAttr.setVideoAttributes(videoAttr);
-        encodingAttr.setFormat("mp4");
+        encodingAttr.setOutputFormat("mp4");
 
         Encoder encoder = new Encoder();
         encoder.encode(new MultimediaObject(source), target, encodingAttr);

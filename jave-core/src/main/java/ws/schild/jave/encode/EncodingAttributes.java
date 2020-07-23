@@ -16,9 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ws.schild.jave;
+package ws.schild.jave.encode;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import ws.schild.jave.Encoder;
 
 /**
  * Attributes controlling the encoding process.
@@ -27,13 +32,18 @@ import java.io.Serializable;
  */
 public class EncodingAttributes implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2473587816471032706L;
 
-    /**
+	/**
+     * The format name for the incoming multimedia file.
+     */
+    private String inputFormat = null;
+	
+	/**
      * The format name for the encoded target multimedia file. Be sure this
      * format is supported (see {@link Encoder#getSupportedEncodingFormats()}.
      */
-    private String format = null;
+    private String outputFormat = null;
 
     /**
      * The start offset time (seconds). If null or not specified no start offset
@@ -68,31 +78,83 @@ public class EncodingAttributes implements Serializable {
     private boolean mapMetaData= false;
     
     /**
-     * Maximum number of cores/cpus to use for conversion
-     * -1 means use default of ffmpeg
+     * Maximum number of cores/cpus to use for conversion.<br/>
+     * Not set means we use ffmpeg's default.
      */
-    private int filterThreads= -1;
+    private Integer filterThreads;
     /**
      * Number of threads to use for decoding (if supported by codec)
      */
-    private int decodingThreads= -1;
+    private Integer decodingThreads = null;
     /**
      * Number of threads to use for encoding (if supported by codec)
      */
-    private int encodingThreads= -1;
+    private Integer encodingThreads = null;
 
     /**
-    * Should the input be treated as a loop
-    */
+     * Should the input be treated as a loop
+     */
     private boolean loop = false;
+    
+    /**
+     * Are the file paths considered "safe"
+     * 
+     * @see <a href="https://www.ffmpeg.org/ffmpeg-formats.html#Options">FFMPEG Documentation</a>
+     */
+    private Integer safe = null;
+    
+    /**
+     * Additional context for custom encoder options. Add context here and 
+     * retrieve/use it by adding an EncodingArgument to your Encoder class
+     * via {@link ws.schild.jave.Encoder#addOptionAtIndex(EncodingArgument, Integer)}
+     */
+    private HashMap<String, String> extraContext = new HashMap<>(); 
 
     /**
+     * Returns any additional user supplied context. Meant to be used in conjunction
+     * with {@link ws.schild.jave.Encoder#addOptionAtIndex(EncodingArgument, Integer)}
+     */
+    public Map<String, String> getExtraContext() {
+    	return extraContext;
+    }
+    
+    /**
+     * Adds all key/value pairs from context to the extraContext private variable.
+     * Meant to be used in conjunction with {@link ws.schild.jave.Encoder#addOptionAtIndex(EncodingArgument, Integer)}.
+     * Add context here and retrieve the context via an EncodingArgument.
+     */
+    public EncodingAttributes setExtraContext(Map<String, String> context) {
+    	extraContext.putAll(context);
+    	return this;
+    }
+    
+    /**
+     * Returns the format name for the incoming multimedia file.
+     * 
+     * @return The format name for the incoming multimedia file.
+     */
+    public Optional<String> getInputFormat() {
+		return Optional.ofNullable(inputFormat);
+	}
+
+    /**
+     * Sets the format name for the source multimedia file.
+     * 
+     * @param inputFormat the format name for the incoming multimedia file.
+     * @return this instance
+     */
+	public EncodingAttributes setInputFormat(String inputFormat) {
+		this.inputFormat = inputFormat;
+		return this;
+	}
+
+	/**
      * Returns the format name for the encoded target multimedia file.
      *
      * @return The format name for the encoded target multimedia file.
      */
-    public String getFormat() {
-        return format;
+    public Optional<String> getOutputFormat() {
+        return Optional.ofNullable(outputFormat);
     }
 
     /**
@@ -102,8 +164,8 @@ public class EncodingAttributes implements Serializable {
      * @param format The format name for the encoded target multimedia file.
      * @return this instance
      */
-    public EncodingAttributes setFormat(String format) {
-        this.format = format;
+    public EncodingAttributes setOutputFormat(String format) {
+        this.outputFormat = format;
         return this;
     }
 
@@ -112,8 +174,8 @@ public class EncodingAttributes implements Serializable {
      *
      * @return The start offset time (seconds).
      */
-    public Float getOffset() {
-        return offset;
+    public Optional<Float> getOffset() {
+        return Optional.ofNullable(offset);
     }
 
     /**
@@ -133,8 +195,8 @@ public class EncodingAttributes implements Serializable {
      *
      * @return The duration (seconds) of the re-encoded stream.
      */
-    public Float getDuration() {
-        return duration;
+    public Optional<Float> getDuration() {
+        return Optional.ofNullable(duration);
     }
 
     /**
@@ -150,7 +212,7 @@ public class EncodingAttributes implements Serializable {
         return this;
     }
 
-    /*
+    /**
      * Returns if the input is to be considered for looping.
      * @return if the input will be looped.
      */
@@ -170,14 +232,39 @@ public class EncodingAttributes implements Serializable {
 	}
 
     /**
+     * Returns whether or not the encoder will consider file paths "safe".
+     * 
+     * @return Whether or not the encoder will consider file paths "safe".
+     * @see <a href="https://www.ffmpeg.org/ffmpeg-formats.html#Options">FFMPEG Documentation</a>
+     */
+    public Optional<Integer> getSafe() {
+		return Optional.ofNullable(safe);
+	}
+
+    /**
+     * Are the file paths considered "safe": A file path is considered safe if it does not contain a
+     * protocol specification and is relative and all components only contain characters from the
+     * portable character set (letters, digits, period, underscore and hyphen) and have no period at
+     * the beginning of a component.
+     * 
+     * @param safe 0 for not safe; 1 for safe; is equivalent to 1 if the format was automatically 
+     * probed and 0 otherwise. 1 is the default
+     * @see <a href="https://www.ffmpeg.org/ffmpeg-formats.html#Options">FFMPEG Documentation</a>
+     */
+	public EncodingAttributes setSafe(Integer safe) {
+		this.safe = safe;
+		return this;
+	}
+
+	/**
      * Returns the attributes for the encoding of the audio stream in the target
      * multimedia file.
      *
      * @return The attributes for the encoding of the audio stream in the target
      * multimedia file.
      */
-    public AudioAttributes getAudioAttributes() {
-        return audioAttributes;
+    public Optional<AudioAttributes> getAudioAttributes() {
+        return Optional.ofNullable(audioAttributes);
     }
 
     /**
@@ -201,8 +288,8 @@ public class EncodingAttributes implements Serializable {
      * @return The attributes for the encoding of the video stream in the target
      * multimedia file.
      */
-    public VideoAttributes getVideoAttributes() {
-        return videoAttributes;
+    public Optional<VideoAttributes> getVideoAttributes() {
+        return Optional.ofNullable(videoAttributes);
     }
 
     /**
@@ -221,7 +308,7 @@ public class EncodingAttributes implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getName() + "(format=" + format + ", offset="
+        return getClass().getName() + "(format=" + outputFormat + ", offset="
                 + offset + ", duration=" + duration + ",loop=" + loop + ", audioAttributes="
                 + audioAttributes + ", videoAttributes=" + videoAttributes
                 + ")";
@@ -250,8 +337,8 @@ public class EncodingAttributes implements Serializable {
      * -1 means use default of ffmpeg
      * 
      */
-    public int getFilterThreads() {
-        return filterThreads;
+    public Optional<Integer> getFilterThreads() {
+        return Optional.ofNullable(filterThreads);
     }
 
     /**
@@ -271,8 +358,8 @@ public class EncodingAttributes implements Serializable {
      * -1 means use default of ffmpeg
      * @return the decodingThreads
      */
-    public int getDecodingThreads() {
-        return decodingThreads;
+    public Optional<Integer> getDecodingThreads() {
+        return Optional.ofNullable(decodingThreads);
     }
 
     /**
@@ -288,22 +375,28 @@ public class EncodingAttributes implements Serializable {
 
     /**
      * Number of threads to use for encoding (if supported by codec)
-     * -1 means use default of ffmpeg
+     * No value (Optional.empty()) means use default of ffmpeg
      * @return the encodingThreads
      */
-    public int getEncodingThreads() {
-        return encodingThreads;
+    public Optional<Integer> getEncodingThreads() {
+        return Optional.ofNullable(encodingThreads);
     }
 
     /**
      * Number of threads to use for encoding (if supported by codec)
-     * -1 means use default of ffmpeg
+     * null means use default of ffmpeg
      * @param encodingThreads the encodingThreads to set
      * @return this instance
      */
-    public EncodingAttributes setEncodingThreads(int encodingThreads) {
+    public EncodingAttributes setEncodingThreads(Integer encodingThreads) {
         this.encodingThreads = encodingThreads;
         return this;
     }
+
+	public void validate() {
+		if (audioAttributes == null && videoAttributes == null) {
+            throw new IllegalArgumentException("Both audio and video attributes are null");
+        }
+	}
     
 }

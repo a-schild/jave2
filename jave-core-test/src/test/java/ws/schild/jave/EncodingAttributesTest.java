@@ -22,6 +22,11 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
+import ws.schild.jave.encode.AudioAttributes;
+import ws.schild.jave.encode.EncodingAttributes;
+import ws.schild.jave.encode.VideoAttributes;
+import ws.schild.jave.info.VideoSize;
+
 /**
  *
  * @author a.schild
@@ -58,7 +63,7 @@ public class EncodingAttributesTest extends AMediaTest{
         video.setFrameRate(15);
         video.setSize(new VideoSize(176, 144));
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp4");
+        attrs.setOutputFormat("mp4");
         attrs.setAudioAttributes(audio);
         attrs.setVideoAttributes(video);
         attrs.setDecodingThreads(1);

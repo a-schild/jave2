@@ -26,6 +26,8 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ws.schild.jave.progress.EncoderProgressListener;
+
 /**
  *
  * @author a.schild
@@ -33,7 +35,7 @@ import org.slf4j.LoggerFactory;
 public class ConversionOutputAnalyzer {
     private static final Logger LOG = LoggerFactory.getLogger(ConversionOutputAnalyzer.class);
 
-        /**
+    /**
      * This regexp is used to parse the ffmpeg output about the ongoing encoding
      * process.
      */

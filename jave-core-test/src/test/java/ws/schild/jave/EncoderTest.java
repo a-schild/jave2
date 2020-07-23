@@ -23,6 +23,9 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
+import ws.schild.jave.encode.AudioAttributes;
+import ws.schild.jave.encode.EncodingAttributes;
+
 /**
  *
  * @author a.schild
@@ -126,7 +129,7 @@ public class EncoderTest extends AMediaTest{
         audio.setChannels(2);
         audio.setSamplingRate(44100);
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp3");
+        attrs.setOutputFormat("mp3");
         attrs.setAudioAttributes(audio);
 
         Runnable task = () -> {
