@@ -1,8 +1,8 @@
-package ws.schild.process.ffmpeg;
+package ws.schild.jave.process.ffmpeg;
 
 import java.util.stream.Stream;
 
-import ws.schild.process.ProcessWrapper;
+import ws.schild.jave.process.ProcessWrapper;
 
 /**
  * The standard FFMPEGProcess - enhances the ProcessWrapper by always suppressing

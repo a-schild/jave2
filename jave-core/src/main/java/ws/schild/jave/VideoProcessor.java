@@ -13,9 +13,9 @@ import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
 import ws.schild.jave.progress.EncoderProgressAdapter;
 import ws.schild.jave.progress.VideoProgressListener;
-import ws.schild.process.ProcessLocator;
-import ws.schild.process.ffmpeg.DefaultFFMPEGLocator;
-import ws.schild.utils.AutoRemoveableFile;
+import ws.schild.jave.process.ProcessLocator;
+import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
+import ws.schild.jave.utils.AutoRemoveableFile;
 
 /**
  * A high-level class meant to perform higher level operations on video files.

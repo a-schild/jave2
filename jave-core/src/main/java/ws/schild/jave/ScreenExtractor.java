@@ -8,11 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ws.schild.jave.info.MultimediaInfo;
-import ws.schild.process.ProcessLocator;
-import ws.schild.process.ProcessWrapper;
-import ws.schild.process.ffmpeg.DefaultFFMPEGLocator;
-import ws.schild.utils.RBufferedReader;
-import ws.schild.utils.Utils;
+import ws.schild.jave.process.ProcessLocator;
+import ws.schild.jave.process.ProcessWrapper;
+import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
+import ws.schild.jave.utils.RBufferedReader;
+import ws.schild.jave.utils.Utils;
 
 public class ScreenExtractor {
 

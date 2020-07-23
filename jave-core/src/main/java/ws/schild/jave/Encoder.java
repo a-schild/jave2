@@ -47,10 +47,10 @@ import ws.schild.jave.encode.VideoAttributes.X264_PROFILE;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.info.VideoSize;
 import ws.schild.jave.progress.EncoderProgressListener;
-import ws.schild.process.ProcessLocator;
-import ws.schild.process.ProcessWrapper;
-import ws.schild.process.ffmpeg.DefaultFFMPEGLocator;
-import ws.schild.utils.RBufferedReader;
+import ws.schild.jave.process.ProcessLocator;
+import ws.schild.jave.process.ProcessWrapper;
+import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
+import ws.schild.jave.utils.RBufferedReader;
 
 /**
  * Main class of the package. Instances can encode audio and video streams.

@@ -7,7 +7,7 @@ package ws.schild.jave;
 
 import org.junit.jupiter.api.Test;
 
-import ws.schild.utils.Utils;
+import ws.schild.jave.utils.Utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,4 +1,4 @@
-package ws.schild.utils;
+package ws.schild.jave.utils;
 
 import java.io.File;
 import java.util.Arrays;

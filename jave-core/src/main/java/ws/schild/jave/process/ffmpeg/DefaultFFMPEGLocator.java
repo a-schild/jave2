@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ws.schild.process.ffmpeg;
+package ws.schild.jave.process.ffmpeg;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,8 +27,8 @@ import java.nio.file.StandardCopyOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ws.schild.process.ProcessLocator;
-import ws.schild.process.ProcessWrapper;
+import ws.schild.jave.process.ProcessLocator;
+import ws.schild.jave.process.ProcessWrapper;
 
 /**
  * The default ffmpeg executable locator, which exports on disk the ffmpeg
@@ -41,12 +41,6 @@ import ws.schild.process.ProcessWrapper;
 public class DefaultFFMPEGLocator implements ProcessLocator {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFFMPEGLocator.class);
-
-    /**
-     * Trace the version of the bundled ffmpeg executable. It's a counter: every
-     * time the bundled ffmpeg change it is incremented by 1.
-     */
-    private static final String MY_EXE_VERSION = "2.8.0-SNAPSHOT";
 
     /**
      * The ffmpeg executable file path.

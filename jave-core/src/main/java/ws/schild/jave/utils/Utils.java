@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ws.schild.utils;
+package ws.schild.jave.utils;
 
 import java.text.DecimalFormat;
 
