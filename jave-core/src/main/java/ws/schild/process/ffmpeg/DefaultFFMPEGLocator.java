@@ -80,7 +80,7 @@ public class DefaultFFMPEGLocator implements ProcessLocator {
         String arch = System.getProperty("os.arch");
 
         //File
-        File ffmpegFile = new File(dirFolder, "ffmpeg-" + arch +"-"+MY_EXE_VERSION+ suffix);
+        File ffmpegFile = new File(dirFolder, "ffmpeg-" + arch +"-"+Version.getVersion()+ suffix);
         LOG.debug("Executable path: {}", ffmpegFile.getAbsolutePath());
 
         //Check the version of existing .exe file

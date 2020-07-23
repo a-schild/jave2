@@ -50,6 +50,7 @@
     <modules>
         <module>jave-nativebin-win32</module>
         <module>jave-nativebin-win64</module>
+        <module>jave-nativebin-linux-arm64</module>
         <module>jave-nativebin-linux32</module>
         <module>jave-nativebin-linux64</module>
         <module>jave-nativebin-osx64</module>
