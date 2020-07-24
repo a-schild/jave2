@@ -131,17 +131,17 @@ public class VideoFilterTest extends AMediaTest{
     	OverlayWatermark checkMe = 
     		new OverlayWatermark(fooPng, OverlayLocation.BOTTOM_RIGHT, -10, -10);
     	assertEquals(
-    		"movie=" + fooPath + " [watermark]; [0:v][watermark] overlay=main_w-overlay_w-10:main_h-overlay_h-10", 
+    		"movie='" + fooPath + "'[watermark];[0:v][watermark]overlay='main_w-overlay_w-10:main_h-overlay_h-10'", 
     		checkMe.getExpression());
     	
     	checkMe = new OverlayWatermark(fooPng, OverlayLocation.TOP_LEFT, null, null);
     	assertEquals(
-    		"movie=" + fooPath + " [watermark]; [0:v][watermark] overlay=0:0", 
+    		"movie='" + fooPath + "'[watermark];[0:v][watermark]overlay='0:0'", 
     		checkMe.getExpression());
     	
     	checkMe = new OverlayWatermark(fooPng, OverlayLocation.TOP_RIGHT, null, 10);
     	assertEquals(
-    		"movie=" + fooPath + " [watermark]; [0:v][watermark] overlay=main_w-overlay_w:10", 
+    		"movie='" + fooPath + "'[watermark];[0:v][watermark]overlay='main_w-overlay_w:10'", 
     		checkMe.getExpression());
     }
     

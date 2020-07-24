@@ -24,7 +24,7 @@ public enum OverlayLocation {
 	}
 	
 	public String getExpression(Optional<Integer> offsetX, Optional<Integer> offsetY) {
-		return resolveExpression(x, offsetX) + ":" + resolveExpression(y, offsetY);
+		return getX(offsetX) + ":" + getY(offsetY);
 	}
 	
 	private static String resolveExpression(Optional<String> location, Optional<Integer> offset) {
@@ -32,6 +32,14 @@ public enum OverlayLocation {
 		return location
 			.map(loc -> loc.concat(offsetValue.orElse("")))
 			.orElse(offsetValue.orElse("0"));
+	}
+	
+	public String getX(Optional<Integer> offset) {
+		return resolveExpression(x, offset);
+	}
+	
+	public String getY(Optional<Integer> offset) {
+		return resolveExpression(y, offset);
 	}
 	
 }
