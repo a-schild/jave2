@@ -21,8 +21,11 @@ package ws.schild.jave.filters;
 import ws.schild.jave.*;
 import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
+import ws.schild.jave.utils.AutoRemoveableFile;
 
 import java.io.File;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
@@ -99,7 +102,6 @@ public class VideoFilterTest extends AMediaTest{
         assertTrue( target.exists(), "Output file missing");
     }
 
-
     @Test
     public void testVideoFilter4() throws Exception {
         System.out.println("testVideoFilter4");
@@ -120,5 +122,44 @@ public class VideoFilterTest extends AMediaTest{
         Encoder encoder = new Encoder();
         encoder.encode(new MultimediaObject(source), target, attrs);
         assertTrue( target.exists(), "Output file missing");
+    }
+    
+    @Test
+    public void testOverlayWatermarkExpression() {
+    	File fooPng = new File("foo.png");
+    	String fooPath = fooPng.getAbsolutePath();
+    	OverlayWatermark checkMe = 
+    		new OverlayWatermark(fooPng, OverlayLocation.BOTTOM_RIGHT, -10, -10);
+    	assertEquals(
+    		"movie=" + fooPath + " [watermark]; [0:v][watermark] overlay=main_w-overlay_w-10:main_h-overlay_h-10", 
+    		checkMe.getExpression());
+    	
+    	checkMe = new OverlayWatermark(fooPng, OverlayLocation.TOP_LEFT, null, null);
+    	assertEquals(
+    		"movie=" + fooPath + " [watermark]; [0:v][watermark] overlay=0:0", 
+    		checkMe.getExpression());
+    	
+    	checkMe = new OverlayWatermark(fooPng, OverlayLocation.TOP_RIGHT, null, 10);
+    	assertEquals(
+    		"movie=" + fooPath + " [watermark]; [0:v][watermark] overlay=main_w-overlay_w:10", 
+    		checkMe.getExpression());
+    }
+    
+    @Test
+    public void thatWeCanOverlayAWatermark() throws Exception {
+    	File sourceVideo = new File(VideoFilterTest.class.getClassLoader()
+    		.getResource("9B8CC2D5-3B24-4DD1-B23D-9B5DAF0E70BE.mp4").getFile());
+    	File watermark = new File(VideoFilterTest.class.getClassLoader()
+    		.getResource("watermark.png").getFile());
+    	
+    	VideoAttributes vidAttr = new VideoAttributes();
+    	vidAttr.addFilter(new OverlayWatermark(watermark, OverlayLocation.BOTTOM_RIGHT, -10, -10));
+    	EncodingAttributes encAttr = new EncodingAttributes().setVideoAttributes(vidAttr);
+    	
+    	try (AutoRemoveableFile target = new AutoRemoveableFile(sourceVideo.getParentFile(), "overlay.mp4")) {
+    		new Encoder().encode(new MultimediaObject(sourceVideo), target, encAttr);
+    		assertTrue( target.exists(), "Output file missing");
+    	}
+    	
     }
 }

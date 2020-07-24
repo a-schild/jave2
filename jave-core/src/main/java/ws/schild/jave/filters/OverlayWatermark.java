@@ -1,6 +1,7 @@
 package ws.schild.jave.filters;
 
 import java.io.File;
+import java.util.Optional;
 
 public class OverlayWatermark implements VideoFilter {
 	
@@ -25,7 +26,8 @@ public class OverlayWatermark implements VideoFilter {
 
 	@Override
 	public String getExpression() {
-		return "movie=" + watermark.getAbsolutePath() + " [watermark]; [0:v][watermark] overlay=";
+		return "movie=" + watermark.getAbsolutePath() + " [watermark]; [0:v][watermark] overlay=" + 
+				location.getExpression(Optional.ofNullable(offsetX), Optional.ofNullable(offsetY));
     }
 	
 }
