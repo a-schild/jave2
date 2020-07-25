@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ws.schild.jave.filters;
+package ws.schild.jave.filters.helpers;
 
 /**
  *

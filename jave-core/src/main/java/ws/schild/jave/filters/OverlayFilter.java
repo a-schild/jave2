@@ -2,6 +2,15 @@ package ws.schild.jave.filters;
 
 import java.util.Optional;
 
+import ws.schild.jave.filters.helpers.OverlayLocation;
+
+/**
+ * An implementation of the overlay filter as specified by 
+ * <a href="https://ffmpeg.org/ffmpeg-filters.html#overlay-1">FFMPEG Documentation</a>
+ * 
+ * @author mressler
+ *
+ */
 public class OverlayFilter extends Filter {
 
 	public OverlayFilter(

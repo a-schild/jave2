@@ -7,6 +7,7 @@ package ws.schild.jave.filters;
 
 import java.io.File;
 
+import ws.schild.jave.filters.helpers.Color;
 import ws.schild.jave.utils.Utils;
 
 /**

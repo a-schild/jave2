@@ -1,4 +1,4 @@
-package ws.schild.jave.filters;
+package ws.schild.jave.filters.helpers;
 
 import java.util.Optional;
 

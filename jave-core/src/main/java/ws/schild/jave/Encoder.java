@@ -514,11 +514,7 @@ public class Encoder {
         ffmpeg.addArgument("-i");
         if (multimediaObjects.size() == 1) {
             // Simple case with one input source
-            if ( multimediaObjects.get(0).isURL() ) {
-                ffmpeg.addArgument(multimediaObjects.get(0).getURL().toString());
-            } else {
-                ffmpeg.addArgument(multimediaObjects.get(0).getFile().getAbsolutePath());
-            }
+        	ffmpeg.addArgument(multimediaObjects.get(0).toString());
         } else {
             ffmpeg.addArgument(multimediaObjects.stream()
             		.map(Object::toString)
@@ -543,7 +539,6 @@ public class Encoder {
         try {
             String lastWarning = null;
             long duration = 0;
-            RBufferedReader reader = new RBufferedReader(new InputStreamReader(ffmpeg.getErrorStream()));
             MultimediaInfo info = null;
             if (multimediaObjects.size() == 1 && (!multimediaObjects.get(0).isURL() || !multimediaObjects.get(0).isReadURLOnce()) ) {           
                 info = multimediaObjects.get(0).getInfo();
@@ -567,6 +562,7 @@ public class Encoder {
             }
             String line;
             ConversionOutputAnalyzer outputAnalyzer= new ConversionOutputAnalyzer(duration, listener);
+            RBufferedReader reader = new RBufferedReader(new InputStreamReader(ffmpeg.getErrorStream()));
             while ((line = reader.readLine()) != null) {
                 outputAnalyzer.analyzeNewLine(line);
             }
