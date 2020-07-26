@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -44,12 +43,13 @@ import ws.schild.jave.encode.SimpleArgument;
 import ws.schild.jave.encode.ValueArgument;
 import ws.schild.jave.encode.VideoAttributes;
 import ws.schild.jave.encode.VideoAttributes.X264_PROFILE;
+import ws.schild.jave.filters.FilterGraph;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.info.VideoSize;
-import ws.schild.jave.progress.EncoderProgressListener;
 import ws.schild.jave.process.ProcessLocator;
 import ws.schild.jave.process.ProcessWrapper;
 import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
+import ws.schild.jave.progress.EncoderProgressListener;
 import ws.schild.jave.utils.RBufferedReader;
 
 /**
@@ -443,6 +443,7 @@ public class Encoder {
 			.map(Collection::stream)
 			.map(s -> s.flatMap(vf -> Stream.of("-vf", vf.getExpression())))
 			.orElseGet(Stream::empty)),
+		new ValueArgument(ArgType.OUTFILE, "-filter_complex",ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getComplexFiltergraph).map(FilterGraph::getExpression)),
 		new ValueArgument(ArgType.OUTFILE, "-qscale:v",      ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getQuality).map(Object::toString)),
 		// Audio Options
 		new PredicateArgument(ArgType.OUTFILE, "-an",        ea -> !ea.getAudioAttributes().isPresent()),
@@ -511,15 +512,10 @@ public class Encoder {
 	    	.flatMap(eArg -> eArg.getArguments(attributes))
 	    	.forEach(ffmpeg::addArgument);
 
-        ffmpeg.addArgument("-i");
-        if (multimediaObjects.size() == 1) {
-            // Simple case with one input source
-        	ffmpeg.addArgument(multimediaObjects.get(0).toString());
-        } else {
-            ffmpeg.addArgument(multimediaObjects.stream()
-            		.map(Object::toString)
-            		.collect(Collectors.joining("|", "concat:", "")));
-        }
+        multimediaObjects.stream()
+        	.map(Object::toString)
+        	.flatMap(mmo -> Stream.of("-i", mmo))
+        	.forEach(ffmpeg::addArgument);
         
         // Set output options. Must be after the -i and before the outfile target
         globalOptions.stream()

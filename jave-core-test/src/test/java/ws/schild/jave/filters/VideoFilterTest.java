@@ -18,14 +18,8 @@
  */
 package ws.schild.jave.filters;
 
-import ws.schild.jave.*;
-import ws.schild.jave.encode.EncodingAttributes;
-import ws.schild.jave.encode.VideoAttributes;
-import ws.schild.jave.filtergraphs.OverlayWatermark;
-import ws.schild.jave.filtergraphs.TrimAndWatermark;
-import ws.schild.jave.filters.helpers.Color;
-import ws.schild.jave.filters.helpers.OverlayLocation;
-import ws.schild.jave.utils.AutoRemoveableFile;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.net.URL;
@@ -33,9 +27,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
+
+import ws.schild.jave.AMediaTest;
+import ws.schild.jave.Encoder;
+import ws.schild.jave.MultimediaObject;
+import ws.schild.jave.encode.EncodingAttributes;
+import ws.schild.jave.encode.VideoAttributes;
+import ws.schild.jave.filtergraphs.OverlayWatermark;
+import ws.schild.jave.filtergraphs.TrimAndWatermark;
+import ws.schild.jave.filters.helpers.Color;
+import ws.schild.jave.filters.helpers.OverlayLocation;
+import ws.schild.jave.progress.EchoingEncoderProgressListener;
+import ws.schild.jave.utils.AutoRemoveableFile;
 
 /**
  *
@@ -43,6 +47,8 @@ import org.junit.jupiter.api.Test;
  */
 public class VideoFilterTest extends AMediaTest{
     
+	private static ClassLoader cLoader = VideoFilterTest.class.getClassLoader();
+	
     public VideoFilterTest() {
         super(null, "VideoFilterTest");
     }
@@ -155,10 +161,10 @@ public class VideoFilterTest extends AMediaTest{
     
     @Test
     public void thatWeCanOverlayAWatermark() throws Exception {
-    	File sourceVideo = new File(VideoFilterTest.class.getClassLoader()
-    		.getResource("9B8CC2D5-3B24-4DD1-B23D-9B5DAF0E70BE.mp4").getFile());
-    	File watermark = new File(VideoFilterTest.class.getClassLoader()
-    		.getResource("watermark.png").getFile());
+    	File sourceVideo = new File(
+    		cLoader.getResource("9B8CC2D5-3B24-4DD1-B23D-9B5DAF0E70BE.mp4").getFile());
+    	File watermark = new File(
+    		cLoader.getResource("watermark.png").getFile());
     	
     	VideoAttributes vidAttr = new VideoAttributes();
     	vidAttr.addFilter(new OverlayWatermark(watermark, OverlayLocation.BOTTOM_RIGHT, -10, -10));
@@ -171,9 +177,7 @@ public class VideoFilterTest extends AMediaTest{
     }
     
     @Test
-    public void thatWeCanTrimAndOverlay() throws Exception {
-    	ClassLoader cLoader = VideoFilterTest.class.getClassLoader();
-    	
+    public void thatTrimAndWatermarkFilterProducesCorrectFiltergraphs() throws Exception {
     	List<File> videos = Arrays.asList(
 			"9B8CC2D5-3B24-4DD1-B23D-9B5DAF0E70BE.mp4",
 			"A0EF94F6-F922-4676-B767-A600F2E87F53.mp4",
@@ -187,7 +191,44 @@ public class VideoFilterTest extends AMediaTest{
     	List<TrimAndWatermark.TrimInfo> trimInfo = videos.stream()
 			.map(f -> new TrimAndWatermark.TrimInfo(0.5, 1.0))
 			.collect(Collectors.toList());
+    	File fooPng = new File("foo.png");
+    	String fooPath = fooPng.getAbsolutePath();
     	
+    	assertEquals(
+    		"[0]trim='duration=1.0:start=0.5',setpts='PTS-STARTPTS'[trimmed0],movie='" + fooPath + "',[trimmed0]overlay='main_w-overlay_w-10:main_h-overlay_h-10'[overlayed0];[1]trim='duration=1.0:start=0.5',setpts='PTS-STARTPTS'[trimmed1],movie='" + fooPath + "',[trimmed1]overlay='main_w-overlay_w-10:main_h-overlay_h-10'[overlayed1];[2]trim='duration=1.0:start=0.5',setpts='PTS-STARTPTS'[trimmed2],movie='" + fooPath + "',[trimmed2]overlay='main_w-overlay_w-10:main_h-overlay_h-10'[overlayed2];[overlayed0][overlayed1][overlayed2]concat='n=3'", 
+    		new TrimAndWatermark(fooPng, trimInfo).getExpression());
+    }
+    
+    @Test
+    public void thatWeCanTrimAndWatermarkFiles() throws Exception {
+    	File watermark = new File(VideoFilterTest.class.getClassLoader()
+    		.getResource("watermark.png").getFile());
+    	
+    	List<File> videos = Arrays.asList(
+			"9B8CC2D5-3B24-4DD1-B23D-9B5DAF0E70BE.mp4",
+			"A0EF94F6-F922-4676-B767-A600F2E87F53.mp4",
+			"B3111BAF-A516-48EC-99FB-B492EB23155D.mp4"
+		).stream()
+			.map(cLoader::getResource)
+			.map(URL::getFile)
+			.map(File::new)
+			.collect(Collectors.toList());
+    	
+    	VideoAttributes vidAttr = new VideoAttributes();
+    	vidAttr.setComplexFiltergraph(new TrimAndWatermark(
+    		watermark, 
+    		videos.stream()
+    			.map(v -> new TrimAndWatermark.TrimInfo(0.5, 1.0))
+    			.collect(Collectors.toList())));
+    	EncodingAttributes encAttr = new EncodingAttributes().setVideoAttributes(vidAttr);
+    	
+    	try (AutoRemoveableFile target = new AutoRemoveableFile(videos.get(0).getParentFile(), "overlay.mp4")) {
+    		new Encoder().encode(
+    			videos.stream().map(MultimediaObject::new).collect(Collectors.toList()),
+    			target,
+    			encAttr);
+    		assertTrue( target.exists(), "Output file missing");
+    	}
     }
     
 }

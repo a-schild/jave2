@@ -1,6 +1,7 @@
 package ws.schild.jave.filtergraphs;
 
 import java.io.File;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -26,13 +27,30 @@ public class TrimAndWatermark extends FilterGraph {
 		Double trimDuration) 
 	{
 		super(
-			new FilterChain(new MovieFilter(watermark, "watermark")),
 			new FilterChain(
 				new TrimFilter("0", trimStart, trimDuration),
 				new SetPtsFilter().addOutputLabel("main"),
+				new MovieFilter(watermark, "watermark"),
 				new OverlayFilter("main", "watermark", OverlayLocation.BOTTOM_RIGHT, -10, -10)
 			)
 		);
+	}
+	
+	public TrimAndWatermark(
+		File watermark,
+		List<TrimInfo> trimInfo) 
+	{
+		super();
+		
+		IntStream.range(0, trimInfo.size())
+			.mapToObj(i -> filterchainForInputIndex(i, trimInfo.get(i), watermark))
+			.forEach(this::addChain);
+		
+		addChain(new FilterChain(new ConcatFilter(
+			IntStream.range(0, trimInfo.size())
+				.mapToObj(this::labelForOutput)
+				.collect(Collectors.toList())
+		)));
 	}
 	
 	public static class TrimInfo {
@@ -45,28 +63,12 @@ public class TrimAndWatermark extends FilterGraph {
 		}
 	}
 	
-	public TrimAndWatermark(
-		File watermark,
-		TrimInfo... trimInfo) 
-	{
-		super(new FilterChain(new MovieFilter(watermark, "watermark")));
-		
-		IntStream.range(0, trimInfo.length)
-			.mapToObj(i -> chainForInputIndex(i, trimInfo[i]))
-			.forEach(this::addChain);
-		
-		new FilterChain(new ConcatFilter(
-			IntStream.range(0, trimInfo.length)
-				.mapToObj(this::labelForOutput)
-				.collect(Collectors.toList())
-		));
-	}
-	
-	private FilterChain chainForInputIndex(Integer i, TrimInfo info) {
+	private FilterChain filterchainForInputIndex(Integer i, TrimInfo info, File watermark) {
 		return new FilterChain(
 			new TrimFilter(i.toString(), info.trimStart, info.trimDuration),
 			new SetPtsFilter().addOutputLabel("trimmed" + i),
-			new OverlayFilter("trimmed" + i, "watermark", OverlayLocation.BOTTOM_RIGHT, -10, -10)
+			new MovieFilter(watermark), // Movie output is the second input to the overlay filter
+			new OverlayFilter("trimmed" + i, OverlayLocation.BOTTOM_RIGHT, -10, -10)
 				.addOutputLabel(labelForOutput(i))
 		);
 	}

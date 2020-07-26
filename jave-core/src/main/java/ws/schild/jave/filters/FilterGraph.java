@@ -34,7 +34,7 @@ public class FilterGraph implements VideoFilter {
 	 */
 	public FilterGraph(FilterChain... chains) {
 		this();
-		this.chains = Arrays.asList(chains);
+		this.chains = new ArrayList<>(Arrays.asList(chains));
 	}
 	/**
 	 * Create a filtergraph with a specified list of filterchains and specified sws_flags.

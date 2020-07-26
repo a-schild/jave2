@@ -15,16 +15,25 @@ public class OverlayFilter extends Filter {
 
 	public OverlayFilter(
 		String baseInputLabel, 
-		String overlayInputLabel, 
 		OverlayLocation location, 
 		Integer offsetX, 
 		Integer offsetY) 
 	{
 		super("overlay");
-		addInputLabel(baseInputLabel, overlayInputLabel);
+		addInputLabel(baseInputLabel);
 		addOrderedArgument(
 			location.getX(Optional.ofNullable(offsetX)),
 			location.getY(Optional.ofNullable(offsetY)));
+	}
+	public OverlayFilter(
+		String baseInputLabel, 
+		String overlayInputLabel, 
+		OverlayLocation location, 
+		Integer offsetX, 
+		Integer offsetY) 
+	{
+		this(baseInputLabel, location, offsetX, offsetY);
+		addInputLabel(overlayInputLabel);
 	}
 
 }
