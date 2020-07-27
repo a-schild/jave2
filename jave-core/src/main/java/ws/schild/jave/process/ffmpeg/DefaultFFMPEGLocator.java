@@ -26,7 +26,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ws.schild.jave.FFMPEGLocator;
 import ws.schild.jave.Version;
 
 import ws.schild.jave.process.ProcessLocator;
