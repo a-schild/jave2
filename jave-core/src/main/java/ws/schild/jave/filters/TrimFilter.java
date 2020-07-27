@@ -1,11 +1,11 @@
 package ws.schild.jave.filters;
 
 /**
- * An implementation of the overlay filter as specified by 
- * <a href="https://ffmpeg.org/ffmpeg-filters.html#trim">FFMPEG Documentation</a><br/>
- * <br/>
- * Important implementation note: Most common usage of the trim filter requires a setpts filter 
- * applied immediately after in the filter chain. 
+ * <p>An implementation of the overlay filter as specified by 
+ * <a href="https://ffmpeg.org/ffmpeg-filters.html#trim">FFMPEG Documentation</a></p>
+ * 
+ * <p>Important implementation note: Most common usage of the trim filter requires a setpts filter 
+ * applied immediately after in the filter chain.</p> 
  * 
  * @author mressler
  *

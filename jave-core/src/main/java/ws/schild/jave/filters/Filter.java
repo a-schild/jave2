@@ -9,20 +9,20 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * A filter as described by <a href="https://ffmpeg.org/ffmpeg-filters.html#Filtergraph-syntax-1">
- * FFMPEG Documentation</a>.<br/>
- * <br/>
- * A filter has an ordered list of input labels, a name, arguments, and an ordered list of outpur
- * labels.<br/>
- * Arguments can be either ordered or named. If both are present, ordered must be emitted first.<br/>
- * <br/>
- * Currently <a href="https://ffmpeg.org/ffmpeg-filters.html#Notes-on-filtergraph-escaping">
+ * <p>A filter as described by <a href="https://ffmpeg.org/ffmpeg-filters.html#Filtergraph-syntax-1">
+ * FFMPEG Documentation</a>.</p>
+ * 
+ * <p>A filter has an ordered list of input labels, a name, arguments, and an ordered list of output
+ * labels.
+ * Arguments can be either ordered or named. If both are present, ordered must be emitted first.</p>
+ * 
+ * <p>Currently <a href="https://ffmpeg.org/ffmpeg-filters.html#Notes-on-filtergraph-escaping">
  * filtergraph escaping</a> is not the responsibility of this class. All arguments must be
- * pre-escaped by the time they get to this class.<br/>
- * <br/>
- * It is intended that this class is not used directly. Instead, implementers will add a specific 
+ * pre-escaped by the time they get to this class.</p>
+ * 
+ * <p>It is intended that this class is not used directly. Instead, implementers will add a specific 
  * implementation of the filter they are implementing. A complete list can be found in 
- * <a href="https://ffmpeg.org/ffmpeg-filters.html#Filtergraph-syntax-1">FFMPEG Documentation</a>.  
+ * <a href="https://ffmpeg.org/ffmpeg-filters.html#Filtergraph-syntax-1">FFMPEG Documentation</a>.</p>  
  * 
  * @author mressler
  *
@@ -59,7 +59,7 @@ public abstract class Filter implements VideoFilter {
 	
 	/**
 	 * Add an ordered argument to the list of arguments for this filter
-	 * @param label The name of the input label
+	 * @param arg Any number of ordered arguments
 	 * @return this Filter for builder pattern magic
 	 */
 	public Filter addOrderedArgument(String... arg) {
