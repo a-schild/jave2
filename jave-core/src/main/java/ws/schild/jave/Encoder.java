@@ -109,7 +109,7 @@ public class Encoder {
     }
 
     /**
-     * It builds an encoder with a custom {@link FFMPEGLocator}.
+     * It builds an encoder with a custom {@link FFMPEGProcess}.
      *
      * @param locator The locator picking up the ffmpeg executable used by the
      * encoder.

@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 /**
  * A SimpleArgument is an EncodingArgument that provides all of its components,
- * The argument type and a Function from EncodingAttributes to a Stream<String>
+ * The argument type and a Function from EncodingAttributes to a Stream&lt;String&gt;
  * (arguments to ffmpeg)
  * @author mressler
  *

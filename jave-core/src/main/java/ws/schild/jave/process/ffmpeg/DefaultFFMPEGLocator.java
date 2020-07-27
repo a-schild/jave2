@@ -35,7 +35,7 @@ import ws.schild.jave.process.ProcessWrapper;
  * The default ffmpeg executable locator, which exports on disk the ffmpeg
  * executable bundled with the library distributions. It should work both for
  * windows and many linux distributions. If it doesn't, try compiling your own
- * ffmpeg executable and plug it in JAVE with a custom {@link FFMPEGLocator}.
+ * ffmpeg executable and plug it in JAVE with a custom {@link FFMPEGProcess}
  *
  * @author Carlo Pelliccia
  */

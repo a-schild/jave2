@@ -4,7 +4,7 @@ import java.util.stream.Stream;
 
 /**
  * An EncodingArgument is a placeholder for a future argument to FFMPEG. It uses the
- * EncodingAttributes object to determine context and provides a Stream<String>
+ * EncodingAttributes object to determine context and provides a Stream&lt;String&gt;
  * of arguments back to the caller to bbe used as arguments.
  * @author mressler
  *
