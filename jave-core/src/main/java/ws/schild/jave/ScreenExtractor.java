@@ -25,7 +25,7 @@ public class ScreenExtractor {
     private int numberOfScreens;
 
     /**
-     * It builds an extractor using a {@link DefaultFFMPEGLocator} instance to
+     * It builds an extractor using a {@link  ws.schild.jave.process.ffmpeg.FFMPEGProcess} instance to
      * locate the ffmpeg executable to use.
      */
     public ScreenExtractor() {
@@ -41,7 +41,7 @@ public class ScreenExtractor {
     }
 
     /**
-     * It builds an extractor with a custom {@link FFMPEGLocator}.
+     * It builds an extractor with a custom {@link  ws.schild.jave.process.ffmpeg.FFMPEGProcess}.
      *
      * @param locator The locator picking up the ffmpeg executable used by the
      * extractor.

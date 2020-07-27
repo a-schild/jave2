@@ -26,7 +26,7 @@ import ws.schild.jave.utils.AutoRemoveableFile;
  */
 public class VideoProcessor {
 
-	private static Logger logger = LoggerFactory.getLogger(VideoProcessor.class);
+	private static final Logger logger = LoggerFactory.getLogger(VideoProcessor.class);
 	
 	private static boolean enabled = false;
 	
@@ -49,15 +49,16 @@ public class VideoProcessor {
 	
 	/**
 	 * 
-	 * Concatenate input video files to a destination file. Destination file and parent directory must be writeable.
+	 * Concatenate input video files to a destination file.Destination file and parent directory must be writeable.
 	 * 
 	 * @see <a href="https://trac.ffmpeg.org/wiki/Concatenate">FFMPEG documentation for concatenate</a>
 	 * @param videos The list of videos on the local filesystem that are readable by this process that will be concatenated together
 	 * @param destination The target file to write to. The target file must be unique to this process and writeable.
+         * @param progress Track progress of processing
 	 * @throws FileNotFoundException If the destination cannot be created
-	 * @throws EncoderException 
-	 * @throws InputFormatException 
-	 * @throws IllegalArgumentException 
+	 * @throws EncoderException error in encoding
+	 * @throws InputFormatException  error in input arguments
+	 * @throws IllegalArgumentException thrown when parameters don't match
 	 */
 	public void catClipsTogether(
 		List<File> videos,

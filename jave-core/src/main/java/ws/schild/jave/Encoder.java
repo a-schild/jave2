@@ -109,7 +109,7 @@ public class Encoder {
     }
 
     /**
-     * It builds an encoder with a custom {@link FFMPEGProcess}.
+     * It builds an encoder with a custom {@link ws.schild.jave.process.ffmpeg.FFMPEGProcess}.
      *
      * @param locator The locator picking up the ffmpeg executable used by the
      * encoder.

@@ -78,7 +78,7 @@ public class EncodingAttributes implements Serializable {
     private boolean mapMetaData= false;
     
     /**
-     * Maximum number of cores/cpus to use for conversion.<br/>
+     * Maximum number of cores/cpus to use for conversion.<br>
      * Not set means we use ffmpeg's default.
      */
     private Integer filterThreads;
@@ -112,16 +112,17 @@ public class EncodingAttributes implements Serializable {
 
     /**
      * Returns any additional user supplied context. Meant to be used in conjunction
-     * with {@link ws.schild.jave.Encoder#addOptionAtIndex(EncodingArgument, Integer)}
+ with {@link ws.schild.jave.Encoder#addOptionAtIndex(EncodingArgument, Integer)}
+     * @return extra context
      */
     public Map<String, String> getExtraContext() {
     	return extraContext;
     }
     
     /**
-     * Adds all key/value pairs from context to the extraContext private variable.
-     * Meant to be used in conjunction with {@link ws.schild.jave.Encoder#addOptionAtIndex(EncodingArgument, Integer)}.
-     * Add context here and retrieve the context via an EncodingArgument.
+     * Adds all key/value pairs from context to the extraContext private variable.Meant to be used in conjunction with {@link ws.schild.jave.Encoder#addOptionAtIndex(EncodingArgument, Integer)}.Add context here and retrieve the context via an EncodingArgument.
+     * @param context extra context
+     * @return the EncodingAttributes
      */
     public EncodingAttributes setExtraContext(Map<String, String> context) {
     	extraContext.putAll(context);
@@ -249,6 +250,7 @@ public class EncodingAttributes implements Serializable {
      * 
      * @param safe 0 for not safe; 1 for safe; is equivalent to 1 if the format was automatically 
      * probed and 0 otherwise. 1 is the default
+     * @return The EncodingAttributes
      * @see <a href="https://www.ffmpeg.org/ffmpeg-formats.html#Options">FFMPEG Documentation</a>
      */
 	public EncodingAttributes setSafe(Integer safe) {

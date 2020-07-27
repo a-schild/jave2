@@ -24,8 +24,6 @@ public interface VideoProgressListener {
 	/**
 	 * Meaningful progress has been made.
 	 * @param progress Current percentage complete. (0-1)
-	 * @param rate Any rate information, if known.
-	 * @param timeRemaining
 	 */
 	public void onProgress(Double progress);
 	

@@ -141,7 +141,7 @@ public class MultimediaObject {
     }
     
     /**
-     * It builds an extractor with a custom {@link FFMPEGLocator}.
+     * It builds an extractor with a custom {@link  ws.schild.jave.process.ffmpeg.FFMPEGProcess}.
      *
      * @param input Input file for creating MultimediaObject
      * @param locator The locator picking up the ffmpeg executable used by the
