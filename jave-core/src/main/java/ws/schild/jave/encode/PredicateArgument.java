@@ -1,6 +1,7 @@
 package ws.schild.jave.encode;
 
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -12,7 +13,7 @@ import java.util.stream.Stream;
 public class PredicateArgument implements EncodingArgument {
 
 	private ArgType argumentType;
-	private Stream<String> arguments;
+	private Supplier<Stream<String>> arguments;
 	private Predicate<EncodingAttributes> predicate;
 	
 	public PredicateArgument(
@@ -21,7 +22,7 @@ public class PredicateArgument implements EncodingArgument {
 		Predicate<EncodingAttributes> predicate) 
 	{
 		this.argumentType = argType;
-		this.arguments = Stream.of(argument);
+		this.arguments = () -> Stream.of(argument);
 		this.predicate = predicate;
 	}
 	
@@ -32,14 +33,14 @@ public class PredicateArgument implements EncodingArgument {
 		Predicate<EncodingAttributes> predicate) 
 	{
 		this.argumentType = argType;
-		this.arguments = Stream.of(argument1, argument2);
+		this.arguments = () -> Stream.of(argument1, argument2);
 		this.predicate = predicate;
 	}
 	
 	@Override
 	public Stream<String> getArguments(EncodingAttributes context) {
 		if (predicate.test(context)) {
-			return arguments;
+			return arguments.get();
 		} else {
 			return Stream.empty();
 		}

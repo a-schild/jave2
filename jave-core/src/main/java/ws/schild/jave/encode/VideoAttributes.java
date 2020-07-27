@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import ws.schild.jave.Encoder;
+import ws.schild.jave.filters.FilterGraph;
 import ws.schild.jave.filters.VideoFilter;
 import ws.schild.jave.info.VideoSize;
 
@@ -70,7 +71,7 @@ public class VideoAttributes implements Serializable {
      */
     private Integer quality = null;
 
-
+    private FilterGraph complexFiltergraph = null;
     private final ArrayList<VideoFilter> videoFilters = new ArrayList<>();
     /**
      * Encode the video with faststart mode, default OFF
@@ -224,7 +225,16 @@ public class VideoAttributes implements Serializable {
         return faststart;
     }
 
-    public void addFilter(VideoFilter videoFilter) {
+    public Optional<FilterGraph> getComplexFiltergraph() {
+		return Optional.ofNullable(complexFiltergraph);
+	}
+
+	public VideoAttributes setComplexFiltergraph(FilterGraph complexFiltergraph) {
+		this.complexFiltergraph = complexFiltergraph;
+		return this;
+	}
+
+	public void addFilter(VideoFilter videoFilter) {
         this.videoFilters.add(videoFilter);
     }
 

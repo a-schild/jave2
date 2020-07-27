@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ws.schild.jave.Version;
 
+import ws.schild.jave.Version;
 import ws.schild.jave.process.ProcessLocator;
 import ws.schild.jave.process.ProcessWrapper;
 
@@ -75,7 +76,7 @@ public class DefaultFFMPEGLocator implements ProcessLocator {
         String arch = System.getProperty("os.arch");
 
         //File
-        File ffmpegFile = new File(dirFolder, "ffmpeg-" + arch +"-"+Version.getVersion()+ suffix);
+        File ffmpegFile = new File(dirFolder, "ffmpeg-" + arch + "-" + Version.getVersion() + suffix);
         LOG.debug("Executable path: {}", ffmpegFile.getAbsolutePath());
 
         //Check the version of existing .exe file

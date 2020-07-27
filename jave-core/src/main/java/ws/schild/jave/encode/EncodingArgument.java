@@ -11,6 +11,13 @@ import java.util.stream.Stream;
  */
 public interface EncodingArgument {
 
+	/**
+	 * Gets the Stream of arguments given the EncodingAttributes as context. Implementers must take
+	 * care to return a new Stream on each successive call as doing otherwise will result in the stream
+	 * already being operated on exceptions.
+	 * @param context
+	 * @return
+	 */
 	public Stream<String> getArguments(EncodingAttributes context);
 
 	public ArgType getArgType();

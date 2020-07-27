@@ -149,7 +149,7 @@ public class ConversionOutputAnalyzer {
                             || line.contains("Application provided invalid, non monotonically increasing dts to muxer in stream"))
                     {
                         // Ignore these non-fatal errors, if they are fatal, the next line(s)
-                        // will trow the full error
+                        // will throw the full error
                         if (listener != null)
                         {
                             listener.message(line);
