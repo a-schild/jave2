@@ -28,6 +28,12 @@
             <organization>Aarboard AG</organization>
             <organizationUrl>https://www.aarboard.ch</organizationUrl>
         </developer>
+        <developer>
+            <name>Mike Ressler</name>
+            <email>mressler@diamondkinetics.com</email>
+            <organization>Diamond Kinetics, Inc.</organization>
+            <organizationUrl>https://diamondkinetics.com</organizationUrl>
+        </developer>
     </developers>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

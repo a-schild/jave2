@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * A filterchain as described by <a href="https://ffmpeg.org/ffmpeg-filters.html#Filtergraph-syntax-1">
- * FFMPEG Documentation</a>.<br/>
- * <br/>
- * A filterchain is a comma separated series of filters.
+ * <p>A filterchain as described by <a href="https://ffmpeg.org/ffmpeg-filters.html#Filtergraph-syntax-1">
+ * FFMPEG Documentation</a>.</p>
+ * 
+ * <p>A filterchain is a comma separated series of filters.</p>
  * 
  * @author mressler
  *
@@ -35,7 +35,7 @@ public class FilterChain implements VideoFilter {
 	/**
 	 * Add one Filter to this filterchain
 	 * @param filter The Filter to add to this chain.
-	 * @return
+	 * @return this FilterChain for builder pattern magic
 	 */
 	public FilterChain addFilter(Filter filter) {
 		filters.add(filter);

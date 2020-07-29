@@ -7,11 +7,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * A filtergraph as described by <a href="https://ffmpeg.org/ffmpeg-filters.html#Filtergraph-syntax-1">
- * FFMPEG Documentation</a>.<br/>
- * <br/>
- * A filtergraph can optionally start with sws_flags for scaling of outputs and is then composed of
- * a semi-colon separated series of filterchains.
+ * <p>A filtergraph as described by <a href="https://ffmpeg.org/ffmpeg-filters.html#Filtergraph-syntax-1">
+ * FFMPEG Documentation</a>.</p>
+ * 
+ * <p>A filtergraph can optionally start with sws_flags for scaling of outputs and is then composed of
+ * a semi-colon separated series of filterchains.</p>
  * 
  * @author mressler
  *
