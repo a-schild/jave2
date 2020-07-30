@@ -38,7 +38,6 @@ import ws.schild.jave.filtergraphs.OverlayWatermark;
 import ws.schild.jave.filtergraphs.TrimAndWatermark;
 import ws.schild.jave.filters.helpers.Color;
 import ws.schild.jave.filters.helpers.OverlayLocation;
-import ws.schild.jave.progress.EchoingEncoderProgressListener;
 import ws.schild.jave.utils.AutoRemoveableFile;
 
 /**
@@ -57,7 +56,7 @@ public class VideoFilterTest extends AMediaTest{
     public void testVideoFilter1() throws Exception {
         System.out.println("testVideoFilter1");
         
-        File source = new File(getResourceSourcePath(), "testfile3.wmv ");
+        File source = new File(getResourceSourcePath(), "testfile3.wmv");
         File target = new File(getResourceTargetPath(), "testVideoFilter1.mp4");
         if (target.exists())
         {
@@ -78,7 +77,7 @@ public class VideoFilterTest extends AMediaTest{
     public void testVideoFilter2() throws Exception {
         System.out.println("testVideoFilter2");
         
-        File source = new File(getResourceSourcePath(), "testfile3.wmv ");
+        File source = new File(getResourceSourcePath(), "testfile3.wmv");
         File target = new File(getResourceTargetPath(), "testVideoFilter2.mp4");
         if (target.exists())
         {
@@ -99,7 +98,7 @@ public class VideoFilterTest extends AMediaTest{
     public void testVideoFilter3() throws Exception {
         System.out.println("testVideoFilter3");
         
-        File source = new File(getResourceSourcePath(), "testfile3.wmv ");
+        File source = new File(getResourceSourcePath(), "testfile3.wmv");
         File target = new File(getResourceTargetPath(), "testVideoFilter3.mp4");
         if (target.exists())
         {
@@ -120,7 +119,7 @@ public class VideoFilterTest extends AMediaTest{
     public void testVideoFilter4() throws Exception {
         System.out.println("testVideoFilter4");
         
-        File source = new File(getResourceSourcePath(), "testfile3.wmv ");
+        File source = new File(getResourceSourcePath(), "testfile3.wmv");
         File target = new File(getResourceTargetPath(), "testVideoFilter4.mp4");
         if (target.exists())
         {
