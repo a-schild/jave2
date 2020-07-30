@@ -1,8 +1,8 @@
 /*
  * JAVE - A Java Audio/Video Encoder (based on FFMPEG)
- * 
+ *
  * Copyright (C) 2008-2009 Carlo Pelliccia (www.sauronsoftware.it)
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -24,51 +24,43 @@ import java.io.Reader;
 import java.util.ArrayList;
 
 /**
- * A package-private utility extending java.io.BufferedReader. If a line read
- * with {@link RBufferedReader#readLine()} is not useful for the calling code,
- * it can be re-inserted in the stream. The same line will be returned again at
- * the next readLine() call.
+ * A package-private utility extending java.io.BufferedReader. If a line read with {@link
+ * RBufferedReader#readLine()} is not useful for the calling code, it can be re-inserted in the
+ * stream. The same line will be returned again at the next readLine() call.
  *
  * @author Carlo Pelliccia
  */
 public class RBufferedReader extends BufferedReader {
 
-    /**
-     * Re-inserted lines buffer.
-     */
-    private final ArrayList<String> lines = new ArrayList<>();
+  /** Re-inserted lines buffer. */
+  private final ArrayList<String> lines = new ArrayList<>();
 
-    /**
-     * It builds the reader.
-     *
-     * @param in The underlying reader.
-     */
-    public RBufferedReader(Reader in) {
-        super(in);
+  /**
+   * It builds the reader.
+   *
+   * @param in The underlying reader.
+   */
+  public RBufferedReader(Reader in) {
+    super(in);
+  }
+
+  /** It returns the next line in the stream. */
+  @Override
+  public String readLine() throws IOException {
+    if (lines.size() > 0) {
+      return lines.remove(0);
+    } else {
+      return super.readLine();
     }
+  }
 
-    /**
-     * It returns the next line in the stream.
-     */
-    @Override
-    public String readLine() throws IOException {
-        if (lines.size() > 0)
-        {
-            return lines.remove(0);
-        } else
-        {
-            return super.readLine();
-        }
-    }
-
-    /**
-     * Reinserts a line in the stream. The line will be returned at the next
-     * {@link RBufferedReader#readLine()} call.
-     *
-     * @param line The line.
-     */
-    public void reinsertLine(String line) {
-        lines.add(0, line);
-    }
-
+  /**
+   * Reinserts a line in the stream. The line will be returned at the next {@link
+   * RBufferedReader#readLine()} call.
+   *
+   * @param line The line.
+   */
+  public void reinsertLine(String line) {
+    lines.add(0, line);
+  }
 }

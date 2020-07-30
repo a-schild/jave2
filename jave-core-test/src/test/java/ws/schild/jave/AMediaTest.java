@@ -7,59 +7,43 @@ package ws.schild.jave;
 
 import java.io.File;
 
-/**
- *
- * @author a.schild
- */
+/** @author a.schild */
 public abstract class AMediaTest {
-    private final String resourceSourcePath;
-    private final String resourceTargetPath;
+  private final String resourceSourcePath;
+  private final String resourceTargetPath;
 
-    /**
-     * @param sourcePart
-     * @param targetPart 
-     */
-    public AMediaTest(String sourcePart, String targetPart) {
-        if (sourcePart == null)
-        {
-            resourceSourcePath= "src/test/resources/";
-        }
-        else
-        {
-            if (sourcePart.endsWith("/"))
-            {
-                resourceSourcePath= "src/test/resources/"+sourcePart;
-            }
-            else
-            {
-                resourceSourcePath= "src/test/resources/"+sourcePart+"/";
-            }
-        }
-        new File(resourceSourcePath).mkdirs();
-        if (targetPart == null)
-        {
-            resourceTargetPath= "target/testoutput/";
-        }
-        else
-        {
-            if (targetPart.endsWith("/"))
-            {
-                resourceTargetPath= "target/testoutput/"+targetPart;
-            }
-            else
-            {
-                resourceTargetPath= "target/testoutput/"+targetPart+"/";
-            }
-        }
-        new File(resourceTargetPath).mkdirs();
+  /**
+   * @param sourcePart
+   * @param targetPart
+   */
+  public AMediaTest(String sourcePart, String targetPart) {
+    if (sourcePart == null) {
+      resourceSourcePath = "src/test/resources/";
+    } else {
+      if (sourcePart.endsWith("/")) {
+        resourceSourcePath = "src/test/resources/" + sourcePart;
+      } else {
+        resourceSourcePath = "src/test/resources/" + sourcePart + "/";
+      }
     }
+    new File(resourceSourcePath).mkdirs();
+    if (targetPart == null) {
+      resourceTargetPath = "target/testoutput/";
+    } else {
+      if (targetPart.endsWith("/")) {
+        resourceTargetPath = "target/testoutput/" + targetPart;
+      } else {
+        resourceTargetPath = "target/testoutput/" + targetPart + "/";
+      }
+    }
+    new File(resourceTargetPath).mkdirs();
+  }
 
-    public String getResourceSourcePath() {
-        return resourceSourcePath;
-    }
+  public String getResourceSourcePath() {
+    return resourceSourcePath;
+  }
 
-    public String getResourceTargetPath() {
-        return resourceTargetPath;
-    }
-    
+  public String getResourceTargetPath() {
+    return resourceTargetPath;
+  }
 }

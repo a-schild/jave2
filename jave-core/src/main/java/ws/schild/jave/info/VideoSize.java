@@ -1,8 +1,8 @@
 /*
  * JAVE - A Java Audio/Video Encoder (based on FFMPEG)
- * 
+ *
  * Copyright (C) 2008-2009 Carlo Pelliccia (www.sauronsoftware.it)
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -27,55 +27,49 @@ import java.io.Serializable;
  */
 public class VideoSize implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * The video width.
-     */
-    private final Integer width;
+  /** The video width. */
+  private final Integer width;
 
-    /**
-     * The video height.
-     */
-    private final Integer height;
+  /** The video height. */
+  private final Integer height;
 
-    /**
-     * It builds the bean.
-     *
-     * @param width The video width.
-     * @param height The video height.
-     */
-    public VideoSize(int width, int height) {
-        this.width = width;
-        this.height = height;
-    }
+  /**
+   * It builds the bean.
+   *
+   * @param width The video width.
+   * @param height The video height.
+   */
+  public VideoSize(int width, int height) {
+    this.width = width;
+    this.height = height;
+  }
 
-    /**
-     * Returns the video width.
-     *
-     * @return The video width.
-     */
-    public Integer getWidth() {
-        return width;
-    }
+  /**
+   * Returns the video width.
+   *
+   * @return The video width.
+   */
+  public Integer getWidth() {
+    return width;
+  }
 
-    /**
-     * Returns the video height.
-     *
-     * @return The video height.
-     */
-    public Integer getHeight() {
-        return height;
-    }
+  /**
+   * Returns the video height.
+   *
+   * @return The video height.
+   */
+  public Integer getHeight() {
+    return height;
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getName() + " (width=" + width + ", height=" + height
-                + ")";
-    }
-    
-    public String asEncoderArgument() {
-    	return getWidth().toString() + "x" + getHeight().toString();
-    }
+  @Override
+  public String toString() {
+    return getClass().getName() + " (width=" + width + ", height=" + height + ")";
+  }
 
+  public String asEncoderArgument() {
+    return getWidth().toString() + "x" + getHeight().toString();
+  }
 }

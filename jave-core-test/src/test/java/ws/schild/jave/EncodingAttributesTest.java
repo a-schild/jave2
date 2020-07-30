@@ -1,8 +1,8 @@
 /*
  * JAVE - A Java Audio/Video Encoder (based on FFMPEG)
- * 
+ *
  * Copyright (C) 2018- Andre Schild
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -27,51 +27,46 @@ import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
 import ws.schild.jave.info.VideoSize;
 
-/**
- *
- * @author a.schild
- */
-public class EncodingAttributesTest extends AMediaTest{
-    
-    
-    public EncodingAttributesTest() {
-        super(null, "EncodingAttributes");
-    }
+/** @author a.schild */
+public class EncodingAttributesTest extends AMediaTest {
 
-    /**
-     * Test of encode method, of class Encoder.
-     * @throws java.lang.Exception
-     */
-    @Test
-    public void testEncodeVideo1() throws Exception {
-        System.out.println("testEncodeVideo1 avi to mp4");
-        
-        File source = new File(getResourceSourcePath(), "dance1.avi");
-        File target = new File(getResourceTargetPath(), "testEncodeVideo1.mp4");
-        if (target.exists())
-        {
-            target.delete();
-        }
-        AudioAttributes audio = new AudioAttributes();
-        audio.setCodec("libfaac");
-        audio.setBitRate(128000);
-        audio.setSamplingRate(44100);
-        audio.setChannels(2);
-        VideoAttributes video = new VideoAttributes();
-        video.setCodec("mpeg4");
-        video.setBitRate(160000);
-        video.setFrameRate(15);
-        video.setSize(new VideoSize(176, 144));
-        EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setOutputFormat("mp4");
-        attrs.setAudioAttributes(audio);
-        attrs.setVideoAttributes(video);
-        attrs.setDecodingThreads(1);
-        attrs.setEncodingThreads(1);
-        //attrs.setFilterThreads(1);
-        Encoder encoder = new Encoder();
-        encoder.encode(new MultimediaObject(source), target, attrs);
-        assertTrue( target.exists(), "Output file missing");
-    }
+  public EncodingAttributesTest() {
+    super(null, "EncodingAttributes");
+  }
 
+  /**
+   * Test of encode method, of class Encoder.
+   *
+   * @throws java.lang.Exception
+   */
+  @Test
+  public void testEncodeVideo1() throws Exception {
+    System.out.println("testEncodeVideo1 avi to mp4");
+
+    File source = new File(getResourceSourcePath(), "dance1.avi");
+    File target = new File(getResourceTargetPath(), "testEncodeVideo1.mp4");
+    if (target.exists()) {
+      target.delete();
+    }
+    AudioAttributes audio = new AudioAttributes();
+    audio.setCodec("libfaac");
+    audio.setBitRate(128000);
+    audio.setSamplingRate(44100);
+    audio.setChannels(2);
+    VideoAttributes video = new VideoAttributes();
+    video.setCodec("mpeg4");
+    video.setBitRate(160000);
+    video.setFrameRate(15);
+    video.setSize(new VideoSize(176, 144));
+    EncodingAttributes attrs = new EncodingAttributes();
+    attrs.setOutputFormat("mp4");
+    attrs.setAudioAttributes(audio);
+    attrs.setVideoAttributes(video);
+    attrs.setDecodingThreads(1);
+    attrs.setEncodingThreads(1);
+    // attrs.setFilterThreads(1);
+    Encoder encoder = new Encoder();
+    encoder.encode(new MultimediaObject(source), target, attrs);
+    assertTrue(target.exists(), "Output file missing");
+  }
 }
