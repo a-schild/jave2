@@ -149,10 +149,7 @@ public class ScreenExtractor {
       File outputDir,
       int quality)
       throws EncoderException {
-    String inputSource =
-        multimediaObject.isURL()
-            ? multimediaObject.getURL().toString()
-            : multimediaObject.getFile().getAbsolutePath();
+    String inputSource = multimediaObject.toString();
     outputDir = outputDir.getAbsoluteFile();
     outputDir.getParentFile().mkdirs();
     try {
