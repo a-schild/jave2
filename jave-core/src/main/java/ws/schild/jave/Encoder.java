@@ -224,6 +224,10 @@ public class Encoder {
    * @return A list with the names of all the supported file formats at encoding time.
    * @throws EncoderException If a problem occurs calling the underlying ffmpeg executable.
    */
+  /*
+   * TODO: Refactor this out to a parsing utility. This will enable us to support multiple ffmpeg
+   * versions if the structure changes.
+   */
   protected String[] getSupportedCodingFormats(boolean encoding) throws EncoderException {
     ArrayList<String> res = new ArrayList<>();
 
@@ -347,134 +351,84 @@ public class Encoder {
   }
 
   private static List<EncodingArgument> globalOptions =
-      new ArrayList<EncodingArgument>(
-          Arrays.asList(
-              new ValueArgument(
-                  ArgType.GLOBAL,
-                  "--filter_thread",
-                  ea -> ea.getFilterThreads().map(Object::toString)),
-              new ValueArgument(ArgType.GLOBAL, "-ss", ea -> ea.getOffset().map(Object::toString)),
-              new ValueArgument(
-                  ArgType.INFILE, "-threads", ea -> ea.getDecodingThreads().map(Object::toString)),
-              new PredicateArgument(
-                  ArgType.INFILE, "-loop", "1", ea -> ea.getLoop() && ea.getDuration().isPresent()),
-              new ValueArgument(ArgType.INFILE, "-f", ea -> ea.getInputFormat()),
-              new ValueArgument(ArgType.INFILE, "-safe", ea -> ea.getSafe().map(Object::toString)),
-              new ValueArgument(
-                  ArgType.OUTFILE, "-t", ea -> ea.getDuration().map(Object::toString)),
-              // Video Options
-              new PredicateArgument(
-                  ArgType.OUTFILE, "-vn", ea -> !ea.getVideoAttributes().isPresent()),
-              new ValueArgument(
-                  ArgType.OUTFILE,
-                  "-vcodec",
-                  ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getCodec)),
-              new ValueArgument(
-                  ArgType.OUTFILE,
-                  "-vtag",
-                  ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getTag)),
-              new ValueArgument(
-                  ArgType.OUTFILE,
-                  "-vb",
-                  ea ->
-                      ea.getVideoAttributes()
-                          .flatMap(VideoAttributes::getBitRate)
-                          .map(Object::toString)),
-              new ValueArgument(
-                  ArgType.OUTFILE,
-                  "-r",
-                  ea ->
-                      ea.getVideoAttributes()
-                          .flatMap(VideoAttributes::getFrameRate)
-                          .map(Object::toString)),
-              new ValueArgument(
-                  ArgType.OUTFILE,
-                  "-s",
-                  ea ->
-                      ea.getVideoAttributes()
-                          .flatMap(VideoAttributes::getSize)
-                          .map(VideoSize::asEncoderArgument)),
-              new PredicateArgument(
-                  ArgType.OUTFILE,
-                  "-movflags",
-                  "faststart",
-                  ea -> ea.getVideoAttributes().isPresent()),
-              new ValueArgument(
-                  ArgType.OUTFILE,
-                  "-profile:v",
-                  ea ->
-                      ea.getVideoAttributes()
-                          .flatMap(VideoAttributes::getX264Profile)
-                          .map(X264_PROFILE::getModeName)),
-              new SimpleArgument(
-                  ArgType.OUTFILE,
-                  ea ->
-                      ea.getVideoAttributes()
-                          .map(VideoAttributes::getVideoFilters)
-                          .map(Collection::stream)
-                          .map(s -> s.flatMap(vf -> Stream.of("-vf", vf.getExpression())))
-                          .orElseGet(Stream::empty)),
-              new ValueArgument(
-                  ArgType.OUTFILE,
-                  "-filter_complex",
-                  ea ->
-                      ea.getVideoAttributes()
-                          .flatMap(VideoAttributes::getComplexFiltergraph)
-                          .map(FilterGraph::getExpression)),
-              new ValueArgument(
-                  ArgType.OUTFILE,
-                  "-qscale:v",
-                  ea ->
-                      ea.getVideoAttributes()
-                          .flatMap(VideoAttributes::getQuality)
-                          .map(Object::toString)),
-              // Audio Options
-              new PredicateArgument(
-                  ArgType.OUTFILE, "-an", ea -> !ea.getAudioAttributes().isPresent()),
-              new ValueArgument(
-                  ArgType.OUTFILE,
-                  "-acodec",
-                  ea -> ea.getAudioAttributes().flatMap(AudioAttributes::getCodec)),
-              new ValueArgument(
-                  ArgType.OUTFILE,
-                  "-ab",
-                  ea ->
-                      ea.getAudioAttributes()
-                          .flatMap(AudioAttributes::getBitRate)
-                          .map(Object::toString)),
-              new ValueArgument(
-                  ArgType.OUTFILE,
-                  "-ac",
-                  ea ->
-                      ea.getAudioAttributes()
-                          .flatMap(AudioAttributes::getChannels)
-                          .map(Object::toString)),
-              new ValueArgument(
-                  ArgType.OUTFILE,
-                  "-ar",
-                  ea ->
-                      ea.getAudioAttributes()
-                          .flatMap(AudioAttributes::getSamplingRate)
-                          .map(Object::toString)),
-              new ValueArgument(
-                  ArgType.OUTFILE,
-                  "-vol",
-                  ea ->
-                      ea.getAudioAttributes()
-                          .flatMap(AudioAttributes::getVolume)
-                          .map(Object::toString)),
-              new ValueArgument(
-                  ArgType.OUTFILE,
-                  "-qscale:a",
-                  ea ->
-                      ea.getAudioAttributes()
-                          .flatMap(AudioAttributes::getQuality)
-                          .map(Object::toString)),
-              new ValueArgument(ArgType.OUTFILE, "-f", ea -> ea.getOutputFormat()),
-              new ValueArgument(
-                  ArgType.OUTFILE, "-threads", ea -> ea.getEncodingThreads().map(Object::toString)),
-              new PredicateArgument(
-                  ArgType.OUTFILE, "-map_metadata", "0", ea -> ea.isMapMetaData())));
+      new ArrayList<EncodingArgument>(Arrays.asList(
+          new ValueArgument(ArgType.GLOBAL, "--filter_thread",
+              ea -> ea.getFilterThreads().map(Object::toString)),
+          new ValueArgument(ArgType.GLOBAL, "-ss", ea -> ea.getOffset().map(Object::toString)),
+          new ValueArgument(ArgType.INFILE, "-threads", 
+        	  ea -> ea.getDecodingThreads().map(Object::toString)),
+          new PredicateArgument(ArgType.INFILE, "-loop", "1", 
+        	  ea -> ea.getLoop() && ea.getDuration().isPresent()),
+          new ValueArgument(ArgType.INFILE, "-f", ea -> ea.getInputFormat()),
+          new ValueArgument(ArgType.INFILE, "-safe", ea -> ea.getSafe().map(Object::toString)),
+          new ValueArgument(ArgType.OUTFILE, "-t", ea -> ea.getDuration().map(Object::toString)),
+          // Video Options
+          new PredicateArgument(ArgType.OUTFILE, "-vn", ea -> !ea.getVideoAttributes().isPresent()),
+          new ValueArgument(ArgType.OUTFILE, "-vcodec",
+              ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getCodec)),
+          new ValueArgument(ArgType.OUTFILE, "-vtag",
+              ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getTag)),
+          new ValueArgument(ArgType.OUTFILE, "-vb",
+              ea -> ea.getVideoAttributes()
+                      .flatMap(VideoAttributes::getBitRate)
+                      .map(Object::toString)),
+          new ValueArgument(ArgType.OUTFILE, "-r",
+              ea -> ea.getVideoAttributes()
+                      .flatMap(VideoAttributes::getFrameRate)
+                      .map(Object::toString)),
+          new ValueArgument(ArgType.OUTFILE, "-s",
+              ea -> ea.getVideoAttributes()
+                      .flatMap(VideoAttributes::getSize)
+                      .map(VideoSize::asEncoderArgument)),
+          new PredicateArgument(ArgType.OUTFILE, "-movflags", "faststart",
+              ea -> ea.getVideoAttributes().isPresent()),
+          new ValueArgument(ArgType.OUTFILE, "-profile:v",
+              ea -> ea.getVideoAttributes()
+                      .flatMap(VideoAttributes::getX264Profile)
+                      .map(X264_PROFILE::getModeName)),
+          new SimpleArgument(ArgType.OUTFILE,
+              ea -> ea.getVideoAttributes()
+                      .map(VideoAttributes::getVideoFilters)
+                      .map(Collection::stream)
+                      .map(s -> s.flatMap(vf -> Stream.of("-vf", vf.getExpression())))
+                      .orElseGet(Stream::empty)),
+          new ValueArgument(ArgType.OUTFILE, "-filter_complex",
+              ea -> ea.getVideoAttributes()
+                      .flatMap(VideoAttributes::getComplexFiltergraph)
+                      .map(FilterGraph::getExpression)),
+          new ValueArgument(ArgType.OUTFILE, "-qscale:v",
+              ea -> ea.getVideoAttributes()
+                      .flatMap(VideoAttributes::getQuality)
+                      .map(Object::toString)),
+          // Audio Options
+          new PredicateArgument(ArgType.OUTFILE, "-an", ea -> !ea.getAudioAttributes().isPresent()),
+          new ValueArgument(ArgType.OUTFILE, "-acodec",
+              ea -> ea.getAudioAttributes().flatMap(AudioAttributes::getCodec)),
+          new ValueArgument(ArgType.OUTFILE, "-ab",
+              ea -> ea.getAudioAttributes()
+                      .flatMap(AudioAttributes::getBitRate)
+                      .map(Object::toString)),
+          new ValueArgument(ArgType.OUTFILE, "-ac",
+              ea -> ea.getAudioAttributes()
+                      .flatMap(AudioAttributes::getChannels)
+                      .map(Object::toString)),
+          new ValueArgument(ArgType.OUTFILE, "-ar",
+              ea -> ea.getAudioAttributes()
+                      .flatMap(AudioAttributes::getSamplingRate)
+                      .map(Object::toString)),
+          new ValueArgument(ArgType.OUTFILE, "-vol",
+              ea -> ea.getAudioAttributes()
+                      .flatMap(AudioAttributes::getVolume)
+                      .map(Object::toString)),
+          new ValueArgument(ArgType.OUTFILE, "-qscale:a",
+              ea -> ea.getAudioAttributes()
+                      .flatMap(AudioAttributes::getQuality)
+                      .map(Object::toString)),
+          new ValueArgument(ArgType.OUTFILE, "-f", ea -> ea.getOutputFormat()),
+          new ValueArgument(ArgType.OUTFILE, "-threads", 
+        	  ea -> ea.getEncodingThreads().map(Object::toString)),
+          new PredicateArgument(ArgType.OUTFILE, "-map_metadata", "0", 
+        	  ea -> ea.isMapMetaData())));
 
   public static void addOptionAtIndex(EncodingArgument arg, Integer index) {
     globalOptions.add(index, arg);
@@ -551,6 +505,23 @@ public class Encoder {
       String lastWarning = null;
       long duration = 0;
       MultimediaInfo info = null;
+      /*
+       * TODO: This is an awkward way of determining duration of input videos. This calls a separate
+       * FFMPEG process to getInfo when the output of running FFMPEG just above will list the info
+       * of the input videos as "Input #0" -> "Input #N". Capture _that_ output instead of calling
+       * *back* into FFMPEG. Furthermore, expressing the percentage of the transcoding job as a
+       * simple "what percentage of the input duration have we output" feels too naive given all of
+       * the interesting video filters that can be applied. It feels like the user would know the
+       * duration of the output video as:
+       * 1. The duration of the input video (as we have expressed here)
+       * 2. The sum of the durations of the input videos
+       * 3. A particular duration calculated with the context of all the inputs/encoding attributes.
+       * So, if the calling method tells this method the expected duration, then we can express 
+       * progress as a percentage. I would like to make #1 and #2 very simple to do, however.
+       * Perhaps a method that would take the input MultimediaInfo objects that are generated from
+       * this FFMPEG invocation, the EncodingAttributes, and would output a duration. Then we could
+       * have named methods that would calculate durations as in #1 and #2. 
+       */
       if (multimediaObjects.size() == 1
           && (!multimediaObjects.get(0).isURL() || !multimediaObjects.get(0).isReadURLOnce())) {
         info = multimediaObjects.get(0).getInfo();

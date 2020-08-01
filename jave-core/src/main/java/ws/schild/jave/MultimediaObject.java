@@ -178,6 +178,10 @@ public class MultimediaObject {
    * @throws InputFormatException If the format of the source file cannot be recognized and decoded.
    * @throws EncoderException If a problem occurs calling the underlying ffmpeg executable.
    */
+  /* 
+   * TODO: Refactor all parsing logic to a versioned parsing utility so we can detect FFMPEG version
+   * programmatically/support multiple runtime versions and consolidate parsing in one location. 
+   */
   private MultimediaInfo parseMultimediaInfo(String source, RBufferedReader reader)
       throws InputFormatException, EncoderException {
     Pattern p1 = Pattern.compile("^\\s*Input #0, (\\w+).+$\\s*", Pattern.CASE_INSENSITIVE);
