@@ -67,7 +67,6 @@ public class VideoProcessor {
       throws FileNotFoundException, IllegalArgumentException, InputFormatException,
           EncoderException {
     assert (enabled);
-    // Verify input files?
     progress.onBegin();
 
     try (AutoRemoveableFile mergeFile = prepareMergeInstructions(videos, destination)) {

@@ -554,6 +554,10 @@ public class Encoder {
           throw new EncoderException("No match for: " + SUCCESS_PATTERN + " in " + lastWarning);
         }
       }
+      /*
+       * TODO: This is not thread safe. This needs to be a resulting value from the call to the 
+       * Encoder. We can create a separate EncoderResult, but not a stateful variable.
+       */
       unhandledMessages = outputAnalyzer.getUnhandledMessages();
       int exitCode = ffmpeg.getProcessExitCode();
       if (exitCode != 0) {

@@ -19,6 +19,13 @@ import ws.schild.jave.process.ProcessWrapper;
 import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
 import ws.schild.jave.utils.RBufferedReader;
 
+/*
+ * TODO: Rip out parsing logic. This shouldn't be in a POJO object. This is meant to be a data 
+ * holder.
+ * 
+ * Also TODO: Do away with the distinction between URL and File altogether. Shouldn't this just be
+ * a String anyway? We don't ever need the distinction between the two, correct?
+ */
 public class MultimediaObject {
 
   /** @param readURLOnce the readURLOnce to set */
@@ -142,11 +149,8 @@ public class MultimediaObject {
     if (isURL() || inputFile.canRead()) {
       ProcessWrapper ffmpeg = locator.createExecutor();
       ffmpeg.addArgument("-i");
-      if (isURL()) {
-        ffmpeg.addArgument(inputURL.toString());
-      } else {
-        ffmpeg.addArgument(inputFile.getAbsolutePath());
-      }
+      ffmpeg.addArgument(toString());
+      
       try {
         ffmpeg.execute();
       } catch (IOException e) {

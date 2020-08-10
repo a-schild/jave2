@@ -68,10 +68,7 @@ public class ScreenExtractor {
       String extension,
       int quality)
       throws InputFormatException, EncoderException {
-    String inputSource =
-        multimediaObject.isURL()
-            ? multimediaObject.getURL().toString()
-            : multimediaObject.getFile().getAbsolutePath();
+    String inputSource = multimediaObject.toString();
     try {
       if (!outputDir.exists()) {
         if (!outputDir.mkdirs()) {
@@ -250,10 +247,7 @@ public class ScreenExtractor {
       int quality,
       boolean keyframesSeeking)
       throws InputFormatException, EncoderException {
-    String inputSource =
-        multimediaObject.isURL()
-            ? multimediaObject.getURL().toString()
-            : multimediaObject.getFile().getAbsolutePath();
+    String inputSource = multimediaObject.toString();
     try {
       if (outputFile.exists()) {
         outputFile.delete();
