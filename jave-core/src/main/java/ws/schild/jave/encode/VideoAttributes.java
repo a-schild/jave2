@@ -68,6 +68,7 @@ public class VideoAttributes implements Serializable {
    * will be used
    */
   private Integer quality = null;
+  private String pixelFormat = null;
 
   private FilterGraph complexFiltergraph = null;
   private final ArrayList<VideoFilter> videoFilters = new ArrayList<>();
@@ -260,6 +261,15 @@ public class VideoAttributes implements Serializable {
    */
   public VideoAttributes setQuality(Integer quality) {
     this.quality = quality;
+    return this;
+  }
+
+  public Optional<String> getPixelFormat() {
+    return Optional.ofNullable(pixelFormat);
+  }
+
+  public VideoAttributes setPixelFormat(String pixelFormat) {
+    this.pixelFormat = pixelFormat;
     return this;
   }
 

@@ -426,9 +426,13 @@ public class Encoder {
                       .map(Object::toString)),
           new ValueArgument(ArgType.OUTFILE, "-f", ea -> ea.getOutputFormat()),
           new ValueArgument(ArgType.OUTFILE, "-threads", 
-        	  ea -> ea.getEncodingThreads().map(Object::toString)),
+              ea -> ea.getEncodingThreads().map(Object::toString)),
           new PredicateArgument(ArgType.OUTFILE, "-map_metadata", "0", 
-        	  ea -> ea.isMapMetaData())));
+              ea -> ea.isMapMetaData()),
+          new ValueArgument(ArgType.OUTFILE, "-pix_fmt", 
+              ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getPixelFormat))
+        )
+      );
 
   public static void addOptionAtIndex(EncodingArgument arg, Integer index) {
     globalOptions.add(index, arg);
