@@ -219,13 +219,11 @@ public class VideoFilterTest extends AMediaTest {
     String fooPath = fooPng.getAbsolutePath();
 
     assertEquals(
-        "[0]trim='duration=1.0:start=0.5',setpts='PTS-STARTPTS'[trimmed0],movie='"
-            + fooPath
-            + "',[trimmed0]overlay='main_w-overlay_w-10:main_h-overlay_h-10'[overlayed0];[1]trim='duration=1.0:start=0.5',setpts='PTS-STARTPTS'[trimmed1],movie='"
-            + fooPath
-            + "',[trimmed1]overlay='main_w-overlay_w-10:main_h-overlay_h-10'[overlayed1];[2]trim='duration=1.0:start=0.5',setpts='PTS-STARTPTS'[trimmed2],movie='"
-            + fooPath
-            + "',[trimmed2]overlay='main_w-overlay_w-10:main_h-overlay_h-10'[overlayed2];[overlayed0][overlayed1][overlayed2]concat='n=3'",
+          "[0]trim='duration=1.0:start=0.5',setpts='PTS-STARTPTS'[filtered0];"
+        + "[1]trim='duration=1.0:start=0.5',setpts='PTS-STARTPTS'[filtered1];"
+        + "[2]trim='duration=1.0:start=0.5',setpts='PTS-STARTPTS'[filtered2];"
+        + "[filtered0][filtered1][filtered2]concat='n=3'[concatenated];"
+        + "movie='" + fooPath + "',[concatenated]overlay='main_w-overlay_w-10:main_h-overlay_h-10'",
         new TrimAndWatermark(fooPng, trimInfo).getExpression());
   }
 
