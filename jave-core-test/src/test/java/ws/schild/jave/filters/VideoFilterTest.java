@@ -180,6 +180,22 @@ public class VideoFilterTest extends AMediaTest {
       assertTrue(target.exists(), "Output file missing");
     }
   }
+  
+  @Test
+  public void thatWeCanFadeAVideo() throws Exception {
+    File sourceVideo =
+        new File(cLoader.getResource("9B8CC2D5-3B24-4DD1-B23D-9B5DAF0E70BE.mp4").getFile());
+
+    VideoAttributes vidAttr = new VideoAttributes();
+    vidAttr.addFilter(new FadeFilter(FadeDirection.OUT, 1.0, 1.0));
+    EncodingAttributes encAttr = new EncodingAttributes().setVideoAttributes(vidAttr);
+
+    try (AutoRemoveableFile target =
+        new AutoRemoveableFile(sourceVideo.getParentFile(), "fade.mp4")) {
+      new Encoder().encode(new MultimediaObject(sourceVideo), target, encAttr);
+      assertTrue(target.exists(), "Output file missing");
+    }
+  }
 
   @Test
   public void thatTrimAndWatermarkFilterProducesCorrectFiltergraphs() throws Exception {
