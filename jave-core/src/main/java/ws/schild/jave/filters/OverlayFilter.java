@@ -13,7 +13,11 @@ import ws.schild.jave.filters.helpers.OverlayLocation;
 public class OverlayFilter extends Filter {
 
   public OverlayFilter(
-      String baseInputLabel, OverlayLocation location, Integer offsetX, Integer offsetY) {
+      String baseInputLabel, 
+      OverlayLocation location, 
+      Integer offsetX, 
+      Integer offsetY) 
+  {
     super("overlay");
     addInputLabel(baseInputLabel);
     addOrderedArgument(
@@ -25,7 +29,8 @@ public class OverlayFilter extends Filter {
       String overlayInputLabel,
       OverlayLocation location,
       Integer offsetX,
-      Integer offsetY) {
+      Integer offsetY) 
+  {
     this(baseInputLabel, location, offsetX, offsetY);
     addInputLabel(overlayInputLabel);
   }

@@ -9,12 +9,16 @@ package ws.schild.jave.filters;
  *
  * @author mressler
  */
-public class TrimFilter extends Filter {
-
-  public TrimFilter(String inputLabel, Double start, Double duration) {
+public class TrimFilter extends Filter {  
+  
+  public TrimFilter(Double start, Double duration) {
     super("trim");
-    addInputLabel(inputLabel);
     addNamedArgument("start", start.toString());
     addNamedArgument("duration", duration.toString());
+  }
+
+  public TrimFilter(String inputLabel, Double start, Double duration) {
+    this(start, duration);
+    addInputLabel(inputLabel);
   }
 }
