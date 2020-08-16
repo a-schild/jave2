@@ -9,4 +9,5 @@ public interface VideoFilter {
    * @return A string that will be placed in the -vf or -filter_complex option to ffmpeg.
    */
   public String getExpression();
+  
 }

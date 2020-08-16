@@ -36,7 +36,7 @@ public class VideoAttributes implements Serializable {
 
   private static final long serialVersionUID = 2L;
   /**
-   * This value can be setted in the codec field to perform a direct stream copy, without
+   * This value can be set in the codec field to perform a direct stream copy, without
    * re-encoding of the audio stream.
    */
   public static final String DIRECT_STREAM_COPY = "copy";
