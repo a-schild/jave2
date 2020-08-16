@@ -36,8 +36,11 @@ import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
 import ws.schild.jave.filtergraphs.OverlayWatermark;
 import ws.schild.jave.filtergraphs.TrimAndWatermark;
+import ws.schild.jave.filtergraphs.TrimFadeAndWatermark;
 import ws.schild.jave.filters.helpers.Color;
+import ws.schild.jave.filters.helpers.FadeDirection;
 import ws.schild.jave.filters.helpers.OverlayLocation;
+import ws.schild.jave.info.VideoSize;
 import ws.schild.jave.utils.AutoRemoveableFile;
 
 /** @author a.schild */
@@ -258,6 +261,70 @@ public class VideoFilterTest extends AMediaTest {
       new Encoder()
           .encode(
               videos.stream().map(MultimediaObject::new).collect(Collectors.toList()),
+              target,
+              encAttr);
+      assertTrue(target.exists(), "Output file missing");
+    }
+  }
+
+  @Test
+  public void thatWeCanTrimFadeAndWatermarkFiles() throws Exception {
+    File watermark =
+        new File(VideoFilterTest.class.getClassLoader().getResource("watermark.png").getFile());
+
+    List<File> videos =
+        Arrays.asList(
+                "9B8CC2D5-3B24-4DD1-B23D-9B5DAF0E70BE.mp4",
+                "A0EF94F6-F922-4676-B767-A600F2E87F53.mp4",
+                "B3111BAF-A516-48EC-99FB-B492EB23155D.mp4")
+            .stream()
+            .map(cLoader::getResource)
+            .map(URL::getFile)
+            .map(File::new)
+            .collect(Collectors.toList());
+
+    VideoAttributes vidAttr = new VideoAttributes();
+    vidAttr.setComplexFiltergraph(
+        new TrimFadeAndWatermark(
+            watermark,
+            videos
+                .stream()
+                .map(v -> new TrimAndWatermark.TrimInfo(0.5, 1.0))
+                .collect(Collectors.toList())));
+    EncodingAttributes encAttr = new EncodingAttributes().setVideoAttributes(vidAttr);
+
+    try (AutoRemoveableFile target =
+        new AutoRemoveableFile(videos.get(0).getParentFile(), "overlay.mp4")) {
+      new Encoder()
+          .encode(
+              videos.stream().map(MultimediaObject::new).collect(Collectors.toList()),
+              target,
+              encAttr);
+      assertTrue(target.exists(), "Output file missing");
+    }
+  }
+
+  @Test
+  public void thatWeCanPadAndZoomImages() throws Exception {
+    File profileSample =
+        new File(VideoFilterTest.class.getClassLoader().getResource("profileSample.png").getFile());
+    VideoSize profileSize = new VideoSize(1532, 1378);
+    
+    VideoSize outputSize = new VideoSize(1280, 720);
+    
+    VideoAttributes vidAttr = new VideoAttributes();
+    vidAttr.setComplexFiltergraph(new FilterGraph(new FilterChain(
+        new PadFilter(outputSize),
+        new ZoomPanFilter(8*25, profileSize, outputSize)
+        )));
+    vidAttr.setPixelFormat("yuv420p");
+    EncodingAttributes encAttr = new EncodingAttributes().setVideoAttributes(vidAttr);
+
+    try (AutoRemoveableFile target =
+        new AutoRemoveableFile(profileSample.getParentFile(), "zoompan.mp4")) {
+      new Encoder()
+          .encode(
+              new MultimediaObject(profileSample),
               target,
               encAttr);
       assertTrue(target.exists(), "Output file missing");
