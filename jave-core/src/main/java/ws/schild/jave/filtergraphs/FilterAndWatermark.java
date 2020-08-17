@@ -34,6 +34,7 @@ public abstract class FilterAndWatermark extends FilterGraph {
   /**
    * MUST be called prior to getExpression. It is intended that the subclassing function calls this
    * in the constructor.
+   * @param provider The FilterChainProvider to use to filter input videos.
    */
   protected void init(FilterChainProvider provider) {
     // Apply the provided filterchain for each input video

@@ -206,6 +206,7 @@ public class Color {
   
   /**
    * Deprecated in favor of toString
+   * @return The specified color in command line format.
    */
   public String getFfmpegColor() {
     return "0x" + color + alpha;
