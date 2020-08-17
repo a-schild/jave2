@@ -1,8 +1,8 @@
 /*
  * JAVE - A Java Audio/Video Encoder (based on FFMPEG)
- * 
+ *
  * Copyright (C) 2008-2009 Carlo Pelliccia (www.sauronsoftware.it)
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,31 +21,28 @@ package ws.schild.jave.process;
 import ws.schild.jave.Encoder;
 
 /**
- * Abstract class whose derived concrete instances are used by {@link Encoder}
- * to locate the ffmpeg executable path.
+ * Abstract class whose derived concrete instances are used by {@link Encoder} to locate the ffmpeg
+ * executable path.
  *
  * @author Carlo Pelliccia
  * @see Encoder
  */
 public interface ProcessLocator {
 
-    /**
-     * This method should return the path of a ffmpeg executable suitable for
-     * the current machine.
-     *
-     * @return The path of the ffmpeg executable.
-     */
-    public String getExecutablePath();
+  /**
+   * This method should return the path of a ffmpeg executable suitable for the current machine.
+   *
+   * @return The path of the ffmpeg executable.
+   */
+  public String getExecutablePath();
 
-    /**
-     * It returns a brand new {@link ProcessWrapper}, ready to be used in a
-     * ffmpeg call.
-     *
-     * @return A newly instanced {@link ProcessWrapper}, using this locator to
-     * call the ffmpeg executable.
-     */
-    default public ProcessWrapper createExecutor() {
-        return new ProcessWrapper(getExecutablePath());
-    }
-
+  /**
+   * It returns a brand new {@link ProcessWrapper}, ready to be used in a ffmpeg call.
+   *
+   * @return A newly instanced {@link ProcessWrapper}, using this locator to call the ffmpeg
+   *     executable.
+   */
+  public default ProcessWrapper createExecutor() {
+    return new ProcessWrapper(getExecutablePath());
+  }
 }
