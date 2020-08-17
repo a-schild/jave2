@@ -10,17 +10,13 @@ import ws.schild.jave.filters.helpers.FadeDirection;
 
 public class TrimFadeAndWatermark extends FilterAndWatermark {
   
-  private Double fadeDuration;
-  
   public TrimFadeAndWatermark(File watermark, List<TrimInfo> trimInfo) {
     super(watermark, trimInfo.size());
-
-    fadeDuration = 0.1;
     
-    init((i, isLast) -> filterchainForTrimInfo(i, isLast, trimInfo.get(i)));
+    init((i, isLast) -> filterchainForTrimInfo(i, isLast, trimInfo.get(i), 0.1));
   }
 
-  protected FilterChain filterchainForTrimInfo(Integer i, boolean isLast, TrimInfo info) {
+  public static FilterChain filterchainForTrimInfo(Integer i, boolean isLast, TrimInfo info, Double fadeDuration) {
     FilterChain toReturn = TrimAndWatermark.filterchainForTrimInfo(info);
     
     if (i != 0) {
