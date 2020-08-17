@@ -4,6 +4,10 @@ import ws.schild.jave.info.VideoSize;
 
 public class ZoomPanFilter extends Filter {
 
+  public ZoomPanFilter() {
+    super("zoompan");
+  }
+  
   /**
    * A "top to bottom" zoom and pan of an image/video using the <a
    * href="https://ffmpeg.org/ffmpeg-filters.html#zoompan">zoompan</a> filter.

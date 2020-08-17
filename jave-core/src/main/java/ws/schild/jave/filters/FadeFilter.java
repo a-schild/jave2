@@ -7,6 +7,16 @@ import ws.schild.jave.filters.helpers.FadeDirection;
  */
 public class FadeFilter extends Filter {
   
+  public FadeFilter() {
+    super("fade");
+  }
+  
+  /**
+   * Standard usage - fase in or out at some time for some duration.
+   * @param dir In or Out.
+   * @param startTimeSeconds When to start the fade.
+   * @param durationSeconds How long to fade in or out.
+   */
   public FadeFilter(FadeDirection dir, Double startTimeSeconds, Double durationSeconds) {
     super("fade");
     addNamedArgument("type", dir.toString());

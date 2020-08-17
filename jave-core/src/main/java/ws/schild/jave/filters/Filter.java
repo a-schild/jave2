@@ -22,11 +22,12 @@ import java.util.stream.Stream;
  *
  * <p>It is intended that this class is not used directly. Instead, implementers will add a specific
  * implementation of the filter they are implementing. A complete list can be found in <a
- * href="https://ffmpeg.org/ffmpeg-filters.html#Filtergraph-syntax-1">FFMPEG Documentation</a>.
+ * href="https://ffmpeg.org/ffmpeg-filters.html#Filtergraph-syntax-1">FFMPEG Documentation</a>. 
+ * However, the class is not abstract to not prohibit direct use.</p>
  *
  * @author mressler
  */
-public abstract class Filter implements VideoFilter {
+public class Filter implements VideoFilter {
 
   private List<String> inputLinkLabels;
   private String name;

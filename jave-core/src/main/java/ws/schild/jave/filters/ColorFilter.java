@@ -10,7 +10,21 @@ import ws.schild.jave.info.VideoSize;
  */
 public class ColorFilter extends Filter {
 
-  public ColorFilter(String name, Color c, VideoSize s, Double durationSeconds) {
+  /**
+   * DIY constructor - add the arguments you need.
+   */
+  public ColorFilter() {
+    super("color");
+  }
+  
+  /**
+   * Simple constructor - make a solid color screen for some amount of time.
+   * 
+   * @param c The color to use.
+   * @param s The size of the output video
+   * @param durationSeconds The number of seconds to output the video for
+   */
+  public ColorFilter(Color c, VideoSize s, Double durationSeconds) {
     super("color");
     addNamedArgument("c", c.toString());
     addNamedArgument("size", s.toString());
