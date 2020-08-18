@@ -62,7 +62,7 @@ public class VideoFilterTest extends AMediaTest {
       target.delete();
     }
     DrawtextFilter vf =
-        new DrawtextFilter("testVideoFilter1", 30, 30, "Arial", null, 30, new Color("ffffff"));
+        new DrawtextFilter("testVideoFilter1", "30", "30", "Arial", 30.0, new Color("ffffff"));
     vf.setShadow(new Color("000000"), 2, 2);
     VideoAttributes videoAttributes = new VideoAttributes();
     videoAttributes.addFilter(vf);
@@ -83,7 +83,7 @@ public class VideoFilterTest extends AMediaTest {
       target.delete();
     }
     DrawtextFilter vf =
-        new DrawtextFilter("testVideoFilter2", 30, 30, "Arial", null, 30, new Color("ffffff", "44"));
+        new DrawtextFilter("testVideoFilter2", "30", "30", "Arial", 30.0, new Color("ffffff", "44"));
     vf.setShadow(new Color("000000", "44"), 2, 2);
     VideoAttributes videoAttributes = new VideoAttributes();
     videoAttributes.addFilter(vf);
@@ -106,11 +106,10 @@ public class VideoFilterTest extends AMediaTest {
     DrawtextFilter vf =
         new DrawtextFilter(
             "testVideoFilter3 <[]:=,> End of special chars",
-            30,
-            30,
+            "30",
+            "30",
             "Arial",
-            null,
-            30,
+            30.0,
             new Color("ffffff", "dd"));
     vf.setShadow(new Color("000000", "44"), 2, 2);
     VideoAttributes videoAttributes = new VideoAttributes();
@@ -133,8 +132,7 @@ public class VideoFilterTest extends AMediaTest {
     }
     DrawtextFilter vf =
         new DrawtextFilter(
-            "testVideoFilter4 center", -1, -1, "Arial", null, 30, new Color("ffffff", "44"));
-    vf.setAddArgument("x=(w-text_w)/2:y=(h-text_h)/2");
+            "testVideoFilter4 center", "(w-text_w)/2", "(h-text_h)/2", "Arial", 30.0, new Color("ffffff", "44"));
     vf.setShadow(new Color("000000", "44"), 2, 2);
     VideoAttributes videoAttributes = new VideoAttributes();
     videoAttributes.addFilter(vf);
