@@ -12,7 +12,7 @@ import ws.schild.jave.utils.Utils;
  * <p>https://write.corbpie.com/how-to-do-a-text-watermark-in-ffmpeg/ -vf "drawtext=text='a
  * watermark':x=10:y=H-th-10:fontfile=/pathto/font.ttf:fontsize=10:fontcolor=white:shadowcolor=black:shadowx=2:shadowy=2"
  */
-public class VideoDrawtext extends Filter {
+public class DrawtextFilter extends Filter {
 
   /**
    * @param text The text string to be drawn. The text must be a sequence of UTF-8 encoded
@@ -21,7 +21,7 @@ public class VideoDrawtext extends Filter {
    * @param fontColor The color to be used for drawing fonts. The default value of fontcolor is
    *     "black".
    */
-  public VideoDrawtext(String text, Color fontColor) throws IllegalArgumentException {
+  public DrawtextFilter(String text, Color fontColor) throws IllegalArgumentException {
     super("drawtext");
     addNamedArgument("text", Utils.escapeArgument(text));
     addNamedArgument("fontcolor", fontColor.toString());
@@ -44,7 +44,7 @@ public class VideoDrawtext extends Filter {
    * @param fontColor The color to be used for drawing fonts. The default value of fontcolor is
    *     "black".
    */
-  public VideoDrawtext(
+  public DrawtextFilter(
       String text,
       String posX,
       String posY,
@@ -74,7 +74,7 @@ public class VideoDrawtext extends Filter {
    * @param shadowY Y Position of shadow, relative to text
    * @return this instance
    */
-  public VideoDrawtext setShadow(Color shadowColor, Integer shadowX, Integer shadowY) {
+  public DrawtextFilter setShadow(Color shadowColor, Integer shadowX, Integer shadowY) {
     addNamedArgument("shadowcolor", shadowColor.toString());
     addNamedArgument("shadowx", shadowX.toString());
     addNamedArgument("shadowy", shadowY.toString());
@@ -90,7 +90,7 @@ public class VideoDrawtext extends Filter {
    *     "white".
    * @return this instance.
    */
-  public VideoDrawtext setBox(Integer borderWidth, Color color) {
+  public DrawtextFilter setBox(Integer borderWidth, Color color) {
     addNamedArgument("box", "1");
     addNamedArgument("boxcolor", color.toString());
     addNamedArgument("boxborderw", borderWidth.toString());
@@ -104,7 +104,7 @@ public class VideoDrawtext extends Filter {
    *     bordercolor is "black".
    * @return this instance
    */
-  public VideoDrawtext setBorder(Integer borderWidth, Color color) {
+  public DrawtextFilter setBorder(Integer borderWidth, Color color) {
     addNamedArgument("bordercolor", color.toString());
     addNamedArgument("borderw", borderWidth.toString());
     return this;
@@ -115,7 +115,7 @@ public class VideoDrawtext extends Filter {
    *     using box. The default value of line_spacing is 0.
    * @return this instance
    */
-  public VideoDrawtext setLineSpacing(Integer lineSpacing) {
+  public DrawtextFilter setLineSpacing(Integer lineSpacing) {
     addNamedArgument("line_spacing", lineSpacing.toString());
     return this;
   }
