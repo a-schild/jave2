@@ -41,7 +41,8 @@ import ws.schild.jave.encode.PredicateArgument;
 import ws.schild.jave.encode.SimpleArgument;
 import ws.schild.jave.encode.ValueArgument;
 import ws.schild.jave.encode.VideoAttributes;
-import ws.schild.jave.encode.VideoAttributes.X264_PROFILE;
+import ws.schild.jave.encode.enums.VsyncMethod;
+import ws.schild.jave.encode.enums.X264_PROFILE;
 import ws.schild.jave.filters.FilterGraph;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.info.VideoSize;
@@ -430,7 +431,9 @@ public class Encoder {
           new PredicateArgument(ArgType.OUTFILE, "-map_metadata", "0", 
               ea -> ea.isMapMetaData()),
           new ValueArgument(ArgType.OUTFILE, "-pix_fmt", 
-              ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getPixelFormat))
+              ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getPixelFormat)),
+          new ValueArgument(ArgType.OUTFILE, "-vsync",
+              ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getVsync).map(VsyncMethod::getMethodName))
         )
       );
 

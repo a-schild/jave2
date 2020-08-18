@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import ws.schild.jave.Encoder;
+import ws.schild.jave.encode.enums.VsyncMethod;
+import ws.schild.jave.encode.enums.X264_PROFILE;
 import ws.schild.jave.filters.FilterGraph;
 import ws.schild.jave.filters.VideoFilter;
 import ws.schild.jave.info.VideoSize;
@@ -69,6 +71,7 @@ public class VideoAttributes implements Serializable {
    */
   private Integer quality = null;
   private String pixelFormat = null;
+  private VsyncMethod vsync = null;
 
   private FilterGraph complexFiltergraph = null;
   private final ArrayList<VideoFilter> videoFilters = new ArrayList<>();
@@ -86,24 +89,6 @@ public class VideoAttributes implements Serializable {
    * The downside is that it is less compatible with other applications.
    */
   private boolean faststart = false;
-
-  public enum X264_PROFILE {
-    BASELINE("baseline"),
-    MAIN("main"),
-    HIGH("high"),
-    HIGH10("high10"),
-    HIGH422("high422"),
-    HIGH444("high444");
-    private final String modeName;
-
-    private X264_PROFILE(String modeName) {
-      this.modeName = modeName;
-    }
-
-    public String getModeName() {
-      return modeName;
-    }
-  };
 
   private X264_PROFILE x264Profile = null;
 
@@ -270,6 +255,15 @@ public class VideoAttributes implements Serializable {
 
   public VideoAttributes setPixelFormat(String pixelFormat) {
     this.pixelFormat = pixelFormat;
+    return this;
+  }
+
+  public Optional<VsyncMethod> getVsync() {
+    return Optional.ofNullable(vsync);
+  }
+
+  public VideoAttributes setVsync(VsyncMethod vsync) {
+    this.vsync = vsync;
     return this;
   }
 
