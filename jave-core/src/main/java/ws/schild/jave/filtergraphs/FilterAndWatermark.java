@@ -1,6 +1,7 @@
 package ws.schild.jave.filtergraphs;
 
 import java.io.File;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -9,7 +10,6 @@ import ws.schild.jave.filters.FilterChain;
 import ws.schild.jave.filters.FilterGraph;
 import ws.schild.jave.filters.MovieFilter;
 import ws.schild.jave.filters.OverlayFilter;
-import ws.schild.jave.filters.helpers.FilterChainProvider;
 import ws.schild.jave.filters.helpers.OverlayLocation;
 
 /**
@@ -21,31 +21,19 @@ import ws.schild.jave.filters.helpers.OverlayLocation;
  */
 public abstract class FilterAndWatermark extends FilterGraph {
 
-  private File watermark;
-  private Integer inputVideoCount;
-
-  public FilterAndWatermark(File watermark, Integer inputVideoCount) {
+  public FilterAndWatermark(File watermark, List<FilterChain> inputFilterChains) {
     super();
 
-    this.watermark = watermark;
-    this.inputVideoCount = inputVideoCount;
-  }
-
-  /**
-   * MUST be called prior to getExpression. It is intended that the subclassing function calls this
-   * in the constructor.
-   */
-  protected void init(FilterChainProvider provider) {
     // Apply the provided filterchain for each input video
-    IntStream.range(0, inputVideoCount)
-        .mapToObj(i -> filterchainForInputIndex(i, inputVideoCount, provider))
-        .forEach(this::addChain);
-
+    IntStream.range(0, inputFilterChains.size())
+      .mapToObj(i -> prepFilterChain(inputFilterChains.get(i), i))
+      .forEach(this::addChain);
+    
     // Concatenate all input videos
     addChain(
         new FilterChain(
             new ConcatFilter(
-                    IntStream.range(0, inputVideoCount)
+                    IntStream.range(0, inputFilterChains.size())
                         .mapToObj(this::labelForOutput)
                         .collect(Collectors.toList()))
                 .addOutputLabel("concatenated")));
@@ -57,10 +45,8 @@ public abstract class FilterAndWatermark extends FilterGraph {
             new OverlayFilter("concatenated", OverlayLocation.BOTTOM_RIGHT, -10, -10)));
   }
 
-  private FilterChain filterchainForInputIndex(
-      Integer i, Integer count, FilterChainProvider provider) {
-    return provider
-        .provide(i, i == count - 1)
+  private FilterChain prepFilterChain(FilterChain chain, Integer i) {
+    return chain
         .setInputLabel(i.toString())
         .setOutputLabel(labelForOutput(i));
   }

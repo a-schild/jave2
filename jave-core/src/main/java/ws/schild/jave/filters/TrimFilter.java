@@ -11,6 +11,10 @@ package ws.schild.jave.filters;
  */
 public class TrimFilter extends Filter {  
   
+  public TrimFilter() {
+    super("trim");
+  }
+  
   public TrimFilter(Double start, Double duration) {
     super("trim");
     addNamedArgument("start", start.toString());
