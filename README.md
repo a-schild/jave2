@@ -46,7 +46,7 @@ It includes all binaries for the supported platforms
 <dependency>
  <groupId>ws.schild</groupId>
  <artifactId>jave-all-deps</artifactId>
- <version>2.7.3</version>
+ <version>3.0.0</version>
 </dependency>
 ```
 
@@ -60,7 +60,7 @@ Generally if you want to use for one platform or more what you have to do is add
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-core</artifactId>
-    <version>2.7.3</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 
@@ -71,7 +71,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux64</artifactId>
-    <version>2.7.3</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 
@@ -80,7 +80,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux-arm64</artifactId>
-    <version>2.7.3</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 
@@ -89,7 +89,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-win64</artifactId>
-    <version>2.7.3</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 
@@ -98,7 +98,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-osx64</artifactId>
-    <version>2.7.3</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 
@@ -107,13 +107,13 @@ and then the specific jar(s) for your platform(s) :
 It includes all binaries for the supported platforms
 
 ``` XML
-compile group: 'ws.schild', name: 'jave-all-deps', version: '2.7.3'
+compile group: 'ws.schild', name: 'jave-all-deps', version: '3.0.0'
 ```
 
 ### For one platform only (Linux 64Bit in this case)
 ``` XML
-compile group: 'ws.schild', name: 'jave-core', version: '2.7.3'
-compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '2.7.3'
+compile group: 'ws.schild', name: 'jave-core', version: '3.0.0'
+compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '3.0.0'
 ```
 
 ### Main Components of Jave2
