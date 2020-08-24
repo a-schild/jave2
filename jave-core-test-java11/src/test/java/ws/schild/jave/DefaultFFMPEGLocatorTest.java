@@ -22,6 +22,8 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 
+import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
+
 
 /**
  *
@@ -45,7 +47,7 @@ public class DefaultFFMPEGLocatorTest {
             dirFolder.delete();
         }
         DefaultFFMPEGLocator locator= new  DefaultFFMPEGLocator();
-        String exePath= locator.getFFMPEGExecutablePath();
+        String exePath= locator.getExecutablePath();
         assertNotNull("Native component not found", exePath);
     }
     

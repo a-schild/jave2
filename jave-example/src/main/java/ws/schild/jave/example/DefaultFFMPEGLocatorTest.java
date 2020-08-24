@@ -18,7 +18,7 @@
  */
 package ws.schild.jave.example;
 
-import ws.schild.jave.DefaultFFMPEGLocator;
+import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
 
 
 /**
@@ -30,7 +30,7 @@ public class DefaultFFMPEGLocatorTest {
     public static void main(String [] args)
     {        // TODO review the generated test code and remove the default call to fail.
         DefaultFFMPEGLocator locator= new  DefaultFFMPEGLocator();
-        String exePath= locator.getFFMPEGExecutablePath();
+        String exePath= locator.getExecutablePath();
         System.out.println("ffmpeg executable found in <"+exePath+">");
     }
     

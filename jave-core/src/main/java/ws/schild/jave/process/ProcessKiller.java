@@ -1,8 +1,8 @@
 /*
  * JAVE - A Java Audio/Video Encoder (based on FFMPEG)
- * 
+ *
  * Copyright (C) 2008-2009 Carlo Pelliccia (www.sauronsoftware.it)
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,33 +19,28 @@
 package ws.schild.jave.process;
 
 /**
- * A package-private utility to add a shutdown hook to kill ongoing encoding
- * processes at the jvm shutdown.
+ * A package-private utility to add a shutdown hook to kill ongoing encoding processes at the jvm
+ * shutdown.
  *
  * @author Carlo Pelliccia
  */
 public class ProcessKiller extends Thread {
 
-    /**
-     * The process to kill.
-     */
-    private final Process process;
+  /** The process to kill. */
+  private final Process process;
 
-    /**
-     * Builds the killer.
-     *
-     * @param process The process to kill.
-     */
-    public ProcessKiller(Process process) {
-        this.process = process;
-    }
+  /**
+   * Builds the killer.
+   *
+   * @param process The process to kill.
+   */
+  public ProcessKiller(Process process) {
+    this.process = process;
+  }
 
-    /**
-     * It kills the supplied process.
-     */
-    @Override
-    public void run() {
-        process.destroy();
-    }
-
+  /** It kills the supplied process. */
+  @Override
+  public void run() {
+    process.destroy();
+  }
 }
