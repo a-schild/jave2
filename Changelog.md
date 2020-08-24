@@ -1,6 +1,10 @@
 # JAVE2
 
 ## Changelog
+- **3.0.0**
+   - Reworked base classes to handle the executable (Thanks to Michael Ressler)
+   - Reworked the API to have a fluent and more flexible api (Thanks to Michael Ressler)
+   - Added more supporting methods/classes to video processing/transformations
 - **2.8.0**
    - Added -ss option to ScreenExtractor for faster processing
    - Add loopAttribute to EncodingAttributes, thanks to chrysophylax
