@@ -128,11 +128,12 @@ There exists a jave-all-deps project, which includes core and all windows und li
 
 #### Converting any audio to mp3
 ``` JAVA
+boolean succeeded;  
 try {                                                         
  File source = new File("file path");		                 
- File target = new File("file path);                         
+ File target = new File("file path");                         
                                                               
-     //Audio Attributes                                       
+ //Audio Attributes                                       
  AudioAttributes audio = new AudioAttributes();              
  audio.setCodec("libmp3lame");                               
  audio.setBitRate(128000);                                   
