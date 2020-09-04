@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ws.schild</groupId>
     <packaging>jar</packaging>
-    <version>3.0.0</version>
+    <version>3.0.1-SNAPSHOT</version>
     <artifactId>jave-core-test-java11</artifactId>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -38,32 +38,32 @@
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-core</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-win32</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-win64</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-linux32</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-linux64</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-osx64</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1-SNAPSHOT</version>
         </dependency>    
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
