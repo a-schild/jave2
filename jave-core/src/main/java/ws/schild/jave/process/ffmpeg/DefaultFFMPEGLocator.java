@@ -91,7 +91,14 @@ public class DefaultFFMPEGLocator implements ProcessLocator {
 
     // Everything seems okay
     path = ffmpegFile.getAbsolutePath();
-    LOG.debug("ffmpeg executable found: {}", path);
+    if (ffmpegFile.exists())
+    {
+        LOG.debug("ffmpeg executable found: {}", path);
+    }
+    else
+    {
+        LOG.error("ffmpeg executable NOT found: {}", path);
+    }
   }
 
   @Override
@@ -120,6 +127,17 @@ public class DefaultFFMPEGLocator implements ProcessLocator {
             dest.getAbsolutePath());
         is = ClassLoader.getSystemResourceAsStream(resourceName);
       }
+      if (is == null) {
+        // Use this for spring boot with different class loaders
+        resourceName = "ws/schild/jave/nativebin/" + path;
+        LOG.debug(
+            "Alternative copy from Thread.currentThread().getContextClassLoader() <{}> to target <{}>",
+            resourceName,
+            dest.getAbsolutePath());
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        is = classloader.getResourceAsStream(resourceName);
+      }
+      
       if (is != null) {
         if (copy(is, dest.getAbsolutePath())) {
           if (dest.exists()) {

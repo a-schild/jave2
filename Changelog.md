@@ -1,6 +1,8 @@
 # JAVE2
 
 ## Changelog
+- **3.0.1**
+   - Fixed a class loader issue when using it in spring boot environments
 - **3.0.0**
    - Reworked base classes to handle the executable (Thanks to Michael Ressler)
    - Reworked the API to have a fluent and more flexible api (Thanks to Michael Ressler)
