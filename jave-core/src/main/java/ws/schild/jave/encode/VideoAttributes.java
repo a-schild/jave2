@@ -193,7 +193,7 @@ public class VideoAttributes implements Serializable {
    * Sets the video size for the encoding process. If null or not specified the source video size
    * will not be modified.
    *
-   * @param size he video size for the encoding process.
+   * @param size The video size for the encoding process.
    * @return this instance
    */
   public VideoAttributes setSize(VideoSize size) {
