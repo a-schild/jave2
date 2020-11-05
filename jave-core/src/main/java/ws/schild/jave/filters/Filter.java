@@ -34,6 +34,7 @@ public class Filter implements VideoFilter {
   private List<String> orderedArguments;
   private Map<String, String> namedArguments;
   private List<String> outputLinkLabels;
+  private String quoteCharacter = "\"";
 
   /**
    * Create a filter with the specified name with no input/output labels or arguments.
@@ -101,16 +102,25 @@ public class Filter implements VideoFilter {
         + formatLinkLabels(outputLinkLabels);
   }
 
+  /**
+   * Set quoteCharacter of arguments for this filter, Default is double quote.
+   *
+   * @param quoteCharacter The quoteCharacter of arguments
+   */
+  public void setQuoteCharacter(String quoteCharacter) {
+    this.quoteCharacter = quoteCharacter;
+  }
+
   private static String formatLinkLabels(List<String> labels) {
     return labels.stream().map(labelName -> "[" + labelName + "]").collect(Collectors.joining());
   }
 
   private String formatArguments() {
-    return ((orderedArguments.size() + namedArguments.size() > 0) ? "='" : "")
-        + Stream.concat(
-                orderedArguments.stream(),
-                namedArguments.entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()))
+    return ((orderedArguments.size() + namedArguments.size() > 0) ? "=" + this.quoteCharacter : "")
+            + Stream.concat(
+            orderedArguments.stream(),
+            namedArguments.entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()))
             .collect(Collectors.joining(":"))
-        + ((orderedArguments.size() + namedArguments.size() > 0) ? "'" : "");
+            + ((orderedArguments.size() + namedArguments.size() > 0) ? this.quoteCharacter : "");
   }
 }

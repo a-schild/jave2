@@ -10,11 +10,30 @@ public class MovieFilter extends Filter {
    */
   public MovieFilter(File source) {
     super("movie");
-    addOrderedArgument(source.getAbsolutePath());
+    /*
+     * Need escaping special characters []\':,;
+     */
+    addOrderedArgument(escapingPath(source.getAbsolutePath()));
   }
 
   public MovieFilter(File source, String outputLabel) {
     this(source);
     addOutputLabel(outputLabel);
+  }
+
+  /**
+   *  escaping special characters for file path. <a hrer="https://ffmpeg.org/ffmpeg-filters.html#Notes-on-filtergraph-escaping">Notes on filtergraph escaping</a>
+   *
+   * @param filePath unescaped file path
+   * @return escaped file path
+   */
+  private String escapingPath(String filePath) {
+    return filePath.replaceAll("\\\\","\\\\\\\\")
+            .replaceAll("\\[", "\\\\[")
+            .replaceAll("]", "\\\\]")
+            .replaceAll("'", "\\\\\\\\\\\\'")
+            .replaceAll(":","\\\\\\\\:")
+            .replaceAll(",","\\\\,")
+            .replaceAll(";","\\\\;");
   }
 }
