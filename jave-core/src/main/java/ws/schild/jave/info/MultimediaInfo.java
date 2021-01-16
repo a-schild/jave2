@@ -79,7 +79,7 @@ public class MultimediaInfo {
   /**
    * Sets the multimedia metadata.
    *
-   * @param format The multimedia metadata.
+   * @param metadata The multimedia metadata.
    * @return this instance
    */
   public MultimediaInfo setMetadata(Map<String, String> metadata) {
