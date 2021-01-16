@@ -197,8 +197,8 @@ public class MultimediaObject {
         Pattern.compile(
             "^\\s*Stream #\\S+: ((?:Audio)|(?:Video)|(?:Data)): (.*)\\s*$",
             Pattern.CASE_INSENSITIVE);
-    @SuppressWarnings("unused")
-    Pattern p4 = Pattern.compile("^\\s*Metadata:", Pattern.CASE_INSENSITIVE);
+	Pattern p4 = Pattern.compile("^\\s*Metadata:", Pattern.CASE_INSENSITIVE);
+	Pattern p5 = Pattern.compile("^\\s*(\\w+)\\s*:\\s*(\\S+)\\s*$", Pattern.CASE_INSENSITIVE);
     MultimediaInfo info = null;
     try {
       int step = 0;
@@ -248,7 +248,19 @@ public class MultimediaObject {
                   // step = 3;
                 }
               } else {
-                // step = 3;
+					Matcher m4 = p4.matcher(line);
+					if (m4.matches()) {
+						line = reader.readLine();
+						while (line != null && !p21.matcher(line).matches()) {
+							LOG.debug("Output line: {}", line);
+							Matcher m5 = p5.matcher(line);
+							if (m5.matches()) {
+								info.getMetadata().put(m5.group(1), m5.group(2));
+							}
+							line = reader.readLine();
+						}
+						reader.reinsertLine(line);
+					}
               }
               break;
             }

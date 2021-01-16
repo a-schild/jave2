@@ -20,6 +20,7 @@ package ws.schild.jave;
 
 import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
@@ -108,4 +109,37 @@ public class MultimediaObjectTest {
         }
     }
  
+	/**
+	 * Test of getInfo method, of class MultimediaObject.
+	 *
+	 * @throws java.lang.Exception
+	 */
+	@Test
+	public void testGetInfo08() throws Exception {
+		System.out.println("testGetInfo08");
+		File file = new File("src/test/resources/small.mp4");
+		MultimediaObject instance = new MultimediaObject(file);
+		MultimediaInfo result = instance.getInfo();
+
+		assertEquals("mov", result.getFormat());
+		assertEquals(5570, result.getDuration());
+		assertNotNull(result.getMetadata());
+		assertEquals(4, result.getMetadata().size());
+		assertEquals("2010-03-20T21:29:11.000000Z", result.getMetadata().get("creation_time"));
+		assertEquals("mp42", result.getMetadata().get("major_brand"));
+		assertEquals("0", result.getMetadata().get("minor_version"));
+		assertEquals("mp42isomavc1", result.getMetadata().get("compatible_brands"));
+		assertNotNull(result.getVideo());
+		assertEquals("h264 (Constrained Baseline) (avc1 / 0x31637661)", result.getVideo().getDecoder());
+		assertEquals(560, result.getVideo().getSize().getWidth());
+		assertEquals(320, result.getVideo().getSize().getHeight());
+		assertEquals(465000, result.getVideo().getBitRate());
+		assertEquals(30f, result.getVideo().getFrameRate());
+		assertNotNull(result.getAudio());
+		assertEquals("aac (LC) (mp4a / 0x6134706D)", result.getAudio().getDecoder());
+		assertEquals(48000, result.getAudio().getSamplingRate());
+		assertEquals(1, result.getAudio().getChannels());
+		assertEquals(83000, result.getAudio().getBitRate());
+	}
+
 }
