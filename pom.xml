@@ -53,6 +53,8 @@
         <module>jave-nativebin-linux32</module>
         <module>jave-nativebin-linux64</module>
         <module>jave-nativebin-osx64</module>
+        <module>jave-nativebin-arm64</module>
+        <module>jave-nativebin-arm32</module>
         <module>jave-core</module>
         <module>jave-core-test</module>
         <module>jave-core-test-java11</module>

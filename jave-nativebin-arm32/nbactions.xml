@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-Deploy</actionName>
+            <displayName>Deploy</displayName>
+            <goals>
+                <goal>deploy</goal>
+            </goals>
+        </action>
+    </actions>
