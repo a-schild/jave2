@@ -18,6 +18,9 @@
  */
 package ws.schild.jave.info;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Instances of this class report informations about a decoded multimedia file.
  *
@@ -28,6 +31,9 @@ public class MultimediaInfo {
   /** The multimedia file format name. */
   private String format = null;
 
+  /** The multimedia metadata. */
+  private Map<String, String> metadata = new HashMap<>();
+ 
   /** The stream duration in millis. If less than 0 this information is not available. */
   private long duration = -1;
 
@@ -58,6 +64,26 @@ public class MultimediaInfo {
    */
   public MultimediaInfo setFormat(String format) {
     this.format = format;
+    return this;
+  }
+
+  /**
+   * Returns the multimedia metadata.
+   *
+   * @return The multimedia metadata.
+   */
+  public Map<String, String> getMetadata() {
+    return metadata;
+  }
+
+  /**
+   * Sets the multimedia metadata.
+   *
+   * @param format The multimedia metadata.
+   * @return this instance
+   */
+  public MultimediaInfo setMetadata(Map<String, String> metadata) {
+    this.metadata = metadata;
     return this;
   }
 
@@ -128,6 +154,8 @@ public class MultimediaInfo {
     return getClass().getName()
         + " (format="
         + format
+        + " (metadata="
+        + metadata
         + ", duration="
         + duration
         + ", video="
