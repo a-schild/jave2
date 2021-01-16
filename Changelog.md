@@ -1,6 +1,8 @@
 # JAVE2
 
 ## Changelog
+- **3.1.0**
+   - Added support for arm32 bit (Thanks to jmformenti)
 - **3.0.1**
    - Fixed a class loader issue when using it in spring boot environments
 - **3.0.0**
