@@ -181,6 +181,16 @@
 			<artifactId>jave-nativebin-osx64</artifactId>
 			<version>3.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>ws.schild</groupId>
+			<artifactId>jave-nativebin-linux-arm32</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>ws.schild</groupId>
+			<artifactId>jave-nativebin-linux-arm64</artifactId>
+			<version>3.0.1</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
