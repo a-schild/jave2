@@ -17,8 +17,8 @@ Many other formats, containers and operations are supported by JAVE2.
 > JAVE can also be easily ported to other OS and hardware configurations, 
 see the JAVE manual for details.
 
-| Operating System | Windows x32,x64 | MacOS x32,x64 | Linux x32,x64 | Linux arm64
-| ------- | :-----: | :-: | :-----: |
+| Operating System | Windows x32,x64 | MacOS x32,x64 | Linux x32,x64 | Linux arm64 |
+| ------- | :---: | :---: | :---: | :---: |
 | Supported? | YES | YES  | YES  |
 
 ## Projects using Jave2
@@ -53,8 +53,8 @@ It includes all binaries for the supported platforms
 You can use maven dependencies to include the libraries in your projects.
 Include the following in your pom files.
 ### [ Remember always to check the latest release [here](https://github.com/a-schild/jave2/releases/latest) ]
-=======
-Generally if you want to use for one platform or more what you have to do is add the jave-core:
+
+**Generally if you want to use for one platform or more what you have to do is add the jave-core:**
 
 ``` XML
 <dependency>
