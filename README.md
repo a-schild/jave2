@@ -60,7 +60,7 @@ Include the following in your pom files.
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-core</artifactId>
-    <version>3.1.0</version>
+    <version>3.0.1</version>
 </dependency>
 ```
 
