@@ -114,7 +114,7 @@ public class MultimediaObject {
     this.inputFile = file;
   }
 
-  public void setUR(URL input) {
+  public void setURL(URL input) {
     this.inputURL = input;
   }
 
