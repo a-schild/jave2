@@ -10,7 +10,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-resources-plugin.version>3.1.1-SNAPSHOT</maven-resources-plugin.version>
+        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <junit-jupiter-api.version>5.4.2</junit-jupiter-api.version>
         <slf4j-simple.version>1.7.26</slf4j-simple.version>
     </properties>
