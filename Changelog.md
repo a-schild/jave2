@@ -1,6 +1,8 @@
 # JAVE2
 
 ## Changelog
+- **3.1.1**
+   - Modified quoting for command line arguments
 - **3.1.0**
    - Added support for arm32 bit (Thanks to jmformenti)
    - Added option to use a specific quote character for command line

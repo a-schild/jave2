@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ws.schild</groupId>
 	<packaging>jar</packaging>
-	<version>3.1.1-SNAPSHOT</version>
+	<version>3.1.1</version>
 	<artifactId>jave-all-deps</artifactId>
 	<name>Jave all native dependencies package</name>
 	<description>The JAVE (Java Audio Video Encoder) library is Java wrapper on the 
@@ -154,42 +154,42 @@
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-core</artifactId>
-			<version>3.1.1-SNAPSHOT</version>
+			<version>3.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-win32</artifactId>
-			<version>3.1.1-SNAPSHOT</version>
+			<version>3.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-win64</artifactId>
-			<version>3.1.1-SNAPSHOT</version>
+			<version>3.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-linux32</artifactId>
-			<version>3.1.1-SNAPSHOT</version>
+			<version>3.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-linux64</artifactId>
-			<version>3.1.1-SNAPSHOT</version>
+			<version>3.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-osx64</artifactId>
-			<version>3.1.1-SNAPSHOT</version>
+			<version>3.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-linux-arm32</artifactId>
-			<version>3.1.1-SNAPSHOT</version>
+			<version>3.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-linux-arm64</artifactId>
-			<version>3.1.1-SNAPSHOT</version>
+			<version>3.1.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
 		<dependency>
