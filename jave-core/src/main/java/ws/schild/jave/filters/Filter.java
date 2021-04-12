@@ -29,12 +29,12 @@ import java.util.stream.Stream;
  */
 public class Filter implements VideoFilter {
 
-  private List<String> inputLinkLabels;
-  private String name;
-  private List<String> orderedArguments;
-  private Map<String, String> namedArguments;
-  private List<String> outputLinkLabels;
-  private String quoteCharacter = "\"";
+  private final List<String> inputLinkLabels;
+  private final String name;
+  private final List<String> orderedArguments;
+  private final Map<String, String> namedArguments;
+  private final List<String> outputLinkLabels;
+  private String quoteCharacter = "\'";
 
   /**
    * Create a filter with the specified name with no input/output labels or arguments.

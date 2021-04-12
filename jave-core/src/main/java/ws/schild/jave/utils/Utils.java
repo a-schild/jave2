@@ -46,17 +46,29 @@ public class Utils {
   }
 
   /**
-   * Escape all special characters []=;, to be safe to use in command line
-   *
+   * Escape all special characters []=;,' to be safe to use in command line
+   * See https://ffmpeg.org/ffmpeg-utils.html#toc-Quoting-and-escaping
    * @param argumentIn input argument to escape
    * @return escaped string
    */
   public static String escapeArgument(String argumentIn) {
-    String retVal = argumentIn.replace("[", "\\[");
-    retVal = retVal.replace("]", "\\]");
-    retVal = retVal.replace("=", "\\=");
-    retVal = retVal.replace(":", "\\:");
-    retVal = retVal.replace(",", "\\,");
+    String retVal;
+    if (argumentIn.contains("\'"))
+    {
+        retVal= "'"+argumentIn.replace("'", "'\''")+"'";
+    }
+    else if (argumentIn.startsWith(" ") || argumentIn.endsWith(" "))
+    {
+        retVal= "'"+argumentIn+"'";
+    }
+    else
+    {
+        retVal = argumentIn.replace("[", "\\[");
+        retVal = retVal.replace("]", "\\]");
+        retVal = retVal.replace("=", "\\=");
+        retVal = retVal.replace(":", "\\:");
+        retVal = retVal.replace(",", "\\,");
+    }
     return retVal;
   }
 }

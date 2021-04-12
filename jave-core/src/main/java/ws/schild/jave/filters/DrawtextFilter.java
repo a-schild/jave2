@@ -31,8 +31,8 @@ public class DrawtextFilter extends Filter {
       String posY) {
     super("drawtext");
     addNamedArgument("text", Utils.escapeArgument(text));
-    addNamedArgument("x", posX.toString());
-    addNamedArgument("y", posY.toString());
+    addNamedArgument("x", posX);
+    addNamedArgument("y", posY);
   }
 
   /**
