@@ -131,11 +131,12 @@ public class Filter implements VideoFilter {
    * @return escaped file path
    */
   protected String escapingPath(String filePath) {
-    return filePath.replaceAll("\\\\","\\\\\\\\")
+    return filePath
+            .replaceAll(":","\\\\\\\\:")
+            .replaceAll("\\\\","\\\\\\\\")
             .replaceAll("\\[", "\\\\[")
             .replaceAll("]", "\\\\]")
             .replaceAll("'", "\\\\\\\\\\\\'")
-            .replaceAll(":","\\\\\\\\:")
             .replaceAll(",","\\\\,")
             .replaceAll(";","\\\\;");
   }

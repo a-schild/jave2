@@ -40,7 +40,6 @@ import ws.schild.jave.filtergraphs.TrimFadeAndWatermark;
 import ws.schild.jave.filters.helpers.Color;
 import ws.schild.jave.filters.helpers.FadeDirection;
 import ws.schild.jave.filters.helpers.OverlayLocation;
-import ws.schild.jave.filters.helpers.AssSubtitlesFilter;
 import ws.schild.jave.info.VideoSize;
 import ws.schild.jave.utils.AutoRemoveableFile;
 
@@ -335,20 +334,4 @@ public class VideoFilterTest extends AMediaTest {
     }
   }
 
-  @Test
-  public void thatAssSubtitle() throws Exception {
-    File sourceVideo =
-        new File(cLoader.getResource("9B8CC2D5-3B24-4DD1-B23D-9B5DAF0E70BE.mp4").getFile());
-    File assSubtitle = new File(cLoader.getResource("test.ass").getFile());
-
-    VideoAttributes vidAttr = new VideoAttributes();
-    vidAttr.addFilter(new AssSubtitleFilter(assSubtitle));
-    EncodingAttributes encAttr = new EncodingAttributes().setVideoAttributes(vidAttr);
-
-    try (AutoRemoveableFile target =
-        new AutoRemoveableFile(sourceVideo.getParentFile(), "ass-subtitle.mp4")) {
-      new Encoder().encode(new MultimediaObject(sourceVideo), target, encAttr);
-      assertTrue(target.exists(), "Output file missing");
-    }
-  }
 }
