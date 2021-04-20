@@ -150,7 +150,7 @@ public class VideoFilterTest extends AMediaTest {
     fooPath= fooPath.replace("\\", "\\\\");
     if (fooPath.charAt(1) == ':')
     {
-        fooPath= fooPath.replace(":", "\\\\:");
+        fooPath= fooPath.replace(":", "\\:");
     }
     OverlayWatermark checkMe = new OverlayWatermark(fooPng, OverlayLocation.BOTTOM_RIGHT, -10, -10);
     assertEquals(
