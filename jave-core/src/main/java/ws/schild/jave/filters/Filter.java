@@ -123,4 +123,20 @@ public class Filter implements VideoFilter {
             .collect(Collectors.joining(":"))
             + ((orderedArguments.size() + namedArguments.size() > 0) ? this.quoteCharacter : "");
   }
+
+  /**
+   *  escaping special characters for file path. <a href="https://ffmpeg.org/ffmpeg-filters.html#Notes-on-filtergraph-escaping">Notes on file url escaping</a>
+   *
+   * @param filePath unescaped file path
+   * @return escaped file path
+   */
+  protected String escapingPath(String filePath) {
+    return filePath.replaceAll("\\\\","\\\\\\\\")
+            .replaceAll("\\[", "\\\\[")
+            .replaceAll("]", "\\\\]")
+            .replaceAll("'", "\\\\\\\\\\\\'")
+            .replaceAll(":","\\\\\\\\:")
+            .replaceAll(",","\\\\,")
+            .replaceAll(";","\\\\;");
+  }
 }

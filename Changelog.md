@@ -1,7 +1,7 @@
 # JAVE2
 
 ## Changelog
-- **3.1.1**
+- **3.2.0-SNAPSHOT**
    - Modified quoting for command line arguments
 - **3.1.0**
    - Added support for arm32 bit (Thanks to jmformenti)

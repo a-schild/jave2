@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ws.schild</groupId>
     <packaging>jar</packaging>
-    <version>3.1.1</version>
+    <version>3.2.0-SNAPSHOT</version>
     <artifactId>jave-example</artifactId>
     <properties>
         <maven.compiler.source>12</maven.compiler.source>
@@ -66,12 +66,12 @@
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-core</artifactId>
-            <version>3.1.1</version>
+            <version>3.2.0-SNAPSHOT</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-linux32</artifactId>
-            <version>3.1.1</version>
+            <version>3.2.0-SNAPSHOT</version>
         </dependency>    
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
         <dependency>
