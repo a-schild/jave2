@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  */
 public class FilterChain implements VideoFilter {
 
-  private List<Filter> filters;
+  private final List<Filter> filters;
 
   /** Create an empty filterchain. */
   public FilterChain() {

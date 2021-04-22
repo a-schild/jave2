@@ -44,7 +44,8 @@ public class RBufferedReader extends BufferedReader {
     super(in);
   }
 
-  /** It returns the next line in the stream. */
+  /** It returns the next line in the stream.
+     * @throws java.io.IOException */
   @Override
   public String readLine() throws IOException {
     if (lines.size() > 0) {

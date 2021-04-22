@@ -26,7 +26,7 @@ public enum VsyncMethod {
    */
   AUTO("auto");
   
-  private String methodName;
+  private final String methodName;
   
   private VsyncMethod(String parameter) {
     methodName = parameter;

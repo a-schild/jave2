@@ -12,9 +12,9 @@ import java.util.stream.Stream;
  */
 public class ValueArgument implements EncodingArgument {
 
-  private ArgType argumentType;
-  private String argumentName;
-  private Function<EncodingAttributes, Optional<String>> valueGetter;
+  private final ArgType argumentType;
+  private final String argumentName;
+  private final Function<EncodingAttributes, Optional<String>> valueGetter;
 
   public ValueArgument(
       ArgType argType,

@@ -12,9 +12,9 @@ import java.util.stream.Stream;
  */
 public class PredicateArgument implements EncodingArgument {
 
-  private ArgType argumentType;
-  private Supplier<Stream<String>> arguments;
-  private Predicate<EncodingAttributes> predicate;
+  private final ArgType argumentType;
+  private final Supplier<Stream<String>> arguments;
+  private final Predicate<EncodingAttributes> predicate;
 
   public PredicateArgument(
       ArgType argType, String argument, Predicate<EncodingAttributes> predicate) {

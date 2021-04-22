@@ -1,6 +1,7 @@
 # JAVE2
 
 ## More advanced examples    
+For many use cases you can look at the java-core-tests code on how to use the different classes.
 
 #### Running the conversion in a separate thread, so it can be aborted (only in version 2.4.4 and up)
 ``` JAVA 

@@ -94,7 +94,7 @@ public class EncodingAttributes implements Serializable {
    * an EncodingArgument to your Encoder class via {@link
    * ws.schild.jave.Encoder#addOptionAtIndex(EncodingArgument, Integer)}
    */
-  private HashMap<String, String> extraContext = new HashMap<>();
+  private final HashMap<String, String> extraContext = new HashMap<>();
 
   /**
    * Returns any additional user supplied context. Meant to be used in conjunction with {@link

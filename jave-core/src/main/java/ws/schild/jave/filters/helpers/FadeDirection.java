@@ -4,12 +4,13 @@ public enum FadeDirection {
   IN("in"),
   OUT("out");
   
-  private String friendlyName;
+  private final String friendlyName;
   
   private FadeDirection(String friendlyName) {
     this.friendlyName = friendlyName;
   }
   
+  @Override
   public String toString() {
     return friendlyName;
   }

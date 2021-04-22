@@ -200,6 +200,7 @@ public class Color {
   /** 
    * @return color in command line format 
    * */
+  @Override
   public String toString() {
     return getFfmpegColor();
   }

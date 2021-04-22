@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public class AutoRemoveableFile extends File implements AutoCloseable {
 
-  private static Logger logger = LoggerFactory.getLogger(AutoRemoveableFile.class);
+  private static final Logger logger = LoggerFactory.getLogger(AutoRemoveableFile.class);
 
   private static final long serialVersionUID = 1270202558229293283L;
 

@@ -4,7 +4,7 @@ import ws.schild.jave.info.MultimediaInfo;
 
 public class EncoderProgressAdapter implements EncoderProgressListener {
 
-  private VideoProgressListener listener;
+  private final VideoProgressListener listener;
 
   public EncoderProgressAdapter(VideoProgressListener listener) {
     this.listener = listener;

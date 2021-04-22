@@ -14,8 +14,8 @@ public enum OverlayLocation {
   BOTTOM_RIGHT("main_w-overlay_w", "main_h-overlay_h"),
   BOTTOM_LEFT(null, "main_h-overlay_h");
 
-  private Optional<String> x;
-  private Optional<String> y;
+  private final Optional<String> x;
+  private final Optional<String> y;
 
   private OverlayLocation(String x, String y) {
     this.x = Optional.ofNullable(x);

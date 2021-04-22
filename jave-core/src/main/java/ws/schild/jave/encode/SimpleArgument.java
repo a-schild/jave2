@@ -11,8 +11,8 @@ import java.util.stream.Stream;
  */
 public class SimpleArgument implements EncodingArgument {
 
-  private ArgType argumentType;
-  private Function<EncodingAttributes, Stream<String>> getArguments;
+  private final ArgType argumentType;
+  private final Function<EncodingAttributes, Stream<String>> getArguments;
 
   public SimpleArgument(
       ArgType argumentType, Function<EncodingAttributes, Stream<String>> getArguments) {
