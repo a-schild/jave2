@@ -3,6 +3,7 @@
 ## Changelog
 - **3.2.0-SNAPSHOT**
    - Modified quoting for command line arguments
+   - Implemented subtitle ass video filter
 - **3.1.0**
    - Added support for arm32 bit (Thanks to jmformenti)
    - Added option to use a specific quote character for command line
@@ -15,6 +16,7 @@
    - Reworked base classes to handle the executable (Thanks to Michael Ressler)
    - Reworked the API to have a fluent and more flexible api (Thanks to Michael Ressler)
    - Added more supporting methods/classes to video processing/transformations
+   
 - **2.8.0**
    - Added -ss option to ScreenExtractor for faster processing
    - Add loopAttribute to EncodingAttributes, thanks to chrysophylax
