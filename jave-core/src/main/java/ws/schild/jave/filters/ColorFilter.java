@@ -18,6 +18,17 @@ public class ColorFilter extends Filter {
   }
   
   /**
+   * Constructor with expression
+   * 
+   * @param expression expression to be passed as the color argument
+   */
+  public ColorFilter(String expression)
+  {
+      super("color");
+      addOrderedArgument(expression);
+  }
+  
+  /**
    * Simple constructor - make a solid color screen for some amount of time.
    * 
    * @param c The color to use.

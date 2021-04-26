@@ -49,7 +49,7 @@ public class CropFilterTest extends AMediaTest {
         new File(cLoader.getResource("size2.mp4").getFile());
 
     VideoAttributes vidAttr = new VideoAttributes();
-    vidAttr.addFilter(new CropFilter(20, 20, 60, 60));
+    vidAttr.addFilter(new CropFilter(256, 800, 60, 60));
     EncodingAttributes encAttr = new EncodingAttributes().setVideoAttributes(vidAttr);
     encAttr.setOutputFormat("mp4");
 

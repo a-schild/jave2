@@ -7,6 +7,7 @@
    - Added constructor for scaling filter which allows string expressions
    - Added constructor for scaling filter which does not require the ForceOriginalAspectRatio parameter
    - Added CropFilter
+   - Added constructor for color filter which allows string expressions
 - **3.1.0**
    - Added support for arm32 bit (Thanks to jmformenti)
    - Added option to use a specific quote character for command line
