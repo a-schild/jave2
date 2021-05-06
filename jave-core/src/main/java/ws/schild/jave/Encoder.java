@@ -391,7 +391,8 @@ public class Encoder {
               ea -> ea.getVideoAttributes()
                       .map(VideoAttributes::getVideoFilters)
                       .map(Collection::stream)
-                      .map(s -> s.flatMap(vf -> Stream.of("-vf", vf.getExpression())))
+                      .map(s -> s.flatMap(vf -> Stream.of(vf.getExpression())))
+                      //.map(s -> s.flatMap(vf -> Stream.of("-vf", vf.getExpression())))
                       .orElseGet(Stream::empty)),
           new ValueArgument(ArgType.OUTFILE, "-filter_complex",
               ea -> ea.getVideoAttributes()

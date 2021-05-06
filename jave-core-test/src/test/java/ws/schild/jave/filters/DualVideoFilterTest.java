@@ -34,11 +34,12 @@ public class DualVideoFilterTest extends AMediaTest {
     File assSubtitle = new File(cLoader.getResource("test.ass").getFile());
 
     VideoAttributes vidAttr = new VideoAttributes();
-    vidAttr.addFilter(new AssSubtitlesFilter(assSubtitle));
     
     VideoSize size=new VideoSize(1080,720);
-        ScaleFilter scaleFilter=new ScaleFilter(size);
-        vidAttr.addFilter(scaleFilter);
+    ScaleFilter scaleFilter=new ScaleFilter(size);
+
+    vidAttr.addFilter(new AssSubtitlesFilter(assSubtitle));
+    vidAttr.addFilter(scaleFilter);
 
     EncodingAttributes encAttr = new EncodingAttributes().setVideoAttributes(vidAttr);
 
