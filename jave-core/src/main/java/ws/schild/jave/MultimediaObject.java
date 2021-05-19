@@ -199,7 +199,6 @@ public class MultimediaObject {
             Pattern.CASE_INSENSITIVE);
 	Pattern p4 = Pattern.compile("^\\s*Metadata:", Pattern.CASE_INSENSITIVE);
 	Pattern p5 = Pattern.compile("^\\s*(\\w+)\\s*:\\s*(\\S+)\\s*$", Pattern.CASE_INSENSITIVE);
-	Pattern p6 = Pattern.compile("^\\s*Side\\sdata:", Pattern.CASE_INSENSITIVE);
     MultimediaInfo info = null;
     try {
       int step = 0;
