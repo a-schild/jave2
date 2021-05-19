@@ -224,7 +224,6 @@ public class MultimediaObjectTest extends AMediaTest {
 
         assertNotNull(videoInfo.getMetadata());
         assertNotNull(videoInfo.getMetadata().get("creation_time"));
-        assertEquals("JVT/AVC Coding",videoInfo.getMetadata().get("encoder"));
 
         assertNotNull(result.getAudio());
 

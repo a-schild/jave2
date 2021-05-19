@@ -313,7 +313,7 @@ public class MultimediaObject {
                   Matcher m4 = p4.matcher(line);
                   if(m4.matches()){
                     line = reader.readLine();
-                    while (line != null && !(p21.matcher(line).matches() || p6.matcher(line).matches())) {
+                    while (line != null && p5.matcher(line).matches()) {
                       LOG.debug("Output line: {}", line);
                       Matcher m5 = p5.matcher(line);
                       if (m5.matches()) {
@@ -370,7 +370,7 @@ public class MultimediaObject {
                   Matcher m4 = p4.matcher(line);
                   if(m4.matches()){
                     line = reader.readLine();
-                    while (line != null && !(p21.matcher(line).matches() || p6.matcher(line).matches())) {
+                    while (line != null && p5.matcher(line).matches()) {
                       LOG.debug("Output line: {}", line);
                       Matcher m5 = p5.matcher(line);
                       if (m5.matches()) {
