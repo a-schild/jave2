@@ -322,9 +322,12 @@ public class MultimediaObject {
                       line = reader.readLine();
                     }
                     reader.reinsertLine(line);
+                  } else {
+                    reader.reinsertLine(line);
                   }
                   info.setVideo(video);
-                } else if ("Audio".equalsIgnoreCase(type)) {
+                } else
+                  if ("Audio".equalsIgnoreCase(type)) {
                   AudioInfo audio = new AudioInfo();
                   StringTokenizer st = new StringTokenizer(specs, ",");
                   for (int i = 0; st.hasMoreTokens(); i++) {
@@ -375,6 +378,8 @@ public class MultimediaObject {
                       }
                       line = reader.readLine();
                     }
+                    reader.reinsertLine(line);
+                  }else {
                     reader.reinsertLine(line);
                   }
                   info.setAudio(audio);
