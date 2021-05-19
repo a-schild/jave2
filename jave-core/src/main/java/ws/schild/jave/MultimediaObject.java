@@ -379,7 +379,7 @@ public class MultimediaObject {
                       line = reader.readLine();
                     }
                     reader.reinsertLine(line);
-                  }else {
+                  } else {
                     reader.reinsertLine(line);
                   }
                   info.setAudio(audio);
