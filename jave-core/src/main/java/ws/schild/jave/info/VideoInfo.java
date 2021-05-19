@@ -18,6 +18,9 @@
  */
 package ws.schild.jave.info;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Instances of this class report informations about a video stream that can be decoded.
  *
@@ -36,6 +39,9 @@ public class VideoInfo {
 
   /** The video frame rate. If less than 0 this information is not available. */
   private float frameRate = -1;
+
+  /** The video metadata. */
+  private Map<String, String> metadata = new HashMap<>();
 
   /**
    * Returns the video stream decoder name.
@@ -114,6 +120,26 @@ public class VideoInfo {
    */
   public VideoInfo setBitRate(int bitRate) {
     this.bitRate = bitRate;
+    return this;
+  }
+
+  /**
+   * Returns the video metadata.
+   *
+   * @return The video metadata.
+   */
+  public Map<String, String> getMetadata() {
+    return metadata;
+  }
+
+  /**
+   * Sets the video metadata.
+   *
+   * @param metadata The video metadata.
+   * @return this instance
+   */
+  public VideoInfo setMetadata(Map<String, String> metadata) {
+    this.metadata = metadata;
     return this;
   }
 
