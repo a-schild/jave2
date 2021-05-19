@@ -18,6 +18,9 @@
  */
 package ws.schild.jave.info;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Instances of this class report informations about an audio stream that can be decoded.
  *
@@ -39,6 +42,9 @@ public class AudioInfo {
 
   /** The audio stream (average) bit rate. If less than 0, this information is not available. */
   private int bitRate = -1;
+
+  /** The video metadata. */
+  private Map<String, String> metadata = new HashMap<>();
 
   /**
    * Returns the audio stream decoder name.
@@ -118,6 +124,26 @@ public class AudioInfo {
    */
   public AudioInfo setBitRate(int bitRate) {
     this.bitRate = bitRate;
+    return this;
+  }
+
+  /**
+   * Returns the audio metadata.
+   *
+   * @return The audio metadata.
+   */
+  public Map<String, String> getMetadata() {
+    return metadata;
+  }
+
+  /**
+   * Sets the audio metadata.
+   *
+   * @param metadata The audio metadata.
+   * @return this instance
+   */
+  public AudioInfo setMetadata(Map<String, String> metadata) {
+    this.metadata = metadata;
     return this;
   }
 

@@ -199,6 +199,7 @@ public class MultimediaObject {
             Pattern.CASE_INSENSITIVE);
 	Pattern p4 = Pattern.compile("^\\s*Metadata:", Pattern.CASE_INSENSITIVE);
 	Pattern p5 = Pattern.compile("^\\s*(\\w+)\\s*:\\s*(\\S+)\\s*$", Pattern.CASE_INSENSITIVE);
+	Pattern p6 = Pattern.compile("^\\s*Side\\sdata:", Pattern.CASE_INSENSITIVE);
     MultimediaInfo info = null;
     try {
       int step = 0;
@@ -307,6 +308,21 @@ public class MultimediaObject {
                       }
                     }
                   }
+                  //reading vedio metadata
+                  line = reader.readLine();
+                  Matcher m4 = p4.matcher(line);
+                  if(m4.matches()){
+                    line = reader.readLine();
+                    while (line != null && !(p21.matcher(line).matches() || p6.matcher(line).matches())) {
+                      LOG.debug("Output line: {}", line);
+                      Matcher m5 = p5.matcher(line);
+                      if (m5.matches()) {
+                        video.getMetadata().put(m5.group(1), m5.group(2));
+                      }
+                      line = reader.readLine();
+                    }
+                    reader.reinsertLine(line);
+                  }
                   info.setVideo(video);
                 } else if ("Audio".equalsIgnoreCase(type)) {
                   AudioInfo audio = new AudioInfo();
@@ -346,6 +362,21 @@ public class MultimediaObject {
                       }
                     }
                   }
+                  //reading audio metadata
+                  line = reader.readLine();
+                  Matcher m4 = p4.matcher(line);
+                  if(m4.matches()){
+                    line = reader.readLine();
+                    while (line != null && !(p21.matcher(line).matches() || p6.matcher(line).matches())) {
+                      LOG.debug("Output line: {}", line);
+                      Matcher m5 = p5.matcher(line);
+                      if (m5.matches()) {
+                        audio.getMetadata().put(m5.group(1), m5.group(2));
+                      }
+                      line = reader.readLine();
+                    }
+                    reader.reinsertLine(line);
+                  }
                   info.setAudio(audio);
                 }
               } else // if (m4.matches())
@@ -359,6 +390,7 @@ public class MultimediaObject {
                  }
               */ break;
             }
+
           default:
             break;
         }
