@@ -307,6 +307,23 @@ public class MultimediaObject {
                       }
                     }
                   }
+                  //reading vedio metadata
+                  line = reader.readLine();
+                  Matcher m4 = p4.matcher(line);
+                  if(m4.matches()){
+                    line = reader.readLine();
+                    while (line != null && p5.matcher(line).matches()) {
+                      LOG.debug("Output line: {}", line);
+                      Matcher m5 = p5.matcher(line);
+                      if (m5.matches()) {
+                        video.getMetadata().put(m5.group(1), m5.group(2));
+                      }
+                      line = reader.readLine();
+                    }
+                    reader.reinsertLine(line);
+                  } else {
+                    reader.reinsertLine(line);
+                  }
                   info.setVideo(video);
                 } else if ("Audio".equalsIgnoreCase(type)) {
                   AudioInfo audio = new AudioInfo();
@@ -346,6 +363,23 @@ public class MultimediaObject {
                       }
                     }
                   }
+                  //reading audio metadata
+                  line = reader.readLine();
+                  Matcher m4 = p4.matcher(line);
+                  if(m4.matches()){
+                    line = reader.readLine();
+                    while (line != null && p5.matcher(line).matches()) {
+                      LOG.debug("Output line: {}", line);
+                      Matcher m5 = p5.matcher(line);
+                      if (m5.matches()) {
+                        audio.getMetadata().put(m5.group(1), m5.group(2));
+                      }
+                      line = reader.readLine();
+                    }
+                    reader.reinsertLine(line);
+                  } else {
+                    reader.reinsertLine(line);
+                  }
                   info.setAudio(audio);
                 }
               } else // if (m4.matches())
@@ -359,6 +393,7 @@ public class MultimediaObject {
                  }
               */ break;
             }
+
           default:
             break;
         }

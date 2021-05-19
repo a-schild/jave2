@@ -25,7 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
+import ws.schild.jave.info.AudioInfo;
 import ws.schild.jave.info.MultimediaInfo;
+import ws.schild.jave.info.VideoInfo;
 
 /** @author a.schild */
 public class MultimediaObjectTest extends AMediaTest {
@@ -202,5 +204,33 @@ public class MultimediaObjectTest extends AMediaTest {
 		assertEquals(1, result.getAudio().getChannels());
 		assertEquals(83000, result.getAudio().getBitRate());
 	}
+
+    /**
+     * Test of getInfo method, of class MultimediaObject.
+     * Test reading video and audio metadata
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testGetInfo09() throws Exception {
+        System.out.println("testGetInfo09");
+        File file = new File("src/test/resources/small.mp4");
+        MultimediaObject instance = new MultimediaObject(file);
+        MultimediaInfo result = instance.getInfo();
+
+        assertNotNull(result.getVideo());
+
+        VideoInfo videoInfo = result.getVideo();
+
+        assertNotNull(videoInfo.getMetadata());
+        assertNotNull(videoInfo.getMetadata().get("creation_time"));
+
+        assertNotNull(result.getAudio());
+
+        AudioInfo audioInfo = result.getAudio();
+
+        assertNotNull(audioInfo.getMetadata());
+        assertNotNull(audioInfo.getMetadata().get("creation_time"));
+    }
 
 }
