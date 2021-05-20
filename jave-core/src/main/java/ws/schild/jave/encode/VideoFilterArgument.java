@@ -1,6 +1,7 @@
 package ws.schild.jave.encode;
 
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -22,7 +23,7 @@ public class VideoFilterArgument implements EncodingArgument {
 
   @Override
   public Stream<String> getArguments(EncodingAttributes context) {
-    return Stream.concat(Stream.of("-vf"), getArguments.apply(context));
+    return Stream.concat(Stream.of("-vf"), Stream.of(getArguments.apply(context).collect(Collectors.joining(";"))));
   }
 
   @Override
