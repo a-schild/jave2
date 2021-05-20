@@ -23,7 +23,14 @@ public class VideoFilterArgument implements EncodingArgument {
 
   @Override
   public Stream<String> getArguments(EncodingAttributes context) {
-    return Stream.concat(Stream.of("-vf"), Stream.of(getArguments.apply(context).collect(Collectors.joining(", "))));
+      if (getArguments.apply(context).collect(Collectors.joining(", ")).isEmpty())
+      {
+          return Stream.of();
+      }
+      else
+      {
+        return Stream.concat(Stream.of("-vf"), Stream.of(getArguments.apply(context).collect(Collectors.joining(", "))));
+      }
   }
 
   @Override
