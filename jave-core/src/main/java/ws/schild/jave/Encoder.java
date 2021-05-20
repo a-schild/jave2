@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -387,12 +388,17 @@ public class Encoder {
               ea -> ea.getVideoAttributes()
                       .flatMap(VideoAttributes::getX264Profile)
                       .map(X264_PROFILE::getModeName)),
+//          new SimpleArgument(ArgType.OUTFILE,
+//              ea -> ea.getVideoAttributes()
+//                      .map(VideoAttributes::getVideoFilters)
+//                      .map(Collection::stream)
+//                      .map(s -> s.flatMap(vf -> Stream.of("-vf", vf.getExpression())))
+//                      .orElseGet(Stream::empty)),
           new SimpleArgument(ArgType.OUTFILE,
               ea -> ea.getVideoAttributes()
                       .map(VideoAttributes::getVideoFilters)
                       .map(Collection::stream)
                       .map(s -> s.flatMap(vf -> Stream.of(vf.getExpression())))
-                      //.map(s -> s.flatMap(vf -> Stream.of("-vf", vf.getExpression())))
                       .orElseGet(Stream::empty)),
           new ValueArgument(ArgType.OUTFILE, "-filter_complex",
               ea -> ea.getVideoAttributes()
