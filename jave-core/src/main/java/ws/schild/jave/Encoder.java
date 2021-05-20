@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -39,9 +38,9 @@ import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingArgument;
 import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.PredicateArgument;
-import ws.schild.jave.encode.SimpleArgument;
 import ws.schild.jave.encode.ValueArgument;
 import ws.schild.jave.encode.VideoAttributes;
+import ws.schild.jave.encode.VideoFilterArgument;
 import ws.schild.jave.encode.enums.VsyncMethod;
 import ws.schild.jave.encode.enums.X264_PROFILE;
 import ws.schild.jave.filters.FilterGraph;
@@ -388,13 +387,7 @@ public class Encoder {
               ea -> ea.getVideoAttributes()
                       .flatMap(VideoAttributes::getX264Profile)
                       .map(X264_PROFILE::getModeName)),
-//          new SimpleArgument(ArgType.OUTFILE,
-//              ea -> ea.getVideoAttributes()
-//                      .map(VideoAttributes::getVideoFilters)
-//                      .map(Collection::stream)
-//                      .map(s -> s.flatMap(vf -> Stream.of("-vf", vf.getExpression())))
-//                      .orElseGet(Stream::empty)),
-          new SimpleArgument(ArgType.OUTFILE,
+          new VideoFilterArgument(ArgType.OUTFILE,
               ea -> ea.getVideoAttributes()
                       .map(VideoAttributes::getVideoFilters)
                       .map(Collection::stream)
