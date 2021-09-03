@@ -11,6 +11,10 @@
    - Added support for multiple video filters in one conversion pass
    - Added enhanced meta data detection in MultiMedia object
    - Implement critical section in executable location+creation to prevent race condition (Issue #163)
+   - Upgraded to ffmpeg v 4.4
+   - Binaries from https://github.com/eugeneware/ffmpeg-static 
+   - The 32bit windows binaries remain at v4.2 since ffmpeg no longer supports the 32bit architekture
+     32bit support will be removed later
 - **3.1.0**
    - Added support for arm32 bit (Thanks to jmformenti)
    - Added option to use a specific quote character for command line
