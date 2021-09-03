@@ -10,6 +10,7 @@
    - Added constructor for color filter which allows string expressions
    - Added support for multiple video filters in one conversion pass
    - Added enhanced meta data detection in MultiMedia object
+   - Implement critical section in executable location+creation to prevent race condition (Issue #163)
 - **3.1.0**
    - Added support for arm32 bit (Thanks to jmformenti)
    - Added option to use a specific quote character for command line

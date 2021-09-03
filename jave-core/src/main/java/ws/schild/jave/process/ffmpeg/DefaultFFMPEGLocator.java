@@ -71,22 +71,25 @@ public class DefaultFFMPEGLocator implements ProcessLocator {
     File ffmpegFile = new File(dirFolder, "ffmpeg-" + arch + "-" + Version.getVersion() + suffix);
     LOG.debug("Executable path: {}", ffmpegFile.getAbsolutePath());
 
-    // Check the version of existing .exe file
-    if (ffmpegFile.exists()) {
-      // OK, already present
-      LOG.debug("Executable exists in <{}>", ffmpegFile.getAbsolutePath());
-    } else {
-      LOG.debug("Need to copy executable to <{}>", ffmpegFile.getAbsolutePath());
-      copyFile("ffmpeg-" + arch + suffix, ffmpegFile);
-    }
+    synchronized(this)
+    {
+        // Check the version of existing .exe file
+        if (ffmpegFile.exists()) {
+          // OK, already present
+          LOG.debug("Executable exists in <{}>", ffmpegFile.getAbsolutePath());
+        } else {
+          LOG.debug("Need to copy executable to <{}>", ffmpegFile.getAbsolutePath());
+          copyFile("ffmpeg-" + arch + suffix, ffmpegFile);
+        }
 
-    // Need a chmod?
-    if (!isWindows) {
-      try {
-        Runtime.getRuntime().exec(new String[] {"/bin/chmod", "755", ffmpegFile.getAbsolutePath()});
-      } catch (IOException e) {
-        LOG.error("Error setting executable via chmod", e);
-      }
+        // Need a chmod?
+        if (!isWindows) {
+          try {
+            Runtime.getRuntime().exec(new String[] {"/bin/chmod", "755", ffmpegFile.getAbsolutePath()});
+          } catch (IOException e) {
+            LOG.error("Error setting executable via chmod", e);
+          }
+        }
     }
 
     // Everything seems okay
