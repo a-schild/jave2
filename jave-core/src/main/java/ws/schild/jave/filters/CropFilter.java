@@ -1,8 +1,5 @@
 package ws.schild.jave.filters;
 
-import ws.schild.jave.filters.helpers.Color;
-import ws.schild.jave.info.VideoSize;
-
 /**
  * A crop filter as described by the <a href=
  * "https://ffmpeg.org/ffmpeg-filters.html#crop">
@@ -20,10 +17,10 @@ public class CropFilter extends Filter {
   /**
    * Simple constructor - crop input stream to given w/h//x/y
    * 
-   * @param width
-   * @param height
-   * @param posX
-   * @param posY
+   * @param width width crop here
+   * @param height height of crop area
+   * @param posX origin of crop area
+   * @param posY origin of crop area
    */
   public CropFilter(int width, int height, int posX, int posY) {
     super("crop");
