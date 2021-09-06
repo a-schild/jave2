@@ -4,14 +4,14 @@
     <artifactId>jave-modules</artifactId>
     <packaging>pom</packaging>
     <properties>
-        <revision>3.2.0</revision>
+        <revision>3.2.1-SNAPSHOT</revision>
         <!-- Don't forget to change it also in DefaultFFMPEGLocator.java  -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <version>3.2.0</version>
+    <version>3.2.1-SNAPSHOT</version>
     <name>Jave master project</name>
     <description>Jave master project</description>
     <url>https://github.com/a-schild/jave2</url>
@@ -53,6 +53,7 @@
         <module>jave-nativebin-linux32</module>
         <module>jave-nativebin-linux64</module>
         <module>jave-nativebin-osx64</module>
+        <module>jave-nativebin-osxm1</module>
         <module>jave-nativebin-arm64</module>
         <module>jave-nativebin-arm32</module>
         <module>jave-core</module>

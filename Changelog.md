@@ -1,6 +1,9 @@
 # JAVE2
 
 ## Changelog
+- **3.2.1**
+   - Moved development to it's own branch
+   - Implemented first support for apple m1 chip on OS-X (Needs to be tested)
 - **3.2.0**
    - Modified quoting for command line arguments
    - Implemented subtitle ass video filter

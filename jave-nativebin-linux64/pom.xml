@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ws.schild</groupId>
     <packaging>jar</packaging>
-    <version>3.2.0</version>
+    <version>3.2.1-SNAPSHOT</version>
     <artifactId>jave-nativebin-linux64</artifactId>
     <name>Jave linux 64 bit native package</name>
     <description>The JAVE (Java Audio Video Encoder) library is Java wrapper on the 
