@@ -1,7 +1,7 @@
 # JAVE2
 
 ## Changelog
-- **3.2.0-SNAPSHOT**
+- **3.2.0**
    - Modified quoting for command line arguments
    - Implemented subtitle ass video filter
    - Added constructor for scaling filter which allows string expressions
