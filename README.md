@@ -19,7 +19,7 @@ see the JAVE manual for details.
 
 | Operating System | Windows x32,x64 | MacOS x64 | MacOS m1 | Linux x32,x64 | Linux arm32,arm64 |
 | ------- | :---: | :---: | :---: | :---: |
-| Supported? | YES, x32 deprecated | YES |  Not yet | YES  | YES |
+| Supported? | YES | YES |  Not yet | YES  | YES |
 
 ## Projects using Jave2
 * [XR3Player](https://github.com/goxr3plus/XR3Player)

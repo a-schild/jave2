@@ -4,6 +4,7 @@
 - **3.2.1**
    - Moved development to it's own branch
    - Implemented first support for apple m1 chip on OS-X (Needs to be tested)
+   - Added win 32 ffmpeg 4.4 static release https://www.notion.so/34dc4ddf501a4b98b46ea9fb4f3470af?v=878345c5d88f4d21a6520db752b5c29f
 - **3.2.0**
    - Modified quoting for command line arguments
    - Implemented subtitle ass video filter
