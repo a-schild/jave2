@@ -486,12 +486,6 @@ public class Encoder {
         .flatMap(eArg -> eArg.getArguments(attributes))
         .forEach(ffmpeg::addArgument);
 
-    
-    if (multimediaObjects.size()>1)
-    {
-        ffmpeg.addArgument("-f");
-        ffmpeg.addArgument("concat");
-    }
     multimediaObjects
         .stream()
         .map(Object::toString)

@@ -27,6 +27,8 @@ import org.junit.jupiter.api.Test;
 import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
+import ws.schild.jave.filters.AssSubtitlesFilter;
+import ws.schild.jave.filters.ConcatFilter;
 import ws.schild.jave.info.VideoSize;
 
 /** @author a.schild */
@@ -104,9 +106,16 @@ public class ConcatEncoderTest extends AMediaTest {
     attrs.setAudioAttributes(audio);
     
     Encoder encoder = new Encoder();
+    List<String> srcStr = new ArrayList<>();
+    srcStr.add(source1.getAbsolutePath());
+    srcStr.add(source2.getAbsolutePath());
+    
+    video.addFilter(new ConcatFilter(srcStr));
+    
     List<MultimediaObject> src = new ArrayList<>();
     src.add(new MultimediaObject(source1));
     src.add(new MultimediaObject(source2));
+    
     encoder.encode(src, target, attrs);
     assertTrue(target.exists(), "Output file missing");
   }
