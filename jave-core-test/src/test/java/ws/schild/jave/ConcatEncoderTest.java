@@ -27,8 +27,9 @@ import org.junit.jupiter.api.Test;
 import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
-import ws.schild.jave.filters.AssSubtitlesFilter;
-import ws.schild.jave.filters.ConcatFilter;
+import ws.schild.jave.filters.FilterChain;
+import ws.schild.jave.filters.FilterGraph;
+import ws.schild.jave.filters.MediaConcatFilter;
 import ws.schild.jave.info.VideoSize;
 
 /** @author a.schild */
@@ -71,8 +72,14 @@ public class ConcatEncoderTest extends AMediaTest {
     List<MultimediaObject> src = new ArrayList<>();
     src.add(new MultimediaObject(source1));
     src.add(new MultimediaObject(source2));
+    FilterGraph complexFiltergraph= new FilterGraph();
+    FilterChain fc= new FilterChain();
+    fc.addFilter(new MediaConcatFilter(src.size(), true, false));
+    complexFiltergraph.addChain(fc);
+    video.setComplexFiltergraph(complexFiltergraph);
     encoder.encode(src, target, attrs);
     assertTrue(target.exists(), "Output file missing");
+    assertTrue(target.length() == 107384, "Output file incorrect size");
   }
 
   /**
@@ -106,18 +113,20 @@ public class ConcatEncoderTest extends AMediaTest {
     attrs.setAudioAttributes(audio);
     
     Encoder encoder = new Encoder();
-    List<String> srcStr = new ArrayList<>();
-    srcStr.add(source1.getAbsolutePath());
-    srcStr.add(source2.getAbsolutePath());
-    
-    video.addFilter(new ConcatFilter(srcStr));
-    
+
     List<MultimediaObject> src = new ArrayList<>();
     src.add(new MultimediaObject(source1));
     src.add(new MultimediaObject(source2));
     
+    FilterGraph complexFiltergraph= new FilterGraph();
+    FilterChain fc= new FilterChain();
+    fc.addFilter(new MediaConcatFilter(src.size()));
+    complexFiltergraph.addChain(fc);
+    video.setComplexFiltergraph(complexFiltergraph);
+    
     encoder.encode(src, target, attrs);
     assertTrue(target.exists(), "Output file missing");
+    assertTrue(target.length() == 1368738, "Output file incorrect size");
   }
   
   @Test
@@ -144,7 +153,16 @@ public class ConcatEncoderTest extends AMediaTest {
     List<MultimediaObject> src = new ArrayList<>();
     src.add(new MultimediaObject(source1));
     src.add(new MultimediaObject(source2));
+    FilterGraph complexFiltergraph= new FilterGraph();
+    FilterChain fc= new FilterChain();
+    fc.addFilter(new MediaConcatFilter(src.size(), false, true));
+    complexFiltergraph.addChain(fc);
+    VideoAttributes video = new VideoAttributes();
+    video.setComplexFiltergraph(complexFiltergraph);
+    attributes.setVideoAttributes(video);
     encoder.encode(src, target, attributes);
     assertTrue(target.exists(), "Output file missing");
+    assertTrue(target.length() == 20477182, "Output file incorrect size");
   }
+
 }
