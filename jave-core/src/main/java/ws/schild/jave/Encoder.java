@@ -441,6 +441,18 @@ public class Encoder {
     globalOptions.add(index, arg);
   }
 
+  public static void removeOptionAtIndex(Integer index) {
+    globalOptions.remove(index);
+  }
+
+  public static void setOptionAtIndex(EncodingArgument arg, Integer index) {
+    globalOptions.set(index, arg);
+  }
+
+  public static EncodingArgument setOptionAtIndex(Integer index) {
+    return globalOptions.get(index);
+  }
+
   /**
    * Re-encode a multimedia file(s).
    *
