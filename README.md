@@ -1,4 +1,6 @@
 # JAVE2
+![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-core?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-core?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
 
 The JAVE2 (Java Audio Video Encoder) library is Java wrapper on the ffmpeg
 project. Developers can take take advantage of JAVE2 to transcode audio 

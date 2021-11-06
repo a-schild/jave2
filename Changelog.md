@@ -1,6 +1,8 @@
 # JAVE2
 
 ## Changelog
+- **3.3.0-SNAPSHOT**
+   - Added options to get/set options by index, thanks to HANXU2018
 - **3.2.1**
    - Moved development to it's own branch
    - Implemented first support for apple m1 chip on OS-X (Needs to be tested)
