@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ws.schild</groupId>
     <packaging>jar</packaging>
-    <version>3.2.1-SNAPSHOT</version>
+    <version>3.3.0-SNAPSHOT</version>
     <artifactId>jave-nativebin-win32</artifactId>
     <name>Jave windows 32 bit native package</name>
     <description>The JAVE (Java Audio Video Encoder) library is Java wrapper on the 
