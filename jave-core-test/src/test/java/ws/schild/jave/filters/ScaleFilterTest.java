@@ -6,13 +6,17 @@
 package ws.schild.jave.filters;
 
 import java.io.File;
+import static jdk.nashorn.internal.objects.NativeRegExp.source;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import ws.schild.jave.AMediaTest;
 import ws.schild.jave.Encoder;
+import ws.schild.jave.EncoderException;
 import ws.schild.jave.MultimediaObject;
+import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
+import ws.schild.jave.info.VideoSize;
 import ws.schild.jave.utils.AutoRemoveableFile;
 
 /**
@@ -43,5 +47,32 @@ public class ScaleFilterTest extends AMediaTest {
       assertTrue(target.exists(), "Output file missing");
     }
   }
-    
+  
+  @Test
+  public void testMpegVideoScaling() throws Exception {
+    File sourceVideo =
+        new File(cLoader.getResource("small.mp4").getFile());
+        AudioAttributes audio = new AudioAttributes();
+        audio.setCodec("aac");
+        audio.setBitRate(128000);
+        audio.setSamplingRate(44100);
+        audio.setChannels(2);
+
+        VideoAttributes video = new VideoAttributes();
+        video.setCodec("h264");
+        video.setBitRate(160000);
+        video.setFrameRate(30);
+        video.setSize(new VideoSize(1280,596));
+        EncodingAttributes encAttr = new EncodingAttributes();
+        encAttr.setOutputFormat("mp4");
+        encAttr.setAudioAttributes(audio);
+        encAttr.setVideoAttributes(video);
+
+
+        try (AutoRemoveableFile target =
+            new AutoRemoveableFile(sourceVideo.getParentFile(), "even-scaling.mp4")) {
+          new Encoder().encode(new MultimediaObject(sourceVideo), target, encAttr);
+          assertTrue(target.exists(), "Output file missing");
+        }
+  }    
 }
