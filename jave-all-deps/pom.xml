@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ws.schild</groupId>
 	<packaging>jar</packaging>
-	<version>3.3.0-SNAPSHOT</version>
+	<version>4.4.0-SNAPSHOT</version>
 	<artifactId>jave-all-deps</artifactId>
 	<name>Jave all native dependencies package</name>
 	<description>The JAVE (Java Audio Video Encoder) library is Java wrapper on the 
@@ -66,19 +66,6 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>${maven-deploy-plugin.version}</version>
-				<executions>
-					<execution>
-						<id>default-deploy</id>
-						<phase>deploy</phase>
-						<goals>
-							<goal>deploy</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
 				<version>${maven-release-plugin.version}</version>
@@ -95,17 +82,6 @@
 						<version>${maven-scm-provider-gitexe.version}</version>
 					</dependency>
 				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>${nexus-staging-maven-plugin.version}</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -133,20 +109,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>${maven-gpg-plugin.version}</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 
@@ -154,7 +116,7 @@
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-core</artifactId>
-			<version>3.3.0-SNAPSHOT</version>
+			<version>4.4.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
@@ -164,7 +126,7 @@
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-win64</artifactId>
-			<version>3.3.0-SNAPSHOT</version>
+			<version>4.4.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
@@ -174,12 +136,12 @@
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-linux64</artifactId>
-			<version>3.3.0-SNAPSHOT</version>
+			<version>4.4.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-osx64</artifactId>
-			<version>3.3.0-SNAPSHOT</version>
+			<version>4.4.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
@@ -194,7 +156,7 @@
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-linux-arm64</artifactId>
-			<version>3.3.0-SNAPSHOT</version>
+			<version>4.4.0-SNAPSHOT</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
 		<dependency>
@@ -204,51 +166,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/
-            </url>
-		</repository>
-	</distributionManagement>
-	<scm>
-		<connection>scm:git:git://github.com/a-schild/jave2.git</connection>
-		<developerConnection>scm:git:git@github.com:a-schild/jave2.git</developerConnection>
-		<url>https://github.com/a-schild/jave2</url>
-		<tag>HEAD</tag>
-	</scm>
 	<profiles>
-		<!-- GPG Signature on release -->
-		<profile>
-			<id>release-sign-artifacts</id>
-			<activation>
-				<property>
-					<name>performRelease</name>
-					<value>true</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>${maven-gpg-plugin.version}</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
 	</profiles>
 </project>
