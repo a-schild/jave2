@@ -3,6 +3,10 @@
 ## Changelog
 - **3.3.0-SNAPSHOT**
    - Added options to get/set options by index, thanks to HANXU2018
+   - Upgraded binaries to 4.4.1 release
+     OS-X releases from https://www.osxexperts.net/
+	 Linux binaries from https://johnvansickle.com/ffmpeg/
+	 -> Windows and arm32 bit builds still on 4.4.0 release
 - **3.2.1**
    - Moved development to it's own branch
    - Implemented first support for apple m1 chip on OS-X (Needs to be tested)
