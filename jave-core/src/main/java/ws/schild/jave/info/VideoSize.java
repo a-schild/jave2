@@ -19,9 +19,10 @@
 package ws.schild.jave.info;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
- * Instances of this class report informations about videos size.
+ * Instances of this class report information about videos size.
  *
  * @author Carlo Pelliccia
  */
@@ -116,6 +117,19 @@ public class VideoSize implements Serializable {
    */
   public Integer getHeight() {
     return height;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    VideoSize videoSize = (VideoSize) o;
+    return Objects.equals(width, videoSize.width) && Objects.equals(height, videoSize.height);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(width, height);
   }
 
   @Override
