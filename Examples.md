@@ -30,7 +30,7 @@ ConvertProgressListener listener = new ConvertProgressListener();
                                                                        
 try {                                                                  
  	File source = new File("file path");		                         
- 	File target = new File("file path);                                  
+ 	File target = new File("file path");                                  
                                                                        
         //Audio Attributes                                             
  	AudioAttributes audio = new AudioAttributes();                       
