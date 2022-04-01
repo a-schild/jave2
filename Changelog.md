@@ -1,7 +1,8 @@
 # JAVE2
 
 ## Changelog
-- **3.3.0-SNAPSHOT**
+- **3.3.0**
+   - Upgraded slf4j libraries
    - Added options to get/set options by index, thanks to HANXU2018
    - Upgraded binaries to 4.4.1 release
      OS-X releases from https://www.osxexperts.net/
