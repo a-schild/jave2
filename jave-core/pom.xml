@@ -6,7 +6,7 @@
 	<groupId>ws.schild</groupId>
 	<artifactId>jave-core</artifactId>
 	<packaging>jar</packaging>
-	<version>3.2.0</version>
+	<version>3.3.0</version>
 	<name>Jave core package</name>
 	<description>The JAVE (Java Audio Video Encoder) library is Java wrapper on the 
         ffmpeg project. Developers can take take advantage of JAVE2 to transcode 
@@ -50,7 +50,7 @@
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 		<nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
 		<maven-scm-provider-gitexe.version>1.11.2</maven-scm-provider-gitexe.version>
-		<slf4j-api.version>1.7.26</slf4j-api.version>
+		<slf4j-api.version>1.7.36</slf4j-api.version>
 		<junit-jupiter-api.version>5.4.2</junit-jupiter-api.version>
 	</properties>
 	<build>

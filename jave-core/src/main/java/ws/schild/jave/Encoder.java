@@ -441,6 +441,18 @@ public class Encoder {
     globalOptions.add(index, arg);
   }
 
+  public static void removeOptionAtIndex(Integer index) {
+    globalOptions.remove(index);
+  }
+
+  public static void setOptionAtIndex(EncodingArgument arg, Integer index) {
+    globalOptions.set(index, arg);
+  }
+
+  public static EncodingArgument setOptionAtIndex(Integer index) {
+    return globalOptions.get(index);
+  }
+
   /**
    * Re-encode a multimedia file(s).
    *
@@ -466,6 +478,38 @@ public class Encoder {
       EncodingAttributes attributes,
       EncoderProgressListener listener)
       throws IllegalArgumentException, InputFormatException, EncoderException {
+    encode(multimediaObjects,target,attributes,listener,null);
+  }
+
+  /**
+   * Re-encode a multimedia file(s).
+   *
+   * <p>This method is not reentrant, instead create multiple object instances
+   *
+   * @param multimediaObjects The source multimedia files. It cannot be null. Be sure this file can
+   *     be decoded (see null null null null {@link Encoder#getSupportedDecodingFormats()}, {@link
+   *     Encoder#getAudioDecoders()} and* {@link Encoder#getVideoDecoders()}) When passing multiple
+   *     sources, make sure that they are compatible in the way that ffmpeg can concat them. We
+   *     don't use the complex filter at the moment Perhaps you will need to first transcode/resize
+   *     them https://trac.ffmpeg.org/wiki/Concatenate @see "Concat protocol"
+   * @param target The target multimedia re-encoded file. It cannot be null. If this file already
+   *     exists, it will be overwrited.
+   * @param attributes A set of attributes for the encoding process.
+   * @param listener An optional progress listener for the encoding process. It can be null.
+   * @param currOptions Set more global options It can be null.
+   * @throws IllegalArgumentException If both audio and video parameters are null.
+   * @throws InputFormatException If the source multimedia file cannot be decoded.
+   * @throws EncoderException If a problems occurs during the encoding process.
+   */
+
+
+  public void encode(
+          List<MultimediaObject> multimediaObjects,
+          File target,
+          EncodingAttributes attributes,
+          EncoderProgressListener listener,
+          List<EncodingArgument> currOptions)
+          throws IllegalArgumentException, InputFormatException, EncoderException {
     attributes.validate();
 
     target = target.getAbsoluteFile();
@@ -478,6 +522,13 @@ public class Encoder {
         .filter(ea -> ArgType.GLOBAL.equals(ea.getArgType()))
         .flatMap(eArg -> eArg.getArguments(attributes))
         .forEach(ffmpeg::addArgument);
+    if (currOptions != null) {
+        currOptions
+          .stream()
+          .filter(ea -> ArgType.GLOBAL.equals(ea.getArgType()))
+          .flatMap(eArg -> eArg.getArguments(attributes))
+          .forEach(ffmpeg::addArgument);
+    }
 
     // Set input options, must be before -i argument
     globalOptions
@@ -485,6 +536,13 @@ public class Encoder {
         .filter(ea -> ArgType.INFILE.equals(ea.getArgType()))
         .flatMap(eArg -> eArg.getArguments(attributes))
         .forEach(ffmpeg::addArgument);
+    if (currOptions != null) {
+      currOptions
+          .stream()
+          .filter(ea -> ArgType.INFILE.equals(ea.getArgType()))
+          .flatMap(eArg -> eArg.getArguments(attributes))
+          .forEach(ffmpeg::addArgument);
+    }
 
     multimediaObjects
         .stream()
@@ -498,6 +556,14 @@ public class Encoder {
         .filter(ea -> ArgType.OUTFILE.equals(ea.getArgType()))
         .flatMap(eArg -> eArg.getArguments(attributes))
         .forEach(ffmpeg::addArgument);
+
+    if (currOptions != null) {
+      currOptions
+          .stream()
+          .filter(ea -> ArgType.OUTFILE.equals(ea.getArgType()))
+          .flatMap(eArg -> eArg.getArguments(attributes))
+          .forEach(ffmpeg::addArgument);
+    }
 
     ffmpeg.addArgument("-y");
     ffmpeg.addArgument(target.getAbsolutePath());

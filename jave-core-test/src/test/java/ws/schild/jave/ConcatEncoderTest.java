@@ -27,6 +27,9 @@ import org.junit.jupiter.api.Test;
 import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
+import ws.schild.jave.filters.FilterChain;
+import ws.schild.jave.filters.FilterGraph;
+import ws.schild.jave.filters.MediaConcatFilter;
 import ws.schild.jave.info.VideoSize;
 
 /** @author a.schild */
@@ -69,10 +72,63 @@ public class ConcatEncoderTest extends AMediaTest {
     List<MultimediaObject> src = new ArrayList<>();
     src.add(new MultimediaObject(source1));
     src.add(new MultimediaObject(source2));
+    FilterGraph complexFiltergraph= new FilterGraph();
+    FilterChain fc= new FilterChain();
+    fc.addFilter(new MediaConcatFilter(src.size(), true, false));
+    complexFiltergraph.addChain(fc);
+    video.setComplexFiltergraph(complexFiltergraph);
     encoder.encode(src, target, attrs);
     assertTrue(target.exists(), "Output file missing");
+    assertTrue(target.length() == 107384, "Output file incorrect size");
   }
 
+  /**
+   * Test of encode method, of class Encoder.
+   *
+   * @throws java.lang.Exception
+   */
+  @Test
+  public void testConcatVideo2() throws Exception {
+    System.out.println("concat two identical videos");
+
+    File source1 = new File(getResourceSourcePath(), "small.mp4");
+    File source2 = new File(getResourceSourcePath(), "small.mp4");
+    File target = new File(getResourceTargetPath(), "testConcatVideo2.mp4");
+    if (target.exists()) {
+      target.delete();
+    }
+    AudioAttributes audio = new AudioAttributes();
+    audio.setCodec("eac3");
+    audio.setBitRate(97000);
+    audio.setSamplingRate(48000);
+    audio.setChannels(2);
+    VideoAttributes video = new VideoAttributes();
+    video.setCodec("mpeg4");
+    video.setBitRate(1500000);
+    video.setFrameRate(30);
+    video.setSize(new VideoSize(320, 240));
+    EncodingAttributes attrs = new EncodingAttributes();
+    attrs.setOutputFormat("mp4");
+    attrs.setVideoAttributes(video);
+    attrs.setAudioAttributes(audio);
+    
+    Encoder encoder = new Encoder();
+
+    List<MultimediaObject> src = new ArrayList<>();
+    src.add(new MultimediaObject(source1));
+    src.add(new MultimediaObject(source2));
+    
+    FilterGraph complexFiltergraph= new FilterGraph();
+    FilterChain fc= new FilterChain();
+    fc.addFilter(new MediaConcatFilter(src.size()));
+    complexFiltergraph.addChain(fc);
+    video.setComplexFiltergraph(complexFiltergraph);
+    
+    encoder.encode(src, target, attrs);
+    assertTrue(target.exists(), "Output file missing");
+    assertTrue(target.length() == 1368738, "Output file incorrect size");
+  }
+  
   @Test
   public void testContactAudio01() throws Exception {
     System.out.println("concat two wmv files and build wav from it");
@@ -97,7 +153,16 @@ public class ConcatEncoderTest extends AMediaTest {
     List<MultimediaObject> src = new ArrayList<>();
     src.add(new MultimediaObject(source1));
     src.add(new MultimediaObject(source2));
+    FilterGraph complexFiltergraph= new FilterGraph();
+    FilterChain fc= new FilterChain();
+    fc.addFilter(new MediaConcatFilter(src.size(), false, true));
+    complexFiltergraph.addChain(fc);
+    VideoAttributes video = new VideoAttributes();
+    video.setComplexFiltergraph(complexFiltergraph);
+    attributes.setVideoAttributes(video);
     encoder.encode(src, target, attributes);
     assertTrue(target.exists(), "Output file missing");
+    assertTrue(target.length() == 20477182, "Output file incorrect size");
   }
+
 }

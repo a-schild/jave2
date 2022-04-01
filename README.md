@@ -1,4 +1,6 @@
 # JAVE2
+![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-core?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-core?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
 
 The JAVE2 (Java Audio Video Encoder) library is Java wrapper on the ffmpeg
 project. Developers can take take advantage of JAVE2 to transcode audio 
@@ -17,9 +19,11 @@ Many other formats, containers and operations are supported by JAVE2.
 > JAVE can also be easily ported to other OS and hardware configurations, 
 see the JAVE manual for details.
 
-| Operating System | Windows x32,x64 | MacOS x32,x64 | Linux x32,x64 | Linux arm64 |
+| Operating System | Windows x32,x64 | MacOS x64 | MacOS m1 | Linux x32,x64 | Linux arm32,arm64 |
 | ------- | :---: | :---: | :---: | :---: |
-| Supported? | YES | YES  | YES  |
+| Supported? | YES | YES |  YES | YES  | YES |
+
+Please note that the arm+win 32 bit versions are still on 4.4.0
 
 ## Projects using Jave2
 * [XR3Player](https://github.com/goxr3plus/XR3Player)
@@ -46,7 +50,7 @@ It includes all binaries for the supported platforms
 <dependency>
  <groupId>ws.schild</groupId>
  <artifactId>jave-all-deps</artifactId>
- <version>3.2.0</version>
+ <version>3.3.0</version>
 </dependency>
 ```
 
@@ -60,7 +64,7 @@ Include the following in your pom files.
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-core</artifactId>
-    <version>3.2.0</version>
+    <version>3.3.0</version>
 </dependency>
 ```
 
@@ -71,7 +75,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux64</artifactId>
-    <version>3.2.0</version>
+    <version>3.3.0</version>
 </dependency>
 ```
 
@@ -80,7 +84,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux-arm64</artifactId>
-    <version>3.2.0</version>
+    <version>3.3.0</version>
 </dependency>
 ```
 
@@ -89,7 +93,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux-arm32</artifactId>
-    <version>3.2.0</version>
+    <version>3.3.0</version>
 </dependency>
 ```
 
@@ -98,7 +102,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-win64</artifactId>
-    <version>3.2.0</version>
+    <version>3.3.0</version>
 </dependency>
 ```
 
@@ -107,7 +111,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-osx64</artifactId>
-    <version>3.2.0</version>
+    <version>3.3.0</version>
 </dependency>
 ```
 
@@ -116,13 +120,13 @@ and then the specific jar(s) for your platform(s) :
 It includes all binaries for the supported platforms
 
 ``` XML
-compile group: 'ws.schild', name: 'jave-all-deps', version: '3.2.0'
+compile group: 'ws.schild', name: 'jave-all-deps', version: '3.3.0'
 ```
 
 ### For one platform only (Linux 64Bit in this case)
 ``` XML
-compile group: 'ws.schild', name: 'jave-core', version: '3.2.0'
-compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '3.2.0'
+compile group: 'ws.schild', name: 'jave-core', version: '3.3.0'
+compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '3.3.0'
 ```
 
 ### Main Components of Jave2

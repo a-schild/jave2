@@ -201,4 +201,30 @@ public class FileAudioEncoderTest extends AMediaTest {
     encoder.encode(new MultimediaObject(source), target, attrs);
     assertTrue(target.exists(), "Output file missing");
   }
+
+
+  @Test
+  public void testEncodeAudio6() throws Exception {
+    System.out.println("testEncodeAudio6");
+    File source = new File(getResourceSourcePath(), "audioonly.mpeg");
+    File target = new File(getResourceTargetPath(), "testEncodeAudio6.mp3");
+    if (target.exists()) {
+      target.delete();
+    }
+
+    MultimediaObject sourceInfos = new MultimediaObject(source);
+    Encoder encoder = new Encoder();
+    AudioAttributes audio = new AudioAttributes();
+    audio.setCodec("mp3");
+    EncodingAttributes attrs = new EncodingAttributes();
+    attrs.setDecodingThreads(1);
+    attrs.setEncodingThreads(1);
+    attrs.setOutputFormat("mp3");
+    attrs.setAudioAttributes(audio);
+    attrs.setMapMetaData(true);
+    encoder.encode(new MultimediaObject(source), target, attrs);
+    assertTrue(target.exists(), "Output file missing");
+  }
+
+
 }
