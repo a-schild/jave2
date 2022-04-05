@@ -1,6 +1,10 @@
 # JAVE2
 
 ## Changelog
+- **3.3.1**
+   - Fixed naming of binary for OSX M1 platform
+   - Windows 64bit binary on 4.4.1 too
+    -> Still missing 4.4.1 binaries for win32 and win arm32 builds
 - **3.3.0**
    - Upgraded slf4j libraries
    - Added options to get/set options by index, thanks to HANXU2018
