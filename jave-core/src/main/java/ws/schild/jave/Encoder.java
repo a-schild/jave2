@@ -433,7 +433,11 @@ public class Encoder {
           new ValueArgument(ArgType.OUTFILE, "-pix_fmt", 
               ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getPixelFormat)),
           new ValueArgument(ArgType.OUTFILE, "-vsync",
-              ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getVsync).map(VsyncMethod::getMethodName))
+              ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getVsync).map(VsyncMethod::getMethodName)),
+          new ValueArgument(ArgType.OUTFILE, "-crf",
+              ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getCrf).map(Object::toString)),
+          new ValueArgument(ArgType.OUTFILE, "-preset",
+              ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getPreset))
         )
       );
 
