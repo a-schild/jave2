@@ -93,6 +93,21 @@ public class VideoAttributes implements Serializable {
   private X264_PROFILE x264Profile = null;
 
   /**
+   * Set the quality for constant quality mode.
+   * The lower the value, the better the quality and the larger the file size.
+   * Reference Range:[0, 51]
+   */
+  private Integer crf = null;
+
+  /**
+   * This option itemizes a range of choices from ultrafast (best speed) to placebo (best quality).
+   *
+   * {@link ws.schild.jave.encode.enums.PresetEnum}
+   */
+  private String preset = null;
+
+
+  /**
    * Returns the codec name for the encoding process.
    *
    * @return The codec name for the encoding process.
@@ -298,4 +313,44 @@ public class VideoAttributes implements Serializable {
     this.x264Profile = x264Profile;
     return this;
   }
+
+  /**
+   * Set the quality for constant quality mode.
+   *
+   * @param crf the crf to set
+   * @return this instance
+   */
+  public VideoAttributes setCrf(Integer crf) {
+    this.crf = crf;
+    return this;
+  }
+
+  /**
+   * Get the quality for constant quality mode.
+   *
+   * @return the crf
+   */
+  public Optional<Integer> getCrf() {
+    return Optional.ofNullable(crf);
+  }
+
+  /**
+   * set the quality from {@link ws.schild.jave.encode.enums.PresetEnum}
+   * @param preset
+   * @return this instance
+   */
+  public VideoAttributes setPreset(String preset) {
+    this.preset = preset;
+    return this;
+  }
+
+  /**
+   * Get the preset.
+   *
+   * @return the preset
+   */
+  public Optional<String> getPreset() {
+    return Optional.ofNullable(preset);
+  }
+
 }

@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
+import ws.schild.jave.encode.enums.PresetEnum;
 import ws.schild.jave.info.VideoSize;
 
 /** @author a.schild */
@@ -58,6 +59,8 @@ public class EncodingAttributesTest extends AMediaTest {
     video.setBitRate(160000);
     video.setFrameRate(15);
     video.setSize(new VideoSize(176, 144));
+    video.setCrf(18);
+    video.setPreset(PresetEnum.FAST.getPresetName());
     EncodingAttributes attrs = new EncodingAttributes();
     attrs.setOutputFormat("mp4");
     attrs.setAudioAttributes(audio);
