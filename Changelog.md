@@ -1,6 +1,8 @@
 # JAVE2
 
 ## Changelog
+- **3.4.0**
+   - Added PresetEnum to API
 - **3.3.1**
    - Fixed naming of binary for OSX M1 platform
    - Windows 64bit + 32bit binary on 4.4.1 too
