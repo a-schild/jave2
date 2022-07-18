@@ -41,17 +41,18 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-		<maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+		<maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
 		<maven-deploy-plugin.version>3.0.1-M1</maven-deploy-plugin.version>
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-		<maven-source-plugin.version>3.1.0</maven-source-plugin.version>
-		<maven-javadoc-plugin.version>3.1.0</maven-javadoc-plugin.version>
-		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-		<nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
-		<maven-scm-provider-gitexe.version>1.11.2</maven-scm-provider-gitexe.version>
+		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+		<maven-javadoc-plugin.version>3.4.0</maven-javadoc-plugin.version>
+		<maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
+		<nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
+		<maven-scm-provider-gitexe.version>1.13.0</maven-scm-provider-gitexe.version>
+                <buildnumber-maven-plugin.version>3.0.0</buildnumber-maven-plugin.version>
 		<slf4j-api.version>1.7.36</slf4j-api.version>
-		<junit-jupiter-api.version>5.4.2</junit-jupiter-api.version>
+		<junit-jupiter-api.version>5.8.0</junit-jupiter-api.version>
 	</properties>
 	<build>
 		<plugins>
@@ -74,7 +75,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.4</version>
+				<version>${buildnumber-maven-plugin.version}</version>
 				<executions>
 					<execution>
 						<phase>validate</phase>
@@ -84,7 +85,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<doCheck>true</doCheck>
+					<doCheck>false</doCheck>
 					<doUpdate>true</doUpdate>
 				</configuration>
 			</plugin>
