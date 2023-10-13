@@ -54,6 +54,12 @@ public class MultimediaObject {
   private static final Pattern CHANNELS_PATTERN =
       Pattern.compile("(mono|stereo|quad)", Pattern.CASE_INSENSITIVE);
 
+  /**
+   * This regexp is used to parse the ffmpeg output about the bit depth of an audio stream.
+   */
+  private static final Pattern BIT_DEPTH_PATTERN =
+          Pattern.compile("(s16|s16p|s32|fltp|dblp|s64)", Pattern.CASE_INSENSITIVE);
+
   /** The locator of the ffmpeg executable used by this extractor. */
   private final ProcessLocator locator;
 
@@ -359,6 +365,13 @@ public class MultimediaObject {
                       if (!parsed && m2.find()) {
                         int bitRate = Integer.parseInt(m2.group(1));
                         audio.setBitRate(bitRate * 1000);
+                        parsed = true;
+                      }
+                      // Bit depth
+                      m2 = BIT_DEPTH_PATTERN.matcher(token);
+                      if (!parsed && m2.find()) {
+                        String bitDepth = m2.group(1);
+                        audio.setBitDepth(bitDepth);
                         parsed = true;
                       }
                     }
