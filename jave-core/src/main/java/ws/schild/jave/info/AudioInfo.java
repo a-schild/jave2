@@ -43,6 +43,10 @@ public class AudioInfo {
   /** The audio stream (average) bit rate. If less than 0, this information is not available. */
   private int bitRate = -1;
 
+
+  /** The audio stream bit depth. */
+  private String bitDepth;
+
   /** The video metadata. */
   private Map<String, String> metadata = new HashMap<>();
 
@@ -128,6 +132,25 @@ public class AudioInfo {
   }
 
   /**
+   * Returns the audio stream bit depth.
+   *
+   * @return The audio stream bit depth.
+   */
+  public String getBitDepth() {
+    return bitDepth;
+  }
+
+  /**
+   * Sets the audio stream bit depth.
+   *
+   * @param bitDepth The audio stream bit depth.
+   * @return this instance
+   */
+  public void setBitDepth(String bitDepth) {
+    this.bitDepth = bitDepth;
+  }
+
+  /**
    * Returns the audio metadata.
    *
    * @return The audio metadata.
@@ -150,14 +173,16 @@ public class AudioInfo {
   @Override
   public String toString() {
     return getClass().getName()
-        + " (decoder="
-        + decoder
-        + ", samplingRate="
-        + samplingRate
-        + ", channels="
-        + channels
-        + ", bitRate="
-        + bitRate
-        + ")";
+            + " (decoder="
+            + decoder
+            + ", samplingRate="
+            + samplingRate
+            + ", channels="
+            + channels
+            + ", bitRate="
+            + bitRate
+            + ", bitDepth="
+            + bitDepth
+            + ")";
   }
 }
