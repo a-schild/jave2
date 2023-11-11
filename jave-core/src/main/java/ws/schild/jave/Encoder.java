@@ -603,7 +603,11 @@ public class Encoder {
        */
       if (multimediaObjects.size() == 1
           && (!multimediaObjects.get(0).isURL() || !multimediaObjects.get(0).isReadURLOnce())) {
-        info = multimediaObjects.get(0).getInfo();
+        try {
+          info = multimediaObjects.get(0).getInfo();
+        } catch (InputFormatException ife) {
+          LOG.warn("Get media info failed: " + ife.getMessage());
+        }
       }
 
       Float offsetAttribute = attributes.getOffset().orElse(null);
