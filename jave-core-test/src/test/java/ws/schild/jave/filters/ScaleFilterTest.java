@@ -6,12 +6,10 @@
 package ws.schild.jave.filters;
 
 import java.io.File;
-import static jdk.nashorn.internal.objects.NativeRegExp.source;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import ws.schild.jave.AMediaTest;
 import ws.schild.jave.Encoder;
-import ws.schild.jave.EncoderException;
 import ws.schild.jave.MultimediaObject;
 import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;

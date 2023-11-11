@@ -6,7 +6,10 @@ package ws.schild.jave.encode;
  * @author mressler
  */
 public enum ArgType {
-  GLOBAL,
-  INFILE,
-  OUTFILE;
+    /** Global argument for ffmpeg */
+    GLOBAL,
+    /** Arguments for input file(s) */
+    INFILE,
+    /** Argument for output file(s) */
+    OUTFILE;
 }

@@ -602,7 +602,7 @@ public class Encoder {
        * have named methods that would calculate durations as in #1 and #2. 
        */
       if (multimediaObjects.size() == 1
-          && (!multimediaObjects.get(0).isURL() || !multimediaObjects.get(0).isReadURLOnce())) {
+          && !multimediaObjects.get(0).isReadURLOnce()) {
         info = multimediaObjects.get(0).getInfo();
       }
 

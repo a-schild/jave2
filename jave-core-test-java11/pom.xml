@@ -3,15 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ws.schild</groupId>
     <packaging>jar</packaging>
-    <version>3.3.1</version>
+    <version>3.4.0</version>
     <artifactId>jave-core-test-java11</artifactId>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-        <junit-jupiter-api.version>5.4.2</junit-jupiter-api.version>
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+        <junit-jupiter-api.version>5.10.1</junit-jupiter-api.version>
         <slf4j-simple.version>1.7.26</slf4j-simple.version>
     </properties>
     <build>
@@ -38,32 +38,32 @@
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-core</artifactId>
-            <version>3.3.1</version>
+            <version>3.4.0</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-win32</artifactId>
-            <version>3.3.1</version>
+            <version>3.4.0</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-win64</artifactId>
-            <version>3.3.1</version>
+            <version>3.4.0</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-linux32</artifactId>
-            <version>3.3.1</version>
+            <version>3.4.0</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-linux64</artifactId>
-            <version>3.3.1</version>
+            <version>3.4.0</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-osx64</artifactId>
-            <version>3.3.1</version>
+            <version>3.4.0</version>
         </dependency>    
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>

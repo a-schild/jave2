@@ -2,6 +2,11 @@ package ws.schild.jave.filters;
 
 import java.io.File;
 
+/**
+ * Add subtitles to the video
+ * 
+ * @author andre
+ */
 public class AssSubtitlesFilter extends Filter {
 
   /**
@@ -16,6 +21,11 @@ public class AssSubtitlesFilter extends Filter {
     addOrderedArgument(escapingPath(source.getAbsolutePath()));
   }
 
+  /**
+   * 
+   * @param source The source ass subtitle file to be used for this movie filter.
+   * @param outputLabel The label to add as subtitle
+   */
   public AssSubtitlesFilter(File source, String outputLabel) {
     this(source);
     addOutputLabel(outputLabel);

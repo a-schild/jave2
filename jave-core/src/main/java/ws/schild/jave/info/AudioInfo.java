@@ -144,7 +144,6 @@ public class AudioInfo {
    * Sets the audio stream bit depth.
    *
    * @param bitDepth The audio stream bit depth.
-   * @return this instance
    */
   public void setBitDepth(String bitDepth) {
     this.bitDepth = bitDepth;

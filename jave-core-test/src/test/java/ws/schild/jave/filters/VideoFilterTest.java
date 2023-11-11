@@ -223,6 +223,13 @@ public class VideoFilterTest extends AMediaTest {
             .collect(Collectors.toList());
     File fooPng = new File("foo.png");
     String fooPath = fooPng.getAbsolutePath();
+    // Check for windows path
+    String os = System.getProperty("os.name").toLowerCase();
+    boolean isWindows = os.contains("windows");
+    if (isWindows) {
+        fooPath= fooPath.replace("\\", "\\\\");
+        fooPath= fooPath.replace(":", "\\:");
+    }
 
     assertEquals(
           "[0]trim='duration=1.0:start=0.5',setpts='PTS-STARTPTS'[filtered0];"

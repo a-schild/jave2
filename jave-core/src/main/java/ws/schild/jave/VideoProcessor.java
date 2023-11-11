@@ -71,6 +71,8 @@ public class VideoProcessor {
 
     try (AutoRemoveableFile mergeFile = prepareMergeInstructions(videos, destination)) {
       MultimediaObject toMerge = fromFile(mergeFile);
+      // Prevent trying to determine multimedia infos from txt file
+      toMerge.setReadURLOnce(true);
 
       EncodingAttributes attributes = new EncodingAttributes();
       attributes.setInputFormat("concat");

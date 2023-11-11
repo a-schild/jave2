@@ -3,6 +3,10 @@
 ## Changelog
 - **3.4.0**
    - Added PresetEnum to API
+   - Added quit encoding to api, thanks to sam80180
+   - Added module name for java 9+ compatibility, thanks to Stickerifier
+   - Use proper class for semaphore, thanks to leeychee
+   - Updated maven build environment
 - **3.3.1**
    - Fixed naming of binary for OSX M1 platform
    - Windows 64bit + 32bit binary on 4.4.1 too

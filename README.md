@@ -21,9 +21,10 @@ see the JAVE manual for details.
 
 | Operating System | Windows x32,x64 | MacOS x64 | MacOS m1 | Linux x32,x64 | Linux arm32,arm64 |
 | ------------- | ------------- |  ------------- |  ------------- |  ------------- |  ------------- |
-| Supported? | YES | YES |  YES | YES  | YES |
+| Supported? | YES | Partial,YES |  YES | YES  | YES |
 
 Please note that the arm+win 32 bit versions are still on 4.4.0
+The win32 binaries will be removed in the next release
 
 ## Projects using Jave2
 * [XR3Player](https://github.com/goxr3plus/XR3Player)
@@ -50,7 +51,7 @@ It includes all binaries for the supported platforms
 <dependency>
  <groupId>ws.schild</groupId>
  <artifactId>jave-all-deps</artifactId>
- <version>3.3.1</version>
+ <version>3.4.0</version>
 </dependency>
 ```
 
@@ -64,7 +65,7 @@ Include the following in your pom files.
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-core</artifactId>
-    <version>3.3.1</version>
+    <version>3.4.0</version>
 </dependency>
 ```
 
@@ -75,7 +76,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux64</artifactId>
-    <version>3.3.1</version>
+    <version>3.4.0</version>
 </dependency>
 ```
 
@@ -84,7 +85,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux-arm64</artifactId>
-    <version>3.3.1</version>
+    <version>3.4.0</version>
 </dependency>
 ```
 
@@ -93,7 +94,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux-arm32</artifactId>
-    <version>3.3.1</version>
+    <version>3.4.0</version>
 </dependency>
 ```
 
@@ -102,7 +103,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-win64</artifactId>
-    <version>3.3.1</version>
+    <version>3.4.0</version>
 </dependency>
 ```
 
@@ -111,7 +112,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-osx64</artifactId>
-    <version>3.3.1</version>
+    <version>3.4.0</version>
 </dependency>
 ```
 
@@ -120,13 +121,13 @@ and then the specific jar(s) for your platform(s) :
 It includes all binaries for the supported platforms
 
 ``` XML
-compile group: 'ws.schild', name: 'jave-all-deps', version: '3.3.1'
+compile group: 'ws.schild', name: 'jave-all-deps', version: '3.4.0'
 ```
 
 ### For one platform only (Linux 64Bit in this case)
 ``` XML
-compile group: 'ws.schild', name: 'jave-core', version: '3.3.1'
-compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '3.3.1'
+compile group: 'ws.schild', name: 'jave-core', version: '3.4.0'
+compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '3.4.0'
 ```
 
 ### Main Components of Jave2

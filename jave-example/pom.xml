@@ -3,17 +3,17 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ws.schild</groupId>
     <packaging>jar</packaging>
-    <version>3.3.1</version>
+    <version>3.4.0</version>
     <artifactId>jave-example</artifactId>
     <properties>
         <maven.compiler.source>12</maven.compiler.source>
         <maven.compiler.target>12</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
         <slf4j-simple.version>1.7.26</slf4j-simple.version>
-        <junit-jupiter-api.version>5.4.2</junit-jupiter-api.version>
+        <junit-jupiter-api.version>5.10.1</junit-jupiter-api.version>
     </properties>
     <build>
         <resources>
@@ -66,12 +66,12 @@
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-core</artifactId>
-            <version>3.3.1</version>
+            <version>3.4.0</version>
         </dependency>    
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-nativebin-linux32</artifactId>
-            <version>3.3.1</version>
+            <version>3.4.0</version>
         </dependency>    
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
         <dependency>

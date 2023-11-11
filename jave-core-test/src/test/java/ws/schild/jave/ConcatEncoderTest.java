@@ -79,7 +79,7 @@ public class ConcatEncoderTest extends AMediaTest {
     video.setComplexFiltergraph(complexFiltergraph);
     encoder.encode(src, target, attrs);
     assertTrue(target.exists(), "Output file missing");
-    assertTrue(target.length() == 107384, "Output file incorrect size");
+    assertTrue(target.length() == 107872, "Output file incorrect size, expecting 107872 bytes, got "+target.length());
   }
 
   /**
@@ -126,7 +126,7 @@ public class ConcatEncoderTest extends AMediaTest {
     
     encoder.encode(src, target, attrs);
     assertTrue(target.exists(), "Output file missing");
-    assertTrue(target.length() == 1368738, "Output file incorrect size");
+    assertTrue(target.length() == 1360228, "Output file incorrect size, expecting 1360228 bytes, got "+target.length());
   }
   
   @Test
@@ -162,7 +162,7 @@ public class ConcatEncoderTest extends AMediaTest {
     attributes.setVideoAttributes(video);
     encoder.encode(src, target, attributes);
     assertTrue(target.exists(), "Output file missing");
-    assertTrue(target.length() == 20477182, "Output file incorrect size");
+    assertTrue(target.length() == 20477182, "Output file incorrect size, expecting 20477182 bytes, got "+target.length());
   }
 
 }

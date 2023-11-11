@@ -66,8 +66,8 @@ public class MultimediaObject {
   private File inputFile;
   private URL inputURL;
   /**
-   * When true, we try to not read the source more than once One of the side effects is, that no
-   * progressbar is available.
+   * When true, we try to not read the source more than once.
+   * One of the side effects is, that no progressbar is available
    */
   private boolean readURLOnce = false;
 
