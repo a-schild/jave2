@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import ws.schild.jave.Encoder;
+import ws.schild.jave.encode.enums.TuneEnum;
 import ws.schild.jave.encode.enums.VsyncMethod;
 import ws.schild.jave.encode.enums.X264_PROFILE;
 import ws.schild.jave.filters.FilterGraph;
@@ -307,7 +308,7 @@ public class VideoAttributes implements Serializable {
     return Optional.ofNullable(tune);
   }
   /**
-   * @param TuneEnum the TuneEnum to set
+   * @param tune the TuneEnum to set
    * @return this instance
    */
   public VideoAttributes setTune(TuneEnum tune){

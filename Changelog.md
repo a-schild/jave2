@@ -1,6 +1,8 @@
 # JAVE2
 
 ## Changelog
+- **3.5.0**
+   - Added support for Tune video attribute, thanks to rayacode
 - **3.4.0**
    - Added PresetEnum to API
    - Added quit encoding to api, thanks to sam80180

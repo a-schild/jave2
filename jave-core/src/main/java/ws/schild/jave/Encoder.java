@@ -43,6 +43,7 @@ import ws.schild.jave.encode.PredicateArgument;
 import ws.schild.jave.encode.ValueArgument;
 import ws.schild.jave.encode.VideoAttributes;
 import ws.schild.jave.encode.VideoFilterArgument;
+import ws.schild.jave.encode.enums.TuneEnum;
 import ws.schild.jave.encode.enums.VsyncMethod;
 import ws.schild.jave.encode.enums.X264_PROFILE;
 import ws.schild.jave.filters.FilterGraph;
@@ -354,7 +355,7 @@ public class Encoder {
   }
 
   private static List<EncodingArgument> globalOptions =
-      new ArrayList<EncodingArgument>(Arrays.asList(
+      new ArrayList<>(Arrays.asList(
           new ValueArgument(ArgType.GLOBAL, "--filter_thread",
               ea -> ea.getFilterThreads().map(Object::toString)),
           new ValueArgument(ArgType.GLOBAL, "-ss", ea -> ea.getOffset().map(Object::toString)),

@@ -1,3 +1,5 @@
+package ws.schild.jave.encode.enums;
+
 public enum TuneEnum {
     FILM("film"),//use for high quality movie content; lowers deblocking
     ANIMATION("animation"),//good for cartoons; uses higher deblocking and more reference frames

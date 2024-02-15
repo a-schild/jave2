@@ -19,7 +19,7 @@ public class EncoderProgressAdapter implements EncoderProgressListener {
 
   @Override
   public void progress(int permil) {
-    listener.onProgress(new Double(permil) / 100);
+    listener.onProgress(Double.valueOf(permil) / 100);
   }
 
   @Override

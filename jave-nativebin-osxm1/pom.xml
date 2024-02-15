@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ws.schild</groupId>
     <packaging>jar</packaging>
-    <version>3.4.0</version>
+    <version>3.5.0</version>
     <artifactId>jave-nativebin-osxm1</artifactId>
     <name>Jave OSX m1 native package</name>
     <description>The JAVE (Java Audio Video Encoder) library is Java wrapper on the 
