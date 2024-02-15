@@ -439,7 +439,9 @@ public class Encoder {
           new ValueArgument(ArgType.OUTFILE, "-crf",
               ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getCrf).map(Object::toString)),
           new ValueArgument(ArgType.OUTFILE, "-preset",
-              ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getPreset))
+              ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getPreset)),
+	  new ValueArgument(ArgType.OUTFILE, "-tune",
+              ea -> ea.getVideoAttributes().flatMap(VideoAttributes::getTune).map(TuneEnum::getTuneName))    
         )
       );
 

@@ -47,6 +47,7 @@ public class VideoAttributes implements Serializable {
    * direct stream copy.
    */
   private String codec = null;
+  
   /** The the forced tag/fourcc value for the video stream. */
   private String tag = null;
   /**
@@ -89,7 +90,9 @@ public class VideoAttributes implements Serializable {
    * The downside is that it is less compatible with other applications.
    */
   private boolean faststart = false;
-
+  
+  private TuneEnum tune = null;
+  
   private X264_PROFILE x264Profile = null;
 
   /**
@@ -299,7 +302,18 @@ public class VideoAttributes implements Serializable {
         + quality
         + ")";
   }
-
+  /** @return the Tune value */
+  public Optional<TuneEnum> getTune() {
+    return Optional.ofNullable(tune);
+  }
+  /**
+   * @param TuneEnum the TuneEnum to set
+   * @return this instance
+   */
+  public VideoAttributes setTune(TuneEnum tune){
+    this.tune = tune;
+    return this;
+  }
   /** @return the x264Profile */
   public Optional<X264_PROFILE> getX264Profile() {
     return Optional.ofNullable(x264Profile);
