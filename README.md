@@ -1,6 +1,34 @@
 # JAVE2
-![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-core?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
+jave-core ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-core?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
 ![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-core?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+
+jave-all-deps ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-all-deps?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-all-deps?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+
+jave-nativebin-arm32 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-arm32?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-arm32?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+
+jave-nativebin-arm64 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-arm64?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-arm64?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+
+jave-nativebin-linux32 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-linux32?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-linux32?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+
+jave-nativebin-linux64 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-linux64?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-linux64?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+
+jave-nativebin-win32 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-win32?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-win32?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+
+jave-nativebin-win64 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-win64?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-win64?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+
+jave-nativebin-osx64 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-osx64?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-osx64?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+
+jave-nativebin-osxm1 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-osxm1?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-osxm1?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+
 
 The JAVE2 (Java Audio Video Encoder) library is Java wrapper on the ffmpeg
 project. Developers can take take advantage of JAVE2 to transcode audio 
