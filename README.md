@@ -5,11 +5,11 @@ jave-core ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/
 jave-all-deps ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-all-deps?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
 ![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-all-deps?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
 
-jave-nativebin-arm32 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-arm32?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
-![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-arm32?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+jave-nativebin-linux-arm32 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-linux-arm32?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-linux-arm32?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
 
-jave-nativebin-arm64 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-arm64?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
-![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-arm64?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+jave-nativebin-linux-arm64 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-linux-arm64?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-linux-arm64?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
 
 jave-nativebin-linux32 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-linux32?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
 ![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-linux32?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
