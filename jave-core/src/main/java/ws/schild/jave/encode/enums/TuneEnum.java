@@ -1,14 +1,38 @@
 package ws.schild.jave.encode.enums;
 
 public enum TuneEnum {
-    FILM("film"),//use for high quality movie content; lowers deblocking
-    ANIMATION("animation"),//good for cartoons; uses higher deblocking and more reference frames
-    GRAIN("grain"),//preserves the grain structure in old, grainy film material
-    STILLIMAGE("stillimage"),//good for slideshow-like content
-    FASTDECODE("fastdecode"),//allows faster decoding by disabling certain filters
-    ZEROLATENCY("zerolatency"),//good for fast encoding and low-latency streaming
-    PSNR("psnr"),//ignore this as it is only used for codec development
-    SSIM("ssim");//ignore this as it is only used for codec development
+    /**
+     * use for high quality movie content; lowers deblocking
+     */
+    FILM("film"),
+    /**
+     * good for cartoons; uses higher deblocking and more reference frames
+     */
+    ANIMATION("animation"),
+    /**
+     * preserves the grain structure in old, grainy film material
+     */
+    GRAIN("grain"),
+    /**
+     * good for slideshow-like content
+     */
+    STILLIMAGE("stillimage"),
+    /**
+     * allows faster decoding by disabling certain filters
+     */
+    FASTDECODE("fastdecode"),
+    /**
+     * good for fast encoding and low-latency streaming
+     */
+    ZEROLATENCY("zerolatency"),
+    /**
+     * ignore this as it is only used for codec development
+     */
+    PSNR("psnr"),
+    /**
+     * ignore this as it is only used for codec development
+     */
+    SSIM("ssim");
 
     private final String tuneName;
 
