@@ -48,8 +48,8 @@ Many other formats, containers and operations are supported by JAVE2.
 see the JAVE manual for details.
 
 | Operating System | Windows x32,x64 | MacOS intel x64 | MacOS m1 | Linux x32,x64 | Linux arm32,arm64 |
-| ------------- | ------------- |  ------------- |  ------------- |  ------------- |  ------------- |
-| Supported? | Parial,YES | YES |  YES | YES  | Partial,YES |
+| ---------------- | --------------- |  -------------- | -------- | ------------- | ----------------- |
+| Supported?       | Partial,YES     | YES             |  YES     | YES           | Partial,YES       |
 
 Please note that the arm+win 32 bit versions are still on 4.4.0 and will be removed in a future release
 The win32 binaries will be removed in the next release
