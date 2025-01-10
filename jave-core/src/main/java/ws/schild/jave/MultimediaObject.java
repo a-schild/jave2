@@ -270,9 +270,16 @@ public class MultimediaObject {
               }
               break;
             }
+
           case 2:
             {
               Matcher m = p3.matcher(line);
+              //视频方向***************
+              if (line.contains("rotate")) {
+                String[] r = line.split(":");
+                // Stay on level 2
+                info.setRotate(Integer.parseInt(r[1].trim()));
+              }
               if (m.matches()) {
                 String type = m.group(1);
                 String specs = m.group(2);

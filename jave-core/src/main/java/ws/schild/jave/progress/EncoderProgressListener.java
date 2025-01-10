@@ -43,6 +43,8 @@ public interface EncoderProgressListener {
    */
   public void progress(int permil);
 
+  public void done();
+
   /**
    * This method is called every time the encoder need to send a message (usually, a warning).
    *

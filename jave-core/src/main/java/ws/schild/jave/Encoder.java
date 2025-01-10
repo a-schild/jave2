@@ -635,7 +635,13 @@ public class Encoder {
         if (!SUCCESS_PATTERN.matcher(lastWarning).matches()) {
           throw new EncoderException("No match for: " + SUCCESS_PATTERN + " in " + lastWarning);
         }
+      }else {
+        if (listener != null) {
+          listener.done();
+        }
+
       }
+
       /*
        * TODO: This is not thread safe. This needs to be a resulting value from the call to the 
        * Encoder. We can create a separate EncoderResult, but not a stateful variable.
