@@ -27,141 +27,162 @@ import java.util.Map;
  * @author Carlo Pelliccia
  */
 public class MultimediaInfo {
+    /**
+     * 视频方向
+     */
+    private int rotate;
 
-  /** The multimedia file format name. */
-  private String format = null;
+    /**
+     * The multimedia file format name.
+     */
+    private String format = null;
 
-  /** The multimedia metadata. */
-  private Map<String, String> metadata = new HashMap<>();
- 
-  /** The stream duration in millis. If less than 0 this information is not available. */
-  private long duration = -1;
+    /**
+     * The multimedia metadata.
+     */
+    private Map<String, String> metadata = new HashMap<>();
 
-  /**
-   * A set of audio-specific informations. If null, there's no audio stream in the multimedia file.
-   */
-  private AudioInfo audio = null;
+    /**
+     * The stream duration in millis. If less than 0 this information is not available.
+     */
+    private long duration = -1;
 
-  /**
-   * A set of video-specific informations. If null, there's no video stream in the multimedia file.
-   */
-  private VideoInfo video = null;
+    /**
+     * A set of audio-specific informations. If null, there's no audio stream in the multimedia file.
+     */
+    private AudioInfo audio = null;
 
-  /**
-   * Returns the multimedia file format name.
-   *
-   * @return The multimedia file format name.
-   */
-  public String getFormat() {
-    return format;
-  }
+    /**
+     * A set of video-specific informations. If null, there's no video stream in the multimedia file.
+     */
+    private VideoInfo video = null;
 
-  /**
-   * Sets the multimedia file format name.
-   *
-   * @param format The multimedia file format name.
-   * @return this instance
-   */
-  public MultimediaInfo setFormat(String format) {
-    this.format = format;
-    return this;
-  }
+    /**
+     * Returns the multimedia file format name.
+     *
+     * @return The multimedia file format name.
+     */
+    public String getFormat() {
+        return format;
+    }
 
-  /**
-   * Returns the multimedia metadata.
-   *
-   * @return The multimedia metadata.
-   */
-  public Map<String, String> getMetadata() {
-    return metadata;
-  }
+    /**
+     * Sets the multimedia file format name.
+     *
+     * @param format The multimedia file format name.
+     * @return this instance
+     */
+    public MultimediaInfo setFormat(String format) {
+        this.format = format;
+        return this;
+    }
 
-  /**
-   * Sets the multimedia metadata.
-   *
-   * @param metadata The multimedia metadata.
-   * @return this instance
-   */
-  public MultimediaInfo setMetadata(Map<String, String> metadata) {
-    this.metadata = metadata;
-    return this;
-  }
+    /**
+     * Returns the multimedia metadata.
+     *
+     * @return The multimedia metadata.
+     */
+    public Map<String, String> getMetadata() {
+        return metadata;
+    }
 
-  /**
-   * Returns the stream duration in millis. If less than 0 this information is not available.
-   *
-   * @return The stream duration in millis. If less than 0 this information is not available.
-   */
-  public long getDuration() {
-    return duration;
-  }
+    /**
+     * Sets the multimedia metadata.
+     *
+     * @param metadata The multimedia metadata.
+     * @return this instance
+     */
+    public MultimediaInfo setMetadata(Map<String, String> metadata) {
+        this.metadata = metadata;
+        return this;
+    }
 
-  /**
-   * Sets the stream duration in millis.
-   *
-   * @param duration The stream duration in millis.
-   * @return this instance
-   */
-  public MultimediaInfo setDuration(long duration) {
-    this.duration = duration;
-    return this;
-  }
+    /**
+     * Returns the stream duration in millis. If less than 0 this information is not available.
+     *
+     * @return The stream duration in millis. If less than 0 this information is not available.
+     */
+    public long getDuration() {
+        return duration;
+    }
 
-  /**
-   * Returns a set of audio-specific informations. If null, there's no audio stream in the
-   * multimedia file.
-   *
-   * @return A set of audio-specific informations.
-   */
-  public AudioInfo getAudio() {
-    return audio;
-  }
+    /**
+     * Sets the stream duration in millis.
+     *
+     * @param duration The stream duration in millis.
+     * @return this instance
+     */
+    public MultimediaInfo setDuration(long duration) {
+        this.duration = duration;
+        return this;
+    }
 
-  /**
-   * Sets a set of audio-specific informations.
-   *
-   * @param audio A set of audio-specific informations.
-   * @return this instance
-   */
-  public MultimediaInfo setAudio(AudioInfo audio) {
-    this.audio = audio;
-    return this;
-  }
+    /**
+     * Returns a set of audio-specific informations. If null, there's no audio stream in the
+     * multimedia file.
+     *
+     * @return A set of audio-specific informations.
+     */
+    public AudioInfo getAudio() {
+        return audio;
+    }
 
-  /**
-   * Returns a set of video-specific informations. If null, there's no video stream in the
-   * multimedia file.
-   *
-   * @return A set of audio-specific informations.
-   */
-  public VideoInfo getVideo() {
-    return video;
-  }
+    /**
+     * Sets a set of audio-specific informations.
+     *
+     * @param audio A set of audio-specific informations.
+     * @return this instance
+     */
+    public MultimediaInfo setAudio(AudioInfo audio) {
+        this.audio = audio;
+        return this;
+    }
 
-  /**
-   * Sets a set of video-specific informations.
-   *
-   * @param video A set of video-specific informations.
-   * @return this instance
-   */
-  public MultimediaInfo setVideo(VideoInfo video) {
-    this.video = video;
-    return this;
-  }
+    /**
+     * Returns a set of video-specific informations. If null, there's no video stream in the
+     * multimedia file.
+     *
+     * @return A set of audio-specific informations.
+     */
+    public VideoInfo getVideo() {
+        return video;
+    }
 
-  @Override
-  public String toString() {
-    return getClass().getName()
-        + " (format="
-        + format
-        + " (metadata="
-        + metadata
-        + ", duration="
-        + duration
-        + ", video="
-        + video
-        + ", audio="
-        + audio
-        + ")";
-  }
+    /**
+     * Sets a set of video-specific informations.
+     *
+     * @param video A set of video-specific informations.
+     * @return this instance
+     */
+    public MultimediaInfo setVideo(VideoInfo video) {
+        this.video = video;
+        return this;
+    }
+
+    public int getRotate() {
+        return rotate;
+    }
+
+    public void setRotate(int rotate) {
+        this.rotate = rotate;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getName()
+                + "rotate="
+                + rotate
+                + " (format="
+                + format
+                + " (metadata="
+                + metadata
+                + ", duration="
+                + duration
+                + ", video="
+                + video
+                + ", audio="
+                + audio
+
+                + ")";
+    }
 }
