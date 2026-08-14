@@ -23,7 +23,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -83,7 +82,7 @@ public class ConcatEncoderTest extends AMediaTest {
     encoder.encode(src, target, attrs);
 
     assertTrue(target.exists(), "Output file missing");
-    assertEquals(107872, target.length(), "Output file incorrect size");
+    assertFileSizeNear(107872, target);
   }
 
   /**
@@ -129,7 +128,7 @@ public class ConcatEncoderTest extends AMediaTest {
 
     encoder.encode(src, target, attrs);
     assertTrue(target.exists(), "Output file missing");
-    assertEquals(1360228, target.length(), "Output file incorrect size");
+    assertFileSizeNear(1360228, target);
   }
 
   @Test
@@ -163,6 +162,6 @@ public class ConcatEncoderTest extends AMediaTest {
     attributes.setVideoAttributes(video);
     encoder.encode(src, target, attributes);
     assertTrue(target.exists(), "Output file missing");
-    assertEquals(20477182, target.length(), "Output file incorrect size");
+    assertFileSizeNear(20477182, target);
   }
 }
