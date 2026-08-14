@@ -1,33 +1,33 @@
 # JAVE2
-jave-core ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-core?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
-![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-core?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+jave-core [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-core?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-core)
+![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-core%2Fmaven-metadata.xml)
 
-jave-all-deps ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-all-deps?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
-![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-all-deps?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+jave-all-deps [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-all-deps?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-all-deps)
+![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-all-deps%2Fmaven-metadata.xml)
 
-jave-nativebin-linux-arm32 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-linux-arm32?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
-![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-linux-arm32?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+jave-nativebin-linux-arm32 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-linux-arm32?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-linux-arm32)
+![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-linux-arm32%2Fmaven-metadata.xml)
 
-jave-nativebin-linux-arm64 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-linux-arm64?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
-![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-linux-arm64?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+jave-nativebin-linux-arm64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-linux-arm64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-linux-arm64)
+![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-linux-arm64%2Fmaven-metadata.xml)
 
-jave-nativebin-linux32 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-linux32?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
-![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-linux32?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+jave-nativebin-linux32 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-linux32?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-linux32)
+![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-linux32%2Fmaven-metadata.xml)
 
-jave-nativebin-linux64 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-linux64?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
-![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-linux64?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+jave-nativebin-linux64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-linux64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-linux64)
+![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-linux64%2Fmaven-metadata.xml)
 
-jave-nativebin-win32 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-win32?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
-![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-win32?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+jave-nativebin-win32 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-win32?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-win32)
+![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-win32%2Fmaven-metadata.xml)
 
-jave-nativebin-win64 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-win64?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
-![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-win64?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+jave-nativebin-win64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-win64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-win64)
+![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-win64%2Fmaven-metadata.xml)
 
-jave-nativebin-osx64 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-osx64?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
-![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-osx64?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+jave-nativebin-osx64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-osx64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-osx64)
+![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-osx64%2Fmaven-metadata.xml)
 
-jave-nativebin-osxm1 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/ws.schild/jave-nativebin-osxm1?label=release&nexusVersion=2&server=https%3A%2F%2Foss.sonatype.org%2F)
-![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/ws.schild/jave-nativebin-osxm1?label=snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)
+jave-nativebin-osxm1 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-osxm1?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-osxm1)
+![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-osxm1%2Fmaven-metadata.xml)
 
 
 The JAVE2 (Java Audio Video Encoder) library is Java wrapper on the ffmpeg
@@ -204,6 +204,48 @@ Can be found [**here**](https://github.com/a-schild/jave2/blob/master/Examples.m
 ## Changelog
 
 Can be found [**here**](https://github.com/a-schild/jave2/blob/master/Changelog.md)
+
+## Using snapshot builds
+
+Snapshots of the `develop` branch are published to the Sonatype Central Portal
+snapshot repository. To consume them, add the repository to your build:
+
+```xml
+<repositories>
+    <repository>
+        <id>central-snapshots</id>
+        <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+        <releases><enabled>false</enabled></releases>
+        <snapshots><enabled>true</enabled></snapshots>
+    </repository>
+</repositories>
+```
+
+## Publishing (maintainers)
+
+Artifacts are published to Maven Central through the
+[Sonatype Central Portal](https://central.sonatype.com/) using the
+`central-publishing-maven-plugin`. The old OSSRH service (`oss.sonatype.org`)
+that this project used previously has been retired by Sonatype.
+
+Publishing runs from the `Publish to Maven Central` GitHub Actions workflow:
+
+* a push to `develop` publishes a snapshot, but only while the poms carry a
+  `-SNAPSHOT` version
+* creating a GitHub release publishes the release, which is auto-released by
+  the plugin (`autoPublish=true`)
+
+The workflow needs these repository secrets:
+
+| Secret | Meaning |
+| --- | --- |
+| `MAVEN_CENTRAL_USERNAME` | Central Portal user token name (Account &rarr; Generate User Token) |
+| `MAVEN_CENTRAL_PASSWORD` | Central Portal user token value |
+| `MAVEN_GPG_PRIVATE_KEY` | ASCII armored private key, `gpg --armor --export-secret-keys <KEYID>` |
+| `MAVEN_GPG_PASSPHRASE` | Passphrase of that key |
+
+To publish by hand, put the same token in a `central` server entry in your
+`~/.m2/settings.xml` and run `mvn deploy`.
 
 ## License
 

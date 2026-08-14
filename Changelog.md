@@ -1,6 +1,15 @@
 # JAVE2
 
 ## Changelog
+- **Unreleased**
+   - Migrated publishing from the retired OSSRH service (oss.sonatype.org) to the
+     Sonatype Central Portal. The nexus-staging-maven-plugin has been replaced by
+     the central-publishing-maven-plugin in all published modules
+   - Added a "Publish to Maven Central" GitHub Actions workflow, snapshots are
+     published from the develop branch, releases from GitHub releases
+   - Fixed the version badges in README.md, the old OSSRH service they queried has
+     been retired. Release badges now read from Maven Central, snapshot badges from
+     the Central Portal snapshot repository
 - **3.5.0**
    - Added support for Tune video attribute, thanks to rayacode
 - **3.4.0**

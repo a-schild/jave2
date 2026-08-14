@@ -1,0 +1,67 @@
+# Publishes to Maven Central via the Sonatype Central Portal.
+#
+# Snapshots go to https://central.sonatype.com/repository/maven-snapshots/ and are
+# published on every push to develop, as long as the poms carry a -SNAPSHOT version.
+# Releases are published when a GitHub release is created, and are auto-released
+# by the central-publishing-maven-plugin (autoPublish=true).
+#
+# Required repository secrets:
+#   MAVEN_CENTRAL_USERNAME  - Central Portal user token name  (Account -> Generate User Token)
+#   MAVEN_CENTRAL_PASSWORD  - Central Portal user token value
+#   MAVEN_GPG_PRIVATE_KEY   - ASCII armored private key (gpg --armor --export-secret-keys <KEYID>)
+#   MAVEN_GPG_PASSPHRASE    - passphrase of that key
+
+name: Publish to Maven Central
+
+on:
+  push:
+    branches: [ "develop" ]
+  release:
+    types: [ created ]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+          server-id: central
+          server-username: MAVEN_CENTRAL_USERNAME
+          server-password: MAVEN_CENTRAL_PASSWORD
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+      - name: Determine project version
+        id: version
+        run: |
+          VERSION=$(mvn -B -q -N help:evaluate -Dexpression=project.version -DforceStdout)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if [[ "$VERSION" == *-SNAPSHOT ]]; then
+            echo "snapshot=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "snapshot=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Project version: $VERSION"
+
+      # A push to develop only publishes when the poms are on a -SNAPSHOT version.
+      # Release builds are driven by the release event instead.
+      - name: Skip - develop is not on a snapshot version
+        if: github.event_name == 'push' && steps.version.outputs.snapshot == 'false'
+        run: |
+          echo "::notice::Version ${{ steps.version.outputs.version }} is not a snapshot, nothing to publish."
+
+      - name: Publish
+        if: github.event_name != 'push' || steps.version.outputs.snapshot == 'true'
+        run: mvn -B deploy
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
