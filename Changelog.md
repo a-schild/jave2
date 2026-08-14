@@ -2,6 +2,17 @@
 
 ## Changelog
 - **3.6.0-SNAPSHOT**
+   - Fixed the extracted ffmpeg binary being run before it was ready. The chmod was
+     started but never waited for, and the copy went straight to the target path, so
+     a second process could pick up a half written or not yet executable file and
+     fail with "Permission denied" or "Cannot run program" (#281, #236)
+   - Fixed `Encoder`'s shared option list throwing a ConcurrentModificationException
+     when it was changed while another thread was encoding, and `VideoProcessor`
+     reporting itself enabled because some earlier instance had been (#179)
+   - Added `MultimediaObject.getInfo(long timeoutMillis)`, so an unreachable or
+     stalled source can no longer block the call forever (#264)
+   - Corrected `attrs.setFormat(...)` to `setOutputFormat(...)` in README.md and
+     Examples.md, the old name does not exist on EncodingAttributes (#189)
    - Added `MultimediaInfo.getRotate()`, the rotation cameras record in the stream
      metadata when filming in a non native orientation, thanks to JinLike
    - Added `EncoderProgressListener.done()`, called once an encoding has finished.

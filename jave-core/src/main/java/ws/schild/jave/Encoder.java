@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -354,8 +355,18 @@ public class Encoder {
     encode(src, target, attributes, listener);
   }
 
-  private static List<EncodingArgument> globalOptions =
-      new ArrayList<>(Arrays.asList(
+  /**
+   * The arguments every encoding run is built from.
+   *
+   * <p>This is shared by every Encoder in the jvm and can be reshaped at runtime through the
+   * addOptionAtIndex, removeOptionAtIndex and setOptionAtIndex methods below, while other threads
+   * are in the middle of an encoding and iterating over it. A plain ArrayList threw a
+   * ConcurrentModificationException at whichever thread happened to be encoding at the time, so
+   * this is a copy on write list. Iteration works on a snapshot and never sees a concurrent
+   * change, which suits a list that is read on every encoding and written to almost never.
+   */
+  private static final List<EncodingArgument> globalOptions =
+      new CopyOnWriteArrayList<>(Arrays.asList(
           new ValueArgument(ArgType.GLOBAL, "--filter_thread",
               ea -> ea.getFilterThreads().map(Object::toString)),
           new ValueArgument(ArgType.GLOBAL, "-ss", ea -> ea.getOffset().map(Object::toString)),

@@ -184,7 +184,7 @@ try {
                                                              
  //Encoding attributes                                       
  EncodingAttributes attrs = new EncodingAttributes();        
- attrs.setFormat("mp3");                                     
+ attrs.setOutputFormat("mp3");                               
  attrs.setAudioAttributes(audio);                            
                                                              
  //Encode                                                    

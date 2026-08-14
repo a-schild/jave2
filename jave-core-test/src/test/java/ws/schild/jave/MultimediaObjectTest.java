@@ -21,6 +21,8 @@ package ws.schild.jave;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.net.URL;
@@ -36,6 +38,41 @@ public class MultimediaObjectTest extends AMediaTest {
 
   public MultimediaObjectTest() {
     super(null, "MultimediaObject");
+  }
+
+  /**
+   * A generous timeout must not get in the way of a local file, which is read in milliseconds.
+   *
+   * @throws java.lang.Exception
+   */
+  @Test
+  public void testGetInfoWithTimeoutSucceeds() throws Exception {
+    System.out.println("testGetInfoWithTimeoutSucceeds");
+    File file = new File(getResourceSourcePath(), "dance1.avi");
+    MultimediaObject instance = new MultimediaObject(file);
+
+    MultimediaInfo result = instance.getInfo(30000L);
+
+    assertNotNull(result, "No info returned within the timeout");
+    assertEquals("avi", result.getFormat(), "Invalid video format");
+  }
+
+  /**
+   * A timeout too short for ffmpeg to finish has to end the call, rather than let it run on, and
+   * has to say so rather than report the source as unreadable.
+   */
+  @Test
+  public void testGetInfoTimesOut() {
+    System.out.println("testGetInfoTimesOut");
+    File file = new File(getResourceSourcePath(), "dance1.avi");
+    MultimediaObject instance = new MultimediaObject(file);
+
+    EncoderException thrown =
+        assertThrows(EncoderException.class, () -> instance.getInfo(1L), "Expected to time out");
+
+    assertTrue(
+        thrown.getMessage().contains("Gave up reading the media information"),
+        "Expected a timeout message, got: " + thrown.getMessage());
   }
 
   /** Test of getFile method, of class MultimediaObject. */
