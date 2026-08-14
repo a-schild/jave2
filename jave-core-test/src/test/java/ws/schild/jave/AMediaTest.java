@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 /** @author a.schild */
@@ -67,32 +66,30 @@ public abstract class AMediaTest {
   }
 
   /**
-   * Skips the calling test when {@link #REMOTE_SAMPLE} cannot be reached. These tests need the
-   * sample from samples.ffmpeg.org, which is not reachable from every network, github hosted
-   * runners among them. A test that cannot reach it proves nothing about this library, so it is
-   * reported as skipped rather than failed.
+   * Skips the calling test unless the bundled ffmpeg can actually read {@link #REMOTE_SAMPLE}.
+   *
+   * <p>Plain http reachability is not the condition that matters and is not enough to tell. On
+   * github hosted runners the host answers a HEAD request perfectly well, yet the bundled static
+   * ffmpeg still fails on the same url, returning nothing parsable or dying on a segmentation
+   * fault, exit code 139. So the probe is the operation itself, done once per jvm.
+   *
+   * <p>A test that cannot get the input in front of the encoder says nothing about this library,
+   * so it is reported as skipped rather than failed.
    */
   protected static void assumeRemoteSampleReachable() {
     if (remoteSampleReachable == null) {
       remoteSampleReachable = probeRemoteSample();
     }
-    assumeTrue(remoteSampleReachable, "Sample not reachable: " + REMOTE_SAMPLE);
+    assumeTrue(
+        remoteSampleReachable,
+        "The bundled ffmpeg cannot read " + REMOTE_SAMPLE + " in this environment");
   }
 
   private static boolean probeRemoteSample() {
-    HttpURLConnection connection = null;
     try {
-      connection = (HttpURLConnection) new URL(REMOTE_SAMPLE).openConnection();
-      connection.setRequestMethod("HEAD");
-      connection.setConnectTimeout(10000);
-      connection.setReadTimeout(10000);
-      return connection.getResponseCode() < 400;
+      return new MultimediaObject(new URL(REMOTE_SAMPLE)).getInfo() != null;
     } catch (Exception e) {
       return false;
-    } finally {
-      if (connection != null) {
-        connection.disconnect();
-      }
     }
   }
 
