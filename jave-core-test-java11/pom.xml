@@ -13,6 +13,7 @@
         <maven.deploy.skip>true</maven.deploy.skip>
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
         <junit-jupiter-api.version>5.10.1</junit-jupiter-api.version>
         <slf4j-simple.version>1.7.26</slf4j-simple.version>
     </properties>
@@ -25,6 +26,16 @@
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
+            </plugin>
+            <!--
+              Without an explicit version maven falls back to surefire 2.12.4, which predates
+              the junit platform. It then runs the tests with its pojo provider, which picks
+              methods up by their test prefix and ignores every junit 5 annotation.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -71,6 +82,14 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit-jupiter-api.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- The engine that actually runs the junit 5 tests, without it surefire falls
+             back to a provider that ignores the junit 5 annotations -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit-jupiter-api.version}</version>
             <scope>test</scope>
         </dependency>
