@@ -606,7 +606,18 @@ public class Encoder {
        */
       if (multimediaObjects.size() == 1
           && !multimediaObjects.get(0).isReadURLOnce()) {
-        info = multimediaObjects.get(0).getInfo();
+        /*
+         * ffmpeg 4.4.x reports some containers in a way we fail to parse. That only costs us the
+         * source information used to report progress as a percentage, so warn and carry on rather
+         * than aborting an encoding that would otherwise succeed. Everything reading info below
+         * already copes with it being null.
+         */
+        try {
+          info = multimediaObjects.get(0).getInfo();
+        } catch (InputFormatException ife) {
+          LOG.warn("Unable to read the source media information, progress will be reported without"
+              + " a total duration", ife);
+        }
       }
 
       Float offsetAttribute = attributes.getOffset().orElse(null);
