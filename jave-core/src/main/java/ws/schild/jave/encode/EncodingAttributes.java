@@ -83,6 +83,14 @@ public class EncodingAttributes implements Serializable {
   private boolean loop = false;
 
   /**
+   * How many extra times the input stream should be repeated, -1 to repeat it endlessly. Null
+   * leaves the input playing once.
+   *
+   * @see <a href="https://www.ffmpeg.org/ffmpeg.html#Main-options">FFMPEG Documentation</a>
+   */
+  private Integer streamLoop = null;
+
+  /**
    * Are the file paths considered "safe"
    *
    * @see <a href="https://www.ffmpeg.org/ffmpeg-formats.html#Options">FFMPEG Documentation</a>
@@ -222,6 +230,31 @@ public class EncodingAttributes implements Serializable {
   }
 
   /**
+   * Returns how many extra times the input stream will be repeated.
+   *
+   * @return The number of extra repetitions, empty when the input plays once.
+   * @see <a href="https://www.ffmpeg.org/ffmpeg.html#Main-options">FFMPEG Documentation</a>
+   */
+  public Optional<Integer> getStreamLoop() {
+    return Optional.ofNullable(streamLoop);
+  }
+
+  /**
+   * Sets how many extra times the input stream should be repeated. Unlike {@link
+   * #setLoop(boolean)}, which only applies to image inputs and needs a duration, this repeats any
+   * input stream.
+   *
+   * @param streamLoop The number of extra repetitions, -1 to repeat endlessly, null to play the
+   *     input once.
+   * @return this instance
+   * @see <a href="https://www.ffmpeg.org/ffmpeg.html#Main-options">FFMPEG Documentation</a>
+   */
+  public EncodingAttributes setStreamLoop(Integer streamLoop) {
+    this.streamLoop = streamLoop;
+    return this;
+  }
+
+  /**
    * Returns whether or not the encoder will consider file paths "safe".
    *
    * @return Whether or not the encoder will consider file paths "safe".
@@ -304,6 +337,8 @@ public class EncodingAttributes implements Serializable {
         + duration
         + ",loop="
         + loop
+        + ", streamLoop="
+        + streamLoop
         + ", audioAttributes="
         + audioAttributes
         + ", videoAttributes="

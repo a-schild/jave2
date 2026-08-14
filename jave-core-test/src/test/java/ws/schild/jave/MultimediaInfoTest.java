@@ -18,19 +18,15 @@
  */
 package ws.schild.jave;
 
-import java.io.File;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import ws.schild.jave.encode.AudioAttributes;
-import ws.schild.jave.encode.EncodingAttributes;
-import ws.schild.jave.encode.VideoAttributes;
+import java.io.File;
+
+import org.junit.jupiter.api.Test;
 import ws.schild.jave.info.AudioInfo;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.info.VideoInfo;
-import ws.schild.jave.info.VideoSize;
 
 /** @author a.schild */
 public class MultimediaInfoTest extends AMediaTest {
@@ -53,7 +49,7 @@ public class MultimediaInfoTest extends AMediaTest {
     MultimediaInfo mi= mo.getInfo();
     AudioInfo ai= mi.getAudio();
     VideoInfo vi= mi.getVideo();
-    assertTrue(ai == null, "AudioInfo should be missing");
-    assertTrue(vi != null, "VideoInfo is missing");
+    assertNull(ai, "AudioInfo should be missing");
+    assertNotNull(vi, "VideoInfo is missing");
   }
 }

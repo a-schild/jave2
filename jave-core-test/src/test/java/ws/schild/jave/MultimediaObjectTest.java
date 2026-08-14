@@ -18,13 +18,15 @@
  */
 package ws.schild.jave;
 
-import java.io.File;
-import java.net.URL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.net.URL;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import ws.schild.jave.info.AudioInfo;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.info.VideoInfo;
@@ -42,9 +44,8 @@ public class MultimediaObjectTest extends AMediaTest {
     System.out.println("getFile");
     File file = new File(getResourceSourcePath(), "dance1.avi");
     MultimediaObject instance = new MultimediaObject(file);
-    File expResult = file;
     File result = instance.getFile();
-    assertEquals(expResult, result);
+    assertEquals(file, result);
   }
 
   /**
@@ -96,16 +97,13 @@ public class MultimediaObjectTest extends AMediaTest {
    * @throws java.lang.Exception
    */
   @Test
+  @Disabled("Info retrieval fails with message: Invalid data found when processing input")
   public void testGetInfo03() throws Exception {
     System.out.println("testGetInfo03");
     File file = new File(getResourceSourcePath(), "2019V7HR.amr");
     MultimediaObject instance = new MultimediaObject(file);
-    try {
-      instance.getInfo();
-      assertEquals(1, 1, "Invalid data in header not thrown");
-    } catch (Exception ex) {
-      assertEquals(1, 1);
-    }
+
+    instance.getInfo();
   }
 
   /**
@@ -119,27 +117,10 @@ public class MultimediaObjectTest extends AMediaTest {
     URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
     MultimediaObject instance = new MultimediaObject(source);
     MultimediaInfo result = instance.getInfo();
-    assertEquals(result.getFormat(), "mpeg", "Invalid video format");
-    assertEquals(result.getDuration(), 29800, "Invalid duration");
+    assertEquals("mpeg", result.getFormat(), "Invalid video format");
+    assertEquals(29800, result.getDuration(), "Invalid duration");
   }
 
-  /**
-   * Test of getInfo method, of class MultimediaObject.
-   *
-   * @throws java.lang.Exception
-   */
-  //    @Test
-  //    public void testGetInfo05() throws Exception {
-  //        System.out.println("testGetInfo05");
-  //        File file = new File(getResourceSourcePath(), "PCRecorded.mp4");
-  //        MultimediaObject instance = new MultimediaObject(file);
-  //        MultimediaInfo result = instance.getInfo();
-  //        assertEquals("matroska", result.getFormat(),  "Invalid video format");
-  //        assertEquals("vp8", result.getVideo().getDecoder(), "Invalid video decoder format");
-  //        assertEquals("opus", result.getAudio().getDecoder(), "Invalid audio decoder format");
-  //
-  //    }
-  //
   /**
    * Test of getInfo method, of class MultimediaObject.
    *
@@ -172,65 +153,64 @@ public class MultimediaObjectTest extends AMediaTest {
     assertEquals(544, result.getVideo().getSize().getWidth(), "Video width not as expected");
   }
 
-	/**
-	 * Test of getInfo method, of class MultimediaObject.
-	 *
-	 * @throws java.lang.Exception
-	 */
-	@Test
-	public void testGetInfo08() throws Exception {
-		System.out.println("testGetInfo08");
-		File file = new File(getResourceSourcePath(), "small.mp4");
-		MultimediaObject instance = new MultimediaObject(file);
-		MultimediaInfo result = instance.getInfo();
+  /**
+   * Test of getInfo method, of class MultimediaObject.
+   *
+   * @throws java.lang.Exception
+   */
+  @Test
+  public void testGetInfo08() throws Exception {
+    System.out.println("testGetInfo08");
+    File file = new File(getResourceSourcePath(), "small.mp4");
+    MultimediaObject instance = new MultimediaObject(file);
+    MultimediaInfo result = instance.getInfo();
 
-		assertEquals("mov", result.getFormat());
-		assertEquals(5570, result.getDuration());
-		assertNotNull(result.getMetadata());
-		assertEquals(4, result.getMetadata().size());
-		assertEquals("2010-03-20T21:29:11.000000Z", result.getMetadata().get("creation_time"));
-		assertEquals("mp42", result.getMetadata().get("major_brand"));
-		assertEquals("0", result.getMetadata().get("minor_version"));
-		assertEquals("mp42isomavc1", result.getMetadata().get("compatible_brands"));
-		assertNotNull(result.getVideo());
-		assertEquals("h264 (Constrained Baseline) (avc1 / 0x31637661)", result.getVideo().getDecoder());
-		assertEquals(560, result.getVideo().getSize().getWidth());
-		assertEquals(320, result.getVideo().getSize().getHeight());
-		assertEquals(465000, result.getVideo().getBitRate());
-		assertEquals(30f, result.getVideo().getFrameRate());
-		assertNotNull(result.getAudio());
-		assertEquals("aac (LC) (mp4a / 0x6134706D)", result.getAudio().getDecoder());
-		assertEquals(48000, result.getAudio().getSamplingRate());
-		assertEquals(1, result.getAudio().getChannels());
-		assertEquals(83000, result.getAudio().getBitRate());
-	}
+    assertEquals("mov", result.getFormat());
+    assertEquals(5570, result.getDuration());
+    assertNotNull(result.getMetadata());
+    assertEquals(4, result.getMetadata().size());
+    assertEquals("2010-03-20T21:29:11.000000Z", result.getMetadata().get("creation_time"));
+    assertEquals("mp42", result.getMetadata().get("major_brand"));
+    assertEquals("0", result.getMetadata().get("minor_version"));
+    assertEquals("mp42isomavc1", result.getMetadata().get("compatible_brands"));
+    assertNotNull(result.getVideo());
+    assertEquals("h264 (Constrained Baseline) (avc1 / 0x31637661)", result.getVideo().getDecoder());
+    assertEquals(560, result.getVideo().getSize().getWidth());
+    assertEquals(320, result.getVideo().getSize().getHeight());
+    assertEquals(465000, result.getVideo().getBitRate());
+    assertEquals(30f, result.getVideo().getFrameRate());
+    assertNotNull(result.getAudio());
+    assertEquals("aac (LC) (mp4a / 0x6134706D)", result.getAudio().getDecoder());
+    assertEquals(48000, result.getAudio().getSamplingRate());
+    assertEquals(1, result.getAudio().getChannels());
+    assertEquals(83000, result.getAudio().getBitRate());
+  }
 
-    /**
-     * Test of getInfo method, of class MultimediaObject.
-     * Test reading video and audio metadata
-     *
-     * @throws java.lang.Exception
-     */
-    @Test
-    public void testGetInfo09() throws Exception {
-        System.out.println("testGetInfo09");
-        File file = new File("src/test/resources/small.mp4");
-        MultimediaObject instance = new MultimediaObject(file);
-        MultimediaInfo result = instance.getInfo();
+  /**
+   * Test of getInfo method, of class MultimediaObject.
+   * Test reading video and audio metadata
+   *
+   * @throws java.lang.Exception
+   */
+  @Test
+  public void testGetInfo09() throws Exception {
+    System.out.println("testGetInfo09");
+    File file = new File("src/test/resources/small.mp4");
+    MultimediaObject instance = new MultimediaObject(file);
+    MultimediaInfo result = instance.getInfo();
 
-        assertNotNull(result.getVideo());
+    assertNotNull(result.getVideo());
 
-        VideoInfo videoInfo = result.getVideo();
+    VideoInfo videoInfo = result.getVideo();
 
-        assertNotNull(videoInfo.getMetadata());
-        assertNotNull(videoInfo.getMetadata().get("creation_time"));
+    assertNotNull(videoInfo.getMetadata());
+    assertNotNull(videoInfo.getMetadata().get("creation_time"));
 
-        assertNotNull(result.getAudio());
+    assertNotNull(result.getAudio());
 
-        AudioInfo audioInfo = result.getAudio();
+    AudioInfo audioInfo = result.getAudio();
 
-        assertNotNull(audioInfo.getMetadata());
-        assertNotNull(audioInfo.getMetadata().get("creation_time"));
-    }
-
+    assertNotNull(audioInfo.getMetadata());
+    assertNotNull(audioInfo.getMetadata().get("creation_time"));
+  }
 }

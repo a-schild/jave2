@@ -1,7 +1,24 @@
 # JAVE2
 
 ## Changelog
-- **Unreleased**
+- **3.6.0-SNAPSHOT**
+   - Added `MultimediaInfo.getRotate()`, the rotation cameras record in the stream
+     metadata when filming in a non native orientation, thanks to JinLike
+   - Added `EncoderProgressListener.done()`, called once an encoding has finished.
+     It is a default method, so existing listeners keep working unchanged,
+     thanks to JinLike
+   - Added `EncodingAttributes.setStreamLoop()` for ffmpeg `-stream_loop`,
+     thanks to supermoonie
+   - Added `ProcessWrapper.setExecFolder()` to choose the working directory of the
+     ffmpeg process, thanks to supermoonie
+   - Added `MultimediaInfo.getMultimediaObject()`, pointing back at the object the
+     information was read from, thanks to supermoonie
+   - An unparsable source media header no longer aborts the whole encoding, it is
+     only needed to report progress as a percentage, thanks to jhsea3do
+   - Reworked the unit tests, thanks to Stickerifier
+   - Fixed the test setup, which used a surefire version predating the junit
+     platform. JUnit 5 annotations had no effect, `@Disabled` was ignored and seven
+     tests were never run
    - Migrated publishing from the retired OSSRH service (oss.sonatype.org) to the
      Sonatype Central Portal. The nexus-staging-maven-plugin has been replaced by
      the central-publishing-maven-plugin in all published modules

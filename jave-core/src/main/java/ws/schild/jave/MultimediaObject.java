@@ -60,6 +60,13 @@ public class MultimediaObject {
   private static final Pattern BIT_DEPTH_PATTERN =
           Pattern.compile("(s16|s16p|s32|fltp|dblp|s64)", Pattern.CASE_INSENSITIVE);
 
+  /**
+   * This regexp is used to parse the ffmpeg output about the rotation of a video stream, as
+   * reported in the stream metadata by cameras that record in a non native orientation.
+   */
+  private static final Pattern ROTATE_PATTERN =
+      Pattern.compile("^\\s*rotate\\s*:\\s*(-?\\d+)\\s*$", Pattern.CASE_INSENSITIVE);
+
   /** The locator of the ffmpeg executable used by this extractor. */
   private final ProcessLocator locator;
 
@@ -165,11 +172,13 @@ public class MultimediaObject {
       try {
         RBufferedReader reader =
             new RBufferedReader(new InputStreamReader(ffmpeg.getErrorStream()));
+        MultimediaInfo info;
         if (isURL()) {
-          return parseMultimediaInfo(inputURL.toString(), reader);
+          info = parseMultimediaInfo(inputURL.toString(), reader);
         } else {
-          return parseMultimediaInfo(inputFile.getAbsolutePath(), reader);
+          info = parseMultimediaInfo(inputFile.getAbsolutePath(), reader);
         }
+        return info.setMultimediaObject(this);
       } finally {
         ffmpeg.destroy();
       }
@@ -272,6 +281,12 @@ public class MultimediaObject {
             }
           case 2:
             {
+              // The rotation is reported as a metadata entry of the video stream, so it turns up
+              // between the stream lines rather than inside them.
+              Matcher mRotate = ROTATE_PATTERN.matcher(line);
+              if (mRotate.matches()) {
+                info.setRotate(Integer.parseInt(mRotate.group(1)));
+              }
               Matcher m = p3.matcher(line);
               if (m.matches()) {
                 String type = m.group(1);

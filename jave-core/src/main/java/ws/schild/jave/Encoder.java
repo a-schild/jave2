@@ -361,8 +361,10 @@ public class Encoder {
           new ValueArgument(ArgType.GLOBAL, "-ss", ea -> ea.getOffset().map(Object::toString)),
           new ValueArgument(ArgType.INFILE, "-threads", 
         	  ea -> ea.getDecodingThreads().map(Object::toString)),
-          new PredicateArgument(ArgType.INFILE, "-loop", "1", 
+          new PredicateArgument(ArgType.INFILE, "-loop", "1",
         	  ea -> ea.getLoop() && ea.getDuration().isPresent()),
+          new ValueArgument(ArgType.INFILE, "-stream_loop",
+        	  ea -> ea.getStreamLoop().map(Object::toString)),
           new ValueArgument(ArgType.INFILE, "-f", ea -> ea.getInputFormat()),
           new ValueArgument(ArgType.INFILE, "-safe", ea -> ea.getSafe().map(Object::toString)),
           new ValueArgument(ArgType.OUTFILE, "-t", ea -> ea.getDuration().map(Object::toString)),
@@ -606,7 +608,18 @@ public class Encoder {
        */
       if (multimediaObjects.size() == 1
           && !multimediaObjects.get(0).isReadURLOnce()) {
-        info = multimediaObjects.get(0).getInfo();
+        /*
+         * ffmpeg 4.4.x reports some containers in a way we fail to parse. That only costs us the
+         * source information used to report progress as a percentage, so warn and carry on rather
+         * than aborting an encoding that would otherwise succeed. Everything reading info below
+         * already copes with it being null.
+         */
+        try {
+          info = multimediaObjects.get(0).getInfo();
+        } catch (InputFormatException ife) {
+          LOG.warn("Unable to read the source media information, progress will be reported without"
+              + " a total duration", ife);
+        }
       }
 
       Float offsetAttribute = attributes.getOffset().orElse(null);
@@ -645,6 +658,9 @@ public class Encoder {
       if (exitCode != 0) {
         LOG.error("Process exit code: {}  to {}", exitCode, target.getName());
         throw new EncoderException("Exit code of ffmpeg encoding run is " + exitCode);
+      }
+      if (listener != null) {
+        listener.done();
       }
     } catch (IOException e) {
       throw new EncoderException(e);

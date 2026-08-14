@@ -18,12 +18,15 @@
  */
 package ws.schild.jave;
 
-import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.nio.file.Files;
+
+import org.junit.jupiter.api.Test;
 import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;
 
@@ -45,15 +48,13 @@ public class FileAudioEncoderTest extends AMediaTest {
 
     File source = new File(getResourceSourcePath(), "4channels.ogg");
     File target = new File(getResourceTargetPath(), "4channels.flac");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
+
     AudioAttributes audioAttr = new AudioAttributes();
     EncodingAttributes encodingAttr = new EncodingAttributes();
 
     audioAttr.setCodec("flac");
     audioAttr.setBitRate(360000);
-    //        audioAttr.setChannels(4);
     audioAttr.setVolume(1000);
     audioAttr.setQuality(1000);
     audioAttr.setSamplingRate(48000);
@@ -75,9 +76,8 @@ public class FileAudioEncoderTest extends AMediaTest {
     System.out.println("testEncodeAudio1");
     File source = new File(getResourceSourcePath(), "Alesis-Fusion-Clean-Guitar-C3.wav");
     File target = new File(getResourceTargetPath(), "testEncodeAudio1.mp3");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
+
     AudioAttributes audio = new AudioAttributes();
     audio.setCodec("libmp3lame");
     audio.setBitRate(128000);
@@ -103,9 +103,8 @@ public class FileAudioEncoderTest extends AMediaTest {
     System.out.println("testEncodeAudio2");
     File source = new File(getResourceSourcePath(), "Alesis-Fusion-Clean-Guitar-C3.wav");
     File target = new File(getResourceTargetPath(), "testEncodeAudio2.mp3");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
+
     AudioAttributes audio = new AudioAttributes();
     audio.setCodec("libmp3lame");
     audio.setBitRate(128000);
@@ -116,15 +115,10 @@ public class FileAudioEncoderTest extends AMediaTest {
     attrs.setAudioAttributes(audio);
     Encoder encoder = new Encoder();
     PListener listener = new PListener();
+
     String errorMessage = "Exit code of ffmpeg encoding run is 1";
-    boolean exceptionThrown = false;
-    try {
-      encoder.encode(new MultimediaObject(source), target, attrs, listener);
-    } catch (EncoderException ex) {
-      assertEquals(ex.getMessage(), errorMessage, "Not expected error message");
-      exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown, "No exception occured");
+    EncoderException ex = assertThrows(EncoderException.class, () -> encoder.encode(new MultimediaObject(source), target, attrs, listener));
+    assertEquals(errorMessage, ex.getMessage(), "Unexpected error message");
   }
 
   /**
@@ -137,9 +131,8 @@ public class FileAudioEncoderTest extends AMediaTest {
     System.out.println("testEncodeAudio3");
     File source = new File(getResourceSourcePath(), "testfile3.wmv");
     File target = new File(getResourceTargetPath(), "testEncodeAudio3.mp3");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
+
     Encoder encoder = new Encoder();
     AudioAttributes audio = new AudioAttributes();
     audio.setCodec("libmp3lame");
@@ -163,9 +156,7 @@ public class FileAudioEncoderTest extends AMediaTest {
     System.out.println("testEncodeAudio4");
     File source = new File(getResourceSourcePath(), "buggy.ogg");
     File target = new File(getResourceTargetPath(), "testEncodeAudio4.mp3");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
 
     Encoder encoder = new Encoder();
     AudioAttributes audio = new AudioAttributes();
@@ -187,9 +178,7 @@ public class FileAudioEncoderTest extends AMediaTest {
     System.out.println("testEncodeAudio5");
     File source = new File(getResourceSourcePath(), "cj2009-10-05d01t07.ku100_at37.flac");
     File target = new File(getResourceTargetPath(), "testEncodeAudio5.mp3");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
 
     Encoder encoder = new Encoder();
     AudioAttributes audio = new AudioAttributes();
@@ -202,17 +191,13 @@ public class FileAudioEncoderTest extends AMediaTest {
     assertTrue(target.exists(), "Output file missing");
   }
 
-
   @Test
   public void testEncodeAudio6() throws Exception {
     System.out.println("testEncodeAudio6");
     File source = new File(getResourceSourcePath(), "audioonly.mpeg");
     File target = new File(getResourceTargetPath(), "testEncodeAudio6.mp3");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
 
-    MultimediaObject sourceInfos = new MultimediaObject(source);
     Encoder encoder = new Encoder();
     AudioAttributes audio = new AudioAttributes();
     audio.setCodec("mp3");
@@ -225,6 +210,4 @@ public class FileAudioEncoderTest extends AMediaTest {
     encoder.encode(new MultimediaObject(source), target, attrs);
     assertTrue(target.exists(), "Output file missing");
   }
-
-
 }
