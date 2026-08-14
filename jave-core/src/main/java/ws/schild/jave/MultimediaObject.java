@@ -172,11 +172,13 @@ public class MultimediaObject {
       try {
         RBufferedReader reader =
             new RBufferedReader(new InputStreamReader(ffmpeg.getErrorStream()));
+        MultimediaInfo info;
         if (isURL()) {
-          return parseMultimediaInfo(inputURL.toString(), reader);
+          info = parseMultimediaInfo(inputURL.toString(), reader);
         } else {
-          return parseMultimediaInfo(inputFile.getAbsolutePath(), reader);
+          info = parseMultimediaInfo(inputFile.getAbsolutePath(), reader);
         }
+        return info.setMultimediaObject(this);
       } finally {
         ffmpeg.destroy();
       }
