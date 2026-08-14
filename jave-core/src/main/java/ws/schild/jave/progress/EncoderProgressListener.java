@@ -49,4 +49,13 @@ public interface EncoderProgressListener {
    * @param message The message sent by the encoder.
    */
   public void message(String message);
+
+  /**
+   * This method is called once the encoding process has run to completion, after the last call to
+   * {@link #progress(int)}. It is not called when the encoding fails.
+   *
+   * <p>It is a default method so that listeners written against earlier versions keep compiling,
+   * override it when you need to be told that the work has finished.
+   */
+  default void done() {}
 }

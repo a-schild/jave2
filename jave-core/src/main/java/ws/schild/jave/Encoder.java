@@ -657,6 +657,9 @@ public class Encoder {
         LOG.error("Process exit code: {}  to {}", exitCode, target.getName());
         throw new EncoderException("Exit code of ffmpeg encoding run is " + exitCode);
       }
+      if (listener != null) {
+        listener.done();
+      }
     } catch (IOException e) {
       throw new EncoderException(e);
     } finally {

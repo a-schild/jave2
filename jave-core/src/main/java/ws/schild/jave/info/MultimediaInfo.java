@@ -48,6 +48,12 @@ public class MultimediaInfo {
   private VideoInfo video = null;
 
   /**
+   * The clockwise rotation in degrees the video stream should be played back with, as recorded in
+   * the stream metadata. 0 when the file carries no rotation, which is the common case.
+   */
+  private int rotate = 0;
+
+  /**
    * Returns the multimedia file format name.
    *
    * @return The multimedia file format name.
@@ -149,6 +155,26 @@ public class MultimediaInfo {
     return this;
   }
 
+  /**
+   * Returns the clockwise rotation in degrees the video stream should be played back with.
+   *
+   * @return The rotation in degrees, 0 when the file carries no rotation metadata.
+   */
+  public int getRotate() {
+    return rotate;
+  }
+
+  /**
+   * Sets the clockwise rotation in degrees the video stream should be played back with.
+   *
+   * @param rotate The rotation in degrees.
+   * @return this instance
+   */
+  public MultimediaInfo setRotate(int rotate) {
+    this.rotate = rotate;
+    return this;
+  }
+
   @Override
   public String toString() {
     return getClass().getName()
@@ -162,6 +188,8 @@ public class MultimediaInfo {
         + video
         + ", audio="
         + audio
+        + ", rotate="
+        + rotate
         + ")";
   }
 }
