@@ -5,10 +5,19 @@
  */
 package ws.schild.jave;
 
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 /** @author andre */
 public class ScreenExtractorTest extends AMediaTest {
@@ -26,13 +35,9 @@ public class ScreenExtractorTest extends AMediaTest {
   public void testRenderImages_01() throws Exception {
     System.out.println("render images 01");
     URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
-    File target = new File(getResourceTargetPath(), "extractor01");
-    if (target.exists()) {
-      for (File f : target.listFiles()) {
-        f.delete();
-      }
-      target.delete();
-    }
+    Path target = Paths.get(getResourceTargetPath(), "extractor01");
+    clearDirectory(target);
+
     MultimediaObject multimediaObject = new MultimediaObject(source);
     int width = 100;
     int height = 100;
@@ -41,17 +46,35 @@ public class ScreenExtractorTest extends AMediaTest {
     String extension = "jpg";
     int quality = 0;
     ScreenExtractor instance = new ScreenExtractor();
-    instance.render(
-        multimediaObject, width, height, seconds, target, fileNamePrefix, extension, quality);
-    File tFiles[] = target.listFiles();
+    instance.render(multimediaObject, width, height, seconds, target.toFile(), fileNamePrefix, extension, quality);
+    long totalFiles = countFiles(target);
+
     assertEquals(
-        instance.getNumberOfScreens(),
-        tFiles.length,
-        "Not correct number of output files, expecting: "
-            + instance.getNumberOfScreens()
-            + " got: "
-            + tFiles.length);
-    assertEquals(15, tFiles.length, "Not 15 output files, but " + tFiles.length);
+            instance.getNumberOfScreens(),
+            totalFiles,
+            "Not correct number of output files, expecting: "
+                    + instance.getNumberOfScreens()
+                    + " got: "
+                    + totalFiles);
+    assertEquals(15, totalFiles, "Not 15 output files, but " + totalFiles);
+  }
+
+  private static void clearDirectory(Path directory) throws IOException {
+    if (Files.isDirectory(directory)) {
+      try (Stream<Path> files = Files.list(directory)) {
+        for (Path filePath : files.collect(toList())) {
+          Files.delete(filePath);
+        }
+
+        Files.delete(directory);
+      }
+    }
+  }
+
+  private static long countFiles(Path directory) throws IOException {
+    try (Stream<Path> outputFiles = Files.list(directory)) {
+      return outputFiles.count();
+    }
   }
 
   /**
@@ -63,13 +86,9 @@ public class ScreenExtractorTest extends AMediaTest {
   public void testRenderImages_02() throws Exception {
     System.out.println("render images 02");
     File source = new File(getResourceSourcePath(), "AV36_1.AVI");
-    File target = new File(getResourceTargetPath(), "extractor02");
-    if (target.exists()) {
-      for (File f : target.listFiles()) {
-        f.delete();
-      }
-      target.delete();
-    }
+    Path target = Paths.get(getResourceTargetPath(), "extractor02");
+    clearDirectory(target);
+
     MultimediaObject multimediaObject = new MultimediaObject(source);
     int width = 100;
     int height = 100;
@@ -78,17 +97,17 @@ public class ScreenExtractorTest extends AMediaTest {
     String extension = "jpg";
     int quality = 0;
     ScreenExtractor instance = new ScreenExtractor();
-    instance.render(
-        multimediaObject, width, height, seconds, target, fileNamePrefix, extension, quality);
-    File tFiles[] = target.listFiles();
+    instance.render(multimediaObject, width, height, seconds, target.toFile(), fileNamePrefix, extension, quality);
+    long totalFiles = countFiles(target);
+
     assertEquals(
         instance.getNumberOfScreens(),
-        tFiles.length,
+        totalFiles,
         "Not correct number of output files, expecting: "
             + instance.getNumberOfScreens()
             + " got: "
-            + tFiles.length);
-    assertEquals(16, tFiles.length, "Not 16 output files, but " + tFiles.length);
+            + totalFiles);
+    assertEquals(16, totalFiles, "Not 16 output files, but " + totalFiles);
   }
 
   /**
@@ -100,13 +119,9 @@ public class ScreenExtractorTest extends AMediaTest {
   public void testRenderImages_03() throws Exception {
     System.out.println("render images 03");
     File source = new File(getResourceSourcePath(), "zelda first commercial.mpeg");
-    File target = new File(getResourceTargetPath(), "extractor03");
-    if (target.exists()) {
-      for (File f : target.listFiles()) {
-        f.delete();
-      }
-      target.delete();
-    }
+    Path target = Paths.get(getResourceTargetPath(), "extractor03");
+    clearDirectory(target);
+
     MultimediaObject multimediaObject = new MultimediaObject(source);
     int width = 100;
     int height = 100;
@@ -115,17 +130,17 @@ public class ScreenExtractorTest extends AMediaTest {
     String extension = "jpg";
     int quality = 0;
     ScreenExtractor instance = new ScreenExtractor();
-    instance.render(
-        multimediaObject, width, height, seconds, target, fileNamePrefix, extension, quality);
-    File tFiles[] = target.listFiles();
+    instance.render(multimediaObject, width, height, seconds, target.toFile(), fileNamePrefix, extension, quality);
+    long totalFiles = countFiles(target);
+
     assertEquals(
         instance.getNumberOfScreens(),
-        tFiles.length,
+        totalFiles,
         "Not correct number of output files, expecting: "
             + instance.getNumberOfScreens()
             + " got: "
-            + tFiles.length);
-    assertEquals(15, tFiles.length, "Not 15 output files, but " + tFiles.length);
+            + totalFiles);
+    assertEquals(15, totalFiles, "Not 15 output files, but " + totalFiles);
   }
 
   /**
@@ -138,9 +153,7 @@ public class ScreenExtractorTest extends AMediaTest {
     System.out.println("render image 01");
     URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
     File target = new File(getResourceTargetPath(), "extractor01.jpg");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
     MultimediaObject multimediaObject = new MultimediaObject(source);
     int width = 100;
     int height = 100;
@@ -161,9 +174,7 @@ public class ScreenExtractorTest extends AMediaTest {
     System.out.println("render image 02");
     URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
     File target = new File(getResourceTargetPath(), "extractor02.jpg");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
     MultimediaObject multimediaObject = new MultimediaObject(source);
     int width = 100;
     int height = 100;
@@ -184,9 +195,7 @@ public class ScreenExtractorTest extends AMediaTest {
     System.out.println("render one image 00");
     File source = new File(getResourceSourcePath(), "zelda first commercial.mpeg");
     File target = new File(getResourceTargetPath(), "RenderOneImage00.jpg");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
     MultimediaObject multimediaObject = new MultimediaObject(source);
     int width = -1;
     int height = -1;
@@ -207,9 +216,7 @@ public class ScreenExtractorTest extends AMediaTest {
     System.out.println("render one image 01");
     File source = new File(getResourceSourcePath(), "zelda first commercial.mpeg");
     File target = new File(getResourceTargetPath(), "RenderOneImage01.jpg");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
     MultimediaObject multimediaObject = new MultimediaObject(source);
     int width = 60;
     int height = 60;
@@ -230,9 +237,7 @@ public class ScreenExtractorTest extends AMediaTest {
     System.out.println("render one image 03");
     File source = new File(getResourceSourcePath(), "testfile3.wmv");
     File target = new File(getResourceTargetPath(), "RenderOneImage03.jpg");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
     MultimediaObject multimediaObject = new MultimediaObject(source);
     int width = -1;
     int height = -1;

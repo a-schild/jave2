@@ -17,26 +17,24 @@ public abstract class AMediaTest {
    * @param targetPart
    */
   public AMediaTest(String sourcePart, String targetPart) {
-    if (sourcePart == null) {
-      resourceSourcePath = "src/test/resources/";
+    resourceSourcePath = initialiseDirectory(sourcePart, "src/test/resources/");
+    resourceTargetPath = initialiseDirectory(targetPart, "target/testoutput/");
+  }
+
+  private String initialiseDirectory(String path, String basePath) {
+    String resourcePath;
+
+    if (path == null) {
+      resourcePath = basePath;
+    } else if (path.endsWith("/")) {
+      resourcePath = basePath + path;
     } else {
-      if (sourcePart.endsWith("/")) {
-        resourceSourcePath = "src/test/resources/" + sourcePart;
-      } else {
-        resourceSourcePath = "src/test/resources/" + sourcePart + "/";
-      }
+      resourcePath = basePath + path + "/";
     }
-    new File(resourceSourcePath).mkdirs();
-    if (targetPart == null) {
-      resourceTargetPath = "target/testoutput/";
-    } else {
-      if (targetPart.endsWith("/")) {
-        resourceTargetPath = "target/testoutput/" + targetPart;
-      } else {
-        resourceTargetPath = "target/testoutput/" + targetPart + "/";
-      }
-    }
-    new File(resourceTargetPath).mkdirs();
+
+    new File(resourcePath).mkdirs();
+
+    return resourcePath;
   }
 
   public String getResourceSourcePath() {
