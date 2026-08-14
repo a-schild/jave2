@@ -41,6 +41,7 @@
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>3.6.2</maven-javadoc-plugin.version>
+		<maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
 		<maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
 		<central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
 		<maven-scm-provider-gitexe.version>2.0.1</maven-scm-provider-gitexe.version>
@@ -143,6 +144,40 @@
 						<goals>
 							<goal>sign</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!--
+			  This module only aggregates dependencies and carries no sources at all, so
+			  neither the source nor the javadoc plugin produces anything. Maven Central
+			  requires both artifacts all the same, so attach empty ones.
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${maven-jar-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>empty-javadoc-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>javadoc</classifier>
+							<classesDirectory>${project.build.directory}/empty-javadoc</classesDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>empty-sources-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>sources</classifier>
+							<classesDirectory>${project.build.directory}/empty-sources</classesDirectory>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
