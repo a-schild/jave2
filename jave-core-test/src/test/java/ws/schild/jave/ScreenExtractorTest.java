@@ -34,7 +34,8 @@ public class ScreenExtractorTest extends AMediaTest {
   @Test
   public void testRenderImages_01() throws Exception {
     System.out.println("render images 01");
-    URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
+    assumeRemoteSampleReachable();
+    URL source = new URL(REMOTE_SAMPLE);
     Path target = Paths.get(getResourceTargetPath(), "extractor01");
     clearDirectory(target);
 
@@ -151,7 +152,8 @@ public class ScreenExtractorTest extends AMediaTest {
   @Test
   public void testRenderImage_01() throws Exception {
     System.out.println("render image 01");
-    URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
+    assumeRemoteSampleReachable();
+    URL source = new URL(REMOTE_SAMPLE);
     File target = new File(getResourceTargetPath(), "extractor01.jpg");
     Files.deleteIfExists(target.toPath());
     MultimediaObject multimediaObject = new MultimediaObject(source);
@@ -172,7 +174,8 @@ public class ScreenExtractorTest extends AMediaTest {
   @Test
   public void testRenderImage_02() throws Exception {
     System.out.println("render image 02");
-    URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
+    assumeRemoteSampleReachable();
+    URL source = new URL(REMOTE_SAMPLE);
     File target = new File(getResourceTargetPath(), "extractor02.jpg");
     Files.deleteIfExists(target.toPath());
     MultimediaObject multimediaObject = new MultimediaObject(source);

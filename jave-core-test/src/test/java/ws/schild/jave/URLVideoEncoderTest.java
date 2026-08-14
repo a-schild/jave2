@@ -47,7 +47,8 @@ public class URLVideoEncoderTest extends AMediaTest {
   public void testEncodeVideo13() throws Exception {
     System.out.println("testEncodeVideo13");
 
-    URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
+    assumeRemoteSampleReachable();
+    URL source = new URL(REMOTE_SAMPLE);
     File target = new File(getResourceTargetPath(), "testEncodeVideo13.mp4");
     Files.deleteIfExists(target.toPath());
     AudioAttributes audioAttr = new AudioAttributes();
@@ -82,7 +83,8 @@ public class URLVideoEncoderTest extends AMediaTest {
   public void testEncodeVideo14() throws Exception {
     System.out.println("testEncodeVideo14");
 
-    URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
+    assumeRemoteSampleReachable();
+    URL source = new URL(REMOTE_SAMPLE);
     File target = new File(getResourceTargetPath(), "testEncodeVideo14.mp4");
     Files.deleteIfExists(target.toPath());
     AudioAttributes audioAttr = new AudioAttributes();

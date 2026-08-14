@@ -114,7 +114,8 @@ public class MultimediaObjectTest extends AMediaTest {
   @Test
   public void testGetInfo04() throws Exception {
     System.out.println("testGetInfo04");
-    URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
+    assumeRemoteSampleReachable();
+    URL source = new URL(REMOTE_SAMPLE);
     MultimediaObject instance = new MultimediaObject(source);
     MultimediaInfo result = instance.getInfo();
     assertEquals("mpeg", result.getFormat(), "Invalid video format");
