@@ -25,6 +25,10 @@ export CXXFLAGS="$CFLAGS"
 export LDFLAGS="-L$PREFIX/lib -L$PREFIX/lib64"
 JOBS="$(nproc)"
 
+# Several of these configure scripts are written for bash, busybox ash trips over
+# them with errors that point nowhere useful
+export CONFIG_SHELL=/bin/bash
+
 # Versions are pinned so a build is repeatable and a failure is not a moving target
 OPUS_VERSION=1.5.2
 SPEEX_VERSION=1.2.1
@@ -75,17 +79,17 @@ fetch() {
 
 echo "=== opus ==="
 fetch "https://downloads.xiph.org/releases/opus/opus-${OPUS_VERSION}.tar.gz" "opus-${OPUS_VERSION}"
-./configure --prefix="$PREFIX" --disable-shared --enable-static --disable-doc --disable-extra-programs
+bash ./configure --prefix="$PREFIX" --disable-shared --enable-static --disable-doc --disable-extra-programs
 make -j"$JOBS" && make install
 
 echo "=== speex ==="
 fetch "https://downloads.xiph.org/releases/speex/speex-${SPEEX_VERSION}.tar.gz" "speex-${SPEEX_VERSION}"
-./configure --prefix="$PREFIX" --disable-shared --enable-static
+bash ./configure --prefix="$PREFIX" --disable-shared --enable-static
 make -j"$JOBS" && make install
 
 echo "=== libvpx ==="
 fetch "https://github.com/webmproject/libvpx/archive/refs/tags/v${VPX_VERSION}.tar.gz" "libvpx-${VPX_VERSION}"
-./configure --prefix="$PREFIX" \
+bash ./configure --prefix="$PREFIX" \
   --disable-shared --enable-static --enable-pic \
   --enable-vp8 --enable-vp9 --enable-vp9-highbitdepth \
   --disable-examples --disable-tools --disable-docs --disable-unit-tests
@@ -106,24 +110,24 @@ sed -i 's/-lgcc_s//g' "$PREFIX/lib/pkgconfig/x265.pc" || true
 
 echo "=== libass ==="
 fetch "https://github.com/libass/libass/releases/download/${ASS_VERSION}/libass-${ASS_VERSION}.tar.gz" "libass-${ASS_VERSION}"
-./configure --prefix="$PREFIX" --disable-shared --enable-static
+bash ./configure --prefix="$PREFIX" --disable-shared --enable-static
 make -j"$JOBS" && make install
 
 echo "=== xvid ==="
 fetch "https://downloads.xvid.com/downloads/xvidcore-${XVID_VERSION}.tar.gz" "xvidcore"
 cd build/generic
-./configure --prefix="$PREFIX" --disable-shared --enable-static
+bash ./configure --prefix="$PREFIX" --disable-shared --enable-static
 make -j"$JOBS" && make install
 rm -f "$PREFIX"/lib/libxvidcore.so*
 
 echo "=== opencore-amr ==="
 fetch "https://downloads.sourceforge.net/opencore-amr/opencore-amr-${OPENCORE_VERSION}.tar.gz" "opencore-amr-${OPENCORE_VERSION}"
-./configure --prefix="$PREFIX" --disable-shared --enable-static
+bash ./configure --prefix="$PREFIX" --disable-shared --enable-static
 make -j"$JOBS" && make install
 
 echo "=== vo-amrwbenc ==="
 fetch "https://downloads.sourceforge.net/opencore-amr/vo-amrwbenc-${VOAMRWBENC_VERSION}.tar.gz" "vo-amrwbenc-${VOAMRWBENC_VERSION}"
-./configure --prefix="$PREFIX" --disable-shared --enable-static
+bash ./configure --prefix="$PREFIX" --disable-shared --enable-static
 make -j"$JOBS" && make install
 
 echo "=== openjpeg ==="
