@@ -50,33 +50,27 @@ jobs:
                 xz-dev \
                 openssl-dev openssl-libs-static \
                 x264-dev \
-                x265-dev \
                 lame-dev \
-                opus-dev \
-                libvorbis-dev \
-                libogg-dev \
-                libtheora-dev \
-                libvpx-dev \
-                dav1d-dev \
-                libass-dev \
+                libogg-dev libogg-static \
+                libvorbis-dev libvorbis-static \
+                libtheora-dev libtheora-static \
                 freetype-dev freetype-static \
                 fribidi-dev fribidi-static \
                 harfbuzz-dev harfbuzz-static \
                 brotli-dev brotli-static \
                 expat-dev expat-static \
-                libpng-dev \
-                libwebp-dev \
-                soxr-dev \
-                libxml2-dev \
                 graphite2-dev graphite2-static \
-                opencore-amr-dev
+                libpng-dev libpng-static \
+                libwebp-dev libwebp-static \
+                soxr-dev soxr-static \
+                libxml2-dev libxml2-static
 
-              # Alpine ships the archives inside -dev for some libraries and in a
-              # separate -static package for others. Say plainly which are present,
-              # a missing .a shows up as a confusing link error much later.
-              for lib in libx264 libx265 libdav1d libmp3lame libopus libvorbis \
-                         libtheora libvpx libass libfreetype libwebp libsoxr \
-                         libssl libcrypto libz; do
+              # Alpine keeps some archives in -dev and others in a -static package,
+              # and for x265, dav1d, opus, libvpx and libass it ships no static build
+              # at all. Say plainly what is here, a missing .a otherwise surfaces as a
+              # link error far from its cause.
+              for lib in libx264 libmp3lame libvorbis libogg libtheora libfreetype \
+                         libfribidi libwebp libsoxr libxml2 libssl libcrypto libz; do
                 if ls /usr/lib/"${lib}".a >/dev/null 2>&1; then
                   echo "static ok      ${lib}.a"
                 else
@@ -105,21 +99,14 @@ jobs:
                 --enable-version3 \
                 --enable-openssl \
                 --enable-libx264 \
-                --enable-libx265 \
                 --enable-libmp3lame \
-                --enable-libopus \
                 --enable-libvorbis \
                 --enable-libtheora \
-                --enable-libvpx \
-                --enable-libdav1d \
-                --enable-libass \
                 --enable-libfreetype \
                 --enable-libfribidi \
                 --enable-libwebp \
                 --enable-libsoxr \
                 --enable-libxml2 \
-                --enable-libopencore-amrnb \
-                --enable-libopencore-amrwb \
                 --disable-doc \
                 --disable-debug \
                 --disable-ffplay \
@@ -170,7 +157,7 @@ jobs:
           fi
 
           echo "=== encoders used across the test suite ==="
-          for enc in libx264 libmp3lame aac libvorbis flac mpeg4 libopus; do
+          for enc in libx264 libmp3lame aac libvorbis flac mpeg4; do
             if ./out/ffmpeg-amd64 -hide_banner -encoders | grep -qw "$enc"; then
               echo "  $enc"
             else
@@ -196,6 +183,31 @@ jobs:
             -c:v libx264 -c:a aac -shortest proof.mp4
           ls -l proof.mp4
           ./out/ffmpeg-amd64 -hide_banner -i proof.mp4 2>&1 | grep -E "Duration|Stream"
+
+      - name: Check out, to compare against the binary bundled today
+        uses: actions/checkout@v5
+
+      - name: What this build gains and loses against the bundled 4.4.1
+        run: |
+          set -uo pipefail
+          bundled=jave-nativebin-linux64/src/main/resources/ws/schild/jave/nativebin/ffmpeg-amd64
+          chmod +x "$bundled"
+
+          echo "bundled: $("$bundled" -version | head -1)"
+          echo "built  : $(./out/ffmpeg-amd64 -version | head -1)"
+
+          "$bundled" -hide_banner -encoders 2>/dev/null | awk '{print $2}' | sort -u > enc-old.txt
+          ./out/ffmpeg-amd64 -hide_banner -encoders 2>/dev/null | awk '{print $2}' | sort -u > enc-new.txt
+
+          echo "### Encoders lost against 4.4.1" | tee -a "$GITHUB_STEP_SUMMARY"
+          comm -23 enc-old.txt enc-new.txt | tr '\n' ' ' | tee -a "$GITHUB_STEP_SUMMARY"
+          echo | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "### Encoders gained" | tee -a "$GITHUB_STEP_SUMMARY"
+          comm -13 enc-old.txt enc-new.txt | tr '\n' ' ' | tee -a "$GITHUB_STEP_SUMMARY"
+          echo | tee -a "$GITHUB_STEP_SUMMARY"
+
+          echo "lost:   $(comm -23 enc-old.txt enc-new.txt | wc -l)"
+          echo "gained: $(comm -13 enc-old.txt enc-new.txt | wc -l)"
 
       - name: Upload
         uses: actions/upload-artifact@v4
