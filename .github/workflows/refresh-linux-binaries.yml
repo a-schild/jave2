@@ -1,0 +1,111 @@
+# Fetches the static linux ffmpeg builds this project bundles and checks them
+# before they go anywhere near a commit.
+#
+# The binaries have to be statically linked. The ones bundled here are, and that is
+# what lets jave extract an executable and run it on an unknown machine, old
+# enterprise distributions and musl based images included. A dynamically linked
+# build would quietly drop those users, so the job fails rather than upload one.
+#
+# Run it from the Actions tab, collect the artifact, and commit the binaries.
+
+name: Refresh linux ffmpeg binaries
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: 'Base URL to fetch the static builds from'
+        required: false
+        default: 'https://johnvansickle.com/ffmpeg/releases'
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            target: jave-nativebin-linux64
+            name: ffmpeg-amd64
+          - arch: arm64
+            target: jave-nativebin-arm64
+            name: ffmpeg-aarch64
+          - arch: armhf
+            target: jave-nativebin-arm32
+            name: ffmpeg-arm
+
+    steps:
+      - name: Fetch ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          url="${{ inputs.source }}/ffmpeg-release-${{ matrix.arch }}-static.tar.xz"
+          echo "Fetching $url"
+          curl -fSL --retry 3 --retry-delay 5 --max-time 900 -o ffmpeg.tar.xz "$url"
+          ls -l ffmpeg.tar.xz
+
+      - name: Unpack
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          tar -xf ffmpeg.tar.xz --strip-components=1 -C out
+          cp "out/ffmpeg" "${{ matrix.name }}"
+          ls -l "${{ matrix.name }}"
+
+      - name: Verify it is static and report what it is
+        run: |
+          set -euo pipefail
+          description=$(file -b "${{ matrix.name }}")
+          echo "file: $description"
+
+          if ! echo "$description" | grep -q "statically linked"; then
+            echo "::error::${{ matrix.name }} is not statically linked. Bundling it would break"
+            echo "::error::musl based images and any distribution older than its glibc floor."
+            exit 1
+          fi
+
+          # A static binary must not carry an interpreter or need shared objects
+          if echo "$description" | grep -q "interpreter"; then
+            echo "::error::${{ matrix.name }} names an interpreter, so it is not self contained"
+            exit 1
+          fi
+
+          echo "Highest glibc symbol referenced, informational:"
+          strings -a "${{ matrix.name }}" | grep -oE 'GLIBC_[0-9]+\.[0-9]+' | sort -uV | tail -1 || echo "  none"
+
+          echo "Version reported by the build:"
+          if [ "${{ matrix.arch }}" = "amd64" ]; then
+            chmod +x "${{ matrix.name }}"
+            "./${{ matrix.name }}" -version | head -1
+          else
+            echo "  cross architecture, not run here"
+            strings -a "${{ matrix.name }}" | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?-static' | head -1 || true
+          fi
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}
+          path: ${{ matrix.name }}
+          retention-days: 7
+          compression-level: 0
+
+  summary:
+    needs: fetch
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Where the binaries belong
+        run: |
+          cat <<'EOF' >> "$GITHUB_STEP_SUMMARY"
+          ## Where these go
+
+          | Artifact | Commit to |
+          | --- | --- |
+          | `jave-nativebin-linux64` | `jave-nativebin-linux64/src/main/resources/ws/schild/jave/nativebin/ffmpeg-amd64` |
+          | `jave-nativebin-arm64` | `jave-nativebin-arm64/src/main/resources/ws/schild/jave/nativebin/ffmpeg-aarch64` |
+          | `jave-nativebin-arm32` | `jave-nativebin-arm32/src/main/resources/ws/schild/jave/nativebin/ffmpeg-arm` |
+
+          Keep the file names exactly as they are, `DefaultFFMPEGLocator` builds them from `os.arch`.
+          EOF
