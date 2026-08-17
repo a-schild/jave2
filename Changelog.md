@@ -1,7 +1,7 @@
 # JAVE2
 
 ## Changelog
-- **3.6.0-SNAPSHOT**
+- **3.6.0**
    - Fixed the extracted ffmpeg binary being run before it was ready. The chmod was
      started but never waited for, and the copy went straight to the target path, so
      a second process could pick up a half written or not yet executable file and
