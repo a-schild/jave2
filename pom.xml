@@ -54,6 +54,7 @@
     </build>
     <modules>
         <module>jave-nativebin-win64</module>
+        <module>jave-nativebin-win-arm64</module>
         <module>jave-nativebin-linux64</module>
         <module>jave-nativebin-osx64</module>
         <module>jave-nativebin-osxm1</module>

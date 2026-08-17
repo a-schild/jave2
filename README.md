@@ -17,6 +17,9 @@ jave-nativebin-linux64 [![Maven Central](https://img.shields.io/maven-central/v/
 jave-nativebin-win64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-win64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-win64)
 ![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-win64%2Fmaven-metadata.xml)
 
+jave-nativebin-win-arm64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-win-arm64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-win-arm64)
+![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-win-arm64%2Fmaven-metadata.xml)
+
 jave-nativebin-osx64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-osx64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-osx64)
 ![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-osx64%2Fmaven-metadata.xml)
 
@@ -41,9 +44,9 @@ Many other formats, containers and operations are supported by JAVE2.
 > JAVE can also be easily ported to other OS and hardware configurations, 
 see the JAVE manual for details.
 
-| Operating System | Windows x64 | MacOS intel x64 | MacOS m1 | Linux x64 | Linux arm32,arm64 |
-| ---------------- | ----------- |  -------------- | -------- | --------- | ----------------- |
-| Supported?       | YES         | YES             |  YES     | YES       | YES               |
+| Operating System | Windows x64 | Windows arm64 | MacOS intel x64 | MacOS m1 | Linux x64 | Linux arm32,arm64 |
+| ---------------- | ----------- | ------------- |  -------------- | -------- | --------- | ----------------- |
+| Supported?       | YES         | YES           | YES             |  YES     | YES       | YES               |
 
 > **The 32 bit x86 packages were removed in 4.0.0.** `jave-nativebin-win32` and
 > `jave-nativebin-linux32` are gone, because ffmpeg itself no longer publishes builds
@@ -129,6 +132,15 @@ and then the specific jar(s) for your platform(s) :
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-win64</artifactId>
     <version>3.6.0</version>
+</dependency>
+```
+
+### For one platform only (Windows arm 64Bit in this case)
+``` XML
+<dependency>
+    <groupId>ws.schild</groupId>
+    <artifactId>jave-nativebin-win-arm64</artifactId>
+    <version>4.0.0</version>
 </dependency>
 ```
 
