@@ -41,6 +41,8 @@ jobs:
           docker run --rm \
             -v "$PWD/out:/out" \
             -e FFMPEG_VERSION="${{ inputs.ffmpeg_version }}" \
+            -e HOST_UID="$(id -u)" \
+            -e HOST_GID="$(id -g)" \
             "alpine:${{ inputs.alpine_version }}" \
             sh -eux -c '
               apk add --no-cache \
@@ -115,6 +117,10 @@ jobs:
               make -j"$(nproc)"
               strip ffmpeg
               cp ffmpeg /out/ffmpeg-amd64
+              # The container is root, the runner is not, so hand the file over or
+              # nothing outside can even chmod it
+              chmod 0755 /out/ffmpeg-amd64
+              chown "${HOST_UID}:${HOST_GID}" /out/ffmpeg-amd64
             '
 
           ls -l out/
