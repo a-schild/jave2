@@ -48,6 +48,7 @@ echo "=== toolchain and the libraries alpine can give us statically ==="
 apk add --no-cache \
   build-base coreutils pkgconf nasm yasm cmake meson ninja \
   autoconf automake libtool git tar xz curl perl bash \
+  diffutils findutils grep sed \
   zlib-dev zlib-static \
   bzip2-dev bzip2-static \
   xz-dev \
