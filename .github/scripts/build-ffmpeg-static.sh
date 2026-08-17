@@ -13,7 +13,10 @@
 #
 # Expects FFMPEG_VERSION, OUTPUT_NAME, HOST_UID and HOST_GID in the environment.
 
-set -eux
+# No -x. The trace goes to stderr, and some of these configure scripts build their
+# config.status by evaluating captured output, so the +cat markers end up being run
+# as commands. The echo lines below say where we are instead.
+set -eu
 
 PREFIX=/opt/ffbuild
 SRC=/tmp/src
