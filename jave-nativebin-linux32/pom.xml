@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ws.schild</groupId>
     <packaging>jar</packaging>
-    <version>3.5.0</version>
+    <version>3.6.0-SNAPSHOT</version>
     <artifactId>jave-nativebin-linux32</artifactId>
     <name>Jave linux 32 bit native package</name>
     <description>The JAVE (Java Audio Video Encoder) library is Java wrapper on the 
@@ -39,6 +39,7 @@
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
         <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.6.2</maven-javadoc-plugin.version>
+        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
         <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
         <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
         <maven-scm-provider-gitexe.version>2.0.1</maven-scm-provider-gitexe.version>
@@ -141,6 +142,29 @@
                         <goals>
                             <goal>sign</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--
+              This module ships a binary and has no java sources, so the javadoc plugin
+              produces nothing. Maven Central requires a javadoc artifact all the same,
+              so attach an empty one.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>empty-javadoc-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>javadoc</classifier>
+                            <classesDirectory>${project.build.directory}/empty-javadoc</classesDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

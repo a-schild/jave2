@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ws.schild</groupId>
 	<packaging>jar</packaging>
-	<version>3.5.0</version>
+	<version>3.6.0-SNAPSHOT</version>
 	<artifactId>jave-all-deps</artifactId>
 	<name>Jave all native dependencies package</name>
 	<description>The JAVE (Java Audio Video Encoder) library is Java wrapper on the 
@@ -41,6 +41,7 @@
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>3.6.2</maven-javadoc-plugin.version>
+		<maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
 		<maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
 		<central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
 		<maven-scm-provider-gitexe.version>2.0.1</maven-scm-provider-gitexe.version>
@@ -146,6 +147,40 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!--
+			  This module only aggregates dependencies and carries no sources at all, so
+			  neither the source nor the javadoc plugin produces anything. Maven Central
+			  requires both artifacts all the same, so attach empty ones.
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${maven-jar-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>empty-javadoc-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>javadoc</classifier>
+							<classesDirectory>${project.build.directory}/empty-javadoc</classesDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>empty-sources-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>sources</classifier>
+							<classesDirectory>${project.build.directory}/empty-sources</classesDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -153,47 +188,47 @@
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-core</artifactId>
-			<version>3.5.0</version>
+			<version>3.6.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-win32</artifactId>
-			<version>3.5.0</version>
+			<version>3.6.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-win64</artifactId>
-			<version>3.5.0</version>
+			<version>3.6.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-linux32</artifactId>
-			<version>3.5.0</version>
+			<version>3.6.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-linux64</artifactId>
-			<version>3.5.0</version>
+			<version>3.6.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-osx64</artifactId>
-			<version>3.5.0</version>
+			<version>3.6.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-osxm1</artifactId>
-			<version>3.5.0</version>
+			<version>3.6.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-linux-arm32</artifactId>
-			<version>3.5.0</version>
+			<version>3.6.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ws.schild</groupId>
 			<artifactId>jave-nativebin-linux-arm64</artifactId>
-			<version>3.5.0</version>
+			<version>3.6.0-SNAPSHOT</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
 		<dependency>

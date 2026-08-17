@@ -19,8 +19,12 @@
 package ws.schild.jave;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.concurrent.TimeUnit;
+
+import static org.apache.commons.lang3.ArrayUtils.isNotEmpty;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
 import ws.schild.jave.encode.AudioAttributes;
@@ -43,7 +47,7 @@ public class EncoderTest extends AMediaTest {
     System.out.println("getAudioDecoders");
     Encoder instance = new Encoder();
     String[] result = instance.getAudioDecoders();
-    assertTrue(result != null && result.length > 0, "No audio decoders found");
+    assertTrue(isNotEmpty(result), "No audio decoders found");
   }
 
   /**
@@ -56,7 +60,7 @@ public class EncoderTest extends AMediaTest {
     System.out.println("getAudioEncoders");
     Encoder instance = new Encoder();
     String[] result = instance.getAudioEncoders();
-    assertTrue(result != null && result.length > 0, "No audio encoders found");
+    assertTrue(isNotEmpty(result), "No audio encoders found");
   }
 
   /**
@@ -69,7 +73,7 @@ public class EncoderTest extends AMediaTest {
     System.out.println("getVideoDecoders");
     Encoder instance = new Encoder();
     String[] result = instance.getVideoDecoders();
-    assertTrue(result != null && result.length > 0, "No video decoders found");
+    assertTrue(isNotEmpty(result), "No video decoders found");
   }
 
   /**
@@ -82,7 +86,7 @@ public class EncoderTest extends AMediaTest {
     System.out.println("getVideoEncoders");
     Encoder instance = new Encoder();
     String[] result = instance.getVideoEncoders();
-    assertTrue(result != null && result.length > 0, "No video enecoders found");
+    assertTrue(isNotEmpty(result), "No video enecoders found");
   }
 
   /**
@@ -95,7 +99,7 @@ public class EncoderTest extends AMediaTest {
     System.out.println("getSupportedEncodingFormats");
     Encoder instance = new Encoder();
     String[] result = instance.getSupportedEncodingFormats();
-    assertTrue(result != null && result.length > 0, "No supported encoding formats found");
+    assertTrue(isNotEmpty(result), "No supported encoding formats found");
   }
 
   /**
@@ -108,7 +112,7 @@ public class EncoderTest extends AMediaTest {
     System.out.println("getSupportedDecodingFormats");
     Encoder instance = new Encoder();
     String[] result = instance.getSupportedDecodingFormats();
-    assertTrue(result != null && result.length > 0, "No supported decoding formats found");
+    assertTrue(isNotEmpty(result), "No supported decoding formats found");
   }
 
   /**
@@ -121,9 +125,8 @@ public class EncoderTest extends AMediaTest {
     System.out.println("testAbortEncoder");
     File source = new File(getResourceSourcePath(), "testfile3.wmv");
     File target = new File(getResourceTargetPath(), "testAbortEncoder.mp3");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
+
     Encoder encoder = new Encoder();
     PListener listener = new PListener();
     AudioAttributes audio = new AudioAttributes();

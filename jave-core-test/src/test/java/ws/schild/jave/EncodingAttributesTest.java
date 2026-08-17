@@ -19,6 +19,8 @@
 package ws.schild.jave;
 
 import java.io.File;
+import java.nio.file.Files;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
@@ -46,9 +48,8 @@ public class EncodingAttributesTest extends AMediaTest {
 
     File source = new File(getResourceSourcePath(), "dance1.avi");
     File target = new File(getResourceTargetPath(), "testEncodeVideo1.mp4");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
+
     AudioAttributes audio = new AudioAttributes();
     audio.setCodec("libfaac");
     audio.setBitRate(128000);
@@ -67,7 +68,6 @@ public class EncodingAttributesTest extends AMediaTest {
     attrs.setVideoAttributes(video);
     attrs.setDecodingThreads(1);
     attrs.setEncodingThreads(1);
-    // attrs.setFilterThreads(1);
     Encoder encoder = new Encoder();
     encoder.encode(new MultimediaObject(source), target, attrs);
     assertTrue(target.exists(), "Output file missing");

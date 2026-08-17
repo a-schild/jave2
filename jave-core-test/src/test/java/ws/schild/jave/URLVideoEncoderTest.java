@@ -18,13 +18,15 @@
  */
 package ws.schild.jave;
 
-import java.io.File;
-import java.net.URL;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.net.URL;
+import java.nio.file.Files;
+
+import org.junit.jupiter.api.Test;
 import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
@@ -45,11 +47,10 @@ public class URLVideoEncoderTest extends AMediaTest {
   public void testEncodeVideo13() throws Exception {
     System.out.println("testEncodeVideo13");
 
-    URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
+    assumeRemoteSampleReachable();
+    URL source = new URL(REMOTE_SAMPLE);
     File target = new File(getResourceTargetPath(), "testEncodeVideo13.mp4");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
     AudioAttributes audioAttr = new AudioAttributes();
     VideoAttributes videoAttr = new VideoAttributes();
     EncodingAttributes encodingAttr = new EncodingAttributes();
@@ -82,11 +83,10 @@ public class URLVideoEncoderTest extends AMediaTest {
   public void testEncodeVideo14() throws Exception {
     System.out.println("testEncodeVideo14");
 
-    URL source = new URL("https://samples.ffmpeg.org/MPEG1/zelda%20first%20commercial.mpeg");
+    assumeRemoteSampleReachable();
+    URL source = new URL(REMOTE_SAMPLE);
     File target = new File(getResourceTargetPath(), "testEncodeVideo14.mp4");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
     AudioAttributes audioAttr = new AudioAttributes();
     VideoAttributes videoAttr = new VideoAttributes();
     EncodingAttributes encodingAttr = new EncodingAttributes();

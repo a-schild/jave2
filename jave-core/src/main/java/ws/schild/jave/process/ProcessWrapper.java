@@ -18,6 +18,7 @@
  */
 package ws.schild.jave.process;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -43,6 +44,14 @@ public class ProcessWrapper implements AutoCloseable {
 
   /** Arguments for the executable. */
   private final ArrayList<String> args = new ArrayList<>();
+
+  /**
+   * The working directory of the ffmpeg process. When null the process inherits the working
+   * directory of the jvm, which is the previous and still default behaviour. Setting it matters for
+   * arguments ffmpeg resolves itself, such as the file list of the concat demuxer or a font file
+   * referenced from a filter.
+   */
+  private File execFolder = null;
 
   /** The process representing the ffmpeg execution. */
   private Process ffmpeg = null;
@@ -100,7 +109,8 @@ public class ProcessWrapper implements AutoCloseable {
     }
 
     Runtime runtime = Runtime.getRuntime();
-    ffmpeg = runtime.exec(execList.toArray(new String[0]));
+    // A null envp inherits the environment of the jvm, a null execFolder its working directory
+    ffmpeg = runtime.exec(execList.toArray(new String[0]), null, execFolder);
 
     if (destroyOnRuntimeShutdown) {
       ffmpegKiller = new ProcessKiller(ffmpeg);
@@ -123,6 +133,25 @@ public class ProcessWrapper implements AutoCloseable {
    */
   protected Stream<String> enhanceArguments(Stream<String> execArgs) {
     return execArgs;
+  }
+
+  /**
+   * Returns the working directory the ffmpeg process will be started in.
+   *
+   * @return The working directory, null when the jvm working directory is used.
+   */
+  public File getExecFolder() {
+    return execFolder;
+  }
+
+  /**
+   * Sets the working directory the ffmpeg process will be started in. Has to be called before
+   * {@link #execute()}.
+   *
+   * @param execFolder The working directory, null to use the jvm working directory.
+   */
+  public void setExecFolder(File execFolder) {
+    this.execFolder = execFolder;
   }
 
   /**

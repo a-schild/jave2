@@ -1,7 +1,35 @@
 # JAVE2
 
 ## Changelog
-- **Unreleased**
+- **3.6.0-SNAPSHOT**
+   - Fixed the extracted ffmpeg binary being run before it was ready. The chmod was
+     started but never waited for, and the copy went straight to the target path, so
+     a second process could pick up a half written or not yet executable file and
+     fail with "Permission denied" or "Cannot run program" (#281, #236)
+   - Fixed `Encoder`'s shared option list throwing a ConcurrentModificationException
+     when it was changed while another thread was encoding, and `VideoProcessor`
+     reporting itself enabled because some earlier instance had been (#179)
+   - Added `MultimediaObject.getInfo(long timeoutMillis)`, so an unreachable or
+     stalled source can no longer block the call forever (#264)
+   - Corrected `attrs.setFormat(...)` to `setOutputFormat(...)` in README.md and
+     Examples.md, the old name does not exist on EncodingAttributes (#189)
+   - Added `MultimediaInfo.getRotate()`, the rotation cameras record in the stream
+     metadata when filming in a non native orientation, thanks to JinLike
+   - Added `EncoderProgressListener.done()`, called once an encoding has finished.
+     It is a default method, so existing listeners keep working unchanged,
+     thanks to JinLike
+   - Added `EncodingAttributes.setStreamLoop()` for ffmpeg `-stream_loop`,
+     thanks to supermoonie
+   - Added `ProcessWrapper.setExecFolder()` to choose the working directory of the
+     ffmpeg process, thanks to supermoonie
+   - Added `MultimediaInfo.getMultimediaObject()`, pointing back at the object the
+     information was read from, thanks to supermoonie
+   - An unparsable source media header no longer aborts the whole encoding, it is
+     only needed to report progress as a percentage, thanks to jhsea3do
+   - Reworked the unit tests, thanks to Stickerifier
+   - Fixed the test setup, which used a surefire version predating the junit
+     platform. JUnit 5 annotations had no effect, `@Disabled` was ignored and seven
+     tests were never run
    - Migrated publishing from the retired OSSRH service (oss.sonatype.org) to the
      Sonatype Central Portal. The nexus-staging-maven-plugin has been replaced by
      the central-publishing-maven-plugin in all published modules

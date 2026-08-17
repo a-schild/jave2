@@ -18,12 +18,15 @@
  */
 package ws.schild.jave;
 
-import com.google.common.io.LineReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.Test;
 
 /** @author a.schild */
@@ -37,20 +40,15 @@ public class ConversionOutputAnalyzerTest extends AMediaTest {
   @Test
   public void testAnalyzeNewLine1() {
     System.out.println("analyzeNewLine 1");
-    File file = new File(getResourceSourcePath(), "testoutput1.txt");
+    Path path = Paths.get(getResourceSourcePath(), "testoutput1.txt");
     ConversionOutputAnalyzer oa1 = new ConversionOutputAnalyzer(0, null);
 
-    try {
-      FileInputStream fis = new FileInputStream(file);
-      InputStreamReader streamReader = new InputStreamReader(fis, "UTF-8");
-      LineReader reader = new LineReader(streamReader);
-      String sLine = null;
-      while ((sLine = reader.readLine()) != null) {
-        oa1.analyzeNewLine(sLine);
+    try (Stream<String> lines = Files.lines(path)) {
+      for (String line : lines.collect(toList())) {
+        oa1.analyzeNewLine(line);
       }
-      String result = oa1.getLastWarning();
-      String expResult = null;
-      assertEquals(expResult, result);
+
+      assertNull(oa1.getLastWarning());
     } catch (IOException ioError) {
       System.out.println("IO error " + ioError.getMessage());
       ioError.printStackTrace();

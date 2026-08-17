@@ -18,8 +18,15 @@
  */
 package ws.schild.jave;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.Test;
 
 import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
@@ -30,17 +37,21 @@ public class DefaultFFMPEGLocatorTest {
   public DefaultFFMPEGLocatorTest() {}
 
   @Test
-  public void testFindExecutable() {
+  public void testFindExecutable() throws IOException {
     // We first remove any old executables, to make sure the copy/deploy works
-    File dirFolder = new File(System.getProperty("java.io.tmpdir"), "jave/");
-    if (dirFolder.exists() && dirFolder.isDirectory()) {
-      for (File f : dirFolder.listFiles()) {
-        f.delete();
+    Path dirFolder = Paths.get(System.getProperty("java.io.tmpdir"), "jave/");
+    if (Files.isDirectory(dirFolder)) {
+      try (Stream<Path> files = Files.list(dirFolder)) {
+        for (Path filePath : files.collect(toList())) {
+          Files.delete(filePath);
+        }
+
+        Files.delete(dirFolder);
       }
-      dirFolder.delete();
     }
+
     DefaultFFMPEGLocator locator = new DefaultFFMPEGLocator();
     String exePath = locator.getExecutablePath();
-    assertNotNull("Native component not found", exePath);
+    assertNotNull(exePath, "Native component not found");
   }
 }

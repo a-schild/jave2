@@ -21,6 +21,8 @@ package ws.schild.jave.info;
 import java.util.HashMap;
 import java.util.Map;
 
+import ws.schild.jave.MultimediaObject;
+
 /**
  * Instances of this class report informations about a decoded multimedia file.
  *
@@ -46,6 +48,19 @@ public class MultimediaInfo {
    * A set of video-specific informations. If null, there's no video stream in the multimedia file.
    */
   private VideoInfo video = null;
+
+  /**
+   * The clockwise rotation in degrees the video stream should be played back with, as recorded in
+   * the stream metadata. 0 when the file carries no rotation, which is the common case.
+   */
+  private int rotate = 0;
+
+  /**
+   * The object this information was read from, so that a caller holding several of these can tell
+   * which source each one describes. Null when the instance was not produced by {@link
+   * ws.schild.jave.MultimediaObject#getInfo()}.
+   */
+  private MultimediaObject multimediaObject = null;
 
   /**
    * Returns the multimedia file format name.
@@ -149,6 +164,46 @@ public class MultimediaInfo {
     return this;
   }
 
+  /**
+   * Returns the clockwise rotation in degrees the video stream should be played back with.
+   *
+   * @return The rotation in degrees, 0 when the file carries no rotation metadata.
+   */
+  public int getRotate() {
+    return rotate;
+  }
+
+  /**
+   * Sets the clockwise rotation in degrees the video stream should be played back with.
+   *
+   * @param rotate The rotation in degrees.
+   * @return this instance
+   */
+  public MultimediaInfo setRotate(int rotate) {
+    this.rotate = rotate;
+    return this;
+  }
+
+  /**
+   * Returns the object this information was read from.
+   *
+   * @return The source object, null when this instance was built by other means.
+   */
+  public MultimediaObject getMultimediaObject() {
+    return multimediaObject;
+  }
+
+  /**
+   * Sets the object this information was read from.
+   *
+   * @param multimediaObject The source object.
+   * @return this instance
+   */
+  public MultimediaInfo setMultimediaObject(MultimediaObject multimediaObject) {
+    this.multimediaObject = multimediaObject;
+    return this;
+  }
+
   @Override
   public String toString() {
     return getClass().getName()
@@ -162,6 +217,8 @@ public class MultimediaInfo {
         + video
         + ", audio="
         + audio
+        + ", rotate="
+        + rotate
         + ")";
   }
 }

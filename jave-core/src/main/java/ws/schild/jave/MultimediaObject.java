@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.StringTokenizer;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
@@ -59,6 +62,13 @@ public class MultimediaObject {
    */
   private static final Pattern BIT_DEPTH_PATTERN =
           Pattern.compile("(s16|s16p|s32|fltp|dblp|s64)", Pattern.CASE_INSENSITIVE);
+
+  /**
+   * This regexp is used to parse the ffmpeg output about the rotation of a video stream, as
+   * reported in the stream metadata by cameras that record in a non native orientation.
+   */
+  private static final Pattern ROTATE_PATTERN =
+      Pattern.compile("^\\s*rotate\\s*:\\s*(-?\\d+)\\s*$", Pattern.CASE_INSENSITIVE);
 
   /** The locator of the ffmpeg executable used by this extractor. */
   private final ProcessLocator locator;
@@ -152,30 +162,92 @@ public class MultimediaObject {
    * @throws EncoderException If a problem occurs calling the underlying ffmpeg executable.
    */
   public MultimediaInfo getInfo() throws InputFormatException, EncoderException {
+    return getInfo(0L);
+  }
+
+  /**
+   * Returns a set informations about a multimedia file, if its format is supported for decoding,
+   * giving up after a while.
+   *
+   * <p>Reading an unreachable or very slow source, a stalled network stream in particular, leaves
+   * ffmpeg waiting and this call waiting with it, for as long as that lasts. With a timeout the
+   * ffmpeg process is destroyed once it runs out and an EncoderException is raised, so a single bad
+   * source cannot hold a thread forever.
+   *
+   * @param timeoutMillis How long to wait, in milliseconds. Zero or less waits indefinitely, which
+   *     is what {@link #getInfo()} does.
+   * @return A set of informations about the file and its contents.
+   * @throws InputFormatException If the format of the source file cannot be recognized and decoded.
+   * @throws EncoderException If a problem occurs calling the underlying ffmpeg executable, or if
+   *     the timeout ran out before the information was read.
+   */
+  public MultimediaInfo getInfo(long timeoutMillis)
+      throws InputFormatException, EncoderException {
     if (isURL() || inputFile.canRead()) {
-      ProcessWrapper ffmpeg = locator.createExecutor();
+      final ProcessWrapper ffmpeg = locator.createExecutor();
       ffmpeg.addArgument("-i");
       ffmpeg.addArgument(toString());
-      
+
       try {
         ffmpeg.execute();
       } catch (IOException e) {
         throw new EncoderException(e);
       }
+
+      // Destroying the process closes the stream the parser is blocked on, which is what
+      // unblocks this call. The flag tells the two cases apart afterwards, a source that could
+      // not be parsed and a source we simply stopped waiting for.
+      final AtomicBoolean timedOut = new AtomicBoolean(false);
+      Timer watchdog = null;
+      if (timeoutMillis > 0) {
+        watchdog = new Timer("jave-getInfo-watchdog", true);
+        watchdog.schedule(
+            new TimerTask() {
+              @Override
+              public void run() {
+                timedOut.set(true);
+                ffmpeg.destroy();
+              }
+            },
+            timeoutMillis);
+      }
+
       try {
         RBufferedReader reader =
             new RBufferedReader(new InputStreamReader(ffmpeg.getErrorStream()));
+        MultimediaInfo info;
         if (isURL()) {
-          return parseMultimediaInfo(inputURL.toString(), reader);
+          info = parseMultimediaInfo(inputURL.toString(), reader);
         } else {
-          return parseMultimediaInfo(inputFile.getAbsolutePath(), reader);
+          info = parseMultimediaInfo(inputFile.getAbsolutePath(), reader);
         }
+        if (timedOut.get()) {
+          throw new EncoderException(timeoutMessage(timeoutMillis));
+        }
+        return info.setMultimediaObject(this);
+      } catch (EncoderException e) {
+        // Covers InputFormatException too, it is a subclass
+        if (timedOut.get()) {
+          throw new EncoderException(timeoutMessage(timeoutMillis));
+        }
+        throw e;
       } finally {
+        if (watchdog != null) {
+          watchdog.cancel();
+        }
         ffmpeg.destroy();
       }
     } else {
       throw new EncoderException("Input file not found <" + inputFile.getAbsolutePath() + ">");
     }
+  }
+
+  private String timeoutMessage(long timeoutMillis) {
+    return "Gave up reading the media information of <"
+        + this
+        + "> after "
+        + timeoutMillis
+        + " ms";
   }
 
   /**
@@ -272,6 +344,12 @@ public class MultimediaObject {
             }
           case 2:
             {
+              // The rotation is reported as a metadata entry of the video stream, so it turns up
+              // between the stream lines rather than inside them.
+              Matcher mRotate = ROTATE_PATTERN.matcher(line);
+              if (mRotate.matches()) {
+                info.setRotate(Integer.parseInt(mRotate.group(1)));
+              }
               Matcher m = p3.matcher(line);
               if (m.matches()) {
                 String type = m.group(1);

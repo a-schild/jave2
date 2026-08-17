@@ -18,12 +18,15 @@
  */
 package ws.schild.jave;
 
-import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.nio.file.Files;
+
+import org.junit.jupiter.api.Test;
 import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
@@ -47,9 +50,8 @@ public class FileVideoEncoderTest extends AMediaTest {
 
     File source = new File(getResourceSourcePath(), "dance1.avi");
     File target = new File(getResourceTargetPath(), "testEncodeVideo1.3gp");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
+
     AudioAttributes audio = new AudioAttributes();
     audio.setCodec("libfaac");
     audio.setBitRate(128000);
@@ -79,9 +81,8 @@ public class FileVideoEncoderTest extends AMediaTest {
     System.out.println("testEncodeVideo2");
     File source = new File(getResourceSourcePath(), "dance1.avi");
     File target = new File(getResourceTargetPath(), "testEncodeVideo2.3gp");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
+
     AudioAttributes audio = new AudioAttributes();
     audio.setCodec("libfaac");
     audio.setBitRate(64000);
@@ -113,9 +114,8 @@ public class FileVideoEncoderTest extends AMediaTest {
     System.out.println("testEncodeVideo3");
     File source = new File(getResourceSourcePath(), "AV36_1.AVI");
     File target = new File(getResourceTargetPath(), "testEncodeVideo3.3gp");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
+
     AudioAttributes audio = new AudioAttributes();
     audio.setCodec("libfaac");
     audio.setBitRate(128000);
@@ -132,15 +132,10 @@ public class FileVideoEncoderTest extends AMediaTest {
     attrs.setVideoAttributes(video);
     Encoder encoder = new Encoder();
     PListener listener = new PListener();
+
     String errorMessage = "Exit code of ffmpeg encoding run is 1";
-    boolean exceptionThrown = false;
-    try {
-      encoder.encode(new MultimediaObject(source), target, attrs, listener);
-    } catch (EncoderException ex) {
-      assertEquals(ex.getMessage(), errorMessage, "Not expected error message");
-      exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown, "No exception occured");
+    EncoderException ex = assertThrows(EncoderException.class, () -> encoder.encode(new MultimediaObject(source), target, attrs, listener));
+    assertEquals(errorMessage, ex.getMessage(), "Unexpected error message");
   }
 
   /**
@@ -153,9 +148,8 @@ public class FileVideoEncoderTest extends AMediaTest {
     System.out.println("testEncodeVideo4");
     File source = new File(getResourceSourcePath(), "AV36_1.AVI");
     File target = new File(getResourceTargetPath(), "testEncodeVideo4.3gp");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
+
     AudioAttributes audio = new AudioAttributes();
     audio.setCodec("adpcm_ms");
     audio.setBitRate(128000);
@@ -172,15 +166,10 @@ public class FileVideoEncoderTest extends AMediaTest {
     attrs.setVideoAttributes(video);
     Encoder encoder = new Encoder();
     PListener listener = new PListener();
-    boolean exceptionThrown = false;
+
     String errorMessage = "Exit code of ffmpeg encoding run is 1";
-    try {
-      encoder.encode(new MultimediaObject(source), target, attrs, listener);
-    } catch (EncoderException ex) {
-      assertEquals(ex.getMessage(), errorMessage, "Not expected error message");
-      exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown, "No exception occured");
+    EncoderException ex = assertThrows(EncoderException.class, () -> encoder.encode(new MultimediaObject(source), target, attrs, listener));
+    assertEquals(errorMessage, ex.getMessage(), "Unexpected error message");
   }
 
   /**
@@ -193,9 +182,8 @@ public class FileVideoEncoderTest extends AMediaTest {
     System.out.println("testEncodeVideo5");
     File source = new File(getResourceSourcePath(), "AV36_1.AVI");
     File target = new File(getResourceTargetPath(), "testEncodeVideo5.flv");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
+
     AudioAttributes audio = new AudioAttributes();
     audio.setCodec("libmp3lame");
     audio.setBitRate(64000);
@@ -228,9 +216,7 @@ public class FileVideoEncoderTest extends AMediaTest {
     File source = new File(getResourceSourcePath(), "testfile09.mp3");
     if (source.exists()) {
       File target = new File(getResourceTargetPath(), "testEncodeAudio09.wav");
-      if (target.exists()) {
-        target.delete();
-      }
+      Files.deleteIfExists(target.toPath());
 
       // Set Audio Attributes
       AudioAttributes audio = new AudioAttributes();
@@ -261,9 +247,7 @@ public class FileVideoEncoderTest extends AMediaTest {
     File source = new File(getResourceSourcePath(), "private/test10.mpg");
     if (source.exists()) {
       File target = new File(getResourceTargetPath(), "testEncodeVideo10.mp4");
-      if (target.exists()) {
-        target.delete();
-      }
+      Files.deleteIfExists(target.toPath());
 
       AudioAttributes audio = new AudioAttributes();
       audio.setCodec("eac3");
@@ -298,9 +282,8 @@ public class FileVideoEncoderTest extends AMediaTest {
 
     File source = new File(getResourceSourcePath(), "dance1.avi");
     File target = new File(getResourceTargetPath(), "testEncodeVideo11.3gp");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
+
     AudioAttributes audio = new AudioAttributes();
     audio.setCodec("libfaac");
     audio.setBitRate(128000);
@@ -333,9 +316,8 @@ public class FileVideoEncoderTest extends AMediaTest {
 
     File source = new File(getResourceSourcePath(), "small.mp4");
     File target = new File(getResourceTargetPath(), "testEncodeVideo12.mp4");
-    if (target.exists()) {
-      target.delete();
-    }
+    Files.deleteIfExists(target.toPath());
+
     AudioAttributes audioAttr = new AudioAttributes();
     VideoAttributes videoAttr = new VideoAttributes();
     EncodingAttributes encodingAttr = new EncodingAttributes();

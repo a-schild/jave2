@@ -184,7 +184,7 @@ try {
                                                              
  //Encoding attributes                                       
  EncodingAttributes attrs = new EncodingAttributes();        
- attrs.setFormat("mp3");                                     
+ attrs.setOutputFormat("mp3");                               
  attrs.setAudioAttributes(audio);                            
                                                              
  //Encode                                                    
@@ -200,6 +200,38 @@ try {
 ## More advanced examples    
 
 Can be found [**here**](https://github.com/a-schild/jave2/blob/master/Examples.md)
+
+## Reacting to the end of an encoding
+
+`EncoderProgressListener` gained a `done()` method that is called once the
+encoding has finished successfully. It is a default method, so listeners written
+against earlier versions keep compiling unchanged.
+
+```java
+encoder.encode(new MultimediaObject(source), target, attrs, new EncoderProgressListener() {
+    public void sourceInfo(MultimediaInfo info) { }
+    public void progress(int permil) { }
+    public void message(String message) { }
+
+    @Override
+    public void done() {
+        System.out.println("Encoding finished");
+    }
+});
+```
+
+## Videos recorded in a different orientation
+
+Phones store the orientation as stream metadata instead of rotating the picture.
+`MultimediaInfo.getRotate()` reports that angle in degrees, clockwise, and is 0
+when the file carries no rotation.
+
+```java
+MultimediaInfo info = new MultimediaObject(source).getInfo();
+if (info.getRotate() == 90 || info.getRotate() == 270) {
+    // width and height of info.getVideo().getSize() are swapped on playback
+}
+```
 
 ## Changelog
 

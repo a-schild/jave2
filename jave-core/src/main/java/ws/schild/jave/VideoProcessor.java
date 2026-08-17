@@ -28,7 +28,16 @@ public class VideoProcessor {
 
   private static final Logger logger = LoggerFactory.getLogger(VideoProcessor.class);
 
-  private static boolean enabled = false;
+  /**
+   * Whether this instance found its ffmpeg and is usable.
+   *
+   * <p>Used to be static, which made it say something about the last VideoProcessor that happened
+   * to be constructed rather than about this one. An instance whose constructor had failed still
+   * reported itself enabled as long as any earlier one had succeeded, and then failed on a null
+   * encoder. It is read through the instance method isEnabled(), so keeping it per instance
+   * changes no signature.
+   */
+  private boolean enabled = false;
 
   private Encoder encoder;
   private ProcessLocator locator;
