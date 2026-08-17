@@ -1,7 +1,16 @@
 # JAVE2
 
 ## Changelog
-- **3.7.0-SNAPSHOT**
+- **4.0.0-SNAPSHOT**
+   - **Breaking:** removed the 32 bit x86 packages `jave-nativebin-win32` and
+     `jave-nativebin-linux32`. ffmpeg no longer publishes builds for 32 bit Windows,
+     so that binary could not be kept current, and 32 bit x86 Linux goes with it.
+     Stay on 3.6.0 if you need either. 32 bit ARM is not affected and remains
+     supported
+   - Fixed `VideoAttributes.setVsync()` failing on ffmpeg 5 and newer, which removed
+     `-vsync` in favour of `-fps_mode`. The two never overlap, so the option is now
+     chosen from what the ffmpeg actually in use accepts, asked once per executable.
+     Note that `VsyncMethod.DROP` has no counterpart under `-fps_mode`
    - Upgraded the bundled windows 64 bit ffmpeg from 4.4.1 to 9.0.1. The other
      platforms stay on 4.4.1 for now, see below
    - Fixed `getSupportedEncodingFormats()` and `getSupportedDecodingFormats()`

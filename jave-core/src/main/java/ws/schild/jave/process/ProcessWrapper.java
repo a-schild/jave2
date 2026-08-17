@@ -18,12 +18,16 @@
  */
 package ws.schild.jave.process;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,6 +42,13 @@ import org.slf4j.LoggerFactory;
 public class ProcessWrapper implements AutoCloseable {
 
   private static final Logger LOG = LoggerFactory.getLogger(ProcessWrapper.class);
+
+  /**
+   * Which executables take {@code -fps_mode} instead of {@code -vsync}, keyed by their path.
+   * Finding out costs a process start, and the answer cannot change while that file is in place,
+   * so it is asked once.
+   */
+  private static final Map<String, Boolean> FPS_MODE_SUPPORT = new ConcurrentHashMap<>();
 
   /** The path of the ffmpeg executable. */
   private final String ffmpegExecutablePath;
@@ -98,7 +109,8 @@ public class ProcessWrapper implements AutoCloseable {
    * @throws IOException If the process call fails.
    */
   public void execute(boolean destroyOnRuntimeShutdown, boolean openIOStreams) throws IOException {
-    Stream<String> execArgs = Stream.concat(Stream.of(ffmpegExecutablePath), args.stream());
+    Stream<String> execArgs =
+        Stream.concat(Stream.of(ffmpegExecutablePath), adaptToExecutable(args).stream());
 
     execArgs = enhanceArguments(execArgs);
 
@@ -133,6 +145,76 @@ public class ProcessWrapper implements AutoCloseable {
    */
   protected Stream<String> enhanceArguments(Stream<String> execArgs) {
     return execArgs;
+  }
+
+  /**
+   * Renames the arguments this particular ffmpeg would not understand.
+   *
+   * <p>So far that is only {@code -vsync}, which ffmpeg has removed in favour of {@code -fps_mode}.
+   * The two never overlapped, the old releases this library still bundles for some platforms know
+   * only {@code -vsync} and the current ones know only {@code -fps_mode}, so which to send cannot
+   * be decided when the library is built, only when the executable in front of us is known.
+   *
+   * <p>Note that {@code drop} has no counterpart under {@code -fps_mode}. It is passed through
+   * unchanged so that ffmpeg says so itself rather than the library silently substituting
+   * something else.
+   *
+   * @param arguments The arguments as the caller built them.
+   * @return The arguments this executable accepts, the same list when nothing needed renaming.
+   */
+  private List<String> adaptToExecutable(List<String> arguments) {
+    if (!arguments.contains("-vsync") || !supportsFpsMode()) {
+      return arguments;
+    }
+    LOG.debug("This ffmpeg wants -fps_mode rather than -vsync, renaming the argument");
+    return arguments.stream()
+        .map(argument -> "-vsync".equals(argument) ? "-fps_mode" : argument)
+        .collect(Collectors.toList());
+  }
+
+  /** Whether this executable takes {@code -fps_mode}, probed once per executable and remembered. */
+  private boolean supportsFpsMode() {
+    return FPS_MODE_SUPPORT.computeIfAbsent(ffmpegExecutablePath, ProcessWrapper::probeFpsMode);
+  }
+
+  /**
+   * Asks the executable itself, by handing it the option and seeing whether it objects. Cheaper and
+   * far more dependable than reading a version out of the banner, which the various builds format
+   * as they please.
+   *
+   * @param executable The ffmpeg to ask.
+   * @return Whether it accepts {@code -fps_mode}.
+   */
+  private static boolean probeFpsMode(String executable) {
+    Process probe = null;
+    try {
+      probe =
+          Runtime.getRuntime()
+              .exec(new String[] {executable, "-hide_banner", "-fps_mode", "cfr"});
+      StringBuilder complaints = new StringBuilder();
+      try (BufferedReader reader =
+          new BufferedReader(new InputStreamReader(probe.getErrorStream()))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+          complaints.append(line).append('\n');
+        }
+      }
+      probe.waitFor();
+      boolean supported = !complaints.toString().contains("Unrecognized option 'fps_mode'");
+      LOG.debug("<{}> accepts -fps_mode: {}", executable, supported);
+      return supported;
+    } catch (IOException e) {
+      LOG.warn("Could not ask <{}> about -fps_mode, assuming it wants -vsync", executable, e);
+      return false;
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      LOG.warn("Interrupted while asking <{}> about -fps_mode", executable, e);
+      return false;
+    } finally {
+      if (probe != null) {
+        probe.destroy();
+      }
+    }
   }
 
   /**

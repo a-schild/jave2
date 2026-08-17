@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.VideoAttributes;
+import ws.schild.jave.encode.enums.VsyncMethod;
 import ws.schild.jave.info.VideoSize;
 
 /** @author a.schild */
@@ -36,6 +37,39 @@ public class FileVideoEncoderTest extends AMediaTest {
 
   public FileVideoEncoderTest() {
     super(null, "FileVideoEncoder");
+  }
+
+  /**
+   * Asking for a frame rate mode has to work whichever ffmpeg is bundled.
+   *
+   * <p>The option was renamed, old releases take only -vsync and current ones only -fps_mode, so
+   * this passes solely because the right one is chosen for the executable in front of it. The
+   * platforms of this project do not all carry the same ffmpeg, so both branches are real.
+   *
+   * @throws java.lang.Exception
+   */
+  @Test
+  public void testEncodeVideoWithVsync() throws Exception {
+    System.out.println("testEncodeVideoWithVsync");
+
+    File source = new File(getResourceSourcePath(), "dance1.avi");
+    File target = new File(getResourceTargetPath(), "testEncodeVideoWithVsync.mp4");
+    Files.deleteIfExists(target.toPath());
+
+    AudioAttributes audio = new AudioAttributes();
+    audio.setCodec("aac");
+    VideoAttributes video = new VideoAttributes();
+    video.setCodec("mpeg4");
+    video.setVsync(VsyncMethod.CFR);
+    EncodingAttributes attrs = new EncodingAttributes();
+    attrs.setOutputFormat("mp4");
+    attrs.setAudioAttributes(audio);
+    attrs.setVideoAttributes(video);
+
+    new Encoder().encode(new MultimediaObject(source), target, attrs);
+
+    assertTrue(target.exists(), "Output file missing");
+    assertTrue(target.length() > 0, "Output file empty");
   }
 
   /**
