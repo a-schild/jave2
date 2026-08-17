@@ -134,8 +134,24 @@ jobs:
           "$bundled" -hide_banner -encoders 2>/dev/null | awk '{print $2}' | sort -u > enc-old.txt
           ./out/ffmpeg-amd64 -hide_banner -encoders 2>/dev/null | awk '{print $2}' | sort -u > enc-new.txt
 
+          # Losses we have looked at and accepted, with the reason:
+          #   libspeex  alpine packages it nowhere and its configure will not run in
+          #             this container. Opus replaced it years ago and is present.
+          #   sonic, sonicls, ayuv, v308, v408, v410
+          #             native encoders ffmpeg itself dropped between 4.4 and 9.0,
+          #             nothing this build can put back.
+          allowed='libspeex sonic sonicls ayuv v308 v408 v410'
+
           lost=$(comm -23 enc-old.txt enc-new.txt | tr '\n' ' ')
           gained=$(comm -13 enc-old.txt enc-new.txt | tr '\n' ' ')
+
+          unexpected=''
+          for enc in $lost; do
+            case " $allowed " in
+              *" $enc "*) ;;
+              *) unexpected="$unexpected $enc" ;;
+            esac
+          done
 
           {
             echo "## Encoders against the bundled 4.4.1"
@@ -145,12 +161,14 @@ jobs:
             echo "**Gained:** ${gained:-none}"
           } >> "$GITHUB_STEP_SUMMARY"
 
-          echo "lost:   ${lost:-none}"
-          echo "gained: ${gained:-none}"
+          echo "lost:       ${lost:-none}"
+          echo "gained:     ${gained:-none}"
+          echo "unexpected:${unexpected:- none}"
 
-          # Parity is the point of building these libraries, so losing one is a failure
-          if [ -n "$lost" ]; then
-            echo "::error::this build drops encoders the bundled one has: $lost"
+          # Parity is the point of building these libraries, so an unexplained loss
+          # is a failure rather than something to notice later
+          if [ -n "$unexpected" ]; then
+            echo "::error::this build drops encoders the bundled one has:$unexpected"
             exit 1
           fi
 

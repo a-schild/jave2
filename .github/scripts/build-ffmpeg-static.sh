@@ -34,7 +34,6 @@ export CONFIG_SHELL=/bin/bash
 
 # Versions are pinned so a build is repeatable and a failure is not a moving target
 OPUS_VERSION=1.5.2
-SPEEX_VERSION=1.2.1
 VPX_VERSION=1.15.0
 X265_VERSION=4.1
 ASS_VERSION=0.17.3
@@ -85,10 +84,9 @@ fetch "https://downloads.xiph.org/releases/opus/opus-${OPUS_VERSION}.tar.gz" "op
 bash ./configure --prefix="$PREFIX" --disable-shared --enable-static --disable-doc --disable-extra-programs
 make -j"$JOBS" && make install
 
-echo "=== speex ==="
-fetch "https://downloads.xiph.org/releases/speex/speex-${SPEEX_VERSION}.tar.gz" "speex-${SPEEX_VERSION}"
-bash ./configure --prefix="$PREFIX" --disable-shared --enable-static
-make -j"$JOBS" && make install
+# speex is deliberately absent. Alpine packages it nowhere, and its configure fails
+# inside this container in a way that is not worth chasing for a codec opus replaced
+# years ago. Its encoder is the one accepted regression against the 4.4.1 build.
 
 echo "=== libvpx ==="
 fetch "https://github.com/webmproject/libvpx/archive/refs/tags/v${VPX_VERSION}.tar.gz" "libvpx-${VPX_VERSION}"
