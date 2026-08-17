@@ -194,11 +194,15 @@ jobs:
 
       - name: Check out, to compare against the binary bundled today
         uses: actions/checkout@v5
+        with:
+          # Into its own directory, checkout cleans what it is given and would
+          # otherwise take the binary we just built with it
+          path: bundled
 
       - name: What this build gains and loses against the bundled 4.4.1
         run: |
           set -uo pipefail
-          bundled=jave-nativebin-linux64/src/main/resources/ws/schild/jave/nativebin/ffmpeg-amd64
+          bundled=bundled/jave-nativebin-linux64/src/main/resources/ws/schild/jave/nativebin/ffmpeg-amd64
           chmod +x "$bundled"
 
           echo "bundled: $("$bundled" -version | head -1)"
