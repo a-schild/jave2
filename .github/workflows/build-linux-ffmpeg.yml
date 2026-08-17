@@ -1,9 +1,9 @@
-# Builds the linux ffmpeg this project bundles, from source, fully static.
+# Builds the linux ffmpeg binaries this project bundles, from source, fully static.
 #
 # Why build at all: the static builds this project has always used are no longer
 # reachable, and every other publisher ships dynamically linked binaries. BtbN needs
-# glibc 2.28, ffmpeg.martin-riedl.de needs 2.35. Bundling either would drop older
-# distributions and musl based images, which work today.
+# glibc 2.28, ffmpeg.martin-riedl.de needs 2.35, and neither offers 32 bit arm.
+# Bundling those would drop older distributions and musl based images, which work now.
 #
 # Why musl: linking against musl inside alpine produces a binary with no interpreter
 # and no libc dependency at all, so it runs on any linux, glibc distributions and musl
@@ -12,7 +12,8 @@
 #
 # Alpine is driven through docker rather than the container: key, because the
 # javascript actions need a node that will not run on musl. The build happens in the
-# container, everything else on the host.
+# container, and so does every check, in a glibc debian of the same architecture, so
+# arm binaries can be exercised on an x86 runner through qemu.
 
 name: Build linux ffmpeg
 
@@ -30,22 +31,55 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 120
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 360
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            platform: linux/amd64
+            runner: ubuntu-latest
+            emulated: false
+            output: ffmpeg-amd64
+            module: jave-nativebin-linux64
+          - arch: arm64
+            platform: linux/arm64
+            # Native arm runner, free for public repositories. Emulating this one
+            # would turn twenty minutes into hours for no reason.
+            runner: ubuntu-24.04-arm
+            emulated: false
+            output: ffmpeg-aarch64
+            module: jave-nativebin-arm64
+          - arch: arm32
+            platform: linux/arm/v7
+            # There is no 32 bit arm runner, so this one goes through qemu and is
+            # far slower than the others
+            runner: ubuntu-latest
+            emulated: true
+            output: ffmpeg-arm
+            module: jave-nativebin-arm32
 
     steps:
       - uses: actions/checkout@v5
 
-      - name: Build ffmpeg ${{ inputs.ffmpeg_version }} statically against musl
+      - name: Set up qemu, this architecture has no runner of its own
+        if: matrix.emulated
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: ${{ matrix.platform }}
+
+      - name: Build ffmpeg ${{ inputs.ffmpeg_version }} for ${{ matrix.arch }}
         run: |
           set -euo pipefail
           mkdir -p out
 
-          docker run --rm \
+          docker run --rm --platform "${{ matrix.platform }}" \
             -v "$PWD/out:/out" \
             -v "$PWD/.github/scripts/build-ffmpeg-static.sh:/build.sh:ro" \
             -e FFMPEG_VERSION="${{ inputs.ffmpeg_version }}" \
-            -e OUTPUT_NAME="ffmpeg-amd64" \
+            -e OUTPUT_NAME="${{ matrix.output }}" \
             -e HOST_UID="$(id -u)" \
             -e HOST_GID="$(id -g)" \
             "alpine:${{ inputs.alpine_version }}" \
@@ -56,7 +90,7 @@ jobs:
       - name: It must be static, or it is no use to us
         run: |
           set -euo pipefail
-          description=$(file -b out/ffmpeg-amd64)
+          description=$(file -b "out/${{ matrix.output }}")
           echo "file: $description"
 
           if ! echo "$description" | grep -q "statically linked"; then
@@ -69,71 +103,71 @@ jobs:
           fi
           echo "OK, self contained"
 
-      - name: Run it on the host, which is glibc, to prove it needs nothing
+      - name: Exercise it on glibc, where it claims to need nothing
         run: |
           set -euo pipefail
-          ./out/ffmpeg-amd64 -version | head -2
+          bundled="${{ matrix.module }}/src/main/resources/ws/schild/jave/nativebin/${{ matrix.output }}"
+          chmod +x "$bundled" "out/${{ matrix.output }}"
 
-      - name: The features jave actually depends on
-        run: |
-          set -euo pipefail
-          fail=0
+          # Debian rather than alpine on purpose. A musl static binary is supposed to
+          # run on glibc without asking for anything, and this is where that is proven.
+          docker run --rm --platform "${{ matrix.platform }}" \
+            -v "$PWD:/w" -w /w debian:12-slim bash -euo pipefail -c '
+              new="out/${{ matrix.output }}"
+              old="'"$bundled"'"
+              fail=0
 
-          echo "=== https, needed for MultimediaObject on a URL ==="
-          if ./out/ffmpeg-amd64 -hide_banner -protocols | grep -qw https; then
-            echo "  https present"
-          else
-            echo "::error::no https protocol, remote sources would stop working"; fail=1
-          fi
+              echo "=== it runs ==="
+              "$new" -version | head -2
 
-          echo "=== encoders and filters the test suite exercises ==="
-          for enc in libx264 libx265 libmp3lame aac libvorbis flac mpeg4 libopus libvpx-vp9; do
-            if ./out/ffmpeg-amd64 -hide_banner -encoders | grep -qw "$enc"; then
-              echo "  encoder $enc"
-            else
-              echo "::error::encoder missing: $enc"; fail=1
-            fi
-          done
-          # AssSubtitlesFilter is part of the public API and has its own test
-          if ./out/ffmpeg-amd64 -hide_banner -filters | grep -qw subtitles; then
-            echo "  filter subtitles"
-          else
-            echo "::error::no subtitles filter, libass did not make it in"; fail=1
-          fi
+              echo "=== https, needed for MultimediaObject on a URL ==="
+              if "$new" -hide_banner -protocols | grep -qw https; then
+                echo "  https present"
+              else
+                echo "::error::no https protocol, remote sources would stop working"; fail=1
+              fi
 
-          echo "=== -fps_mode, the modern spelling of -vsync ==="
-          if ./out/ffmpeg-amd64 -hide_banner -fps_mode cfr 2>&1 | grep -q "Unrecognized option"; then
-            echo "::error::this build wants -vsync, unexpected for 9.x"; fail=1
-          else
-            echo "  -fps_mode accepted"
-          fi
+              echo "=== encoders and filters the test suite exercises ==="
+              for enc in libx264 libx265 libmp3lame aac libvorbis flac mpeg4 libopus libvpx-vp9; do
+                if "$new" -hide_banner -encoders | grep -qw "$enc"; then
+                  echo "  encoder $enc"
+                else
+                  echo "::error::encoder missing: $enc"; fail=1
+                fi
+              done
+              if "$new" -hide_banner -filters | grep -qw subtitles; then
+                echo "  filter subtitles"
+              else
+                echo "::error::no subtitles filter, libass did not make it in"; fail=1
+              fi
 
-          exit $fail
+              echo "=== -fps_mode, the modern spelling of -vsync ==="
+              if "$new" -hide_banner -fps_mode cfr 2>&1 | grep -q "Unrecognized option"; then
+                echo "::error::this build wants -vsync, unexpected for 9.x"; fail=1
+              else
+                echo "  -fps_mode accepted"
+              fi
 
-      - name: Actually transcode something
-        run: |
-          set -euo pipefail
-          ./out/ffmpeg-amd64 -hide_banner -loglevel error \
-            -f lavfi -i testsrc=duration=2:size=320x240:rate=15 \
-            -f lavfi -i sine=frequency=440:duration=2 \
-            -c:v libx264 -c:a aac -shortest proof.mp4
-          ls -l proof.mp4
-          # ffmpeg exits 1 when given no output file, which is what probing with -i is,
-          # so do not let that count as the step failing
-          { ./out/ffmpeg-amd64 -hide_banner -i proof.mp4 2>&1 || true; } | grep -E "Duration|Stream"
+              echo "=== it can actually transcode ==="
+              "$new" -hide_banner -loglevel error \
+                -f lavfi -i testsrc=duration=2:size=320x240:rate=15 \
+                -f lavfi -i sine=frequency=440:duration=2 \
+                -c:v libx264 -c:a aac -shortest /tmp/proof.mp4
+              ls -l /tmp/proof.mp4
 
-      - name: What this build gains and loses against the bundled 4.4.1
+              echo "=== encoders against the bundled build ==="
+              "$old" -hide_banner -encoders 2>/dev/null | awk "{print \$2}" | sort -u > /tmp/enc-old.txt
+              "$new" -hide_banner -encoders 2>/dev/null | awk "{print \$2}" | sort -u > /tmp/enc-new.txt
+              comm -23 /tmp/enc-old.txt /tmp/enc-new.txt | tr "\n" " " > /tmp/lost.txt
+              comm -13 /tmp/enc-old.txt /tmp/enc-new.txt | tr "\n" " " > /tmp/gained.txt
+              cp /tmp/lost.txt /tmp/gained.txt /w/ 2>/dev/null || true
+
+              exit $fail
+            '
+
+      - name: What this build gains and loses against the bundled one
         run: |
           set -uo pipefail
-          bundled=jave-nativebin-linux64/src/main/resources/ws/schild/jave/nativebin/ffmpeg-amd64
-          chmod +x "$bundled"
-
-          { "$bundled" -version 2>/dev/null || true; } | head -1
-          { ./out/ffmpeg-amd64 -version 2>/dev/null || true; } | head -1
-
-          "$bundled" -hide_banner -encoders 2>/dev/null | awk '{print $2}' | sort -u > enc-old.txt
-          ./out/ffmpeg-amd64 -hide_banner -encoders 2>/dev/null | awk '{print $2}' | sort -u > enc-new.txt
-
           # Losses we have looked at and accepted, with the reason:
           #   libspeex  alpine packages it nowhere and its configure will not run in
           #             this container. Opus replaced it years ago and is present.
@@ -142,8 +176,8 @@ jobs:
           #             nothing this build can put back.
           allowed='libspeex sonic sonicls ayuv v308 v408 v410'
 
-          lost=$(comm -23 enc-old.txt enc-new.txt | tr '\n' ' ')
-          gained=$(comm -13 enc-old.txt enc-new.txt | tr '\n' ' ')
+          lost=$(cat lost.txt 2>/dev/null || echo '')
+          gained=$(cat gained.txt 2>/dev/null || echo '')
 
           unexpected=''
           for enc in $lost; do
@@ -154,7 +188,7 @@ jobs:
           done
 
           {
-            echo "## Encoders against the bundled 4.4.1"
+            echo "## ${{ matrix.arch }}: encoders against the bundled build"
             echo
             echo "**Lost:** ${lost:-none}"
             echo
@@ -165,8 +199,6 @@ jobs:
           echo "gained:     ${gained:-none}"
           echo "unexpected:${unexpected:- none}"
 
-          # Parity is the point of building these libraries, so an unexplained loss
-          # is a failure rather than something to notice later
           if [ -n "$unexpected" ]; then
             echo "::error::this build drops encoders the bundled one has:$unexpected"
             exit 1
@@ -175,8 +207,8 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: jave-nativebin-linux64
-          path: out/ffmpeg-amd64
+          name: ${{ matrix.module }}
+          path: out/${{ matrix.output }}
           retention-days: 7
           compression-level: 0
 
@@ -184,11 +216,11 @@ jobs:
         if: always()
         run: |
           {
-            echo "## linux amd64 ffmpeg ${{ inputs.ffmpeg_version }}"
+            echo "## ${{ matrix.arch }} ffmpeg ${{ inputs.ffmpeg_version }}"
             echo
             echo '```'
-            file -b out/ffmpeg-amd64 2>/dev/null || echo "not built"
+            file -b "out/${{ matrix.output }}" 2>/dev/null || echo "not built"
             echo '```'
             echo
-            echo "Commit to \`jave-nativebin-linux64/src/main/resources/ws/schild/jave/nativebin/ffmpeg-amd64\`"
+            echo "Commit to \`${{ matrix.module }}/src/main/resources/ws/schild/jave/nativebin/${{ matrix.output }}\`"
           } >> "$GITHUB_STEP_SUMMARY"

@@ -44,9 +44,12 @@ OPENJPEG_VERSION=2.5.2
 DAV1D_VERSION=1.5.0
 AOM_VERSION=3.10.0
 
+ARCH="$(uname -m)"
+echo "=== building for ${ARCH} ==="
+
 echo "=== toolchain and the libraries alpine can give us statically ==="
 apk add --no-cache \
-  build-base coreutils pkgconf nasm yasm cmake meson ninja \
+  build-base coreutils pkgconf cmake meson ninja \
   autoconf automake libtool git tar xz curl perl bash \
   diffutils findutils grep sed \
   zlib-dev zlib-static \
@@ -72,6 +75,12 @@ apk add --no-cache \
   gettext-dev gettext-static \
   pcre2-dev \
   libgomp
+
+# nasm and yasm assemble x86, they are neither packaged nor wanted elsewhere
+case "$ARCH" in
+  x86_64|i686) apk add --no-cache nasm yasm ;;
+  *) echo "not x86, skipping the x86 assemblers" ;;
+esac
 
 fetch() {
   # fetch <url> <directory-it-unpacks-to>
@@ -115,10 +124,17 @@ make -j"$JOBS" && make install
 echo "=== x265 ==="
 fetch "https://bitbucket.org/multicoreware/x265_git/downloads/x265_${X265_VERSION}.tar.gz" "x265_${X265_VERSION}"
 cd source
+# x265 assembles by hand for x86 and aarch64. On 32 bit arm it has no such path and
+# leaving assembly on there only produces a build that will not compile.
+X265_ASM=ON
+case "$ARCH" in
+  armv7l|armv7|armhf) X265_ASM=OFF ;;
+esac
 cmake -G "Unix Makefiles" \
   -DCMAKE_INSTALL_PREFIX="$PREFIX" \
   -DENABLE_SHARED=OFF \
   -DENABLE_CLI=OFF \
+  -DENABLE_ASSEMBLY="$X265_ASM" \
   -DCMAKE_BUILD_TYPE=Release .
 make -j"$JOBS" && make install
 # x265 advertises -lgcc_s in its pkg-config file, which does not exist in a static
