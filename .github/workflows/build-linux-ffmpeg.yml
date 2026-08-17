@@ -71,7 +71,7 @@ jobs:
               # at all. Say plainly what is here, a missing .a otherwise surfaces as a
               # link error far from its cause.
               for lib in libx264 libmp3lame libvorbis libogg libtheora libfreetype \
-                         libfribidi libwebp libsoxr libxml2 libssl libcrypto libz; do
+                         libfribidi libwebp libsoxr libssl libcrypto libz; do
                 if ls /usr/lib/"${lib}".a >/dev/null 2>&1; then
                   echo "static ok      ${lib}.a"
                 else
@@ -107,7 +107,6 @@ jobs:
                 --enable-libfribidi \
                 --enable-libwebp \
                 --enable-libsoxr \
-                --enable-libxml2 \
                 --disable-doc \
                 --disable-debug \
                 --disable-ffplay \
