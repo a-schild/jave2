@@ -49,15 +49,15 @@ jobs:
                 bzip2-dev bzip2-static \
                 xz-dev \
                 openssl-dev openssl-libs-static \
-                x264-dev x264-static \
-                x265-dev x265-static \
+                x264-dev \
+                x265-dev \
                 lame-dev \
                 opus-dev \
                 libvorbis-dev \
                 libogg-dev \
                 libtheora-dev \
                 libvpx-dev \
-                dav1d-dev dav1d-static \
+                dav1d-dev \
                 libass-dev \
                 freetype-dev freetype-static \
                 fribidi-dev fribidi-static \
@@ -70,6 +70,19 @@ jobs:
                 libxml2-dev \
                 graphite2-dev graphite2-static \
                 opencore-amr-dev
+
+              # Alpine ships the archives inside -dev for some libraries and in a
+              # separate -static package for others. Say plainly which are present,
+              # a missing .a shows up as a confusing link error much later.
+              for lib in libx264 libx265 libdav1d libmp3lame libopus libvorbis \
+                         libtheora libvpx libass libfreetype libwebp libsoxr \
+                         libssl libcrypto libz; do
+                if ls /usr/lib/"${lib}".a >/dev/null 2>&1; then
+                  echo "static ok      ${lib}.a"
+                else
+                  echo "static MISSING ${lib}.a"
+                fi
+              done
 
               cd /tmp
               curl -fSL --retry 3 -o ffmpeg.tar.xz \
