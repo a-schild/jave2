@@ -8,6 +8,12 @@
 /jave-core/nbproject/
 /jave-core-test/src/test/resources/private
 
+# ffmpeg and ffprobe binaries dropped next to the test media when running the
+# tests against a local build. They are hundreds of megabytes and come from the
+# jave-nativebin modules or from your own ffmpeg, never from this repository.
+/jave-core-test/src/test/resources/ffmpeg*
+/jave-core-test/src/test/resources/ffprobe*
+
 # Squelch Eclipse settings
 .settings
 .project
