@@ -205,7 +205,6 @@ cd "ffmpeg-${FFMPEG_VERSION}"
   --enable-libx265 \
   --enable-libmp3lame \
   --enable-libopus \
-  --enable-libspeex \
   --enable-libvorbis \
   --enable-libtheora \
   --enable-libvpx \
