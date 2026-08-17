@@ -79,6 +79,17 @@ fetch() {
   cd "$2"
 }
 
+fetch_git() {
+  # fetch_git <repo-url> <tag> <directory>
+  # Codeload rate limits archive downloads from CI often enough to break a build,
+  # a shallow clone of the tag is steadier and costs about the same
+  cd "$SRC"
+  echo "--- cloning $1 at $2"
+  rm -rf "$3"
+  git clone --depth 1 --branch "$2" "$1" "$3"
+  cd "$3"
+}
+
 echo "=== opus ==="
 fetch "https://downloads.xiph.org/releases/opus/opus-${OPUS_VERSION}.tar.gz" "opus-${OPUS_VERSION}"
 bash ./configure --prefix="$PREFIX" --disable-shared --enable-static --disable-doc --disable-extra-programs
@@ -89,7 +100,7 @@ make -j"$JOBS" && make install
 # years ago. Its encoder is the one accepted regression against the 4.4.1 build.
 
 echo "=== libvpx ==="
-fetch "https://github.com/webmproject/libvpx/archive/refs/tags/v${VPX_VERSION}.tar.gz" "libvpx-${VPX_VERSION}"
+fetch_git "https://github.com/webmproject/libvpx.git" "v${VPX_VERSION}" "libvpx"
 bash ./configure --prefix="$PREFIX" \
   --disable-shared --enable-static --enable-pic \
   --enable-vp8 --enable-vp9 --enable-vp9-highbitdepth \
@@ -110,7 +121,8 @@ make -j"$JOBS" && make install
 sed -i 's/-lgcc_s//g' "$PREFIX/lib/pkgconfig/x265.pc" || true
 
 echo "=== libass ==="
-fetch "https://github.com/libass/libass/releases/download/${ASS_VERSION}/libass-${ASS_VERSION}.tar.gz" "libass-${ASS_VERSION}"
+fetch_git "https://github.com/libass/libass.git" "${ASS_VERSION}" "libass"
+./autogen.sh
 bash ./configure --prefix="$PREFIX" --disable-shared --enable-static
 make -j"$JOBS" && make install
 
@@ -132,7 +144,7 @@ bash ./configure --prefix="$PREFIX" --disable-shared --enable-static
 make -j"$JOBS" && make install
 
 echo "=== openjpeg ==="
-fetch "https://github.com/uclouvain/openjpeg/archive/refs/tags/v${OPENJPEG_VERSION}.tar.gz" "openjpeg-${OPENJPEG_VERSION}"
+fetch_git "https://github.com/uclouvain/openjpeg.git" "v${OPENJPEG_VERSION}" "openjpeg"
 cmake -G "Unix Makefiles" \
   -DCMAKE_INSTALL_PREFIX="$PREFIX" \
   -DBUILD_SHARED_LIBS=OFF \
