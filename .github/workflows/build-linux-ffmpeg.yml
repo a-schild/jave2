@@ -1,0 +1,206 @@
+# Builds the linux ffmpeg this project bundles, from source, fully static.
+#
+# Why build at all: the static builds this project has always used are no longer
+# reachable, and every other publisher ships dynamically linked binaries. BtbN needs
+# glibc 2.28, ffmpeg.martin-riedl.de needs 2.35. Bundling either would drop older
+# distributions and musl based images, which work today.
+#
+# Why musl: linking against musl inside alpine produces a binary with no interpreter
+# and no libc dependency at all, so it runs on any linux, glibc distributions and musl
+# containers alike. That is a stronger guarantee than the glibc static builds this
+# project used before.
+#
+# Alpine is driven through docker rather than the container: key, because the
+# javascript actions need a node that will not run on musl. The build happens in the
+# container, everything else on the host.
+
+name: Build linux ffmpeg
+
+on:
+  workflow_dispatch:
+    inputs:
+      ffmpeg_version:
+        description: 'ffmpeg release to build'
+        required: false
+        default: '9.0.1'
+      alpine_version:
+        description: 'alpine image to build in'
+        required: false
+        default: '3.21'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build ffmpeg ${{ inputs.ffmpeg_version }} statically against musl
+        run: |
+          set -euo pipefail
+          mkdir -p out
+
+          docker run --rm \
+            -v "$PWD/out:/out" \
+            -e FFMPEG_VERSION="${{ inputs.ffmpeg_version }}" \
+            "alpine:${{ inputs.alpine_version }}" \
+            sh -eux -c '
+              apk add --no-cache \
+                build-base coreutils pkgconf nasm yasm cmake git tar xz curl \
+                zlib-dev zlib-static \
+                bzip2-dev bzip2-static \
+                xz-dev \
+                openssl-dev openssl-libs-static \
+                x264-dev x264-static \
+                x265-dev x265-static \
+                lame-dev \
+                opus-dev \
+                libvorbis-dev \
+                libogg-dev \
+                libtheora-dev \
+                libvpx-dev \
+                dav1d-dev dav1d-static \
+                libass-dev \
+                freetype-dev freetype-static \
+                fribidi-dev fribidi-static \
+                harfbuzz-dev harfbuzz-static \
+                brotli-dev brotli-static \
+                expat-dev expat-static \
+                libpng-dev \
+                libwebp-dev \
+                soxr-dev \
+                libxml2-dev \
+                graphite2-dev graphite2-static \
+                opencore-amr-dev
+
+              cd /tmp
+              curl -fSL --retry 3 -o ffmpeg.tar.xz \
+                "https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.xz"
+              tar -xf ffmpeg.tar.xz
+              cd "ffmpeg-${FFMPEG_VERSION}"
+
+              # --enable-version3 because this project is GPL3, and openssl 3 is
+              # apache 2.0 which that allows. --extra-ldflags=-static plus
+              # --pkg-config-flags=--static is what actually makes it self contained.
+              ./configure \
+                --prefix=/usr/local \
+                --pkg-config-flags="--static" \
+                --extra-cflags="-I/usr/local/include" \
+                --extra-ldflags="-L/usr/local/lib -static" \
+                --extra-libs="-lpthread -lm" \
+                --disable-shared \
+                --enable-static \
+                --enable-gpl \
+                --enable-version3 \
+                --enable-openssl \
+                --enable-libx264 \
+                --enable-libx265 \
+                --enable-libmp3lame \
+                --enable-libopus \
+                --enable-libvorbis \
+                --enable-libtheora \
+                --enable-libvpx \
+                --enable-libdav1d \
+                --enable-libass \
+                --enable-libfreetype \
+                --enable-libfribidi \
+                --enable-libwebp \
+                --enable-libsoxr \
+                --enable-libxml2 \
+                --enable-libopencore-amrnb \
+                --enable-libopencore-amrwb \
+                --disable-doc \
+                --disable-debug \
+                --disable-ffplay \
+                || { echo "=== configure failed, tail of the log ==="; tail -60 ffbuild/config.log; exit 1; }
+
+              make -j"$(nproc)"
+              strip ffmpeg
+              cp ffmpeg /out/ffmpeg-amd64
+            '
+
+          ls -l out/
+
+      - name: It must be static, or it is no use to us
+        run: |
+          set -euo pipefail
+          description=$(file -b out/ffmpeg-amd64)
+          echo "file: $description"
+
+          if ! echo "$description" | grep -q "statically linked"; then
+            echo "::error::not statically linked, this would break musl images and older distributions"
+            exit 1
+          fi
+          if echo "$description" | grep -q "interpreter"; then
+            echo "::error::names an interpreter, so it is not self contained"
+            exit 1
+          fi
+          if ldd out/ffmpeg-amd64 2>&1 | grep -qv "not a dynamic executable"; then
+            echo "ldd says:"; ldd out/ffmpeg-amd64 2>&1 || true
+          fi
+          echo "OK, self contained"
+
+      - name: Run it on the host, which is glibc, to prove it needs nothing
+        run: |
+          set -euo pipefail
+          chmod +x out/ffmpeg-amd64
+          ./out/ffmpeg-amd64 -version | head -3
+
+      - name: The features jave actually depends on
+        run: |
+          set -euo pipefail
+          fail=0
+
+          echo "=== https, needed for MultimediaObject on a URL ==="
+          if ./out/ffmpeg-amd64 -hide_banner -protocols | grep -qw https; then
+            echo "  https present"
+          else
+            echo "::error::no https protocol, remote sources would stop working"; fail=1
+          fi
+
+          echo "=== encoders used across the test suite ==="
+          for enc in libx264 libmp3lame aac libvorbis flac mpeg4 libopus; do
+            if ./out/ffmpeg-amd64 -hide_banner -encoders | grep -qw "$enc"; then
+              echo "  $enc"
+            else
+              echo "::error::encoder missing: $enc"; fail=1
+            fi
+          done
+
+          echo "=== -fps_mode, the modern spelling of -vsync ==="
+          if ./out/ffmpeg-amd64 -hide_banner -fps_mode cfr 2>&1 | grep -q "Unrecognized option"; then
+            echo "::error::this build wants -vsync, unexpected for 9.x"; fail=1
+          else
+            echo "  -fps_mode accepted"
+          fi
+
+          exit $fail
+
+      - name: Actually transcode something
+        run: |
+          set -euo pipefail
+          ./out/ffmpeg-amd64 -hide_banner -loglevel error \
+            -f lavfi -i testsrc=duration=2:size=320x240:rate=15 \
+            -f lavfi -i sine=frequency=440:duration=2 \
+            -c:v libx264 -c:a aac -shortest proof.mp4
+          ls -l proof.mp4
+          ./out/ffmpeg-amd64 -hide_banner -i proof.mp4 2>&1 | grep -E "Duration|Stream"
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: jave-nativebin-linux64
+          path: out/ffmpeg-amd64
+          retention-days: 7
+          compression-level: 0
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## linux amd64 ffmpeg ${{ inputs.ffmpeg_version }}"
+            echo
+            echo '```'
+            file -b out/ffmpeg-amd64 2>/dev/null || echo "not built"
+            echo '```'
+            echo
+            echo "Commit to \`jave-nativebin-linux64/src/main/resources/ws/schild/jave/nativebin/ffmpeg-amd64\`"
+          } >> "$GITHUB_STEP_SUMMARY"
