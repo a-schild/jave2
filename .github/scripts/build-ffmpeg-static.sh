@@ -67,6 +67,10 @@ apk add --no-cache \
   libpng-dev libpng-static \
   libwebp-dev libwebp-static \
   soxr-dev soxr-static \
+  fontconfig-dev fontconfig-static \
+  glib-dev glib-static \
+  gettext-dev gettext-static \
+  pcre2-dev \
   libgomp
 
 fetch() {
