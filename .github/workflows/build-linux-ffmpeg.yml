@@ -188,7 +188,9 @@ jobs:
             -f lavfi -i sine=frequency=440:duration=2 \
             -c:v libx264 -c:a aac -shortest proof.mp4
           ls -l proof.mp4
-          ./out/ffmpeg-amd64 -hide_banner -i proof.mp4 2>&1 | grep -E "Duration|Stream"
+          # ffmpeg exits 1 when given no output file, which is what probing with -i is,
+          # so do not let that count as the step failing
+          { ./out/ffmpeg-amd64 -hide_banner -i proof.mp4 2>&1 || true; } | grep -E "Duration|Stream"
 
       - name: Check out, to compare against the binary bundled today
         uses: actions/checkout@v5
