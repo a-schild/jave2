@@ -18,7 +18,6 @@
  */
 package ws.schild.jave;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -133,9 +132,12 @@ public class FileVideoEncoderTest extends AMediaTest {
     Encoder encoder = new Encoder();
     PListener listener = new PListener();
 
-    String errorMessage = "Exit code of ffmpeg encoding run is 1";
     EncoderException ex = assertThrows(EncoderException.class, () -> encoder.encode(new MultimediaObject(source), target, attrs, listener));
-    assertEquals(errorMessage, ex.getMessage(), "Unexpected error message");
+    // The exact exit code is ffmpeg's own and differs between its releases, what this
+    // test is about is that the bad input makes the run fail at all.
+    assertTrue(
+        ex.getMessage().startsWith("Exit code of ffmpeg encoding run is"),
+        "Unexpected error message: " + ex.getMessage());
   }
 
   /**
@@ -167,9 +169,12 @@ public class FileVideoEncoderTest extends AMediaTest {
     Encoder encoder = new Encoder();
     PListener listener = new PListener();
 
-    String errorMessage = "Exit code of ffmpeg encoding run is 1";
     EncoderException ex = assertThrows(EncoderException.class, () -> encoder.encode(new MultimediaObject(source), target, attrs, listener));
-    assertEquals(errorMessage, ex.getMessage(), "Unexpected error message");
+    // The exact exit code is ffmpeg's own and differs between its releases, what this
+    // test is about is that the bad input makes the run fail at all.
+    assertTrue(
+        ex.getMessage().startsWith("Exit code of ffmpeg encoding run is"),
+        "Unexpected error message: " + ex.getMessage());
   }
 
   /**

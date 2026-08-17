@@ -156,7 +156,11 @@ public class MultimediaObjectTest extends AMediaTest {
     MultimediaObject instance = new MultimediaObject(source);
     MultimediaInfo result = instance.getInfo();
     assertEquals("mpeg", result.getFormat(), "Invalid video format");
-    assertEquals(29800, result.getDuration(), "Invalid duration");
+    // Different ffmpeg releases round the duration of this sample slightly differently,
+    // so allow a little slack rather than pin it to the millisecond.
+    assertTrue(
+        Math.abs(result.getDuration() - 29800L) <= 100L,
+        "Invalid duration: " + result.getDuration());
   }
 
   /**

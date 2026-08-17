@@ -2,7 +2,19 @@
 
 ## Changelog
 - **3.7.0-SNAPSHOT**
-   - Nothing yet
+   - Upgraded the bundled windows 64 bit ffmpeg from 4.4.1 to 9.0.1. The other
+     platforms stay on 4.4.1 for now, see below
+   - Fixed `getSupportedEncodingFormats()` and `getSupportedDecodingFormats()`
+     returning an empty array against ffmpeg 5 and newer. They looked for the
+     header `File formats:`, which ffmpeg now calls `Formats:`, and the rule of
+     dashes under it grew a column. Nothing reported the mismatch, the list was
+     simply empty
+   - Fixed `AudioAttributes.setVolume()` killing the encoding on ffmpeg 5 and
+     newer. It was passed as `-vol`, an option ffmpeg has removed, so the run died
+     on `Unrecognized option 'vol'`. It now uses the volume filter, with the value
+     converted from the 256 based scale so callers do not have to change anything
+   - Test assertions that pinned ffmpeg exit codes and an exact duration now
+     accept what any ffmpeg release reports, since neither is part of this library
 - **3.6.0**
    - Fixed the extracted ffmpeg binary being run before it was ready. The chmod was
      started but never waited for, and the copy went straight to the target path, so
