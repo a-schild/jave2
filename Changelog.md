@@ -2,6 +2,8 @@
 
 ## Changelog
 - **4.0.0-SNAPSHOT**
+   - Upgraded the bundled ffmpeg from 4.4.1 to 9.0.x on windows 64 bit and on both
+     macOS packages. The linux and arm packages are still on 4.4.1
    - **Breaking:** removed the 32 bit x86 packages `jave-nativebin-win32` and
      `jave-nativebin-linux32`. ffmpeg no longer publishes builds for 32 bit Windows,
      so that binary could not be kept current, and 32 bit x86 Linux goes with it.
