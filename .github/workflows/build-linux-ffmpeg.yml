@@ -63,7 +63,8 @@ jobs:
                 libpng-dev libpng-static \
                 libwebp-dev libwebp-static \
                 soxr-dev soxr-static \
-                libxml2-dev libxml2-static
+                libxml2-dev libxml2-static \
+                libgomp
 
               # Alpine keeps some archives in -dev and others in a -static package,
               # and for x265, dav1d, opus, libvpx and libass it ships no static build
@@ -92,7 +93,7 @@ jobs:
                 --pkg-config-flags="--static" \
                 --extra-cflags="-I/usr/local/include" \
                 --extra-ldflags="-L/usr/local/lib -static" \
-                --extra-libs="-lpthread -lm" \
+                --extra-libs="-lpthread -lm -lgomp" \
                 --disable-shared \
                 --enable-static \
                 --enable-gpl \
