@@ -115,11 +115,26 @@ make -j"$JOBS" && make install
 
 echo "=== libvpx ==="
 fetch_git "https://github.com/webmproject/libvpx.git" "v${VPX_VERSION}" "libvpx"
-bash ./configure --prefix="$PREFIX" \
-  --disable-shared --enable-static --enable-pic \
-  --enable-vp8 --enable-vp9 --enable-vp9-highbitdepth \
-  --disable-examples --disable-tools --disable-docs --disable-unit-tests
+# We build natively, under emulation on 32 bit arm, but libvpx picks a target like
+# armv7-linux-gcc and then looks for an arm-linux-gnueabihf- prefixed compiler that
+# is not there, reporting only that it cannot link. An empty CROSS points it at the
+# plain toolchain it actually has.
+export CROSS=
+vpx_configure() {
+  bash ./configure --prefix="$PREFIX" \
+    --disable-shared --enable-static --enable-pic \
+    --enable-vp8 --enable-vp9 --enable-vp9-highbitdepth \
+    --disable-examples --disable-tools --disable-docs --disable-unit-tests "$@"
+}
+# generic-gnu drops the hand written assembly, so it is a fallback rather than the
+# first choice, but a slower vp9 beats no vp9 at all
+vpx_configure || {
+  echo "--- libvpx did not take the detected target, falling back to generic-gnu"
+  make distclean >/dev/null 2>&1 || true
+  vpx_configure --target=generic-gnu
+}
 make -j"$JOBS" && make install
+unset CROSS
 
 echo "=== x265 ==="
 fetch "https://bitbucket.org/multicoreware/x265_git/downloads/x265_${X265_VERSION}.tar.gz" "x265_${X265_VERSION}"

@@ -120,8 +120,15 @@ jobs:
               echo "=== it runs ==="
               "$new" -version | head -2
 
+              # Ask once and search the answers. Piping ffmpeg into grep -q means grep
+              # leaves as soon as it matches, ffmpeg dies of SIGPIPE, and pipefail
+              # reports the whole thing as failed, so an early match looks like a miss.
+              "$new" -hide_banner -protocols > /tmp/protocols.txt 2>/dev/null
+              "$new" -hide_banner -encoders  > /tmp/encoders.txt  2>/dev/null
+              "$new" -hide_banner -filters   > /tmp/filters.txt   2>/dev/null
+
               echo "=== https, needed for MultimediaObject on a URL ==="
-              if "$new" -hide_banner -protocols | grep -qw https; then
+              if grep -qw https /tmp/protocols.txt; then
                 echo "  https present"
               else
                 echo "::error::no https protocol, remote sources would stop working"; fail=1
@@ -129,13 +136,13 @@ jobs:
 
               echo "=== encoders and filters the test suite exercises ==="
               for enc in libx264 libx265 libmp3lame aac libvorbis flac mpeg4 libopus libvpx-vp9; do
-                if "$new" -hide_banner -encoders | grep -qw "$enc"; then
+                if grep -qw -- "$enc" /tmp/encoders.txt; then
                   echo "  encoder $enc"
                 else
                   echo "::error::encoder missing: $enc"; fail=1
                 fi
               done
-              if "$new" -hide_banner -filters | grep -qw subtitles; then
+              if grep -qw subtitles /tmp/filters.txt; then
                 echo "  filter subtitles"
               else
                 echo "::error::no subtitles filter, libass did not make it in"; fail=1
@@ -156,8 +163,9 @@ jobs:
               ls -l /tmp/proof.mp4
 
               echo "=== encoders against the bundled build ==="
-              "$old" -hide_banner -encoders 2>/dev/null | awk "{print \$2}" | sort -u > /tmp/enc-old.txt
-              "$new" -hide_banner -encoders 2>/dev/null | awk "{print \$2}" | sort -u > /tmp/enc-new.txt
+              "$old" -hide_banner -encoders > /tmp/enc-old-raw.txt 2>/dev/null
+              awk "{print \$2}" /tmp/enc-old-raw.txt | sort -u > /tmp/enc-old.txt
+              awk "{print \$2}" /tmp/encoders.txt   | sort -u > /tmp/enc-new.txt
               comm -23 /tmp/enc-old.txt /tmp/enc-new.txt | tr "\n" " " > /tmp/lost.txt
               comm -13 /tmp/enc-old.txt /tmp/enc-new.txt | tr "\n" " " > /tmp/gained.txt
               cp /tmp/lost.txt /tmp/gained.txt /w/ 2>/dev/null || true
