@@ -118,7 +118,11 @@ jobs:
               fail=0
 
               echo "=== it runs ==="
-              "$new" -version | head -2
+              # Not piped into head. head leaves after two lines, ffmpeg takes SIGPIPE
+              # and pipefail turns that into a failed step, which is a race that depends
+              # on how fast ffmpeg writes.
+              "$new" -version > /tmp/version.txt
+              head -2 /tmp/version.txt
 
               # Ask once and search the answers. Piping ffmpeg into grep -q means grep
               # leaves as soon as it matches, ffmpeg dies of SIGPIPE, and pipefail
