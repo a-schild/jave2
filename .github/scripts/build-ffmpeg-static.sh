@@ -235,9 +235,18 @@ require_archive libdav1d.a "dav1d"
 echo "=== aom ==="
 fetch "https://storage.googleapis.com/aom-releases/libaom-${AOM_VERSION}.tar.gz" "libaom-${AOM_VERSION}"
 mkdir -p aom_build && cd aom_build
+# aom reaches for neon intrinsics on arm, and on 32 bit arm gcc refuses to inline
+# them unless the fpu is named, so the build dies on always_inline. Turning the
+# assembly off there costs av1 encoding speed on a platform where av1 encoding is
+# theoretical anyway, and is the difference between a package and no package.
+AOM_NEON=ON
+case "$ARCH" in
+  armv7l|armv7|armhf) AOM_NEON=OFF ;;
+esac
 cmake -G "Unix Makefiles" \
   -DCMAKE_INSTALL_PREFIX="$PREFIX" \
   -DBUILD_SHARED_LIBS=OFF \
+  -DENABLE_NEON="$AOM_NEON" \
   -DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_DOCS=OFF -DENABLE_TOOLS=OFF \
   -DCMAKE_BUILD_TYPE=Release ..
 make -j"$JOBS"
