@@ -142,11 +142,17 @@ jobs:
                   echo "::error::encoder missing: $enc"; fail=1
                 fi
               done
-              if grep -qw subtitles /tmp/filters.txt; then
-                echo "  filter subtitles"
-              else
-                echo "::error::no subtitles filter, libass did not make it in"; fail=1
-              fi
+              # subtitles comes from libass and drawtext from freetype plus harfbuzz,
+              # which ffmpeg has required for it since 7.x. Both have their own tests
+              # in the suite, and the first build of this shipped without drawtext
+              # because harfbuzz was installed but never enabled.
+              for filter in subtitles drawtext scale crop overlay; do
+                if grep -qw -- "$filter" /tmp/filters.txt; then
+                  echo "  filter $filter"
+                else
+                  echo "::error::filter missing: $filter"; fail=1
+                fi
+              done
 
               echo "=== -fps_mode, the modern spelling of -vsync ==="
               if "$new" -hide_banner -fps_mode cfr 2>&1 | grep -q "Unrecognized option"; then

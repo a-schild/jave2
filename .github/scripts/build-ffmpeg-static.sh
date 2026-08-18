@@ -104,10 +104,24 @@ fetch_git() {
   cd "$3"
 }
 
+
+require_archive() {
+  # require_archive <name.a> <what it was>
+  if [ ! -f "$PREFIX/lib/$1" ] && [ ! -f "$PREFIX/lib64/$1" ]; then
+    echo "ERROR: $2 finished without installing $1. Look at its build above, not at"
+    echo "       the ffmpeg configure further down, which will only say it is missing."
+    exit 1
+  fi
+  echo "    built $1"
+}
+
 echo "=== opus ==="
 fetch "https://downloads.xiph.org/releases/opus/opus-${OPUS_VERSION}.tar.gz" "opus-${OPUS_VERSION}"
 bash ./configure --prefix="$PREFIX" --disable-shared --enable-static --disable-doc --disable-extra-programs
-make -j"$JOBS" && make install
+make -j"$JOBS"
+make install
+
+require_archive libopus.a "opus"
 
 # speex is deliberately absent. Alpine packages it nowhere, and its configure fails
 # inside this container in a way that is not worth chasing for a codec opus replaced
@@ -133,8 +147,11 @@ vpx_configure || {
   make distclean >/dev/null 2>&1 || true
   vpx_configure --target=generic-gnu
 }
-make -j"$JOBS" && make install
+make -j"$JOBS"
+make install
 unset CROSS
+
+require_archive libvpx.a "libvpx"
 
 echo "=== x265 ==="
 fetch "https://bitbucket.org/multicoreware/x265_git/downloads/x265_${X265_VERSION}.tar.gz" "x265_${X265_VERSION}"
@@ -151,33 +168,48 @@ cmake -G "Unix Makefiles" \
   -DENABLE_CLI=OFF \
   -DENABLE_ASSEMBLY="$X265_ASM" \
   -DCMAKE_BUILD_TYPE=Release .
-make -j"$JOBS" && make install
+make -j"$JOBS"
+make install
 # x265 advertises -lgcc_s in its pkg-config file, which does not exist in a static
 # musl link and would make the ffmpeg check fail for the wrong reason
 sed -i 's/-lgcc_s//g' "$PREFIX/lib/pkgconfig/x265.pc" || true
+
+require_archive libx265.a "x265"
 
 echo "=== libass ==="
 fetch_git "https://github.com/libass/libass.git" "${ASS_VERSION}" "libass"
 ./autogen.sh
 bash ./configure --prefix="$PREFIX" --disable-shared --enable-static
-make -j"$JOBS" && make install
+make -j"$JOBS"
+make install
+
+require_archive libass.a "libass"
 
 echo "=== xvid ==="
 fetch "https://downloads.xvid.com/downloads/xvidcore-${XVID_VERSION}.tar.gz" "xvidcore"
 cd build/generic
 bash ./configure --prefix="$PREFIX" --disable-shared --enable-static
-make -j"$JOBS" && make install
+make -j"$JOBS"
+make install
 rm -f "$PREFIX"/lib/libxvidcore.so*
+
+require_archive libxvidcore.a "xvid"
 
 echo "=== opencore-amr ==="
 fetch "https://downloads.sourceforge.net/opencore-amr/opencore-amr-${OPENCORE_VERSION}.tar.gz" "opencore-amr-${OPENCORE_VERSION}"
 bash ./configure --prefix="$PREFIX" --disable-shared --enable-static
-make -j"$JOBS" && make install
+make -j"$JOBS"
+make install
+
+require_archive libopencore-amrnb.a "opencore-amr"
 
 echo "=== vo-amrwbenc ==="
 fetch "https://downloads.sourceforge.net/opencore-amr/vo-amrwbenc-${VOAMRWBENC_VERSION}.tar.gz" "vo-amrwbenc-${VOAMRWBENC_VERSION}"
 bash ./configure --prefix="$PREFIX" --disable-shared --enable-static
-make -j"$JOBS" && make install
+make -j"$JOBS"
+make install
+
+require_archive libvo-amrwbenc.a "vo-amrwbenc"
 
 echo "=== openjpeg ==="
 fetch_git "https://github.com/uclouvain/openjpeg.git" "v${OPENJPEG_VERSION}" "openjpeg"
@@ -186,13 +218,19 @@ cmake -G "Unix Makefiles" \
   -DBUILD_SHARED_LIBS=OFF \
   -DBUILD_CODEC=OFF \
   -DCMAKE_BUILD_TYPE=Release .
-make -j"$JOBS" && make install
+make -j"$JOBS"
+make install
+
+require_archive libopenjp2.a "openjpeg"
 
 echo "=== dav1d ==="
 fetch "https://code.videolan.org/videolan/dav1d/-/archive/${DAV1D_VERSION}/dav1d-${DAV1D_VERSION}.tar.gz" "dav1d-${DAV1D_VERSION}"
 meson setup build --prefix="$PREFIX" --libdir=lib --default-library=static --buildtype=release \
   -Denable_tools=false -Denable_tests=false
-ninja -C build && ninja -C build install
+ninja -C build
+ninja -C build install
+
+require_archive libdav1d.a "dav1d"
 
 echo "=== aom ==="
 fetch "https://storage.googleapis.com/aom-releases/libaom-${AOM_VERSION}.tar.gz" "libaom-${AOM_VERSION}"
@@ -202,7 +240,10 @@ cmake -G "Unix Makefiles" \
   -DBUILD_SHARED_LIBS=OFF \
   -DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_DOCS=OFF -DENABLE_TOOLS=OFF \
   -DCMAKE_BUILD_TYPE=Release ..
-make -j"$JOBS" && make install
+make -j"$JOBS"
+make install
+
+require_archive libaom.a "aom"
 
 echo "=== what we have to link against ==="
 ls -1 "$PREFIX"/lib/*.a 2>/dev/null || true
@@ -244,6 +285,8 @@ cd "ffmpeg-${FFMPEG_VERSION}"
   --enable-libxvid \
   --enable-libass \
   --enable-libfreetype \
+  --enable-libharfbuzz \
+  --enable-libfontconfig \
   --enable-libfribidi \
   --enable-libwebp \
   --enable-libsoxr \
