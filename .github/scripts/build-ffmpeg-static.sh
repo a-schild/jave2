@@ -153,28 +153,39 @@ unset CROSS
 
 require_archive libvpx.a "libvpx"
 
-echo "=== x265 ==="
-fetch "https://bitbucket.org/multicoreware/x265_git/downloads/x265_${X265_VERSION}.tar.gz" "x265_${X265_VERSION}"
-cd source
-# x265 assembles by hand for x86 and aarch64. On 32 bit arm it has no such path and
-# leaving assembly on there only produces a build that will not compile.
-X265_ASM=ON
+# x265 is left out on 32 bit arm. With assembly on it does not compile there, and
+# with assembly off it still refers to x265_cpu_fast_neon_mrc_test, which only the
+# assembly provides, so it does not link either. The 4.4 build this replaces on that
+# platform carried no x265 at all, so nothing is lost by matching it.
+WANT_X265=yes
 case "$ARCH" in
-  armv7l|armv7|armhf) X265_ASM=OFF ;;
+  armv7l|armv7|armhf) WANT_X265=no ;;
 esac
-cmake -G "Unix Makefiles" \
-  -DCMAKE_INSTALL_PREFIX="$PREFIX" \
-  -DENABLE_SHARED=OFF \
-  -DENABLE_CLI=OFF \
-  -DENABLE_ASSEMBLY="$X265_ASM" \
-  -DCMAKE_BUILD_TYPE=Release .
-make -j"$JOBS"
-make install
-# x265 advertises -lgcc_s in its pkg-config file, which does not exist in a static
-# musl link and would make the ffmpeg check fail for the wrong reason
-sed -i 's/-lgcc_s//g' "$PREFIX/lib/pkgconfig/x265.pc" || true
 
-require_archive libx265.a "x265"
+if [ "$WANT_X265" = yes ]; then
+  echo "=== x265 ==="
+  fetch "https://bitbucket.org/multicoreware/x265_git/downloads/x265_${X265_VERSION}.tar.gz" "x265_${X265_VERSION}"
+  cd source
+  cmake -G "Unix Makefiles" \
+    -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+    -DENABLE_SHARED=OFF \
+    -DENABLE_CLI=OFF \
+    -DCMAKE_BUILD_TYPE=Release .
+  make -j"$JOBS"
+  make install
+  # x265 advertises -lgcc_s in its pkg-config file, which does not exist in a static
+  # musl link and would make the ffmpeg check fail for the wrong reason
+  sed -i 's/-lgcc_s//g' "$PREFIX/lib/pkgconfig/x265.pc" || true
+else
+  echo "=== x265 skipped on ${ARCH} ==="
+fi
+
+X265_CONFIGURE_FLAG=--enable-libx265
+if [ "$WANT_X265" = yes ]; then
+  require_archive libx265.a "x265"
+else
+  X265_CONFIGURE_FLAG=
+fi
 
 echo "=== libass ==="
 fetch_git "https://github.com/libass/libass.git" "${ASS_VERSION}" "libass"
@@ -283,7 +294,7 @@ cd "ffmpeg-${FFMPEG_VERSION}"
   --enable-version3 \
   --enable-openssl \
   --enable-libx264 \
-  --enable-libx265 \
+  $X265_CONFIGURE_FLAG \
   --enable-libmp3lame \
   --enable-libopus \
   --enable-libvorbis \

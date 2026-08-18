@@ -44,6 +44,7 @@ jobs:
             emulated: false
             output: ffmpeg-amd64
             module: jave-nativebin-linux64
+            encoders: libx264 libx265 libmp3lame aac libvorbis flac mpeg4 libopus libvpx-vp9
           - arch: arm64
             platform: linux/arm64
             # Native arm runner, free for public repositories. Emulating this one
@@ -52,6 +53,7 @@ jobs:
             emulated: false
             output: ffmpeg-aarch64
             module: jave-nativebin-arm64
+            encoders: libx264 libx265 libmp3lame aac libvorbis flac mpeg4 libopus libvpx-vp9
           - arch: arm32
             platform: linux/arm/v7
             # There is no 32 bit arm runner, so this one goes through qemu and is
@@ -60,6 +62,9 @@ jobs:
             emulated: true
             output: ffmpeg-arm
             module: jave-nativebin-arm32
+            # No x265. It neither compiles nor links on 32 bit arm, and the 4.4
+            # build being replaced there never had it either.
+            encoders: libx264 libmp3lame aac libvorbis flac mpeg4 libopus libvpx-vp9
 
     steps:
       - uses: actions/checkout@v5
@@ -139,7 +144,7 @@ jobs:
               fi
 
               echo "=== encoders and filters the test suite exercises ==="
-              for enc in libx264 libx265 libmp3lame aac libvorbis flac mpeg4 libopus libvpx-vp9; do
+              for enc in ${{ matrix.encoders }}; do
                 if grep -qw -- "$enc" /tmp/encoders.txt; then
                   echo "  encoder $enc"
                 else
