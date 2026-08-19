@@ -1,6 +1,8 @@
 # JAVE2
 
 ## Changelog
+- **4.1.0-SNAPSHOT**
+   - Nothing yet
 - **4.0.0**
    - New package `jave-nativebin-win-arm64`, ffmpeg 9.0.1 for windows on arm. It is
      part of `jave-all-deps`, and needs no code change because the executable is
