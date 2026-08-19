@@ -509,20 +509,57 @@ public class Encoder {
         )
       );
 
+  /**
+   * Inserts an argument into the list every encoding is built from.
+   *
+   * @param arg The argument to insert.
+   * @param index Where to insert it.
+   */
   public static void addOptionAtIndex(EncodingArgument arg, Integer index) {
     globalOptions.add(index, arg);
   }
 
+  /**
+   * Removes the argument at the given position.
+   *
+   * @param index Which one to remove.
+   */
   public static void removeOptionAtIndex(Integer index) {
     globalOptions.remove(index);
   }
 
+  /**
+   * Replaces the argument at the given position.
+   *
+   * @param arg The argument to put there.
+   * @param index Which one to replace.
+   */
   public static void setOptionAtIndex(EncodingArgument arg, Integer index) {
     globalOptions.set(index, arg);
   }
 
-  public static EncodingArgument setOptionAtIndex(Integer index) {
+  /**
+   * Returns the argument at the given position.
+   *
+   * @param index Which one to return.
+   * @return The argument at that position.
+   */
+  public static EncodingArgument getOptionAtIndex(Integer index) {
     return globalOptions.get(index);
+  }
+
+  /**
+   * Returns the argument at the given position.
+   *
+   * @param index Which one to return.
+   * @return The argument at that position.
+   * @deprecated This reads rather than writes, and the name says otherwise, which is why it was
+   *     hard to find that reading was possible at all. Use {@link #getOptionAtIndex(Integer)}. This
+   *     one still works and will be removed in a later release.
+   */
+  @Deprecated
+  public static EncodingArgument setOptionAtIndex(Integer index) {
+    return getOptionAtIndex(index);
   }
 
   /**
@@ -696,7 +733,11 @@ public class Encoder {
         }
       }
 
-      if (listener != null) {
+      // Only when there is something to report. The information is read from a single
+      // source, so concatenating several leaves it null, and a listener that reaches
+      // into what it is handed then dies of a NullPointerException rather than being
+      // told there is nothing to say.
+      if (listener != null && info != null) {
         listener.sourceInfo(info);
       }
       String line;
