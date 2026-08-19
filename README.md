@@ -1,31 +1,27 @@
 # JAVE2
-jave-core [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-core?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-core)
-![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-core%2Fmaven-metadata.xml)
 
-jave-all-deps [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-all-deps?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-all-deps)
-![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-all-deps%2Fmaven-metadata.xml)
+<!--
+  The release and snapshot badges are live, they read Maven Central.
+  The ffmpeg badges are not, they are written by hand. Update them here when
+  the bundled binaries change, the version each package really carries is
+  asserted by BundledFFmpegVersionTest.
+-->
 
-jave-nativebin-linux-arm32 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-linux-arm32?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-linux-arm32)
-![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-linux-arm32%2Fmaven-metadata.xml)
+| Package | | Release | Snapshot | ffmpeg release | ffmpeg snapshot | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| `jave-core` | the library itself, no binary | [![release](https://img.shields.io/maven-central/v/ws.schild/jave-core?label=%20)](https://central.sonatype.com/artifact/ws.schild/jave-core) | ![snapshot](https://img.shields.io/maven-metadata/v?label=%20&color=orange&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-core%2Fmaven-metadata.xml) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-n%2Fa-lightgrey) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-n%2Fa-lightgrey) | Supported |
+| `jave-bom` | bill of materials, no binary | [![release](https://img.shields.io/maven-central/v/ws.schild/jave-bom?label=%20)](https://central.sonatype.com/artifact/ws.schild/jave-bom) | ![snapshot](https://img.shields.io/maven-metadata/v?label=%20&color=orange&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-bom%2Fmaven-metadata.xml) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-n%2Fa-lightgrey) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-n%2Fa-lightgrey) | Supported |
+| `jave-all-deps` | core plus every platform below | [![release](https://img.shields.io/maven-central/v/ws.schild/jave-all-deps?label=%20)](https://central.sonatype.com/artifact/ws.schild/jave-all-deps) | ![snapshot](https://img.shields.io/maven-metadata/v?label=%20&color=orange&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-all-deps%2Fmaven-metadata.xml) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.1-blue) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.1-blue) | Supported |
+| `jave-nativebin-win64` | Windows x64 | [![release](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-win64?label=%20)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-win64) | ![snapshot](https://img.shields.io/maven-metadata/v?label=%20&color=orange&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-win64%2Fmaven-metadata.xml) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.1-blue) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.1-blue) | Supported |
+| `jave-nativebin-win-arm64` | Windows on ARM | [![release](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-win-arm64?label=%20)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-win-arm64) | ![snapshot](https://img.shields.io/maven-metadata/v?label=%20&color=orange&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-win-arm64%2Fmaven-metadata.xml) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.1-blue) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.1-blue) | Supported |
+| `jave-nativebin-linux64` | Linux x64 | [![release](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-linux64?label=%20)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-linux64) | ![snapshot](https://img.shields.io/maven-metadata/v?label=%20&color=orange&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-linux64%2Fmaven-metadata.xml) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.1-blue) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.1-blue) | Supported |
+| `jave-nativebin-linux-arm64` | Linux ARM 64 bit | [![release](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-linux-arm64?label=%20)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-linux-arm64) | ![snapshot](https://img.shields.io/maven-metadata/v?label=%20&color=orange&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-linux-arm64%2Fmaven-metadata.xml) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.1-blue) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.1-blue) | Supported |
+| `jave-nativebin-linux-arm32` | Linux ARM 32 bit | [![release](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-linux-arm32?label=%20)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-linux-arm32) | ![snapshot](https://img.shields.io/maven-metadata/v?label=%20&color=orange&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-linux-arm32%2Fmaven-metadata.xml) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.1-blue) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.1-blue) | Supported |
+| `jave-nativebin-osxm1` | macOS Apple silicon | [![release](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-osxm1?label=%20)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-osxm1) | ![snapshot](https://img.shields.io/maven-metadata/v?label=%20&color=orange&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-osxm1%2Fmaven-metadata.xml) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.x-blue) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.x-blue) | Supported |
+| `jave-nativebin-osx64` | macOS Intel | [![release](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-osx64?label=%20)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-osx64) | ![snapshot](https://img.shields.io/maven-metadata/v?label=%20&color=orange&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-osx64%2Fmaven-metadata.xml) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.1-blue) | ![ffmpeg](https://img.shields.io/badge/ffmpeg-9.0.1-blue) | **Deprecated** |
 
-jave-nativebin-linux-arm64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-linux-arm64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-linux-arm64)
-![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-linux-arm64%2Fmaven-metadata.xml)
-
-jave-nativebin-linux64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-linux64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-linux64)
-![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-linux64%2Fmaven-metadata.xml)
-
-jave-nativebin-win64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-win64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-win64)
-![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-win64%2Fmaven-metadata.xml)
-
-jave-nativebin-win-arm64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-win-arm64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-win-arm64)
-![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-win-arm64%2Fmaven-metadata.xml)
-
-jave-nativebin-osx64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-osx64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-osx64)
-![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-osx64%2Fmaven-metadata.xml)
-
-jave-nativebin-osxm1 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-osxm1?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-osxm1)
-![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-osxm1%2Fmaven-metadata.xml)
-
+> One package is deprecated and two were removed in 4.0.0, see
+> [supported platforms](#supported-platforms) below.
 
 The JAVE2 (Java Audio Video Encoder) library is Java wrapper on the ffmpeg
 project. Developers can take take advantage of JAVE2 to transcode audio 
@@ -37,27 +33,45 @@ resize videos, changing their sizes and proportions and so on.
 
 Many other formats, containers and operations are supported by JAVE2.
 
-## Supported Operating Systems + Requirements 
+## Supported platforms
 
 > JAVE requires **Java 8 or higher**
 
-> JAVE can also be easily ported to other OS and hardware configurations, 
+> JAVE can also be easily ported to other OS and hardware configurations,
 see the JAVE manual for details.
 
-| Operating System | Windows x64 | Windows arm64 | MacOS intel x64 | MacOS m1 | Linux x64 | Linux arm32,arm64 |
-| ---------------- | ----------- | ------------- |  -------------- | -------- | --------- | ----------------- |
-| Supported?       | YES         | YES           | Deprecated      |  YES     | YES       | YES               |
+| Operating system | Architecture | Package | Status |
+| --- | --- | --- | --- |
+| Windows | x64 | `jave-nativebin-win64` | Supported |
+| Windows | ARM 64 bit | `jave-nativebin-win-arm64` | Supported, new in 4.0.0 |
+| macOS | Apple silicon | `jave-nativebin-osxm1` | Supported |
+| macOS | Intel x64 | `jave-nativebin-osx64` | **Deprecated**, see below |
+| Linux | x64 | `jave-nativebin-linux64` | Supported |
+| Linux | ARM 64 bit | `jave-nativebin-linux-arm64` | Supported |
+| Linux | ARM 32 bit | `jave-nativebin-linux-arm32` | Supported |
+| Windows | x86 32 bit | none | **Removed in 4.0.0**, use 3.6.0 |
+| Linux | x86 32 bit | none | **Removed in 4.0.0**, use 3.6.0 |
 
-> **The 32 bit x86 packages were removed in 4.0.0.** `jave-nativebin-win32` and
-> `jave-nativebin-linux32` are gone, because ffmpeg itself no longer publishes builds
-> for 32 bit Windows and 32 bit x86 Linux is no longer a target this project can keep
-> current. 3.6.0 remains available for anyone who still needs them. 32 bit ARM is
-> unaffected and stays supported.
+### macOS on intel is deprecated
 
-> **`jave-nativebin-osx64`, for intel macs, is deprecated.** Apple ends support for
-> intel hardware with macOS 27, so this package will be removed in a later release.
-> It is still built and published, and is still part of `jave-all-deps`, so nothing
-> breaks today. On apple silicon use `jave-nativebin-osxm1`, which is unaffected.
+Apple ends support for intel hardware with macOS 27, so `jave-nativebin-osx64` will be
+removed in a later release. It is still built, still published and still part of
+`jave-all-deps`, so nothing breaks today. On apple silicon use `jave-nativebin-osxm1`,
+which is unaffected.
+
+### The 32 bit x86 packages were removed in 4.0.0
+
+`jave-nativebin-win32` and `jave-nativebin-linux32` are no longer published. ffmpeg
+itself stopped publishing builds for 32 bit Windows, so that binary could not be
+brought past 4.4.1 by any route, and 32 bit x86 Linux went with it. **Stay on 3.6.0**
+if you need either. 32 bit ARM is not affected and remains supported.
+
+### About the bundled ffmpeg
+
+Every package carries ffmpeg 9.0.x. The linux binaries are built from source rather
+than taken from a publisher, compiled against musl and linked fully statically, so they
+have no interpreter and no libc dependency and run on any linux, including musl based
+images such as Alpine and distributions far older than a glibc build would allow.
 
 ## Projects using Jave2
 * [XR3Player](https://github.com/goxr3plus/XR3Player)
@@ -84,7 +98,7 @@ It includes all binaries for the supported platforms
 <dependency>
  <groupId>ws.schild</groupId>
  <artifactId>jave-all-deps</artifactId>
- <version>3.6.0</version>
+ <version>4.0.0</version>
 </dependency>
 ```
 
@@ -129,7 +143,7 @@ Include the following in your pom files.
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-core</artifactId>
-    <version>3.6.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 
@@ -140,7 +154,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux64</artifactId>
-    <version>3.6.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 
@@ -149,7 +163,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux-arm64</artifactId>
-    <version>3.6.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 
@@ -158,7 +172,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux-arm32</artifactId>
-    <version>3.6.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 
@@ -167,7 +181,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-win64</artifactId>
-    <version>3.6.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 
@@ -180,12 +194,21 @@ and then the specific jar(s) for your platform(s) :
 </dependency>
 ```
 
+### For one platform only (MACOS apple silicon in this case)
+``` XML
+<dependency>
+    <groupId>ws.schild</groupId>
+    <artifactId>jave-nativebin-osxm1</artifactId>
+    <version>4.0.0</version>
+</dependency>
+```
+
 ### For one platform only (MACOS intel 64Bit in this case, deprecated)
 ``` XML
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-osx64</artifactId>
-    <version>3.6.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 
@@ -194,13 +217,13 @@ and then the specific jar(s) for your platform(s) :
 It includes all binaries for the supported platforms
 
 ``` XML
-compile group: 'ws.schild', name: 'jave-all-deps', version: '3.6.0'
+compile group: 'ws.schild', name: 'jave-all-deps', version: '4.0.0'
 ```
 
 ### For one platform only (Linux 64Bit in this case)
 ``` XML
-compile group: 'ws.schild', name: 'jave-core', version: '3.6.0'
-compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '3.6.0'
+compile group: 'ws.schild', name: 'jave-core', version: '4.0.0'
+compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '4.0.0'
 ```
 
 ### Main Components of Jave2
