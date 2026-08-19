@@ -28,11 +28,18 @@ on:
         description: 'alpine image to build in'
         required: false
         default: '3.21'
+      architectures:
+        description: 'which to build: all, or a space separated subset of amd64 arm64 arm32'
+        required: false
+        default: 'all'
 
 jobs:
   build:
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 360
+    # 32 bit arm takes an hour and a half under emulation, so being able to
+    # rebuild it alone is worth the one line
+    if: inputs.architectures == 'all' || contains(inputs.architectures, matrix.arch)
 
     strategy:
       fail-fast: false
@@ -45,6 +52,7 @@ jobs:
             output: ffmpeg-amd64
             module: jave-nativebin-linux64
             encoders: libx264 libx265 libmp3lame aac libvorbis flac mpeg4 libopus libvpx-vp9
+            allowed_losses: libspeex sonic sonicls ayuv v308 v408 v410
           - arch: arm64
             platform: linux/arm64
             # Native arm runner, free for public repositories. Emulating this one
@@ -54,6 +62,7 @@ jobs:
             output: ffmpeg-aarch64
             module: jave-nativebin-arm64
             encoders: libx264 libx265 libmp3lame aac libvorbis flac mpeg4 libopus libvpx-vp9
+            allowed_losses: libspeex sonic sonicls ayuv v308 v408 v410
           - arch: arm32
             platform: linux/arm/v7
             # There is no 32 bit arm runner, so this one goes through qemu and is
@@ -65,6 +74,10 @@ jobs:
             # No x265. It neither compiles nor links on 32 bit arm, and the 4.4
             # build being replaced there never had it either.
             encoders: libx264 libmp3lame aac libvorbis flac mpeg4 libopus libvpx-vp9
+            # The vaapi encoders go too. Vaapi is the intel and amd desktop gpu
+            # interface and has no driver on 32 bit arm boards, while this build
+            # gains hevc_v4l2m2m, which is the path those boards actually use.
+            allowed_losses: libspeex sonic sonicls ayuv v308 v408 v410 h264_vaapi hevc_vaapi mjpeg_vaapi mpeg2_vaapi vp8_vaapi vp9_vaapi
 
     steps:
       - uses: actions/checkout@v5
@@ -197,7 +210,7 @@ jobs:
           #   sonic, sonicls, ayuv, v308, v408, v410
           #             native encoders ffmpeg itself dropped between 4.4 and 9.0,
           #             nothing this build can put back.
-          allowed='libspeex sonic sonicls ayuv v308 v408 v410'
+          allowed='${{ matrix.allowed_losses }}'
 
           lost=$(cat lost.txt 2>/dev/null || echo '')
           gained=$(cat gained.txt 2>/dev/null || echo '')
