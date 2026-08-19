@@ -13,6 +13,10 @@
      remaining publisher links dynamically against glibc 2.28 or newer. Ours link
      against musl and need no libc at all, so they run on any linux, including musl
      based images and distributions far older than those builds would allow
+   - Deprecated `jave-nativebin-osx64`, the package for intel macs. Apple ends support
+     for intel hardware with macOS 27, so it will be removed in a later release. It is
+     still built, still published and still part of `jave-all-deps`, so nothing breaks
+     yet. On apple silicon use `jave-nativebin-osxm1`, which is unaffected
    - **Breaking:** removed the 32 bit x86 packages `jave-nativebin-win32` and
      `jave-nativebin-linux32`. ffmpeg no longer publishes builds for 32 bit Windows,
      so that binary could not be kept current, and 32 bit x86 Linux goes with it.

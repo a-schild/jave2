@@ -5,14 +5,20 @@
     <packaging>jar</packaging>
     <version>4.0.0-SNAPSHOT</version>
     <artifactId>jave-nativebin-osx64</artifactId>
-    <name>Jave OSX 64 bit native package</name>
-    <description>The JAVE (Java Audio Video Encoder) library is Java wrapper on the 
-        ffmpeg project. Developers can take take advantage of JAVE2 to transcode 
-        audio and video files from a format to another. In example you can transcode 
-        an AVI file to a MPEG one, you can change a DivX video stream into a 
-        (youtube like) Flash FLV one, you can convert a WAV audio file to a MP3 or 
-        a Ogg Vorbis one, you can separate and transcode audio and video tracks, 
-        you can resize videos, changing their sizes and proportions and so on. 
+    <name>Jave OSX intel 64 bit native package (deprecated)</name>
+    <description>DEPRECATED. This package carries the ffmpeg binary for intel macs.
+        Apple ends support for intel hardware with macOS 27, so this package will be
+        removed in a later release. On apple silicon use jave-nativebin-osxm1, which
+        is unaffected. It is still built and published for now, and jave-all-deps
+        still contains it, so nothing breaks today.
+
+        The JAVE (Java Audio Video Encoder) library is Java wrapper on the
+        ffmpeg project. Developers can take take advantage of JAVE2 to transcode
+        audio and video files from a format to another. In example you can transcode
+        an AVI file to a MPEG one, you can change a DivX video stream into a
+        (youtube like) Flash FLV one, you can convert a WAV audio file to a MP3 or
+        a Ogg Vorbis one, you can separate and transcode audio and video tracks,
+        you can resize videos, changing their sizes and proportions and so on.
         Many other formats, containers and operations are supported by JAVE2.</description>
     <url>https://github.com/a-schild/jave2</url>
         <licenses>

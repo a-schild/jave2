@@ -46,13 +46,18 @@ see the JAVE manual for details.
 
 | Operating System | Windows x64 | Windows arm64 | MacOS intel x64 | MacOS m1 | Linux x64 | Linux arm32,arm64 |
 | ---------------- | ----------- | ------------- |  -------------- | -------- | --------- | ----------------- |
-| Supported?       | YES         | YES           | YES             |  YES     | YES       | YES               |
+| Supported?       | YES         | YES           | Deprecated      |  YES     | YES       | YES               |
 
 > **The 32 bit x86 packages were removed in 4.0.0.** `jave-nativebin-win32` and
 > `jave-nativebin-linux32` are gone, because ffmpeg itself no longer publishes builds
 > for 32 bit Windows and 32 bit x86 Linux is no longer a target this project can keep
 > current. 3.6.0 remains available for anyone who still needs them. 32 bit ARM is
 > unaffected and stays supported.
+
+> **`jave-nativebin-osx64`, for intel macs, is deprecated.** Apple ends support for
+> intel hardware with macOS 27, so this package will be removed in a later release.
+> It is still built and published, and is still part of `jave-all-deps`, so nothing
+> breaks today. On apple silicon use `jave-nativebin-osxm1`, which is unaffected.
 
 ## Projects using Jave2
 * [XR3Player](https://github.com/goxr3plus/XR3Player)
@@ -144,7 +149,7 @@ and then the specific jar(s) for your platform(s) :
 </dependency>
 ```
 
-### For one platform only (MACOS 64Bit in this case)
+### For one platform only (MACOS intel 64Bit in this case, deprecated)
 ``` XML
 <dependency>
     <groupId>ws.schild</groupId>
