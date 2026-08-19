@@ -20,6 +20,14 @@
    - Added `Encoder.getOptionAtIndex()`. Reading an option was already possible but
      the method was called `setOptionAtIndex`, which is presumably why nobody found
      it. The old name still works and is deprecated (#180)
+   - New `jave-bom` package, a bill of materials. Import it under
+     `dependencyManagement` with `scope` import and the jave artifacts can be declared
+     without versions, so a project that picks its own platform packages cannot end up
+     with a core and a native binary from different releases (#273)
+   - Documented how to keep album art when converting audio. Cover art is a video
+     stream, so an encoding with no VideoAttributes drops it along with everything
+     else video. Setting a VideoAttributes with codec copy keeps it, which is now in
+     Examples.md and covered by tests (#266)
    - Added SECURITY.md, setting out where the boundary is between what this library
      is responsible for and what the calling application is, and answering
      CVE-2023-48909 with the two properties that make its claim untrue: no shell is

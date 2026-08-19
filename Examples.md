@@ -76,3 +76,36 @@ public class ConvertProgressListener implements EncoderProgressListener {
  }                                                                                                                                                                                                                     
 ```
 
+
+## Keeping the album art when converting audio
+
+Cover art travels as a video stream carrying an attached picture. An encoding with no
+`VideoAttributes` is an audio only encoding, so `-vn` is added and the picture goes with
+it. That is what was asked for, and almost never what was wanted.
+
+Ask for the video stream and ask for it unchanged, and the art comes across:
+
+``` java
+AudioAttributes audio = new AudioAttributes();
+audio.setCodec("libmp3lame");
+
+// This is what keeps the cover. Without it the encoding is audio only,
+// and the attached picture is dropped along with the video stream.
+VideoAttributes video = new VideoAttributes();
+video.setCodec("copy");
+
+EncodingAttributes attrs = new EncodingAttributes();
+attrs.setOutputFormat("mp3");
+attrs.setAudioAttributes(audio);
+attrs.setVideoAttributes(video);
+
+new Encoder().encode(new MultimediaObject(source), target, attrs);
+```
+
+You can tell whether it worked by reading the result back, since the cover shows up as a
+video stream:
+
+``` java
+MultimediaInfo info = new MultimediaObject(target).getInfo();
+boolean hasCover = info.getVideo() != null;
+```

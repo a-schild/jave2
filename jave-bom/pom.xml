@@ -1,0 +1,138 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>ws.schild</groupId>
+    <packaging>pom</packaging>
+    <version>4.0.0-SNAPSHOT</version>
+    <artifactId>jave-bom</artifactId>
+    <name>Jave bill of materials</name>
+    <description>A bill of materials for JAVE2. Import it and the version of every jave
+        artifact is settled in one place, so a project picking its own platform packages
+        cannot end up with a core and a native binary from different releases, which is
+        the usual way this goes wrong.
+
+        Import it under dependencyManagement with scope import, then declare the jave
+        artifacts you want without a version.</description>
+    <url>https://github.com/a-schild/jave2</url>
+    <licenses>
+        <license>
+            <name>GPL-v3.0</name>
+            <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Andre Schild</name>
+            <email>andre@schild.ws</email>
+            <organization>Aarboard AG</organization>
+            <organizationUrl>https://www.aarboard.ch</organizationUrl>
+        </developer>
+    </developers>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
+        <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
+        <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>ws.schild</groupId>
+                <artifactId>jave-core</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>ws.schild</groupId>
+                <artifactId>jave-all-deps</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>ws.schild</groupId>
+                <artifactId>jave-nativebin-win64</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>ws.schild</groupId>
+                <artifactId>jave-nativebin-win-arm64</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>ws.schild</groupId>
+                <artifactId>jave-nativebin-linux64</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>ws.schild</groupId>
+                <artifactId>jave-nativebin-linux-arm64</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>ws.schild</groupId>
+                <artifactId>jave-nativebin-linux-arm32</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <!-- Deprecated, apple ends support for intel hardware with macOS 27.
+                 Listed so existing builds keep resolving, and so that whoever removes it
+                 has one place to do it. -->
+            <dependency>
+                <groupId>ws.schild</groupId>
+                <artifactId>jave-nativebin-osx64</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>ws.schild</groupId>
+                <artifactId>jave-nativebin-osxm1</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${maven-deploy-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>default-deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>${central-publishing-maven-plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <autoPublish>true</autoPublish>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${maven-gpg-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <scm>
+        <connection>scm:git:git://github.com/a-schild/jave2.git</connection>
+        <developerConnection>scm:git:git@github.com:a-schild/jave2.git</developerConnection>
+        <url>https://github.com/a-schild/jave2</url>
+        <tag>HEAD</tag>
+    </scm>
+</project>

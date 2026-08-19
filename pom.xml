@@ -60,6 +60,7 @@
         <module>jave-nativebin-osxm1</module>
         <module>jave-nativebin-arm64</module>
         <module>jave-nativebin-arm32</module>
+        <module>jave-bom</module>
         <module>jave-core</module>
         <module>jave-core-test</module>
         <module>jave-core-test-java11</module>

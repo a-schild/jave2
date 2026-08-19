@@ -88,6 +88,37 @@ It includes all binaries for the supported platforms
 </dependency>
 ```
 
+### Using the bill of materials
+
+If you pick platform packages yourself rather than taking `jave-all-deps`, import the
+BOM and leave the versions off. That way the core and the native binaries cannot drift
+apart, which is the usual way this goes wrong.
+
+``` XML
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>ws.schild</groupId>
+            <artifactId>jave-bom</artifactId>
+            <version>4.0.0</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
+<dependencies>
+    <dependency>
+        <groupId>ws.schild</groupId>
+        <artifactId>jave-core</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>ws.schild</groupId>
+        <artifactId>jave-nativebin-linux64</artifactId>
+    </dependency>
+</dependencies>
+```
+
 You can use maven dependencies to include the libraries in your projects.
 Include the following in your pom files.
 ### [ Remember always to check the latest release [here](https://github.com/a-schild/jave2/releases/latest) ]
