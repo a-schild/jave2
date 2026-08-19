@@ -28,18 +28,11 @@ on:
         description: 'alpine image to build in'
         required: false
         default: '3.21'
-      architectures:
-        description: 'which to build: all, or a space separated subset of amd64 arm64 arm32'
-        required: false
-        default: 'all'
 
 jobs:
   build:
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 360
-    # 32 bit arm takes an hour and a half under emulation, so being able to
-    # rebuild it alone is worth the one line
-    if: inputs.architectures == 'all' || contains(inputs.architectures, matrix.arch)
 
     strategy:
       fail-fast: false
