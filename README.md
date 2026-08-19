@@ -347,6 +347,17 @@ The workflow needs these repository secrets:
 To publish by hand, put the same token in a `central` server entry in your
 `~/.m2/settings.xml` and run `mvn deploy`.
 
+## Security
+
+JAVE2 runs the ffmpeg executable and gives Java a typed way to build its command
+line. Where that leaves the boundary between this library and the application calling
+it, what an application must not do with user input, and an answer to CVE-2023-48909,
+are all in [SECURITY.md](https://github.com/a-schild/jave2/blob/master/SECURITY.md).
+
+Please report suspected vulnerabilities through a
+[private security advisory](https://github.com/a-schild/jave2/security/advisories/new)
+rather than a public issue.
+
 ## License
 
 JAVE2 is Free Software and it is licensed under [GPL3 LICENSE](https://github.com/a-schild/jave2/blob/master/LICENSE) 
