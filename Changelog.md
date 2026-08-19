@@ -13,6 +13,11 @@
      remaining publisher links dynamically against glibc 2.28 or newer. Ours link
      against musl and need no libc at all, so they run on any linux, including musl
      based images and distributions far older than those builds would allow
+   - Added SECURITY.md, setting out where the boundary is between what this library
+     is responsible for and what the calling application is, and answering
+     CVE-2023-48909 with the two properties that make its claim untrue: no shell is
+     ever spawned, and paths are absolutised so they cannot be read as ffmpeg
+     options. Both are now covered by tests
    - Deprecated `jave-nativebin-osx64`, the package for intel macs. Apple ends support
      for intel hardware with macOS 27, so it will be removed in a later release. It is
      still built, still published and still part of `jave-all-deps`, so nothing breaks
