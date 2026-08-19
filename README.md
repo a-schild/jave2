@@ -11,17 +11,14 @@ jave-nativebin-linux-arm32 [![Maven Central](https://img.shields.io/maven-centra
 jave-nativebin-linux-arm64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-linux-arm64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-linux-arm64)
 ![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-linux-arm64%2Fmaven-metadata.xml)
 
-jave-nativebin-linux32 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-linux32?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-linux32)
-![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-linux32%2Fmaven-metadata.xml)
-
 jave-nativebin-linux64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-linux64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-linux64)
 ![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-linux64%2Fmaven-metadata.xml)
 
-jave-nativebin-win32 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-win32?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-win32)
-![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-win32%2Fmaven-metadata.xml)
-
 jave-nativebin-win64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-win64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-win64)
 ![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-win64%2Fmaven-metadata.xml)
+
+jave-nativebin-win-arm64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-win-arm64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-win-arm64)
+![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-win-arm64%2Fmaven-metadata.xml)
 
 jave-nativebin-osx64 [![Maven Central](https://img.shields.io/maven-central/v/ws.schild/jave-nativebin-osx64?label=release)](https://central.sonatype.com/artifact/ws.schild/jave-nativebin-osx64)
 ![Sonatype Central (Snapshots)](https://img.shields.io/maven-metadata/v?label=snapshot&metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fws%2Fschild%2Fjave-nativebin-osx64%2Fmaven-metadata.xml)
@@ -47,12 +44,20 @@ Many other formats, containers and operations are supported by JAVE2.
 > JAVE can also be easily ported to other OS and hardware configurations, 
 see the JAVE manual for details.
 
-| Operating System | Windows x32,x64 | MacOS intel x64 | MacOS m1 | Linux x32,x64 | Linux arm32,arm64 |
-| ---------------- | --------------- |  -------------- | -------- | ------------- | ----------------- |
-| Supported?       | Partial,YES     | YES             |  YES     | YES           | Partial,YES       |
+| Operating System | Windows x64 | Windows arm64 | MacOS intel x64 | MacOS m1 | Linux x64 | Linux arm32,arm64 |
+| ---------------- | ----------- | ------------- |  -------------- | -------- | --------- | ----------------- |
+| Supported?       | YES         | YES           | Deprecated      |  YES     | YES       | YES               |
 
-Please note that the arm+win 32 bit versions are still on 4.4.0 and will be removed in a future release
-The win32 binaries will be removed in the next release
+> **The 32 bit x86 packages were removed in 4.0.0.** `jave-nativebin-win32` and
+> `jave-nativebin-linux32` are gone, because ffmpeg itself no longer publishes builds
+> for 32 bit Windows and 32 bit x86 Linux is no longer a target this project can keep
+> current. 3.6.0 remains available for anyone who still needs them. 32 bit ARM is
+> unaffected and stays supported.
+
+> **`jave-nativebin-osx64`, for intel macs, is deprecated.** Apple ends support for
+> intel hardware with macOS 27, so this package will be removed in a later release.
+> It is still built and published, and is still part of `jave-all-deps`, so nothing
+> breaks today. On apple silicon use `jave-nativebin-osxm1`, which is unaffected.
 
 ## Projects using Jave2
 * [XR3Player](https://github.com/goxr3plus/XR3Player)
@@ -79,8 +84,39 @@ It includes all binaries for the supported platforms
 <dependency>
  <groupId>ws.schild</groupId>
  <artifactId>jave-all-deps</artifactId>
- <version>3.5.0</version>
+ <version>3.6.0</version>
 </dependency>
+```
+
+### Using the bill of materials
+
+If you pick platform packages yourself rather than taking `jave-all-deps`, import the
+BOM and leave the versions off. That way the core and the native binaries cannot drift
+apart, which is the usual way this goes wrong.
+
+``` XML
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>ws.schild</groupId>
+            <artifactId>jave-bom</artifactId>
+            <version>4.0.0</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
+<dependencies>
+    <dependency>
+        <groupId>ws.schild</groupId>
+        <artifactId>jave-core</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>ws.schild</groupId>
+        <artifactId>jave-nativebin-linux64</artifactId>
+    </dependency>
+</dependencies>
 ```
 
 You can use maven dependencies to include the libraries in your projects.
@@ -93,7 +129,7 @@ Include the following in your pom files.
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-core</artifactId>
-    <version>3.5.0</version>
+    <version>3.6.0</version>
 </dependency>
 ```
 
@@ -104,7 +140,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux64</artifactId>
-    <version>3.5.0</version>
+    <version>3.6.0</version>
 </dependency>
 ```
 
@@ -113,7 +149,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux-arm64</artifactId>
-    <version>3.5.0</version>
+    <version>3.6.0</version>
 </dependency>
 ```
 
@@ -122,7 +158,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux-arm32</artifactId>
-    <version>3.5.0</version>
+    <version>3.6.0</version>
 </dependency>
 ```
 
@@ -131,16 +167,25 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-win64</artifactId>
-    <version>3.5.0</version>
+    <version>3.6.0</version>
 </dependency>
 ```
 
-### For one platform only (MACOS 64Bit in this case)
+### For one platform only (Windows arm 64Bit in this case)
+``` XML
+<dependency>
+    <groupId>ws.schild</groupId>
+    <artifactId>jave-nativebin-win-arm64</artifactId>
+    <version>4.0.0</version>
+</dependency>
+```
+
+### For one platform only (MACOS intel 64Bit in this case, deprecated)
 ``` XML
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-osx64</artifactId>
-    <version>3.5.0</version>
+    <version>3.6.0</version>
 </dependency>
 ```
 
@@ -149,13 +194,13 @@ and then the specific jar(s) for your platform(s) :
 It includes all binaries for the supported platforms
 
 ``` XML
-compile group: 'ws.schild', name: 'jave-all-deps', version: '3.5.0'
+compile group: 'ws.schild', name: 'jave-all-deps', version: '3.6.0'
 ```
 
 ### For one platform only (Linux 64Bit in this case)
 ``` XML
-compile group: 'ws.schild', name: 'jave-core', version: '3.5.0'
-compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '3.5.0'
+compile group: 'ws.schild', name: 'jave-core', version: '3.6.0'
+compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '3.6.0'
 ```
 
 ### Main Components of Jave2

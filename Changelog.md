@@ -1,6 +1,62 @@
 # JAVE2
 
 ## Changelog
+- **4.0.0**
+   - New package `jave-nativebin-win-arm64`, ffmpeg 9.0.1 for windows on arm. It is
+     part of `jave-all-deps`, and needs no code change because the executable is
+     already looked up by `os.arch`, which reports `aarch64` there
+   - Upgraded the bundled ffmpeg from 4.4.1 to 9.0.x on every platform: windows 64
+     bit and windows on arm, both macOS packages, linux 64 bit, and linux arm 64 and
+     32 bit
+   - The linux binaries are now built from source rather than taken from a publisher,
+     because the static builds this project used are no longer reachable and every
+     remaining publisher links dynamically against glibc 2.28 or newer. Ours link
+     against musl and need no libc at all, so they run on any linux, including musl
+     based images and distributions far older than those builds would allow
+   - Fixed `EncoderProgressListener.sourceInfo()` being called with null when several
+     sources are concatenated. The information is read from a single input, so with
+     more than one there is none, and any listener that read what it was handed threw
+     a NullPointerException at the start of every concatenation (#178)
+   - Added `Encoder.getOptionAtIndex()`. Reading an option was already possible but
+     the method was called `setOptionAtIndex`, which is presumably why nobody found
+     it. The old name still works and is deprecated (#180)
+   - New `jave-bom` package, a bill of materials. Import it under
+     `dependencyManagement` with `scope` import and the jave artifacts can be declared
+     without versions, so a project that picks its own platform packages cannot end up
+     with a core and a native binary from different releases (#273)
+   - Documented how to keep album art when converting audio. Cover art is a video
+     stream, so an encoding with no VideoAttributes drops it along with everything
+     else video. Setting a VideoAttributes with codec copy keeps it, which is now in
+     Examples.md and covered by tests (#266)
+   - Added SECURITY.md, setting out where the boundary is between what this library
+     is responsible for and what the calling application is, and answering
+     CVE-2023-48909 with the two properties that make its claim untrue: no shell is
+     ever spawned, and paths are absolutised so they cannot be read as ffmpeg
+     options. Both are now covered by tests
+   - Deprecated `jave-nativebin-osx64`, the package for intel macs. Apple ends support
+     for intel hardware with macOS 27, so it will be removed in a later release. It is
+     still built, still published and still part of `jave-all-deps`, so nothing breaks
+     yet. On apple silicon use `jave-nativebin-osxm1`, which is unaffected
+   - **Breaking:** removed the 32 bit x86 packages `jave-nativebin-win32` and
+     `jave-nativebin-linux32`. ffmpeg no longer publishes builds for 32 bit Windows,
+     so that binary could not be kept current, and 32 bit x86 Linux goes with it.
+     Stay on 3.6.0 if you need either. 32 bit ARM is not affected and remains
+     supported
+   - Fixed `VideoAttributes.setVsync()` failing on ffmpeg 5 and newer, which removed
+     `-vsync` in favour of `-fps_mode`. The two never overlap, so the option is now
+     chosen from what the ffmpeg actually in use accepts, asked once per executable.
+     Note that `VsyncMethod.DROP` has no counterpart under `-fps_mode`
+   - Fixed `getSupportedEncodingFormats()` and `getSupportedDecodingFormats()`
+     returning an empty array against ffmpeg 5 and newer. They looked for the
+     header `File formats:`, which ffmpeg now calls `Formats:`, and the rule of
+     dashes under it grew a column. Nothing reported the mismatch, the list was
+     simply empty
+   - Fixed `AudioAttributes.setVolume()` killing the encoding on ffmpeg 5 and
+     newer. It was passed as `-vol`, an option ffmpeg has removed, so the run died
+     on `Unrecognized option 'vol'`. It now uses the volume filter, with the value
+     converted from the 256 based scale so callers do not have to change anything
+   - Test assertions that pinned ffmpeg exit codes and an exact duration now
+     accept what any ffmpeg release reports, since neither is part of this library
 - **3.6.0**
    - Fixed the extracted ffmpeg binary being run before it was ready. The chmod was
      started but never waited for, and the copy went straight to the target path, so

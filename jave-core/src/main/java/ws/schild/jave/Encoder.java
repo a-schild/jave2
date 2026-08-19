@@ -167,7 +167,7 @@ public class Encoder {
               break;
             }
           } else {
-            evaluateLine = line.trim().equals("------");
+            evaluateLine = isDashRule(line);
           }
         } else if (line.trim().equals(encoder ? "Encoders:" : "Decoders:")) {
           headerFound = true;
@@ -269,9 +269,9 @@ public class Encoder {
               break;
             }
           } else {
-            evaluateLine = line.trim().equals("--");
+            evaluateLine = isDashRule(line);
           }
-        } else if (line.trim().equals("File formats:")) {
+        } else if (isFormatsHeader(line)) {
           headerFound = true;
         }
       }
@@ -285,6 +285,56 @@ public class Encoder {
       ret[i] = res.get(i);
     }
     return ret;
+  }
+
+  /**
+   * Recognises the line that introduces the format table in the output of {@code ffmpeg -formats}.
+   *
+   * <p>ffmpeg used to head that table with {@code File formats:} and calls it {@code Formats:} in
+   * the newer releases. Only the old spelling was accepted here, so against any of those releases
+   * the header was never found and {@link #getSupportedEncodingFormats()} and {@link
+   * #getSupportedDecodingFormats()} returned an empty array, without an error to say why. Both
+   * spellings are accepted now.
+   *
+   * @param line A line of the ffmpeg output.
+   * @return Whether the format table starts after this line.
+   */
+  /**
+   * Expresses the volume of {@link AudioAttributes#setVolume(Integer)} as a volume filter.
+   *
+   * <p>It used to be passed as {@code -vol}, an option ffmpeg has since removed. A run that asked
+   * for a volume then died immediately on {@code Unrecognized option 'vol'}. The volume filter
+   * takes its place and has been available for far longer than any ffmpeg this library ships.
+   *
+   * <p>The scales differ. {@code -vol} counted 256 as unchanged, the filter takes a plain
+   * multiplier where 1 is unchanged, so the value is divided through by 256 and the meaning of
+   * what callers already pass is preserved.
+   *
+   * @param volume The volume on the 256 based scale.
+   * @return The filter expression for it.
+   */
+  private static String volumeFilter(Integer volume) {
+    return "volume=" + (volume / 256.0);
+  }
+
+  private static boolean isFormatsHeader(String line) {
+    String trimmed = line.trim();
+    return "File formats:".equals(trimmed) || "Formats:".equals(trimmed);
+  }
+
+  /**
+   * Recognises the rule of dashes that separates the legend from the table itself.
+   *
+   * <p>Its width follows the number of flag columns, which ffmpeg has changed over time. The format
+   * table went from two columns and {@code --} to three and {@code ---} once a column for devices
+   * was added, so the exact string is not something to compare against.
+   *
+   * @param line A line of the ffmpeg output.
+   * @return Whether the line is such a rule.
+   */
+  private static boolean isDashRule(String line) {
+    String trimmed = line.trim();
+    return trimmed.length() >= 2 && trimmed.chars().allMatch(c -> c == '-');
   }
 
   /**
@@ -433,10 +483,10 @@ public class Encoder {
               ea -> ea.getAudioAttributes()
                       .flatMap(AudioAttributes::getSamplingRate)
                       .map(Object::toString)),
-          new ValueArgument(ArgType.OUTFILE, "-vol",
+          new ValueArgument(ArgType.OUTFILE, "-af",
               ea -> ea.getAudioAttributes()
                       .flatMap(AudioAttributes::getVolume)
-                      .map(Object::toString)),
+                      .map(Encoder::volumeFilter)),
           new ValueArgument(ArgType.OUTFILE, "-qscale:a",
               ea -> ea.getAudioAttributes()
                       .flatMap(AudioAttributes::getQuality)
@@ -459,20 +509,57 @@ public class Encoder {
         )
       );
 
+  /**
+   * Inserts an argument into the list every encoding is built from.
+   *
+   * @param arg The argument to insert.
+   * @param index Where to insert it.
+   */
   public static void addOptionAtIndex(EncodingArgument arg, Integer index) {
     globalOptions.add(index, arg);
   }
 
+  /**
+   * Removes the argument at the given position.
+   *
+   * @param index Which one to remove.
+   */
   public static void removeOptionAtIndex(Integer index) {
     globalOptions.remove(index);
   }
 
+  /**
+   * Replaces the argument at the given position.
+   *
+   * @param arg The argument to put there.
+   * @param index Which one to replace.
+   */
   public static void setOptionAtIndex(EncodingArgument arg, Integer index) {
     globalOptions.set(index, arg);
   }
 
-  public static EncodingArgument setOptionAtIndex(Integer index) {
+  /**
+   * Returns the argument at the given position.
+   *
+   * @param index Which one to return.
+   * @return The argument at that position.
+   */
+  public static EncodingArgument getOptionAtIndex(Integer index) {
     return globalOptions.get(index);
+  }
+
+  /**
+   * Returns the argument at the given position.
+   *
+   * @param index Which one to return.
+   * @return The argument at that position.
+   * @deprecated This reads rather than writes, and the name says otherwise, which is why it was
+   *     hard to find that reading was possible at all. Use {@link #getOptionAtIndex(Integer)}. This
+   *     one still works and will be removed in a later release.
+   */
+  @Deprecated
+  public static EncodingArgument setOptionAtIndex(Integer index) {
+    return getOptionAtIndex(index);
   }
 
   /**
@@ -646,7 +733,11 @@ public class Encoder {
         }
       }
 
-      if (listener != null) {
+      // Only when there is something to report. The information is read from a single
+      // source, so concatenating several leaves it null, and a listener that reaches
+      // into what it is handed then dies of a NullPointerException rather than being
+      // told there is nothing to say.
+      if (listener != null && info != null) {
         listener.sourceInfo(info);
       }
       String line;
