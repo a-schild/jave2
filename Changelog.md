@@ -5,9 +5,9 @@
    - New package `jave-nativebin-win-arm64`, ffmpeg 9.0.1 for windows on arm. It is
      part of `jave-all-deps`, and needs no code change because the executable is
      already looked up by `os.arch`, which reports `aarch64` there
-   - Upgraded the bundled ffmpeg from 4.4.1 to 9.0.x on windows 64 bit, on both macOS
-     packages, and on linux 64 bit and linux arm 64 bit. The 32 bit arm package is
-     still on 4.4
+   - Upgraded the bundled ffmpeg from 4.4.1 to 9.0.x on every platform: windows 64
+     bit and windows on arm, both macOS packages, linux 64 bit, and linux arm 64 and
+     32 bit
    - The linux binaries are now built from source rather than taken from a publisher,
      because the static builds this project used are no longer reachable and every
      remaining publisher links dynamically against glibc 2.28 or newer. Ours link

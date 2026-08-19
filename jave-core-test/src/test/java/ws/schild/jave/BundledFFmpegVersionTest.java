@@ -52,9 +52,8 @@ public class BundledFFmpegVersionTest {
   private static final Map<String, String> KNOWINGLY_BEHIND = new HashMap<>();
 
   static {
-    // 32 bit arm, still the 4.4 build. It is the one architecture with no runner of its
-    // own, so its replacement has to be produced under emulation.
-    KNOWINGLY_BEHIND.put("arm", "4.4");
+    // Empty, and worth keeping that way. 32 bit arm was the last one behind, on 4.4,
+    // and is now built alongside the others.
   }
 
   /**
