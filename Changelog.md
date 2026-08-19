@@ -13,12 +13,12 @@
      remaining publisher links dynamically against glibc 2.28 or newer. Ours link
      against musl and need no libc at all, so they run on any linux, including musl
      based images and distributions far older than those builds would allow
-   - Fixed  being called with null when several
+   - Fixed `EncoderProgressListener.sourceInfo()` being called with null when several
      sources are concatenated. The information is read from a single input, so with
      more than one there is none, and any listener that read what it was handed threw
      a NullPointerException at the start of every concatenation (#178)
-   - Added . Reading an option was already possible but
-     the method was called , which is presumably why nobody found
+   - Added `Encoder.getOptionAtIndex()`. Reading an option was already possible but
+     the method was called `setOptionAtIndex`, which is presumably why nobody found
      it. The old name still works and is deprecated (#180)
    - Added SECURITY.md, setting out where the boundary is between what this library
      is responsible for and what the calling application is, and answering
