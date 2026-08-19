@@ -31,8 +31,6 @@
      `-vsync` in favour of `-fps_mode`. The two never overlap, so the option is now
      chosen from what the ffmpeg actually in use accepts, asked once per executable.
      Note that `VsyncMethod.DROP` has no counterpart under `-fps_mode`
-   - Upgraded the bundled windows 64 bit ffmpeg from 4.4.1 to 9.0.1. The other
-     platforms stay on 4.4.1 for now, see below
    - Fixed `getSupportedEncodingFormats()` and `getSupportedDecodingFormats()`
      returning an empty array against ffmpeg 5 and newer. They looked for the
      header `File formats:`, which ffmpeg now calls `Formats:`, and the rule of
