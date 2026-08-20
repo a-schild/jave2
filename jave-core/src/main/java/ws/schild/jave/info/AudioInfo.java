@@ -35,8 +35,8 @@ public class AudioInfo {
   private int samplingRate = -1;
 
   /**
-   * The audio stream channels number (1=mono, 2=stereo). If less than 0, this information is not
-   * available.
+   * The audio stream channels number, 1 for mono, 2 for stereo, 6 for 5.1 and so on. If less than
+   * 0, this information is not available.
    */
   private int channels = -1;
 
@@ -91,19 +91,22 @@ public class AudioInfo {
   }
 
   /**
-   * Returns the audio stream channels number (1=mono, 2=stereo). If less than 0, this information
-   * is not available.
+   * Returns the audio stream channels number, 1 for mono, 2 for stereo, 6 for 5.1 and so on. If
+   * less than 0, this information is not available.
    *
-   * @return the channels The audio stream channels number (1=mono, 2=stereo).
+   * <p>Every channel layout ffmpeg knows is recognised. Before 4.1.0 only mono, stereo and quad
+   * were, and everything else was reported as unavailable.
+   *
+   * @return The number of channels, or less than 0 when it could not be determined.
    */
   public int getChannels() {
     return channels;
   }
 
   /**
-   * Sets the audio stream channels number (1=mono, 2=stereo).
+   * Sets the audio stream channels number, 1 for mono, 2 for stereo, 6 for 5.1 and so on.
    *
-   * @param channels The audio stream channels number (1=mono, 2=stereo).
+   * @param channels The audio stream channels number.
    * @return this instance
    */
   public AudioInfo setChannels(int channels) {

@@ -20,6 +20,7 @@ import ws.schild.jave.info.VideoSize;
 import ws.schild.jave.process.ProcessLocator;
 import ws.schild.jave.process.ProcessWrapper;
 import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
+import ws.schild.jave.utils.ChannelLayouts;
 import ws.schild.jave.utils.RBufferedReader;
 
 /*
@@ -51,11 +52,13 @@ public class MultimediaObject {
   /** This regexp is used to parse the ffmpeg output about the sampling rate of an audio stream. */
   private static final Pattern SAMPLING_RATE_PATTERN =
       Pattern.compile("(\\d+)\\s+Hz", Pattern.CASE_INSENSITIVE);
-  /**
-   * This regexp is used to parse the ffmpeg output about the channels number of an audio stream.
+  /*
+   * The channel layout has no pattern of its own. ffmpeg writes it as a bare name, "stereo",
+   * "5.1(side)", "7.1.4", or as "6 channels" when it has no name for it, and there is nothing in
+   * the shape of those that a codec name or a sample format could not also have. The token is
+   * handed to ChannelLayouts instead, which knows the actual set of layouts and says so when it
+   * does not recognise one.
    */
-  private static final Pattern CHANNELS_PATTERN =
-      Pattern.compile("(mono|stereo|quad)", Pattern.CASE_INSENSITIVE);
 
   /**
    * This regexp is used to parse the ffmpeg output about the bit depth of an audio stream.
@@ -426,17 +429,12 @@ public class MultimediaObject {
                         parsed = true;
                       }
                       // Channels.
-                      m2 = CHANNELS_PATTERN.matcher(token);
-                      if (!parsed && m2.find()) {
-                        String ms = m2.group(1);
-                        if ("mono".equalsIgnoreCase(ms)) {
-                          audio.setChannels(1);
-                        } else if ("stereo".equalsIgnoreCase(ms)) {
-                          audio.setChannels(2);
-                        } else if ("quad".equalsIgnoreCase(ms)) {
-                          audio.setChannels(4);
+                      if (!parsed) {
+                        int channels = ChannelLayouts.channelCount(token);
+                        if (channels != ChannelLayouts.UNKNOWN) {
+                          audio.setChannels(channels);
+                          parsed = true;
                         }
-                        parsed = true;
                       }
                       // Bit rate.
                       m2 = BIT_RATE_PATTERN.matcher(token);

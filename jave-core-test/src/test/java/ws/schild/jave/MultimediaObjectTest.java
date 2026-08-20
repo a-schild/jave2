@@ -25,13 +25,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Locale;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ws.schild.jave.info.AudioInfo;
 import ws.schild.jave.info.MultimediaInfo;
 import ws.schild.jave.info.VideoInfo;
+import ws.schild.jave.process.ProcessLocator;
+import ws.schild.jave.process.ProcessWrapper;
 
 /** @author a.schild */
 public class MultimediaObjectTest extends AMediaTest {
@@ -65,14 +69,96 @@ public class MultimediaObjectTest extends AMediaTest {
   public void testGetInfoTimesOut() {
     System.out.println("testGetInfoTimesOut");
     File file = new File(getResourceSourcePath(), "dance1.avi");
-    MultimediaObject instance = new MultimediaObject(file);
 
+    /*
+     * Pointed at a process that never answers rather than at a real ffmpeg given an impossibly
+     * short deadline. Racing a real probe made this test decide the winner by how loaded the
+     * machine was, and it lost often enough on CI to fail the build. Here the watchdog is the only
+     * thing that can end the call, so the outcome does not depend on timing at all.
+     */
+    MultimediaObject instance = new MultimediaObject(file, neverAnsweringLocator());
+
+    long start = System.currentTimeMillis();
     EncoderException thrown =
-        assertThrows(EncoderException.class, () -> instance.getInfo(1L), "Expected to time out");
+        assertThrows(EncoderException.class, () -> instance.getInfo(250L), "Expected to time out");
+    long elapsed = System.currentTimeMillis() - start;
 
     assertTrue(
         thrown.getMessage().contains("Gave up reading the media information"),
         "Expected a timeout message, got: " + thrown.getMessage());
+
+    /*
+     * The deadline has to actually end the call, not merely be reported once the process finishes
+     * by itself. ProcessWrapper.destroy() used to close the streams before killing the process,
+     * and closing a pipe does not wake a thread already blocked reading it, so this returned only
+     * when the process exited on its own, 120 seconds later, with the right message and entirely
+     * the wrong behaviour. The bound is loose because it only needs to tell those two apart.
+     */
+    assertTrue(
+        elapsed < 30000L,
+        "Timed out only after the process ended by itself, taking " + elapsed + "ms");
+  }
+
+  /**
+   * The call must not be ended by the watchdog when the process answers in time, so that a timeout
+   * is only ever reported when there really was one.
+   */
+  @Test
+  public void testGetInfoDoesNotTimeOutWhenTheProcessAnswers() throws Exception {
+    System.out.println("testGetInfoDoesNotTimeOutWhenTheProcessAnswers");
+    File file = new File(getResourceSourcePath(), "dance1.avi");
+
+    MultimediaInfo result = new MultimediaObject(file).getInfo(60000L);
+
+    assertNotNull(result);
+    assertEquals("avi", result.getFormat());
+  }
+
+  /**
+   * A locator for a process that starts, says nothing and does not exit, standing in for an ffmpeg
+   * that hangs. It runs {@link NeverFinishes} on the JVM running the tests, so it needs nothing
+   * installed and behaves the same on every platform.
+   */
+  private ProcessLocator neverAnsweringLocator() {
+    String javaBin =
+        System.getProperty("java.home")
+            + File.separator
+            + "bin"
+            + File.separator
+            + (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win")
+                ? "java.exe"
+                : "java");
+
+    String classpath;
+    try {
+      classpath =
+          new File(
+                  NeverFinishes.class
+                      .getProtectionDomain()
+                      .getCodeSource()
+                      .getLocation()
+                      .toURI())
+              .getAbsolutePath();
+    } catch (URISyntaxException e) {
+      throw new IllegalStateException("Could not locate the test classes", e);
+    }
+
+    return new ProcessLocator() {
+      @Override
+      public String getExecutablePath() {
+        return javaBin;
+      }
+
+      @Override
+      public ProcessWrapper createExecutor() {
+        ProcessWrapper wrapper = new ProcessWrapper(javaBin);
+        wrapper.addArgument("-cp");
+        wrapper.addArgument(classpath);
+        wrapper.addArgument(NeverFinishes.class.getName());
+        // getInfo appends "-i <file>" after these, which NeverFinishes ignores.
+        return wrapper;
+      }
+    };
   }
 
   /** Test of getFile method, of class MultimediaObject. */

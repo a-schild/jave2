@@ -156,9 +156,21 @@ public class ConversionOutputAnalyzer {
                     }
                   }
 
-                  int perm = (int) Math.round((seconds * 1000L * 1000L) / (double) duration);
-                  if (perm > 1000) {
-                    perm = 1000;
+                  /*
+                   * Without a duration there is nothing to be a proportion of. Dividing by it
+                   * anyway produced a large negative number, which passed the upper clamp
+                   * untouched and reached the listener as if it were a permil (#269).
+                   */
+                  int perm;
+                  if (duration > 0) {
+                    perm = (int) Math.round((seconds * 1000L * 1000L) / (double) duration);
+                    if (perm > 1000) {
+                      perm = 1000;
+                    } else if (perm < 0) {
+                      perm = 0;
+                    }
+                  } else {
+                    perm = EncoderProgressListener.PROGRESS_UNKNOWN;
                   }
                   listener.progress(perm);
                 }

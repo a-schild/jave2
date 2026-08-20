@@ -81,11 +81,10 @@ images such as Alpine and distributions far older than a glibc build would allow
 
 
 
-## Usage Example
-For the documentation, please have a look at the project wiki pages [**here**](https://github.com/a-schild/jave2/wiki)
+## Installing
 
-or at this file [**DefaultFFMPEGLocatorTest.java**](https://github.com/a-schild/jave2/blob/master/jave-example/src/main/java/ws/schild/jave/example/DefaultFFMPEGLocatorTest.java)
-
+The full documentation is in the [project wiki](https://github.com/a-schild/jave2/wiki),
+and the sections below cover getting the dependencies right.
 
 Maven Repository URL -> https://mvnrepository.com/artifact/ws.schild/jave-all-deps
 
@@ -98,7 +97,7 @@ It includes all binaries for the supported platforms
 <dependency>
  <groupId>ws.schild</groupId>
  <artifactId>jave-all-deps</artifactId>
- <version>4.0.0</version>
+ <version>4.1.0</version>
 </dependency>
 ```
 
@@ -114,7 +113,7 @@ apart, which is the usual way this goes wrong.
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-bom</artifactId>
-            <version>4.0.0</version>
+            <version>4.1.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -143,7 +142,7 @@ Include the following in your pom files.
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-core</artifactId>
-    <version>4.0.0</version>
+    <version>4.1.0</version>
 </dependency>
 ```
 
@@ -154,7 +153,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux64</artifactId>
-    <version>4.0.0</version>
+    <version>4.1.0</version>
 </dependency>
 ```
 
@@ -163,7 +162,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux-arm64</artifactId>
-    <version>4.0.0</version>
+    <version>4.1.0</version>
 </dependency>
 ```
 
@@ -172,7 +171,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux-arm32</artifactId>
-    <version>4.0.0</version>
+    <version>4.1.0</version>
 </dependency>
 ```
 
@@ -181,7 +180,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-win64</artifactId>
-    <version>4.0.0</version>
+    <version>4.1.0</version>
 </dependency>
 ```
 
@@ -190,7 +189,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-win-arm64</artifactId>
-    <version>4.0.0</version>
+    <version>4.1.0</version>
 </dependency>
 ```
 
@@ -199,7 +198,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-osxm1</artifactId>
-    <version>4.0.0</version>
+    <version>4.1.0</version>
 </dependency>
 ```
 
@@ -208,7 +207,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-osx64</artifactId>
-    <version>4.0.0</version>
+    <version>4.1.0</version>
 </dependency>
 ```
 
@@ -217,13 +216,13 @@ and then the specific jar(s) for your platform(s) :
 It includes all binaries for the supported platforms
 
 ``` XML
-compile group: 'ws.schild', name: 'jave-all-deps', version: '4.0.0'
+compile group: 'ws.schild', name: 'jave-all-deps', version: '4.1.0'
 ```
 
 ### For one platform only (Linux 64Bit in this case)
 ``` XML
-compile group: 'ws.schild', name: 'jave-core', version: '4.0.0'
-compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '4.0.0'
+compile group: 'ws.schild', name: 'jave-core', version: '4.1.0'
+compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '4.1.0'
 ```
 
 ### Main Components of Jave2
@@ -234,72 +233,41 @@ Jave2 consists of two main components:
 There exists a jave-all-deps project, which includes core and all windows und linux binaries.
 
 ---
-## Examples
+## A first encoding
 
-#### Converting any audio to mp3
 ``` JAVA
-boolean succeeded;  
-try {                                                         
- File source = new File("file path");		                 
- File target = new File("file path");                         
-                                                              
- //Audio Attributes                                       
- AudioAttributes audio = new AudioAttributes();              
- audio.setCodec("libmp3lame");                               
- audio.setBitRate(128000);                                   
- audio.setChannels(2);                                       
- audio.setSamplingRate(44100);                               
-                                                             
- //Encoding attributes                                       
- EncodingAttributes attrs = new EncodingAttributes();        
- attrs.setOutputFormat("mp3");                               
- attrs.setAudioAttributes(audio);                            
-                                                             
- //Encode                                                    
- Encoder encoder = new Encoder();                            
- encoder.encode(new MultimediaObject(source), target, attrs);
-                                                              
-} catch (Exception ex) {                                      
- ex.printStackTrace();                                       
- succeeded = false;                                          
-}                                                             
-```
-     
-## More advanced examples    
+File source = new File("source.wav");
+File target = new File("target.mp3");
 
-Can be found [**here**](https://github.com/a-schild/jave2/blob/master/Examples.md)
+AudioAttributes audio = new AudioAttributes();
+audio.setCodec("libmp3lame");
+audio.setBitRate(128000);
+audio.setChannels(2);
+audio.setSamplingRate(44100);
 
-## Reacting to the end of an encoding
+EncodingAttributes attrs = new EncodingAttributes();
+attrs.setOutputFormat("mp3");
+attrs.setAudioAttributes(audio);
 
-`EncoderProgressListener` gained a `done()` method that is called once the
-encoding has finished successfully. It is a default method, so listeners written
-against earlier versions keep compiling unchanged.
-
-```java
-encoder.encode(new MultimediaObject(source), target, attrs, new EncoderProgressListener() {
-    public void sourceInfo(MultimediaInfo info) { }
-    public void progress(int permil) { }
-    public void message(String message) { }
-
-    @Override
-    public void done() {
-        System.out.println("Encoding finished");
-    }
-});
+new Encoder().encode(new MultimediaObject(source), target, attrs);
 ```
 
-## Videos recorded in a different orientation
+`encode()` blocks until the transcoding has finished, and throws `EncoderException`
+when it fails, or `InputFormatException` when the source could not be read.
 
-Phones store the orientation as stream metadata instead of rotating the picture.
-`MultimediaInfo.getRotate()` reports that angle in degrees, clockwise, and is 0
-when the file carries no rotation.
+## Documentation
 
-```java
-MultimediaInfo info = new MultimediaObject(source).getInfo();
-if (info.getRotate() == 90 || info.getRotate() == 270) {
-    // width and height of info.getVideo().getSize() are swapped on playback
-}
-```
+| | |
+| --- | --- |
+| [Usage](https://github.com/a-schild/jave2/wiki/Usage) | Adding the library, encoding, following progress, reading information about a file |
+| [Examples](Examples.md) ([wiki](https://github.com/a-schild/jave2/wiki/Examples)) | Recipes for particular conversions: mp3, wav, mp4/H.264, webm/VP9, amr, album art, joining files, extracting stills, filters |
+| [Encoding attributes](https://github.com/a-schild/jave2/wiki/Encoding-Attributes) | Every audio and video setting, what each one does |
+| [Custom ffmpeg arguments](https://github.com/a-schild/jave2/wiki/Custom-ffmpeg-arguments) | Reaching ffmpeg options the typed API does not model, and using your own ffmpeg binary |
+| [Supported formats](https://github.com/a-schild/jave2/wiki/Supported-formats) | What the bundled ffmpeg reads and writes |
+| [javadoc](https://javadoc.io/doc/ws.schild/jave-core/latest/index.html) | The API itself |
+
+A runnable sample lives in
+[`DefaultFFMPEGLocatorTest.java`](https://github.com/a-schild/jave2/blob/master/jave-example/src/main/java/ws/schild/jave/example/DefaultFFMPEGLocatorTest.java).
 
 ## Changelog
 

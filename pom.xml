@@ -4,19 +4,19 @@
     <artifactId>jave-modules</artifactId>
     <packaging>pom</packaging>
     <properties>
-        <revision>4.0.0</revision>
+        <revision>4.1.0</revision>
         <!-- The version is propagated into ws.schild.jave.Version by the
              templating-maven-plugin, there is nothing to change in Java sources -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+        <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
+        <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Aggregator only, the modules publish themselves to Maven Central -->
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
-    <version>4.0.0</version>
+    <version>4.1.0</version>
     <name>Jave master project</name>
     <description>Jave master project</description>
     <url>https://github.com/a-schild/jave2</url>

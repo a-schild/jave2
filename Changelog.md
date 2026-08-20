@@ -1,6 +1,93 @@
 # JAVE2
 
 ## Changelog
+- **4.1.0** (2026-08-20)
+   - **`slf4j-api` upgraded from 1.7.36 to 2.0.18.** This is the one change here that
+     consumers can notice. slf4j 2 finds its binding through the `ServiceLoader` rather
+     than through `StaticLoggerBinder`, so a project that pins an slf4j **1.7** binding,
+     `slf4j-simple` 1.7.x, `logback-classic` 1.2.x, and lets maven pick up 2.0.18 from
+     here will get "No SLF4J providers were found" and lose its logging until the binding
+     is moved to a 2.x one. Nothing else about the library changes, and pinning
+     `slf4j-api` to 1.7.36 in your own build still works, since only the API is used
+   - Removed `selenium-java` 2.44.0 and `com.opera:operadriver` 1.5 from the test modules.
+     Nothing referenced either of them, they had been there since 2014, and between them
+     they pulled 40 odd transitive artifacts of the same vintage onto the test classpath,
+     including `commons-collections` 3.2.1, `guava` 14.0 and `httpclient` 4.3.4. The test
+     dependency tree goes from 56 artifacts to 13. `commons-lang3` was being used by
+     `EncoderTest` through that accident and is now declared properly, at 3.20.0
+   - Replaced the unused `logback-classic` in `jave-core-test` with `slf4j-simple` at the
+     same version as the api. The binding there was slf4j 1.7 against an api that resolved
+     to 2.x, so it never bound and the library's own debug logging, including the ffmpeg
+     command line, silently produced nothing while tests ran. It works now
+   - `DefaultFFMPEGLocatorTest` no longer fails at random. It clears the shared temporary
+     directory before asking the locator to extract a binary, and windows refuses to
+     delete an executable a process has just finished with, so the cleanup threw and took
+     the test with it. The cleanup is now best effort and the test asserts on what the
+     locator returns instead: a file that exists, is not empty and can be executed
+   - Updated the build plugins: compiler 3.11.0 to 3.15.0, resources 3.3.1 to 3.5.0,
+     surefire 3.2.5 to 3.5.6, javadoc 3.6.2 to 3.12.0, jar 3.3.0 (and 3.1.2 in one module)
+     to 3.5.1, source 3.3.0 to 3.4.0, gpg 3.1.0 to 3.2.8, deploy 3.1.1 to 3.1.4, release
+     2.5.3 to 3.3.1, scm-provider-gitexe 2.0.1 to 2.2.1, buildnumber 3.0.0 to 3.3.0,
+     templating 1.0.0 to 3.1.0. `central-publishing-maven-plugin` was already current at
+     0.11.0. JUnit moves from 5.10.1 to 5.14.4 rather than to 6.x, which requires Java 17
+     and would raise the floor for the test modules
+   - Two pass encoding, `EncodingAttributes.setTwoPass(true)`. ffmpeg is run twice over the
+     same input: the first run encodes the video only to measure it, writing what it learns
+     to a statistics file and discarding the pictures, and the second uses those
+     measurements to decide where the bitrate is worth spending. On material that is not
+     uniformly difficult a fixed budget buys noticeably better quality, at roughly twice
+     the time. It requires a video bitrate, since that is the budget being planned, and
+     `validate()` rejects the combination with no video or no bitrate rather than running
+     ffmpeg twice for nothing. The statistics file goes in the temporary directory and is
+     removed afterwards. The two passes are reported to an `EncoderProgressListener` as one
+     encoding, each taking half of the 0..1000 range, with `sourceInfo` called once at the
+     start and `done()` once at the end (#156)
+   - `ProcessWrapper.destroy()` now kills the process before closing its streams instead
+     of afterwards. Closing a pipe does not wake a thread already blocked reading it, so
+     the kill was reached only once the reader returned, which for the normal case of a
+     caller reading ffmpeg's output meant not until ffmpeg had finished on its own. In
+     other words `Encoder.abortEncoding()` did not abort and `MultimediaObject.getInfo(long)`
+     did not time out, they both waited and then reported as though they had. A test that
+     took 120 seconds to report a 250 millisecond timeout now takes 0.3
+   - `AudioInfo.getChannels()` now understands every channel layout ffmpeg knows. It
+     recognised only `mono`, `stereo` and `quad`, so anything else, 5.1 and 7.1 included,
+     was reported as -1, meaning unavailable. Layouts whose name carries the count are
+     worked out arithmetically, so `5.1` is 6 and `7.1.4` is 12, and a layout ffmpeg adds
+     later needs no change here. A new `ChannelLayouts` utility does the work, and a test
+     checks it against `ffmpeg -layouts` so the two cannot drift apart (#45)
+   - Fixed nonsense progress values for sources with no declared duration. A percentage
+     needs a total, and live streams, webm files from browser recorders and concatenated
+     sources have none. The permil was calculated anyway, dividing by a duration of -1 or
+     0, which produced a large negative number that slipped past the upper clamp and
+     reached the listener as if it were progress. `EncoderProgressListener.progress()` is
+     now called with the new `EncoderProgressListener.PROGRESS_UNKNOWN` constant in those
+     cases, and a calculated permil is clamped to 0..1000 (#269)
+   - Rewrote the documentation, which had drifted a long way from the library. The wiki
+     `Usage` page still documented version 2.4.2, `attrs.setFormat()` and the old
+     `jave-native-*` artifact names, and every example on the `Examples` page used
+     `setFormat`, which has not existed for years, so none of them compiled.
+     `Encoding-Attributes` was regenerated from the source: it had listed six setters
+     under the wrong package names and omitted `crf`, `preset`, `tune`, `x264Profile`,
+     `pixelFormat`, `faststart`, `quality`, `vsync` and the filters entirely (#59, #155)
+   - New wiki page, `Custom ffmpeg arguments`, on reaching options the typed API does
+     not model, driving ffmpeg through `ProcessWrapper`, and supplying your own binary
+     with a `ProcessLocator` (#155)
+   - Regenerated the wiki `Supported formats` page from the bundled ffmpeg 9.0.1. It
+     predated this fork, listing `liba52`, `libfaac`, `libfaad`, `libamr_nb`,
+     `libamr_wb`, `sonic` and `sonicls`, which ffmpeg dropped over a decade ago, while
+     omitting `libopus`, `libvpx-vp9`, `libx265`, `libaom-av1`, `aac` and `libwebp`.
+     It now also documents the `Encoder.get*Encoders()` query methods, which never go
+     stale, and which parts of the codec set differ between platforms
+   - Expanded the wiki `Developers guide lines` page, which was seven lines about
+     semantic versioning, to cover building and the Java 8 language level, the module
+     layout, the test suite, branches, how the static musl linux binaries are built
+     and what the CI parity gate checks, and releasing through the Central Portal
+   - The usage examples have moved out of the README into `Examples.md` and the matching
+     wiki page, so there is one place to keep current instead of three. The README keeps
+     a single first encoding and points at the rest. `Examples.md` gains recipes for
+     video to audio, audio only mp4, joining audio files, AMR, volume, H.264, VP9,
+     trimming, sideways phone video, stills, filters and aborting a running encoding
+     (#59)
 - **4.0.0**
    - New package `jave-nativebin-win-arm64`, ffmpeg 9.0.1 for windows on arm. It is
      part of `jave-all-deps`, and needs no code change because the executable is
