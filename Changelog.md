@@ -2,6 +2,12 @@
 
 ## Changelog
 - **4.1.0-SNAPSHOT**
+   - `AudioInfo.getChannels()` now understands every channel layout ffmpeg knows. It
+     recognised only `mono`, `stereo` and `quad`, so anything else, 5.1 and 7.1 included,
+     was reported as -1, meaning unavailable. Layouts whose name carries the count are
+     worked out arithmetically, so `5.1` is 6 and `7.1.4` is 12, and a layout ffmpeg adds
+     later needs no change here. A new `ChannelLayouts` utility does the work, and a test
+     checks it against `ffmpeg -layouts` so the two cannot drift apart (#45)
    - Fixed nonsense progress values for sources with no declared duration. A percentage
      needs a total, and live streams, webm files from browser recorders and concatenated
      sources have none. The permil was calculated anyway, dividing by a duration of -1 or
