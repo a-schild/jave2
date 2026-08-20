@@ -29,6 +29,17 @@ import ws.schild.jave.info.MultimediaInfo;
 public interface EncoderProgressListener {
 
   /**
+   * Reported to {@link #progress(int)} when the progress cannot be expressed as a proportion,
+   * because the duration of the work is not known in advance.
+   *
+   * <p>This happens when the source does not declare a duration, which is common for streams and
+   * for webm files produced by browser recorders, and when several sources are concatenated, since
+   * there is then no single source whose duration could be read. The encoding itself is unaffected,
+   * only the ability to say how far through it is.
+   */
+  public static final int PROGRESS_UNKNOWN = -1;
+
+  /**
    * This method is called before the encoding process starts, reporting information about the
    * source stream that will be decoded and re-encoded.
    *
@@ -39,7 +50,10 @@ public interface EncoderProgressListener {
   /**
    * This method is called to notify a progress in the encoding process.
    *
-   * @param permil A permil value representing the encoding process progress.
+   * @param permil A permil value representing the encoding process progress, 0 to 1000, or {@link
+   *     #PROGRESS_UNKNOWN} when the duration of the source is not known and no proportion can be
+   *     calculated. Callers that draw a progress bar should treat {@code PROGRESS_UNKNOWN} as the
+   *     cue for an indeterminate one.
    */
   public void progress(int permil);
 

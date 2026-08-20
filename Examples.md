@@ -252,7 +252,8 @@ new Encoder().encode(sources, target, attrs);
 ```
 
 > When several sources are joined there is no single source to describe, so
-> `EncoderProgressListener.sourceInfo` is not called and progress cannot be a percentage.
+> `EncoderProgressListener.sourceInfo` is not called, and progress is reported as
+> `PROGRESS_UNKNOWN` rather than a percentage.
 
 ### Joining audio files
 
@@ -340,7 +341,11 @@ new Encoder().encode(new MultimediaObject(source), target, attrs,
     new EncoderProgressListener() {
         public void sourceInfo(MultimediaInfo info) { }
         public void progress(int permil) {
-            System.out.println(permil / 10.0 + "%");
+            if (permil == EncoderProgressListener.PROGRESS_UNKNOWN) {
+                System.out.println("working");
+            } else {
+                System.out.println(permil / 10.0 + "%");
+            }
         }
         public void message(String message) { }
         @Override public void done() {
@@ -348,6 +353,11 @@ new Encoder().encode(new MultimediaObject(source), target, attrs,
         }
     });
 ```
+
+`PROGRESS_UNKNOWN`, which is `-1`, means the source declared no duration, so there is
+nothing for the progress to be a proportion of. Live streams, webm files from browser
+recorders and concatenations all land there, and an indeterminate progress bar is the
+right response.
 
 ## Stopping a running encoding
 

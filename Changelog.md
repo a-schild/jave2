@@ -2,6 +2,13 @@
 
 ## Changelog
 - **4.1.0-SNAPSHOT**
+   - Fixed nonsense progress values for sources with no declared duration. A percentage
+     needs a total, and live streams, webm files from browser recorders and concatenated
+     sources have none. The permil was calculated anyway, dividing by a duration of -1 or
+     0, which produced a large negative number that slipped past the upper clamp and
+     reached the listener as if it were progress. `EncoderProgressListener.progress()` is
+     now called with the new `EncoderProgressListener.PROGRESS_UNKNOWN` constant in those
+     cases, and a calculated permil is clamped to 0..1000 (#269)
    - Rewrote the documentation, which had drifted a long way from the library. The wiki
      `Usage` page still documented version 2.4.2, `attrs.setFormat()` and the old
      `jave-native-*` artifact names, and every example on the `Examples` page used
