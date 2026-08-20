@@ -2,7 +2,22 @@
 
 ## Changelog
 - **4.1.0-SNAPSHOT**
-   - Nothing yet
+   - Rewrote the documentation, which had drifted a long way from the library. The wiki
+     `Usage` page still documented version 2.4.2, `attrs.setFormat()` and the old
+     `jave-native-*` artifact names, and every example on the `Examples` page used
+     `setFormat`, which has not existed for years, so none of them compiled.
+     `Encoding-Attributes` was regenerated from the source: it had listed six setters
+     under the wrong package names and omitted `crf`, `preset`, `tune`, `x264Profile`,
+     `pixelFormat`, `faststart`, `quality`, `vsync` and the filters entirely (#59, #155)
+   - New wiki page, `Custom ffmpeg arguments`, on reaching options the typed API does
+     not model, driving ffmpeg through `ProcessWrapper`, and supplying your own binary
+     with a `ProcessLocator` (#155)
+   - The usage examples have moved out of the README into `Examples.md` and the matching
+     wiki page, so there is one place to keep current instead of three. The README keeps
+     a single first encoding and points at the rest. `Examples.md` gains recipes for
+     video to audio, audio only mp4, joining audio files, AMR, volume, H.264, VP9,
+     trimming, sideways phone video, stills, filters and aborting a running encoding
+     (#59)
 - **4.0.0**
    - New package `jave-nativebin-win-arm64`, ffmpeg 9.0.1 for windows on arm. It is
      part of `jave-all-deps`, and needs no code change because the executable is
