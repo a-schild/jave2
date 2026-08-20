@@ -73,6 +73,15 @@ than taken from a publisher, compiled against musl and linked fully statically, 
 have no interpreter and no libc dependency and run on any linux, including musl based
 images such as Alpine and distributions far older than a glibc build would allow.
 
+### GraalVM native image
+
+Supported from 4.2.0 with nothing to configure. The `jave-nativebin-*` packages carry the
+reachability metadata that registers the bundled ffmpeg, so native-image keeps it in the
+image instead of discarding it. Depend on the single platform package you are building
+for rather than `jave-all-deps`, or every binary is embedded. See
+[Usage](https://github.com/a-schild/jave2/wiki/Usage#graalvm-native-image) for the
+details.
+
 ## Projects using Jave2
 * [XR3Player](https://github.com/goxr3plus/XR3Player)
 * [XR3Converter](https://github.com/goxr3plus/XR3Converter)
@@ -97,7 +106,7 @@ It includes all binaries for the supported platforms
 <dependency>
  <groupId>ws.schild</groupId>
  <artifactId>jave-all-deps</artifactId>
- <version>4.1.0</version>
+ <version>4.2.0</version>
 </dependency>
 ```
 
@@ -113,7 +122,7 @@ apart, which is the usual way this goes wrong.
         <dependency>
             <groupId>ws.schild</groupId>
             <artifactId>jave-bom</artifactId>
-            <version>4.1.0</version>
+            <version>4.2.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -142,7 +151,7 @@ Include the following in your pom files.
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-core</artifactId>
-    <version>4.1.0</version>
+    <version>4.2.0</version>
 </dependency>
 ```
 
@@ -153,7 +162,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux64</artifactId>
-    <version>4.1.0</version>
+    <version>4.2.0</version>
 </dependency>
 ```
 
@@ -162,7 +171,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux-arm64</artifactId>
-    <version>4.1.0</version>
+    <version>4.2.0</version>
 </dependency>
 ```
 
@@ -171,7 +180,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-linux-arm32</artifactId>
-    <version>4.1.0</version>
+    <version>4.2.0</version>
 </dependency>
 ```
 
@@ -180,7 +189,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-win64</artifactId>
-    <version>4.1.0</version>
+    <version>4.2.0</version>
 </dependency>
 ```
 
@@ -189,7 +198,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-win-arm64</artifactId>
-    <version>4.1.0</version>
+    <version>4.2.0</version>
 </dependency>
 ```
 
@@ -198,7 +207,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-osxm1</artifactId>
-    <version>4.1.0</version>
+    <version>4.2.0</version>
 </dependency>
 ```
 
@@ -207,7 +216,7 @@ and then the specific jar(s) for your platform(s) :
 <dependency>
     <groupId>ws.schild</groupId>
     <artifactId>jave-nativebin-osx64</artifactId>
-    <version>4.1.0</version>
+    <version>4.2.0</version>
 </dependency>
 ```
 
@@ -216,13 +225,13 @@ and then the specific jar(s) for your platform(s) :
 It includes all binaries for the supported platforms
 
 ``` XML
-compile group: 'ws.schild', name: 'jave-all-deps', version: '4.1.0'
+compile group: 'ws.schild', name: 'jave-all-deps', version: '4.2.0'
 ```
 
 ### For one platform only (Linux 64Bit in this case)
 ``` XML
-compile group: 'ws.schild', name: 'jave-core', version: '4.1.0'
-compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '4.1.0'
+compile group: 'ws.schild', name: 'jave-core', version: '4.2.0'
+compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '4.2.0'
 ```
 
 ### Main Components of Jave2

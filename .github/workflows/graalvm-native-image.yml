@@ -1,0 +1,85 @@
+# Checks that jave still works when compiled ahead of time by GraalVM native-image.
+#
+# The bundled ffmpeg is a resource inside the nativebin jars, and native-image discards
+# resources unless something registers them, so those jars ship a resource-config.json
+# under META-INF/native-image which native-image picks up on its own. This workflow is
+# what proves that registration is right: without it the smoke test fails with the error
+# from #276, "Could not find ffmpeg platform executable in resources".
+#
+# Native image builds take several minutes, so this does not run on every push. It runs
+# when something that could affect it changes, and on demand.
+
+name: GraalVM native image
+
+on:
+  push:
+    branches: [ "master", "develop" ]
+    paths:
+      - 'jave-core/src/main/java/ws/schild/jave/process/**'
+      - 'jave-nativebin-*/src/main/resources/META-INF/**'
+      - '.github/graalvm-smoke/**'
+      - '.github/workflows/graalvm-native-image.yml'
+  pull_request:
+    branches: [ "master", "develop" ]
+    paths:
+      - 'jave-core/src/main/java/ws/schild/jave/process/**'
+      - 'jave-nativebin-*/src/main/resources/META-INF/**'
+      - '.github/graalvm-smoke/**'
+  workflow_dispatch:
+
+jobs:
+  native-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '21'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: maven
+
+      - name: Report the toolchain
+        run: |
+          java -version
+          native-image --version
+
+      - name: Install jave into the local repository
+        run: mvn -B install -DskipTests -Dgpg.skip=true
+
+      - name: Work out the version being tested
+        id: version
+        run: |
+          VERSION=$(mvn -B -q -N help:evaluate -Dexpression=project.version -DforceStdout)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Testing jave $VERSION"
+
+      - name: Confirm the metadata is in the jar
+        run: |
+          JAR=$(ls jave-nativebin-linux64/target/jave-nativebin-linux64-*.jar | grep -v -E 'sources|javadoc' | head -1)
+          echo "Inspecting $JAR"
+          unzip -p "$JAR" META-INF/native-image/ws.schild/jave-nativebin-linux64/resource-config.json
+          # A missing entry here would make the failure below much harder to read.
+          unzip -l "$JAR" | grep -q 'META-INF/native-image/ws.schild/jave-nativebin-linux64/resource-config.json'
+
+      - name: Build the native image
+        working-directory: .github/graalvm-smoke
+        run: mvn -B -Djave.version=${{ steps.version.outputs.version }} package
+
+      - name: Run it
+        working-directory: .github/graalvm-smoke
+        run: |
+          ./target/jave-graalvm-smoke "$RUNNER_TEMP"
+
+      - name: Run the same test on the jvm, for comparison
+        if: failure()
+        working-directory: .github/graalvm-smoke
+        run: |
+          echo "The native image failed. Running the same code on the jvm tells a"
+          echo "native-image problem apart from an ordinary one."
+          mvn -B -q -Djave.version=${{ steps.version.outputs.version }} \
+            exec:java -Dexec.mainClass=ws.schild.jave.smoke.GraalVmSmokeTest \
+            -Dexec.args="$RUNNER_TEMP" || true
