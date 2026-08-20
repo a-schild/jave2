@@ -1,6 +1,8 @@
 # JAVE2
 
 ## Changelog
+- **4.2.0-SNAPSHOT**
+   - Nothing yet
 - **4.1.0** (2026-08-20)
    - **`slf4j-api` upgraded from 1.7.36 to 2.0.18.** This is the one change here that
      consumers can notice. slf4j 2 finds its binding through the `ServiceLoader` rather
