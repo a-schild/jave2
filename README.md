@@ -73,6 +73,15 @@ than taken from a publisher, compiled against musl and linked fully statically, 
 have no interpreter and no libc dependency and run on any linux, including musl based
 images such as Alpine and distributions far older than a glibc build would allow.
 
+### GraalVM native image
+
+Supported from 4.2.0 with nothing to configure. The `jave-nativebin-*` packages carry the
+reachability metadata that registers the bundled ffmpeg, so native-image keeps it in the
+image instead of discarding it. Depend on the single platform package you are building
+for rather than `jave-all-deps`, or every binary is embedded. See
+[Usage](https://github.com/a-schild/jave2/wiki/Usage#graalvm-native-image) for the
+details.
+
 ## Projects using Jave2
 * [XR3Player](https://github.com/goxr3plus/XR3Player)
 * [XR3Converter](https://github.com/goxr3plus/XR3Converter)

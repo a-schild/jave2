@@ -2,7 +2,16 @@
 
 ## Changelog
 - **4.2.0-SNAPSHOT**
-   - Nothing yet
+   - GraalVM native image now works with nothing to configure. The bundled ffmpeg is a
+     resource inside the `jave-nativebin-*` jars, and native-image discards resources
+     unless something registers them, so an image built against jave contained no binary
+     and failed at run time with "Could not find ffmpeg platform executable in resources".
+     Each of those jars now ships a `resource-config.json` under `META-INF/native-image`,
+     which native-image discovers by itself. A new workflow proves it, building a native
+     image of a smoke test that extracts the binary, encodes a file and reads the result
+     back (#276)
+   - `.gitignore` now ignores `target` directories at any depth. The rule matched only one
+     level, so build output from anything nested deeper was offered up for committing
 - **4.1.0** (2026-08-20)
    - **`slf4j-api` upgraded from 1.7.36 to 2.0.18.** This is the one change here that
      consumers can notice. slf4j 2 finds its binding through the `ServiceLoader` rather
