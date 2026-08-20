@@ -1,6 +1,8 @@
 # JAVE2
 
 ## Changelog
+- **4.3.0-SNAPSHOT**
+   - Nothing yet
 - **4.2.0** (2026-08-20)
    - GraalVM native image now works with nothing to configure. The bundled ffmpeg is a
      resource inside the `jave-nativebin-*` jars, and native-image discards resources
