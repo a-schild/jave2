@@ -12,6 +12,16 @@
    - New wiki page, `Custom ffmpeg arguments`, on reaching options the typed API does
      not model, driving ffmpeg through `ProcessWrapper`, and supplying your own binary
      with a `ProcessLocator` (#155)
+   - Regenerated the wiki `Supported formats` page from the bundled ffmpeg 9.0.1. It
+     predated this fork, listing `liba52`, `libfaac`, `libfaad`, `libamr_nb`,
+     `libamr_wb`, `sonic` and `sonicls`, which ffmpeg dropped over a decade ago, while
+     omitting `libopus`, `libvpx-vp9`, `libx265`, `libaom-av1`, `aac` and `libwebp`.
+     It now also documents the `Encoder.get*Encoders()` query methods, which never go
+     stale, and which parts of the codec set differ between platforms
+   - Expanded the wiki `Developers guide lines` page, which was seven lines about
+     semantic versioning, to cover building and the Java 8 language level, the module
+     layout, the test suite, branches, how the static musl linux binaries are built
+     and what the CI parity gate checks, and releasing through the Central Portal
    - The usage examples have moved out of the README into `Examples.md` and the matching
      wiki page, so there is one place to keep current instead of three. The README keeps
      a single first encoding and points at the rest. `Examples.md` gains recipes for
