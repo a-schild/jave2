@@ -4,7 +4,7 @@
 /.idea
 /build/
 /out/
-/*/target/
+target/
 /jave-core/nbproject/
 /jave-core-test/src/test/resources/private
 
