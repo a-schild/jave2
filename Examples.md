@@ -45,6 +45,52 @@ attrs.setAudioAttributes(audio);
 new Encoder().encode(new MultimediaObject(source), target, attrs);
 ```
 
+### Taking the soundtrack off a video, as MP3
+
+Leaving `VideoAttributes` unset is what drops the picture.
+
+``` JAVA
+File source = new File("source.mp4");
+File target = new File("target.mp3");
+
+AudioAttributes audio = new AudioAttributes();
+audio.setCodec("libmp3lame");
+audio.setBitRate(192000);
+audio.setChannels(2);
+audio.setSamplingRate(44100);
+
+EncodingAttributes attrs = new EncodingAttributes();
+attrs.setOutputFormat("mp3");
+attrs.setAudioAttributes(audio);
+
+new Encoder().encode(new MultimediaObject(source), target, attrs);
+```
+
+If the source audio is already MP3, `audio.setCodec(AudioAttributes.DIRECT_STREAM_COPY)`
+lifts the stream out unchanged, which is both faster and lossless.
+
+### FLAC to MP4, audio only
+
+An MP4 carrying nothing but sound. Same shape as above, a different container, and
+`setFaststart` so it can be streamed.
+
+``` JAVA
+AudioAttributes audio = new AudioAttributes();
+audio.setCodec("aac");
+audio.setBitRate(256000);
+
+VideoAttributes video = new VideoAttributes();
+video.setFaststart(true);
+
+EncodingAttributes attrs = new EncodingAttributes();
+attrs.setOutputFormat("mp4");
+attrs.setAudioAttributes(audio);
+attrs.setVideoAttributes(video);
+```
+
+Players that insist on a picture want a video stream, so for those, loop a still image
+instead. See [Encoding Attributes](https://github.com/a-schild/jave2/wiki/Encoding-Attributes) for `setLoop`.
+
 ### FLAC to MP3, keeping the album art
 
 Cover art is carried as a video stream, so an audio only encoding drops it. Ask for the
@@ -207,6 +253,45 @@ new Encoder().encode(sources, target, attrs);
 
 > When several sources are joined there is no single source to describe, so
 > `EncoderProgressListener.sourceInfo` is not called and progress cannot be a percentage.
+
+### Joining audio files
+
+The same filter, told to take the audio streams and not the video ones. Note that the
+filter graph still hangs off `VideoAttributes` even though the output has no video, since
+that is where `setComplexFiltergraph` lives.
+
+``` JAVA
+List<MultimediaObject> sources = new ArrayList<>();
+sources.add(new MultimediaObject(new File("1.mp3")));
+sources.add(new MultimediaObject(new File("2.mp3")));
+
+AudioAttributes audio = new AudioAttributes();
+audio.setCodec("libmp3lame");
+audio.setChannels(2);
+audio.setSamplingRate(44100);
+
+FilterGraph graph = new FilterGraph();
+FilterChain chain = new FilterChain();
+chain.addFilter(new MediaConcatFilter(sources.size(), false, true));   // no video, audio
+graph.addChain(chain);
+
+VideoAttributes video = new VideoAttributes();
+video.setComplexFiltergraph(graph);
+
+EncodingAttributes attrs = new EncodingAttributes();
+attrs.setOutputFormat("mp3");
+attrs.setAudioAttributes(audio);
+attrs.setVideoAttributes(video);
+
+new Encoder().encode(sources, target, attrs);
+```
+
+The two booleans are which streams to carry: `MediaConcatFilter(n, video, audio)`. Passing
+`(n, true, false)` joins the pictures and drops the sound, and the single argument
+constructor takes both, which fails if any source lacks either.
+
+> All the sources must have compatible streams. Files with different sample rates or
+> channel counts need converting first, one at a time, and joining afterwards.
 
 ## Stills
 
