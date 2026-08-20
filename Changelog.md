@@ -2,6 +2,13 @@
 
 ## Changelog
 - **4.1.0-SNAPSHOT**
+   - `ProcessWrapper.destroy()` now kills the process before closing its streams instead
+     of afterwards. Closing a pipe does not wake a thread already blocked reading it, so
+     the kill was reached only once the reader returned, which for the normal case of a
+     caller reading ffmpeg's output meant not until ffmpeg had finished on its own. In
+     other words `Encoder.abortEncoding()` did not abort and `MultimediaObject.getInfo(long)`
+     did not time out, they both waited and then reported as though they had. A test that
+     took 120 seconds to report a 250 millisecond timeout now takes 0.3
    - `AudioInfo.getChannels()` now understands every channel layout ffmpeg knows. It
      recognised only `mono`, `stereo` and `quad`, so anything else, 5.1 and 7.1 included,
      was reported as -1, meaning unavailable. Layouts whose name carries the count are

@@ -273,8 +273,21 @@ public class ProcessWrapper implements AutoCloseable {
     return errorStream;
   }
 
-  /** If there's a ffmpeg execution in progress, it kills it. */
+  /**
+   * If there's a ffmpeg execution in progress, it kills it.
+   *
+   * <p>The process is killed before its streams are closed, and not afterwards. Closing a pipe
+   * that another thread is blocked reading does not reliably wake that thread, so with the old
+   * order a caller that was reading the output, which is the normal way to run an encoding, could
+   * sit in {@code readLine()} until ffmpeg finished of its own accord. Killing first closes the
+   * far end of the pipe, the reader sees end of input, and the abort takes effect at once.
+   */
   public void destroy() {
+    if (ffmpeg != null) {
+      ffmpeg.destroy();
+      ffmpeg = null;
+    }
+
     if (inputStream != null) {
       try {
         inputStream.close();
@@ -300,11 +313,6 @@ public class ProcessWrapper implements AutoCloseable {
         LOG.warn("Error closing error stream", t);
       }
       errorStream = null;
-    }
-
-    if (ffmpeg != null) {
-      ffmpeg.destroy();
-      ffmpeg = null;
     }
 
     if (ffmpegKiller != null) {
