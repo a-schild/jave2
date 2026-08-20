@@ -2,6 +2,30 @@
 
 ## Changelog
 - **4.1.0-SNAPSHOT**
+   - **`slf4j-api` upgraded from 1.7.36 to 2.0.18.** This is the one change here that
+     consumers can notice. slf4j 2 finds its binding through the `ServiceLoader` rather
+     than through `StaticLoggerBinder`, so a project that pins an slf4j **1.7** binding,
+     `slf4j-simple` 1.7.x, `logback-classic` 1.2.x, and lets maven pick up 2.0.18 from
+     here will get "No SLF4J providers were found" and lose its logging until the binding
+     is moved to a 2.x one. Nothing else about the library changes, and pinning
+     `slf4j-api` to 1.7.36 in your own build still works, since only the API is used
+   - Removed `selenium-java` 2.44.0 and `com.opera:operadriver` 1.5 from the test modules.
+     Nothing referenced either of them, they had been there since 2014, and between them
+     they pulled 40 odd transitive artifacts of the same vintage onto the test classpath,
+     including `commons-collections` 3.2.1, `guava` 14.0 and `httpclient` 4.3.4. The test
+     dependency tree goes from 56 artifacts to 13. `commons-lang3` was being used by
+     `EncoderTest` through that accident and is now declared properly, at 3.20.0
+   - Replaced the unused `logback-classic` in `jave-core-test` with `slf4j-simple` at the
+     same version as the api. The binding there was slf4j 1.7 against an api that resolved
+     to 2.x, so it never bound and the library's own debug logging, including the ffmpeg
+     command line, silently produced nothing while tests ran. It works now
+   - Updated the build plugins: compiler 3.11.0 to 3.15.0, resources 3.3.1 to 3.5.0,
+     surefire 3.2.5 to 3.5.6, javadoc 3.6.2 to 3.12.0, jar 3.3.0 (and 3.1.2 in one module)
+     to 3.5.1, source 3.3.0 to 3.4.0, gpg 3.1.0 to 3.2.8, deploy 3.1.1 to 3.1.4, release
+     2.5.3 to 3.3.1, scm-provider-gitexe 2.0.1 to 2.2.1, buildnumber 3.0.0 to 3.3.0,
+     templating 1.0.0 to 3.1.0. `central-publishing-maven-plugin` was already current at
+     0.11.0. JUnit moves from 5.10.1 to 5.14.4 rather than to 6.x, which requires Java 17
+     and would raise the floor for the test modules
    - Two pass encoding, `EncodingAttributes.setTwoPass(true)`. ffmpeg is run twice over the
      same input: the first run encodes the video only to measure it, writing what it learns
      to a statistics file and discarding the pictures, and the second uses those

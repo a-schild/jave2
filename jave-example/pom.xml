@@ -11,11 +11,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Example module, never published to Maven Central -->
         <maven.deploy.skip>true</maven.deploy.skip>
-        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-        <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
-        <slf4j-simple.version>1.7.26</slf4j-simple.version>
-        <junit-jupiter-api.version>5.10.1</junit-jupiter-api.version>
+        <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
+        <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
+        <maven-jar-plugin.version>3.5.1</maven-jar-plugin.version>
+        <slf4j-simple.version>2.0.18</slf4j-simple.version>
+        <junit-jupiter-api.version>5.14.4</junit-jupiter-api.version>
     </properties>
     <build>
         <resources>
