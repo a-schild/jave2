@@ -186,6 +186,32 @@ attrs.setAudioAttributes(audio);
 attrs.setVideoAttributes(video);
 ```
 
+### To MP4 at a fixed size, two pass
+
+When the size of the result matters more than the time it takes, let the encoder look at
+the material first. `setTwoPass(true)` runs ffmpeg twice: once to measure, once to encode
+using what it measured, so the bitrate lands where it does the most good.
+
+``` JAVA
+AudioAttributes audio = new AudioAttributes();
+audio.setCodec("aac");
+audio.setBitRate(128000);
+
+VideoAttributes video = new VideoAttributes();
+video.setCodec("libx264");
+video.setBitRate(1200000);       // the budget the two passes exist to spend well
+
+EncodingAttributes attrs = new EncodingAttributes();
+attrs.setOutputFormat("mp4");
+attrs.setAudioAttributes(audio);
+attrs.setVideoAttributes(video);
+attrs.setTwoPass(true);
+```
+
+A video bitrate is required, since that is the budget being planned, and this is the wrong
+tool alongside `setCrf`, which asks for a quality rather than a size. See
+[Encoding Attributes](https://github.com/a-schild/jave2/wiki/Encoding-Attributes) for the details.
+
 ### To WebM, VP9
 
 ``` JAVA

@@ -82,6 +82,9 @@ public class EncodingAttributes implements Serializable {
   /** Should the input be treated as a loop */
   private boolean loop = false;
 
+  /** Should the encoding run twice, measuring the material before spending the bitrate. */
+  private boolean twoPass = false;
+
   /**
    * How many extra times the input stream should be repeated, -1 to repeat it endlessly. Null
    * leaves the input playing once.
@@ -352,6 +355,40 @@ public class EncodingAttributes implements Serializable {
   }
 
   /**
+   * Whether the encoding runs twice.
+   *
+   * @return true when two pass encoding is wanted.
+   */
+  public boolean isTwoPass() {
+    return twoPass;
+  }
+
+  /**
+   * Encode in two passes rather than one.
+   *
+   * <p>ffmpeg is run twice over the same input. The first pass encodes the video only to measure
+   * it, writing what it learns to a statistics file and throwing the pictures away. The second
+   * pass encodes for real and uses those statistics to decide where the bitrate is worth spending,
+   * so a fixed budget buys noticeably better quality on material that is not uniformly difficult.
+   * It costs roughly twice the time.
+   *
+   * <p>This needs a target video bitrate, {@link VideoAttributes#setBitRate}, since the point is
+   * to spend a budget well. It is the wrong tool alongside {@link VideoAttributes#setCrf}, which
+   * asks for a constant quality and whatever bitrate that takes: there is no budget to plan, and a
+   * single pass already produces the same result.
+   *
+   * <p>The statistics file is written beside the target, under a name of this library's choosing,
+   * and removed afterwards.
+   *
+   * @param twoPass true to encode in two passes.
+   * @return this instance
+   */
+  public EncodingAttributes setTwoPass(boolean twoPass) {
+    this.twoPass = twoPass;
+    return this;
+  }
+
+  /**
    * Copy over meta data from original file to new output if possible
    *
    * @param mapMetaData the mapMetaData to set
@@ -422,6 +459,19 @@ public class EncodingAttributes implements Serializable {
   public void validate() {
     if (audioAttributes == null && videoAttributes == null) {
       throw new IllegalArgumentException("Both audio and video attributes are null");
+    }
+    if (twoPass) {
+      if (videoAttributes == null) {
+        throw new IllegalArgumentException(
+            "Two pass encoding needs video attributes, it exists to spend a target video bitrate"
+                + " well and there is no video to spend it on");
+      }
+      if (!videoAttributes.getBitRate().isPresent()) {
+        throw new IllegalArgumentException(
+            "Two pass encoding needs a video bitrate, set VideoAttributes.setBitRate(). The first"
+                + " pass measures the material so that the second can spend that budget where it"
+                + " is needed, so without a budget there is nothing for it to do");
+      }
     }
   }
 }

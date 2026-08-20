@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +42,7 @@ import ws.schild.jave.encode.AudioAttributes;
 import ws.schild.jave.encode.EncodingArgument;
 import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.encode.PredicateArgument;
+import ws.schild.jave.encode.SimpleArgument;
 import ws.schild.jave.encode.ValueArgument;
 import ws.schild.jave.encode.VideoAttributes;
 import ws.schild.jave.encode.VideoFilterArgument;
@@ -623,6 +625,52 @@ public class Encoder {
 
     target = target.getAbsoluteFile();
     target.getParentFile().mkdirs();
+
+    if (!attributes.isTwoPass()) {
+      runPass(
+          multimediaObjects, target, target.getAbsolutePath(), attributes, listener, currOptions);
+      return;
+    }
+
+    /*
+     * Two runs over the same input. The first encodes the video only to measure it, writing what
+     * it learns to a statistics file and discarding the pictures, which is what "-f null" with a
+     * target of "-" does. The second encodes for real and reads those statistics back.
+     *
+     * The passes share the statistics through the file named here, so it has to be unique to this
+     * encoding or two encodings running at once would read each other's measurements.
+     */
+    File passLogPrefix = newPassLogPrefix();
+    try {
+      runPass(
+          multimediaObjects,
+          target,
+          "-",
+          attributes,
+          new PassProgressListener(listener, 0, true, false),
+          withPassOptions(currOptions, 1, passLogPrefix));
+
+      runPass(
+          multimediaObjects,
+          target,
+          target.getAbsolutePath(),
+          attributes,
+          new PassProgressListener(listener, 500, false, true),
+          withPassOptions(currOptions, 2, passLogPrefix));
+    } finally {
+      deletePassLogs(passLogPrefix);
+    }
+  }
+
+  /** Runs ffmpeg once. A single pass encoding is one of these, a two pass encoding is two. */
+  private void runPass(
+      List<MultimediaObject> multimediaObjects,
+      File target,
+      String targetArgument,
+      EncodingAttributes attributes,
+      EncoderProgressListener listener,
+      List<EncodingArgument> currOptions)
+      throws IllegalArgumentException, InputFormatException, EncoderException {
     ffmpeg = locator.createExecutor();
 
     // Set global options
@@ -675,7 +723,7 @@ public class Encoder {
     }
 
     ffmpeg.addArgument("-y");
-    ffmpeg.addArgument(target.getAbsolutePath());
+    ffmpeg.addArgument(targetArgument);
 
     try {
       ffmpeg.execute();
@@ -771,6 +819,130 @@ public class Encoder {
         ffmpeg.destroy();
       }
       ffmpeg = null;
+    }
+  }
+
+  /**
+   * The caller's options plus the ones that make this run a numbered pass.
+   *
+   * <p>These go on the end so that they win. The first pass keeps the encoding settings, since it
+   * is measuring how those settings behave on this material, but throws the result away and skips
+   * the audio, which it has no use for. The trailing {@code -f null} overrides the output format
+   * the attributes asked for, which is why the target can be {@code -}.
+   */
+  private List<EncodingArgument> withPassOptions(
+      List<EncodingArgument> currOptions, int pass, File passLogPrefix) {
+    List<EncodingArgument> options = new ArrayList<>();
+    if (currOptions != null) {
+      options.addAll(currOptions);
+    }
+    options.add(
+        new SimpleArgument(
+            ArgType.OUTFILE,
+            ea ->
+                Stream.of(
+                    "-pass",
+                    Integer.toString(pass),
+                    "-passlogfile",
+                    passLogPrefix.getAbsolutePath())));
+    if (pass == 1) {
+      options.add(new SimpleArgument(ArgType.OUTFILE, ea -> Stream.of("-an", "-f", "null")));
+    }
+    return options;
+  }
+
+  /**
+   * A name for the statistics file that no other encoding will be using. ffmpeg builds the real
+   * names from it, adding {@code -0.log} and, for x264, {@code -0.log.mbtree}.
+   *
+   * <p>It goes in the temporary directory rather than beside the target, so that a run killed
+   * halfway leaves nothing behind in somebody's output directory.
+   */
+  private File newPassLogPrefix() {
+    return new File(
+        System.getProperty("java.io.tmpdir"),
+        "jave2-passlog-" + UUID.randomUUID().toString().replace("-", ""));
+  }
+
+  /** Removes every file ffmpeg derived from the prefix. */
+  private void deletePassLogs(File passLogPrefix) {
+    File directory = passLogPrefix.getParentFile();
+    if (directory == null) {
+      return;
+    }
+    File[] logs = directory.listFiles((dir, name) -> name.startsWith(passLogPrefix.getName()));
+    if (logs == null) {
+      return;
+    }
+    for (File log : logs) {
+      if (!log.delete()) {
+        LOG.warn("Could not remove the two pass statistics file {}", log.getAbsolutePath());
+        log.deleteOnExit();
+      }
+    }
+  }
+
+  /**
+   * Presents two passes to the caller's listener as one encoding.
+   *
+   * <p>Each pass counts from nothing to finished, so reported unchanged the progress would run to
+   * the end twice. Each is folded into half of the range instead. The two halves are equal, which
+   * is a simplification, since measuring is usually quicker than encoding.
+   *
+   * <p>{@link EncoderProgressListener#sourceInfo} belongs to the first pass and {@link
+   * EncoderProgressListener#done} to the second, or the caller would be told the source twice and
+   * told the work had finished while half of it was still to come.
+   */
+  private static class PassProgressListener implements EncoderProgressListener {
+
+    private final EncoderProgressListener delegate;
+    private final int offset;
+    private final boolean reportSourceInfo;
+    private final boolean reportDone;
+
+    PassProgressListener(
+        EncoderProgressListener delegate,
+        int offset,
+        boolean reportSourceInfo,
+        boolean reportDone) {
+      this.delegate = delegate;
+      this.offset = offset;
+      this.reportSourceInfo = reportSourceInfo;
+      this.reportDone = reportDone;
+    }
+
+    @Override
+    public void sourceInfo(MultimediaInfo info) {
+      if (delegate != null && reportSourceInfo) {
+        delegate.sourceInfo(info);
+      }
+    }
+
+    @Override
+    public void progress(int permil) {
+      if (delegate == null) {
+        return;
+      }
+      // Not a proportion of anything, so there is nothing to fold into a half.
+      if (permil == PROGRESS_UNKNOWN) {
+        delegate.progress(PROGRESS_UNKNOWN);
+      } else {
+        delegate.progress(offset + permil / 2);
+      }
+    }
+
+    @Override
+    public void message(String message) {
+      if (delegate != null) {
+        delegate.message(message);
+      }
+    }
+
+    @Override
+    public void done() {
+      if (delegate != null && reportDone) {
+        delegate.done();
+      }
     }
   }
 

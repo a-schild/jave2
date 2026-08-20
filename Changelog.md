@@ -2,6 +2,17 @@
 
 ## Changelog
 - **4.1.0-SNAPSHOT**
+   - Two pass encoding, `EncodingAttributes.setTwoPass(true)`. ffmpeg is run twice over the
+     same input: the first run encodes the video only to measure it, writing what it learns
+     to a statistics file and discarding the pictures, and the second uses those
+     measurements to decide where the bitrate is worth spending. On material that is not
+     uniformly difficult a fixed budget buys noticeably better quality, at roughly twice
+     the time. It requires a video bitrate, since that is the budget being planned, and
+     `validate()` rejects the combination with no video or no bitrate rather than running
+     ffmpeg twice for nothing. The statistics file goes in the temporary directory and is
+     removed afterwards. The two passes are reported to an `EncoderProgressListener` as one
+     encoding, each taking half of the 0..1000 range, with `sourceInfo` called once at the
+     start and `done()` once at the end (#156)
    - `ProcessWrapper.destroy()` now kills the process before closing its streams instead
      of afterwards. Closing a pipe does not wake a thread already blocked reading it, so
      the kill was reached only once the reader returned, which for the normal case of a
