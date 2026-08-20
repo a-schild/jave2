@@ -416,6 +416,11 @@ running.
 One `Encoder` runs one encoding at a time, since it keeps a single process, so give each
 concurrent conversion its own.
 
+With [two pass encoding](https://github.com/a-schild/jave2/wiki/Encoding-Attributes) there are two processes one after the other,
+and aborting ends whichever is running and abandons the encoding as a whole. Aborting
+during the measuring pass therefore throws away work without producing anything, which is
+worth knowing if you abort often.
+
 ## Something not covered here
 
 If the option you need is not in the typed API, see
