@@ -21,7 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.deploy.skip>true</maven.deploy.skip>
         <!-- Supplied by the workflow, so this follows the version being tested -->
-        <jave.version>4.2.0-SNAPSHOT</jave.version>
+        <jave.version>4.2.0</jave.version>
         <native-maven-plugin.version>1.1.10</native-maven-plugin.version>
         <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
         <slf4j-simple.version>2.0.18</slf4j-simple.version>

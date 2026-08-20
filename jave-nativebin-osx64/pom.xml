@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ws.schild</groupId>
     <packaging>jar</packaging>
-    <version>4.2.0-SNAPSHOT</version>
+    <version>4.2.0</version>
     <artifactId>jave-nativebin-osx64</artifactId>
     <name>Jave OSX intel 64 bit native package (deprecated)</name>
     <description>DEPRECATED. This package carries the ffmpeg binary for intel macs.
