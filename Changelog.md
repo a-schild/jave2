@@ -1,7 +1,7 @@
 # JAVE2
 
 ## Changelog
-- **4.1.0-SNAPSHOT**
+- **4.1.0** (2026-08-20)
    - **`slf4j-api` upgraded from 1.7.36 to 2.0.18.** This is the one change here that
      consumers can notice. slf4j 2 finds its binding through the `ServiceLoader` rather
      than through `StaticLoggerBinder`, so a project that pins an slf4j **1.7** binding,
@@ -19,6 +19,11 @@
      same version as the api. The binding there was slf4j 1.7 against an api that resolved
      to 2.x, so it never bound and the library's own debug logging, including the ffmpeg
      command line, silently produced nothing while tests ran. It works now
+   - `DefaultFFMPEGLocatorTest` no longer fails at random. It clears the shared temporary
+     directory before asking the locator to extract a binary, and windows refuses to
+     delete an executable a process has just finished with, so the cleanup threw and took
+     the test with it. The cleanup is now best effort and the test asserts on what the
+     locator returns instead: a file that exists, is not empty and can be executed
    - Updated the build plugins: compiler 3.11.0 to 3.15.0, resources 3.3.1 to 3.5.0,
      surefire 3.2.5 to 3.5.6, javadoc 3.6.2 to 3.12.0, jar 3.3.0 (and 3.1.2 in one module)
      to 3.5.1, source 3.3.0 to 3.4.0, gpg 3.1.0 to 3.2.8, deploy 3.1.1 to 3.1.4, release

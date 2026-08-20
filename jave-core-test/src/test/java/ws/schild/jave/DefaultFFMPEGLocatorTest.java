@@ -18,6 +18,7 @@
  */
 package ws.schild.jave;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,6 +27,7 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -38,20 +40,43 @@ public class DefaultFFMPEGLocatorTest {
 
   @Test
   public void testFindExecutable() throws IOException {
-    // We first remove any old executables, to make sure the copy/deploy works
+    /*
+     * Clear out any old executables first, so that the locator has to extract one rather than
+     * find what an earlier test left behind.
+     *
+     * This directory is shared with every other test in the build, and windows refuses to delete
+     * an executable that a process has just finished with, so a delete here can fail through no
+     * fault of the locator. That threw out of the test and turned up as an intermittent error in
+     * full builds. Failing to clean up is therefore tolerated, and the assertions below check the
+     * result either way: whatever the state of the directory beforehand, the locator has to come
+     * back with an executable that is really there.
+     */
     Path dirFolder = Paths.get(System.getProperty("java.io.tmpdir"), "jave/");
     if (Files.isDirectory(dirFolder)) {
       try (Stream<Path> files = Files.list(dirFolder)) {
         for (Path filePath : files.collect(toList())) {
-          Files.delete(filePath);
+          deleteIfPossible(filePath);
         }
-
-        Files.delete(dirFolder);
       }
+      deleteIfPossible(dirFolder);
     }
 
     DefaultFFMPEGLocator locator = new DefaultFFMPEGLocator();
     String exePath = locator.getExecutablePath();
     assertNotNull(exePath, "Native component not found");
+
+    File executable = new File(exePath);
+    assertTrue(executable.isFile(), "The locator returned a path that is not a file: " + exePath);
+    assertTrue(executable.length() > 0, "The extracted executable is empty: " + exePath);
+    assertTrue(executable.canExecute(), "The extracted executable is not executable: " + exePath);
+  }
+
+  /** Windows holds on to executables for a while after use, and that is not this test's problem. */
+  private void deleteIfPossible(Path path) {
+    try {
+      Files.deleteIfExists(path);
+    } catch (IOException stillInUse) {
+      System.out.println("Could not remove " + path + ", carrying on: " + stillInUse.getMessage());
+    }
   }
 }
