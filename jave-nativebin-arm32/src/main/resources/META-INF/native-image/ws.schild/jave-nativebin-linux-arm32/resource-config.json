@@ -1,0 +1,9 @@
+{
+    "resources": {
+        "includes": [
+            {
+                "pattern": "\\Qws/schild/jave/nativebin/ffmpeg-arm\\E"
+            }
+        ]
+    }
+}
