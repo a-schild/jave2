@@ -224,14 +224,14 @@ and then the specific jar(s) for your platform(s) :
 
 It includes all binaries for the supported platforms
 
-``` XML
-compile group: 'ws.schild', name: 'jave-all-deps', version: '4.2.0'
+``` groovy
+implementation group: 'ws.schild', name: 'jave-all-deps', version: '4.2.0'
 ```
 
 ### For one platform only (Linux 64Bit in this case)
-``` XML
-compile group: 'ws.schild', name: 'jave-core', version: '4.2.0'
-compile group: 'ws.schild', name: 'jave-nativebin-linux64', version: '4.2.0'
+``` groovy
+implementation group: 'ws.schild', name: 'jave-core', version: '4.2.0'
+implementation group: 'ws.schild', name: 'jave-nativebin-linux64', version: '4.2.0'
 ```
 
 ### Main Components of Jave2
